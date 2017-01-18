@@ -1,0 +1,2 @@
+Файл ПереводInfoEmacsDebugging.txt это перевод Info файла elisp.info.gz в текущем коталоге
+строки 17593 по 19890
