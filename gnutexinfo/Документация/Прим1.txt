@@ -1,4 +1,5 @@
 \input texinfo   @c -*-texinfo-*-
+@setfilename Пример1.info
 @comment $Id@w{$}
 @comment %**start of header
 @include version.texi
