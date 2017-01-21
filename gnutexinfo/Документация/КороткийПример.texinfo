@@ -2,57 +2,46 @@
 @setfilename Чпаргалка.info
 @settitle Моё превое руководство 1.0
 @copying
-Можете копировать и изменять сколько угодно душе вашей. А я буду ковырять Texinfo
-
+Здесь краткое описание руководства 1.0
+@quotation
+Разрешается...
+@end quotation
 Copyright @copyright{} 2016 Обинякин Алексей Станиславович, корпорация Рассвет.
 @end copying
-
 @titlepage
-@title Это типа титульный лист
+@title Это титульный лист для печатной версии
+@subtitle 
+@subtitle
 @page
 @vskip 0pt plus 1filll
 @insertcopying
 @end titlepage
-
-@c Output the table of the contents at the beginning.
+@c Вывод таблицы содержимого в начале.
 @contents
-
 @ifnottex
 @node Top
-@top GNU Sample
-This manual is for GNU Sample
+@top Первое моё руководство
+Это моё первое руководство
 @c (version @value{VERSION}, @value{UPDATED}).
 @end ifnottex
-
 @menu
-* First Chapter::    The first chapter is the
-                           only chapter in this sample.
-* Index::            Complete index.
+* Первая Глава::    Первая и единственная глава
+                    данного примера руководства.
+* Index::            Полный индекс.
 @end menu
-
-
-@node First Chapter
-@chapter First Chapter
-
-@cindex chapter, first
-
-     This is the first chapter.
-@cindex index entry, another
-
-Here is a numbered list.
-
+@node Первая Глава
+@chapter Первая Глава
+@cindex глава, первая
+     Это первая глава.
+@cindex запись индекса, другой
+Вот пронумерованный список.
 @enumerate
 @item
-     This is the first item.
-
+     Это первый пункт списка.
 @item
-     This is the second item.
+     Это второй пункт списка.
 @end enumerate
-
-
 @node Index
 @unnumbered Index
-
 @printindex cp
-
 @bye
