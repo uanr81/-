@@ -1,0 +1,11 @@
+#include <stdio.h>
+#include <string.h>
+/* похвала 1*/
+#define PRAISE " Вот эта да, какое великолепное имя"
+main( )
+{
+char name [50];
+printf(" Как вас зовут? \n" );
+scanf(" %s", name);
+printf(" Привет, %s %s\n" , name, PRAISE);
+}
