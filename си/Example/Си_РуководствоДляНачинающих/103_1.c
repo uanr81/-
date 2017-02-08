@@ -1,10 +1,7 @@
 #include <stdio.h>
-#include <string.h>
-#define BLURB "Выдающееся исполнение"
-int main( )
+int main()
 {
-  printf("/%2s/\n", BLURB);
-  printf("/%25.s/\n", BLURB);
-  printf("/%25.5s/\n", BLURB);
-  printf("/%-25.5s/\n", BLURB);
+  int ch;
+  while ((ch = getchar( )) != EOF)
+    putchar(ch);
 }

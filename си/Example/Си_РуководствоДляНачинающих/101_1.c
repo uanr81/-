@@ -1,9 +1,13 @@
 #include <stdio.h>
-#include <string.h>
-int main( )
+/*подсчет символов */
+#define STOP '*' /*дает символу * символическое имя STOP*/
+int main()
 {
-  printf("/%d/\n", 336);
-  printf("/%2d/\n", 336);
-  printf("/%10d/\n", 336);
-  printf("/%-100d/\n", 336);
+  char ch;
+  int count = 0; /*инициализация счетчика символов */
+  while((ch = getchar()) != STOP){ 
+    putchar (ch); /* строка 11 */
+    count++; /* строка 12 */
+  }
+  printf("\n Всего было прочитано %d символов \n", count);
 }
