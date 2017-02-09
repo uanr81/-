@@ -1,21 +1,21 @@
 /* praise2.c */
-// try the %u or %lu specifiers if your implementation
-// does not recognize the %zd specifier
+//Если ваша реализация не распознает спецификатор %zd, попробуйте воспользоваться
+// %u или %lu 
 #include <stdio.h>
-#include <string.h>      /* provides strlen() prototype */
-#define PRAISE "You are an extraordinary being."
+#include <string.h>      /* предоставляет прототип strlen() */
+#define PRAISE "Вы выдающаяся личность."
 int main(void)
 {
     char name[40];
     
-    printf("What's your name? ");
+    printf("Как вас зовут? ");
     scanf("%s", name);
-    printf("Hello, %s. %s\n", name, PRAISE);
-    printf("Your name of %zd letters occupies %zd memory cells.\n",
+    printf("Здравствуйте, %s. %s\n", name, PRAISE);
+    printf("Ваше имя состоит из %zd символов и занимает %zd ячеек памяти.\n",
            strlen(name), sizeof name);
-    printf("The phrase of praise has %zd letters ",
+    printf("Хвалебная фраза содержит %zd символов ",
            strlen(PRAISE));
-    printf("and occupies %zd memory cells.\n", sizeof PRAISE);
+    printf("и занимает %zd ячеек памяти.\n", sizeof PRAISE);
     
     return 0;
 }
