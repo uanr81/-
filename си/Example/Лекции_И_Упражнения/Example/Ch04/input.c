@@ -1,14 +1,14 @@
-// input.c -- when to use &
+// input.c -- ситуации когда должен использоваться символ &
 #include <stdio.h>
 int main(void)
 {
-    int age;             // variable
-    float assets;        // variable
-    char pet[30];        // string
+    int age;             // переменная
+    float assets;        // переменная
+    char pet[30];        // строка
     
-    printf("Enter your age, assets, and favorite pet.\n");
-    scanf("%d %f", &age, &assets); // use the & here
-    scanf("%s", pet);              // no & for char array
+    printf("Введите информацию о своем возврасте, сумме в банке и любимом животном. \n");
+    scanf("%d %f", &age, &assets); // здесь должен быть указан символ & 
+    scanf("%s", pet);              // для указания символьного массива символ & не нужен
     printf("%d $%.2f %s\n", age, assets, pet);
     
     return 0;

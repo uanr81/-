@@ -1,18 +1,15 @@
-/* varwid.c -- uses variable-width output field */
+/* varwid.c -- использование поля вывода переменной ширины */
 #include <stdio.h>
-int main(void)
-{
+int main(void){
     unsigned width, precision;
     int number = 256;
     double weight = 242.5;
-    
-    printf("Enter a field width:\n");
+    printf("Введите ширину поля:\n");
     scanf("%d", &width);
-    printf("The number is :%*d:\n", width, number);
-    printf("Now enter a width and a precision:\n");
+    printf("Значение равно:%*d:\n", width, number);
+    printf("Теперь введите ширину и точность :\n");
     scanf("%d %d", &width, &precision);
-    printf("Weight = %*.*f\n", width, precision, weight);
-    printf("Done!\n");
-    
+    printf("Вес = %*.*f\n", width, precision, weight);
+    printf("Готово!\n");
     return 0;
 }

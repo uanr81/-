@@ -1,4 +1,4 @@
-/* golf.c -- golf tournament scorecard */
+/* golf.c -- таблица результатов турнира по гольфу */
 #include <stdio.h>
 int main(void)
 {
@@ -6,7 +6,7 @@ int main(void)
     
     cheeta = tarzan = jane = 68;
     printf("                  cheeta   tarzan    jane\n");
-    printf("First round score %4d %8d %8d\n",cheeta,tarzan,jane);
+    printf("Счет первого раунда %4d %8d %8d\n",cheeta,tarzan,jane);
     
     return 0;
 }

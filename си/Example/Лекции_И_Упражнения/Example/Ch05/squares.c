@@ -1,4 +1,4 @@
-/* squares.c -- produces a table of first 20 squares */
+/* squares.c -- генерирует таблицу квадратов 20 значений */
 #include <stdio.h>
 int main(void)
 {

@@ -1,15 +1,15 @@
-/* shoes1.c -- converts a shoe size to inches */
+/* shoes1.c -- преобразует размер обуви в дюймы */
 #include <stdio.h>
-#define ADJUST 7.31              // one kind of symbolic constant
+#define ADJUST 7.31              // один из видов символьной константы
 int main(void)
 {
-    const double SCALE = 0.333;  // another kind of symbolic constant
+    const double SCALE = 0.333;  // ещё один вид символьной константы
     double shoe, foot;
     
     shoe = 9.0;
     foot = SCALE * shoe + ADJUST;
-    printf("Shoe size (men's)    foot length\n");
-    printf("%10.1f %15.2f inches\n", shoe, foot);
+    printf("Размер обуви (мужской) длинна ступни\n");
+    printf("%10.1f     %15.2f дюймов\n", shoe, foot);
     
     return 0;
 }

@@ -1,12 +1,10 @@
-/* skiptwo.c -- skips over first two integers of input */
+/* skiptwo.c -- пропускает первые два числа в потоке ввода */
 #include <stdio.h>
-int main(void)
-{
+int main(void){
     int n;
-    
-    printf("Please enter three integers:\n");
+    printf("Введите три целых числа:\n");
     scanf("%*d %*d %d", &n);
-    printf("The last integer was %d\n", n);
+    printf("Последним целым числом было %d\n", n);
     
     return 0;
 }
