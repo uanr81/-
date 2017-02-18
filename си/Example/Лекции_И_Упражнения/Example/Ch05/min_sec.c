@@ -1,23 +1,23 @@
-// min_sec.c -- converts seconds to minutes and seconds
+// min_sec.c -- переводит секунды в минуты и секунды   
 #include <stdio.h>
-#define SEC_PER_MIN 60            // seconds in a minute
+#define SEC_PER_MIN 60            // количество секунд в минуте
 int main(void)
 {
     int sec, min, left;
     
-    printf("Convert seconds to minutes and seconds!\n");
-    printf("Enter the number of seconds (<=0 to quit):\n");
-    scanf("%d", &sec);            // read number of seconds
+    printf("Перевод секунд в минуты и секунды!\n");
+    printf("Введите количество секунд (<=0 для выхода):\n");
+    scanf("%d", &sec);            // чтение количества секунд
     while (sec > 0)
     {
-        min = sec / SEC_PER_MIN;  // truncated number of minutes
-        left = sec % SEC_PER_MIN; // number of seconds left over
-        printf("%d seconds is %d minutes, %d seconds.\n", sec,
+        min = sec / SEC_PER_MIN;  // усеченное количество минут 
+        left = sec % SEC_PER_MIN; // количество секунд в остатке
+        printf("%d секунд это %d минут(ы), %d секунд .\n", sec,
                min, left);
-        printf("Enter next value (<=0 to quit):\n");
+        printf("Введите следующее значение (<=0 для выхода):\n");
         scanf("%d", &sec);
     }
-    printf("Done!\n");
+    printf("Готово!\n");
     
     return 0;
 }

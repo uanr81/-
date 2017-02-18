@@ -1,20 +1,20 @@
-// cypher1.c -- alters input, preserving spaces 
+// cypher1.c -- вносит изменения во входящие данные, сохраняя пробелы
 #include <stdio.h>
-#define SPACE ' '             // that's quote-space-quote 
+#define SPACE ' '             // кавычка, пробел, кавычка
 int main(void)
 {
     char ch;
     
-    ch = getchar();           // read a character         
-    while (ch != '\n')        // while not end of line    
+    ch = getchar();           // читать символ         
+    while (ch != '\n')        // пока не встретится конец строки
     {
-        if (ch == SPACE)      // leave the space          
-            putchar(ch);      // character unchanged      
+        if (ch == SPACE)      // оставить пробел нетронутым
+            putchar(ch);      // символ не меняется       
         else
-            putchar(ch + 1);  // change other characters  
-        ch = getchar();       // get next character       
+            putchar(ch + 1);  // изменить другие символы  
+        ch = getchar();       // получить следующий символ
     }
-    putchar(ch);              // print the newline        
+    putchar(ch);              // вывести символ новой строки
     
     return 0;
 }

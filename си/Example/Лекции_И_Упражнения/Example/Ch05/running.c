@@ -1,43 +1,43 @@
 // running.c -- A useful program for runners
 #include <stdio.h>
-const int S_PER_M = 60;         // seconds in a minute
-const int S_PER_H = 3600;       // seconds in an hour
-const double M_PER_K = 0.62137; // miles in a kilometer
+const int S_PER_M = 60;         // количество секунд в минуте
+const int S_PER_H = 3600;       // количество секунд в часе
+const double M_PER_K = 0.62137; // количество миль в километре
 int main(void)
 {
-    double distk, distm;  // distance run in km and in miles
-    double rate;          // average speed in mph
-    int min, sec;         // minutes and seconds of running time
-    int time;             // running time in seconds only
-    double mtime;         // time in seconds for one mile
-    int mmin, msec;       // minutes and seconds for one mile
+    double distk, distm;  // дистанция пробега в километрах и милях
+    double rate;          // средняя скорость в милях в час
+    int min, sec;         // время пробега в минутах и секундах 
+    int time;             // время пробега только в секундах
+    double mtime;         // время пробега одной мили в секундах
+    int mmin, msec;       // время пробега одной мили в минутах и секундах
     
-    printf("This program converts your time for a metric race\n");
-    printf("to a time for running a mile and to your average\n");
-    printf("speed in miles per hour.\n");
-    printf("Please enter, in kilometers, the distance run.\n");
-    scanf("%lf", &distk);  // %lf for type double
-    printf("Next enter the time in minutes and seconds.\n");
-    printf("Begin by entering the minutes.\n");
+    printf("Эта программа преобразует время пробега дистанции в метрической системе\n");
+    printf("во время пробега одной мили и вычесляет вашу среднюю\n");
+    printf("скорость в милях в час.\n");
+    printf("Введите дистанцию пробега в километрах.\n");
+    scanf("%lf", &distk);  // %lf для типа double
+    printf("Введите время в минутах и секундах.\n");
+    printf("Начните с ввода минут.\n");
     scanf("%d", &min);
-    printf("Now enter the seconds.\n");
+    printf("Теперь введите секунды.\n");
     scanf("%d", &sec);
-    // converts time to pure seconds
+    // переводит время в секунды    
     time = S_PER_M * min + sec;
-    // converts kilometers to miles
+    // переводит километры в мили  
     distm = M_PER_K * distk;
-    // miles per sec x sec per hour = mph
+    // умножение миль в секунду на количество секунд в часе дает количество миль в час
     rate = distm / time * S_PER_H;
-    // time/distance = time per mile
+    // деление времени на расстояние дает время пробега одной мили
     mtime = (double) time / distm;
-    mmin = (int) mtime / S_PER_M; // find whole minutes
-    msec = (int) mtime % S_PER_M; // find remaining seconds
-    printf("You ran %1.2f km (%1.2f miles) in %d min, %d sec.\n",
+    mmin = (int) mtime / S_PER_M; // вычисление полного количества минут
+    msec = (int) mtime % S_PER_M; // вычисление остатка в секундах
+    printf("Вы пробежали %1.2f км (%1.2f мили) за %d мин, %d сек.\n",
            distk, distm, min, sec);
-    printf("That pace corresponds to running a mile in %d min, ",
+    printf("Такая скорость соответствует пробегу одной мили за %d мин, ",
            mmin);
-    printf("%d sec.\nYour average speed was %1.2f mph.\n",msec,
-           rate);
+    printf("%d сек.\nВаша средняя скорость составили %1.2f миль в час.\n",
+           msec, rate);
     
     return 0;
 }

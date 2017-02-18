@@ -1,4 +1,4 @@
-/* convert.c -- automatic type conversions */
+/* convert.c -- автоматическое преобразование типов */
 #include <stdio.h>
 int main(void)
 {
@@ -13,9 +13,9 @@ int main(void)
     fl = 2.0 * ch + i;                                  /* line 13 */
     printf("ch = %c, i = %d, fl = %2.2f\n", ch, i, fl); /* line 14 */
     ch = 1107;                                          /* line 15 */
-    printf("Now ch = %c\n", ch);                        /* line 16 */
+    printf("Теперь ch = %c\n", ch);                        /* line 16 */
     ch = 80.89;                                         /* line 17 */
-    printf("Now ch = %c\n", ch);                        /* line 18 */
+    printf("Теперь ch = %c\n", ch);                        /* line 18 */
     
     return 0;
 }

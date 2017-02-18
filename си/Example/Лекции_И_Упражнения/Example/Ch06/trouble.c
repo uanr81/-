@@ -1,5 +1,5 @@
-// trouble.c -- misuse of =
-// will cause infinite loop
+// trouble.c -- неправильное применение операции =
+// приводит к возникновению бесконечного цикла
 #include <stdio.h>
 int main(void)
 {
@@ -7,16 +7,16 @@ int main(void)
     long sum = 0L;
     int status;
     
-    printf("Please enter an integer to be summed ");
-    printf("(q to quit): ");
+    printf("Введите целое число для последующего суммирования ");
+    printf("(или q для завершения программы): ");
     status = scanf("%ld", &num);
     while (status = 1)
     {
         sum = sum + num;
-        printf("Please enter next integer (q to quit): ");
+        printf("Введите следующее целое число (или q для завершения программы): ");
         status = scanf("%ld", &num);
     }
-    printf("Those integers sum to %ld.\n", sum);
+    printf("Сумма введенных целых чисел равна %ld.\n", sum);
     
     return 0;
 }

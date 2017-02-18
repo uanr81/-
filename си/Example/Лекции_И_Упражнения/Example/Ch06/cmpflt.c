@@ -1,4 +1,4 @@
-// cmpflt.c -- floating-point comparisons
+// cmpflt.c -- сравнение чисел с плавающей запятой
 #include <math.h>
 #include <stdio.h>
 int main(void)
@@ -6,14 +6,14 @@ int main(void)
     const double ANSWER = 3.14159;
     double response;
     
-    printf("What is the value of pi?\n");
+    printf("Каково значение числа pi?\n");
     scanf("%lf", &response);
     while (fabs(response - ANSWER) > 0.0001)
     {
-        printf("Try again!\n");
+        printf("Введите значение еще раз!\n");
         scanf("%lf", &response);
     }
-    printf("Close enough!\n");
+    printf("Достаточно близко!\n");
     
     return 0;
 }

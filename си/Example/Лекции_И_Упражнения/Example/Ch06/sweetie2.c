@@ -1,4 +1,4 @@
-// sweetie2.c -- a counting loop using for
+// sweetie2.c -- цикл for со счетчиком
 #include <stdio.h>
 int main(void)
 {
@@ -6,7 +6,7 @@ int main(void)
     int count;
     
     for (count = 1; count <= NUMBER; count++)
-        printf("Be my Valentine!\n");
+        printf("Будь моим другом!\n");
     
     return 0;
 }

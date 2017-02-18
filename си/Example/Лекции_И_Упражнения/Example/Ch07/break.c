@@ -1,21 +1,21 @@
-/* break.c -- uses break to exit a loop */
+/* break.c -- использование оператора break для выхода из цикла */
 #include <stdio.h>
 int main(void)
 {
     float length, width;
     
-    printf("Enter the length of the rectangle:\n");
+    printf("Введите длину прямоугольника:\n");
     while (scanf("%f", &length) == 1)
     {
-        printf("Length = %0.2f:\n", length);
-        printf("Enter its width:\n");
+        printf("Длина = %0.2f:\n", length);
+        printf("Введите ширину прямоугольника:\n");
         if (scanf("%f", &width) != 1)
             break;
-        printf("Width = %0.2f:\n", width);
-        printf("Area = %0.2f:\n", length * width);
-        printf("Enter the length of the rectangle:\n");
+        printf("Ширина = %0.2f:\n", width);
+        printf("Площадь = %0.2f:\n", length * width);
+        printf("Введите длину прямоугольника:\n");
     }
-    printf("Done.\n");
+    printf("Программа завершена.\n");
     
     return 0;
 }

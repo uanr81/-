@@ -1,21 +1,21 @@
-/* pound.c -- defines a function with an argument   */
+/* pound.c -- определяет функцию с аргументом   */
 #include <stdio.h>
-void pound(int n);   // ANSI function prototype declaration
+void pound(int n);   // ANSI стандарт объявление прототипа функции
 int main(void)
 {
     int times = 5;
-    char ch = '!';   // ASCII code is 33
+    char ch = '!';   // ASCII-код равен 33
     float f = 6.0f;
     
-    pound(times);    // int argument
-    pound(ch);       // same as pound((int)ch);
-    pound(f);        // same as pound((int)f);
+    pound(times);    // аргумент тмпа int 
+    pound(ch);       //эквивалентно pound((int)ch);
+    pound(f);        // эквивалентно pound((int)f);
     
     return 0;
 }
 
-void pound(int n)    // ANSI-style function header
-{                    // says takes one int argument
+void pound(int n)    // ANSI-стиль , заголовок функции, который указывает,
+{                    // что функция принимает один аргумент int
     while (n-- > 0)
         printf("#");
     printf("\n");

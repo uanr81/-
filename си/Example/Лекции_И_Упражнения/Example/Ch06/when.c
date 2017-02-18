@@ -1,4 +1,4 @@
-// when.c -- when a loop quits
+// when.c -- когда цикл завершается?
 #include <stdio.h>
 int main(void)
 {
@@ -8,9 +8,9 @@ int main(void)
     {
         printf("n = %d\n", n);
         n++;                         // line 10
-        printf("Now n = %d\n", n);   // line 11
+        printf("Теперь n = %d\n", n);   // line 11
     }
-    printf("The loop has finished.\n");
+    printf("Цикл завершен.\n");
     
     return 0;
 }

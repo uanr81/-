@@ -1,21 +1,21 @@
-/* summing.c -- sums integers entered interactively */
+/* summing.c -- суммирует целые числа, вводимые в интерактивном режиме */
 #include <stdio.h>
 int main(void)
 {
     long num;
-    long sum = 0L;      /* initialize sum to zero   */
+    long sum = 0L;      /* инициализация переменной нулем */
     int status;
     
-    printf("Please enter an integer to be summed ");
-    printf("(q to quit): ");
+    printf("Введите целое число для последующего суммирования ");
+    printf("(q для завершения программы): ");
     status = scanf("%ld", &num);
-    while (status == 1) /* == means "is equal to"   */
+    while (status == 1) /* == обозначает равенство */
     {
         sum = sum + num;
-        printf("Please enter next integer (q to quit): ");
+        printf("Введите следующее целое число(или q для завершения программы): ");
         status = scanf("%ld", &num);
     }
-    printf("Those integers sum to %ld.\n", sum);
+    printf("Сумма введенных целых чисел равна %ld.\n", sum);
 
     return 0;
 }

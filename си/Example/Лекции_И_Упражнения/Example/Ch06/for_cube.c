@@ -1,10 +1,10 @@
-/* for_cube.c -- using a for loop to make a table of cubes */
+/* for_cube.c -- использование цикла for для построения таблицы кубов */
 #include <stdio.h>
 int main(void)
 {
     int num;
     
-    printf("    n   n cubed\n");
+    printf("    n   в кубе\n");
     for (num = 1; num <= 6; num++)
         printf("%5d %5d\n", num, num*num*num);
     
