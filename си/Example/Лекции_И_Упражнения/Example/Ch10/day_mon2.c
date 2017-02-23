@@ -1,4 +1,4 @@
-/* day_mon2.c -- letting the compiler count elements */
+/* day_mon2.c -- предоставление компилятору возможности прдсчета элементов*/
 #include <stdio.h>
 int main(void)
 {
@@ -6,7 +6,7 @@ int main(void)
     int index;
     
     for (index = 0; index < sizeof days / sizeof days[0]; index++)
-        printf("Month %2d has %d days.\n", index +1,
+        printf("Месяц %2d имеет %d день (дней).\n", index +1,
                days[index]);
     
     return 0;

@@ -1,23 +1,23 @@
-/* showchar2.c -- prints characters in rows and columns */
+/* showchar2.c -- выводит символы в строках и столбцах  */
 #include <stdio.h>
 void display(char cr, int lines, int width);
 int main(void)
 {
-    int ch;             /* character to be printed      */
-    int rows, cols;     /* number of rows and columns   */
+    int ch;             /* вводимый (затем выводимый) символ */
+    int rows, cols;     /* количество строк и столбцов */
     
-    printf("Enter a character and two integers:\n");
+    printf("Введите символ и два целых числа:\n");
     while ((ch = getchar()) != '\n')
     {
         if (scanf("%d %d",&rows, &cols) != 2)
             break;
-        display(ch, rows, cols);
+        display((char)ch, rows, cols);
         while (getchar() !=  '\n')
             continue;
-        printf("Enter another character and two integers;\n");
-        printf("Enter a newline to quit.\n");
+        printf("Введите еще один символ и два целых числа;\n");
+        printf("для завершения введите символ новой строки.\n");
     }
-    printf("Bye.\n");
+    printf("Программа завершена.\n");
     
     return 0;
 }
@@ -30,6 +30,6 @@ void display(char cr, int lines, int width)
     {
         for (col = 1; col <= width; col++)
             putchar(cr);
-        putchar('\n');  /* end line and start a new one */
+        putchar('\n');  /* закончить строку и начать новую */
     }
 }

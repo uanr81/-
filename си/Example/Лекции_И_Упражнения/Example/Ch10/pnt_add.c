@@ -1,4 +1,4 @@
-// pnt_add.c -- pointer addition
+// pnt_add.c -- сложение указателей
 #include <stdio.h>
 #define SIZE 4
 int main(void)
@@ -9,11 +9,11 @@ int main(void)
     double bills[SIZE];
     double * ptf;
     
-    pti = dates;    // assign address of array to pointer
+    pti = dates;    // присваивание указателю адреса масива
     ptf = bills;
     printf("%23s %15s\n", "short", "double");
     for (index = 0; index < SIZE; index ++)
-        printf("pointers + %d: %10p %10p\n",
+        printf("указатели + %d: %10p %10p\n",
                index, pti + index, ptf + index);
     
     return 0;

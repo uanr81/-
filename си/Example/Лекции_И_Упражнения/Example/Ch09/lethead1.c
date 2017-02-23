@@ -5,7 +5,7 @@
 #define PLACE "Megapolis, CA 94904"
 #define WIDTH 40
 
-void starbar(void);  /* prototype the function */
+void starbar(void);  /* прототип функции */
 
 int main(void)
 {
@@ -13,12 +13,12 @@ int main(void)
     printf("%s\n", NAME);
     printf("%s\n", ADDRESS);
     printf("%s\n", PLACE);
-    starbar();       /* use the function       */
+    starbar();       /* использование функции  */
     
     return 0;
 }
 
-void starbar(void)   /* define the function    */
+void starbar(void)   /* определение функции    */
 {
     int count;
     

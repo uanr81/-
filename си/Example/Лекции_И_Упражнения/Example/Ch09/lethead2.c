@@ -1,29 +1,29 @@
 /* lethead2.c */
 #include <stdio.h>
-#include <string.h>            /* for strlen() */
+#include <string.h>            /* для strlen() */
 #define NAME "GIGATHINK, INC."
 #define ADDRESS "101 Megabuck Plaza"
 #define PLACE "Megapolis, CA 94904"
 #define WIDTH 40
 #define SPACE ' '
 
-void show_n_char(char ch, int num);
+void show_n_char(char ch, int num);/*прототип функции*/
 
 int main(void)
 {
     int spaces;
     
-    show_n_char('*', WIDTH);   /* using constants as arguments */
+    show_n_char('*', WIDTH);   /* использование констант в качестве аргументов */
     putchar('\n');
-    show_n_char(SPACE, 12);    /* using constants as arguments */
+    show_n_char(SPACE, 12);    /* использование констант в качестве аргументов */
     printf("%s\n", NAME);
     spaces = (WIDTH - strlen(ADDRESS)) / 2;
-    /* Let the program calculate    */
-    /* how many spaces to skip      */
-    show_n_char(SPACE, spaces);/* use a variable as argument   */
+    /* позволить программе вычислить,
+    сколько пробелов нужно вывести*/
+    show_n_char(SPACE, spaces);/* использование переменной в качестве аргумента*/
     printf("%s\n", ADDRESS);
     show_n_char(SPACE, (WIDTH - strlen(PLACE)) / 2);
-    /* an expression as argument    */
+    /* использование выражения в качестве аргумента    */
     printf("%s\n", PLACE);
     show_n_char('*', WIDTH);
     putchar('\n');
@@ -31,7 +31,7 @@ int main(void)
     return 0;
 }
 
-/* show_n_char() definition */
+/* определение функции show_n_char() */
 void show_n_char(char ch, int num)
 {
     int count;

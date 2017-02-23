@@ -1,25 +1,25 @@
-/* loccheck.c  -- checks to see where variables are stored  */
+/* loccheck.c  -- проверка для выяснения, где хранятся переменные */
 #include <stdio.h>
-void mikado(int);                      /* declare function  */
+void mikado(int);                      /* объявление функции */
 int main(void)
 {
-    int pooh = 2, bah = 5;             /* local to main()   */
+    int pooh = 2, bah = 5;             /* локальные для main() */
     
-    printf("In main(), pooh = %d and &pooh = %p\n",
+    printf("Внутри main(), pooh = %d and &pooh = %p\n",
            pooh, &pooh);
-    printf("In main(), bah = %d and &bah = %p\n",
+    printf("Внутри main(), bah = %d and &bah = %p\n",
            bah, &bah);
     mikado(pooh);
     
     return 0;
 }
 
-void mikado(int bah)                   /* define function   */
+void mikado(int bah)                   /* определение функции */
 {
-    int pooh = 10;                     /* local to mikado() */
+    int pooh = 10;                     /* локальная для mikado() */
     
-    printf("In mikado(), pooh = %d and &pooh = %p\n",
+    printf("Внутри mikado(), pooh = %d and &pooh = %p\n",
            pooh, &pooh);
-    printf("In mikado(), bah = %d and &bah = %p\n",
+    printf("Внутри mikado(), bah = %d and &bah = %p\n",
            bah, &bah);
 }

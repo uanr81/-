@@ -1,7 +1,7 @@
-/* usehotel.c -- room rate program */
-/* compile with  Listing 9.10      */
+/* usehotel.c -- программа определения стоимостми номеров */
+/* компилируется вместе с листингом hotel.c */
 #include <stdio.h>
-#include "hotel.h" /* defines constants, declares functions */
+#include "hotel.h" /* определяет константы, объявляет функции */
 
 int main(void)
 {
@@ -28,7 +28,7 @@ int main(void)
         nights = getnights();
         showprice(hotel_rate, nights);
     }
-    printf("Thank you and goodbye.\n");
+    printf("Спасибо за использование и желаем успехов.\n");
     
     return 0;
 }

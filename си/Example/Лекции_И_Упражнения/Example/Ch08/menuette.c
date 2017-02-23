@@ -1,4 +1,4 @@
-/* menuette.c -- menu techniques */
+/* menuette.c -- технология меню */
 #include <stdio.h>
 char get_choice(void);
 char get_first(void);
@@ -13,17 +13,17 @@ int main(void)
     {
         switch (choice)
         {
-            case 'a' :  printf("Buy low, sell high.\n");
+            case 'a' :  printf("Покупайте дешево, продавайте дорого.\n");
                 break;
             case 'b' :  putchar('\a');  /* ANSI */
                 break;
             case 'c' :  count();
                 break;
-            default  :  printf("Program error!\n");
+            default  :  printf("Ошибка!\n");
                 break;
         }
     }
-    printf("Bye.\n");
+    printf("Программа завершена.\n");
     
     return 0;
 }
@@ -32,7 +32,7 @@ void count(void)
 {
     int n,i;
     
-    printf("Count how far? Enter an integer:\n");
+    printf("До какого предела вести подсчет? Введите целое число:\n");
     n = get_int();
     for (i = 1; i <= n; i++)
         printf("%d\n", i);
@@ -44,13 +44,13 @@ char get_choice(void)
 {
     int ch;
     
-    printf("Enter the letter of your choice:\n");
-    printf("a. advice           b. bell\n");
-    printf("c. count            q. quit\n");
+    printf("Введите букву, соответствующую выбранному варианту:\n");
+    printf("a. совет            b. bell\n");
+    printf("c. подсчет          q. выход\n");
     ch = get_first();
     while (  (ch < 'a' || ch > 'c') && ch != 'q')
     {
-        printf("Please respond with a, b, c, or q.\n");
+        printf("Выберите a, b, c, или q.\n");
         ch = get_first();
     }
     
@@ -76,9 +76,9 @@ int get_int(void)
     while (scanf("%d", &input) != 1)
     {
         while ((ch = getchar()) != '\n')
-            putchar(ch);  // dispose of bad input
-        printf(" is not an integer.\nPlease enter an ");
-        printf("integer value, such as 25, -178, or 3: ");
+            putchar(ch);  // отбросить неправильный ввод
+        printf(" не является целочисленным.\nВведите ");
+        printf("целое число, такое как 25, -178, или 3: ");
     }
     
     return input;

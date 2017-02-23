@@ -1,4 +1,4 @@
-/* sum_arr2.c -- sums the elements of an array */
+/* sum_arr2.c -- сумма элементов массива */
 #include <stdio.h>
 #define SIZE 10
 int sump(int * start, int * end);
@@ -8,20 +8,20 @@ int main(void)
     long answer;
     
     answer = sump(marbles, marbles + SIZE);
-    printf("The total number of marbles is %ld.\n", answer);
+    printf("Общая сумма элементов массива marbles равна %ld.\n", answer);
     
     return 0;
 }
 
-/* use pointer arithmetic   */
+/* использование арифметики указателей */
 int sump(int * start, int * end)
 {
     int total = 0;
     
     while (start < end)
     {
-        total += *start; // add value to total
-        start++;         // advance pointer to next element
+        total += *start; // добавить значение к total
+        start++;         // переместить указатель на следующий элемент
     }
     
     return total;

@@ -1,4 +1,4 @@
-/* echo.c -- repeats input */
+/* echo.c -- повторяет ввод */
 #include <stdio.h>
 int main(void)
 {

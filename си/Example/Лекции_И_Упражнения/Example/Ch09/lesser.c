@@ -1,4 +1,4 @@
-/* lesser.c -- finds the lesser of two evils */
+/* lesser.c -- выбирает меньшее из дух зол */
 #include <stdio.h>
 int imin(int, int);
 
@@ -6,14 +6,14 @@ int main(void)
 {
     int evil1, evil2;
     
-    printf("Enter a pair of integers (q to quit):\n");
+    printf("Введите два целых числа (или q для завершения):\n");
     while (scanf("%d %d", &evil1, &evil2) == 2)
     {
-        printf("The lesser of %d and %d is %d.\n",
+        printf("Меньшим из двух чисел %d и %d является %d.\n",
                evil1, evil2, imin(evil1,evil2));
-        printf("Enter a pair of integers (q to quit):\n");
+        printf("Ввдите два целых числа (или q для завершения):\n");
     }
-    printf("Bye.\n");
+    printf("Программа завершена.\n");
     
     return 0;
 }

@@ -1,5 +1,5 @@
-// sum_arr1.c -- sums the elements of an array
-// use %u or %lu if %zd doesn't work
+// sum_arr1.c -- сумма элементов массива      
+// используйте спецификаторы %u или %lu, если %zd не работает
 #include <stdio.h>
 #define SIZE 10
 int sum(int ar[], int n);
@@ -9,21 +9,21 @@ int main(void)
     long answer;
     
     answer = sum(marbles, SIZE);
-    printf("The total number of marbles is %ld.\n", answer);
-    printf("The size of marbles is %zd bytes.\n",
+    printf("Общая сумма элементов массива marbles равна %ld.\n", answer);
+    printf("Объем памяти, отведенный под массив marbles, составляет %zd байтов.\n",
            sizeof marbles);
     
     return 0;
 }
 
-int sum(int ar[], int n)     // how big an array?
+int sum(int ar[], int n)     // насколько велик массив?
 {
     int i;
     int total = 0;
     
     for( i = 0; i < n; i++)
         total += ar[i];
-    printf("The size of ar is %zd bytes.\n", sizeof ar);
+    printf("Размер ar составляет %zd байтов.\n", sizeof ar);
     
     return total;
 }

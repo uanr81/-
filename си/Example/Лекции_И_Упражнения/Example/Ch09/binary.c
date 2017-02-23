@@ -1,24 +1,24 @@
-/* binary.c -- prints integer in binary form */
+/* binary.c -- выводит целые числа в двоичной форме */
 #include <stdio.h>
 void to_binary(unsigned long n);
 
 int main(void)
 {
     unsigned long number;
-    printf("Enter an integer (q to quit):\n");
+    printf("Введите целое число (q для завершения):\n");
     while (scanf("%lu", &number) == 1)
     {
-        printf("Binary equivalent: ");
+        printf("Двоичный эквивалент: ");
         to_binary(number);
         putchar('\n');
-        printf("Enter an integer (q to quit):\n");
+        printf("Введите целое число (q для завершения):\n");
     }
-    printf("Done.\n");
+    printf("Прграмма завершена.\n");
     
     return 0;
 }
 
-void to_binary(unsigned long n)   /* recursive function */
+void to_binary(unsigned long n)   /* рекурсивная функция */
 {
     int r;
     

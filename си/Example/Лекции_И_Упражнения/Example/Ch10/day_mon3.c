@@ -1,4 +1,4 @@
-/* day_mon3.c -- uses pointer notation */
+/* day_mon3.c -- использование формы записи с указателями */
 #include <stdio.h>
 #define MONTHS 12
 
@@ -8,8 +8,8 @@ int main(void)
     int index;
     
     for (index = 0; index < MONTHS; index++)
-        printf("Month %2d has %d days.\n", index +1,
-               *(days + index));   // same as days[index]
+        printf("Месяц %2d имеет %d день (дней).\n", index +1,
+               *(days + index));   // тоже самое, что и days[index]
     
     return 0;
 }

@@ -1,4 +1,4 @@
-/* hotel.h -- constants and declarations for hotel.c */
+/* hotel.h -- константы и объявления для программы hotel.c */
 #define QUIT       5
 #define HOTEL1   180.00
 #define HOTEL2   225.00
@@ -7,12 +7,12 @@
 #define DISCOUNT   0.95
 #define STARS "**********************************"
 
-// shows list of choices
+// отображает список возможных вариантов
 int menu(void);
 
-// returns number of nights desired
+// возвращает количество суток, на которое бронируется номер
 int getnights(void);
 
-// calculates price from rate, nights
-// and displays result
+// вычисляет стоимость в зависимости от расценок и количества
+// забронированных суток и отображает результат
 void showprice(double rate, int nights);

@@ -1,4 +1,4 @@
-/* order.c -- precedence in pointer operations */
+/* order.c -- приоритеты в операциях с указателями */
 #include <stdio.h>
 int data[2] = {100, 200};
 int moredata[2] = {300, 400};
