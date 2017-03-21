@@ -1,21 +1,21 @@
-/*  fgets1.c  -- using fgets() and fputs() */
+/*  fgets1.c  -- использование функций fgets() и fputs() */
 #include <stdio.h>
 #define STLEN 14
 int main(void)
 {
     char words[STLEN];
     
-    puts("Enter a string, please.");
+    puts("Введите строку.");
     fgets(words, STLEN, stdin);
-    printf("Your string twice (puts(), then fputs()):\n");
+    printf("Ваша строка, выведена дважды (с помощью puts(), затем fputs()):\n");
     puts(words);
     fputs(words, stdout);
-    puts("Enter another string, please.");
+    puts("Введите еще одну строку.");
     fgets(words, STLEN, stdin);
-    printf("Your string twice (puts(), then fputs()):\n");
+    printf("Ваша строка, выведена дважды (с помощью puts(), затем fputs()):\n");
     puts(words);
     fputs(words, stdout);
-    puts("Done.");
+    puts("Готово.");
     
     return 0;
 }

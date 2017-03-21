@@ -1,17 +1,17 @@
 
 //  strings1.c
 #include <stdio.h>
-#define MSG "I am a symbolic string constant."
+#define MSG "Я - символьная константа."
 #define MAXLENGTH 81
 int main(void)
 {
-    char words[MAXLENGTH] = "I am a string in an array.";
-    const char * pt1 = "Something is pointing at me.";
-    puts("Here are some strings:");
+    char words[MAXLENGTH] = "Я являюсь строкой, хранящейся в массиве.";
+    const char * pt1 = "Что-то указывает на меня.";
+    puts("Вот несколько строк:");
     puts(MSG);
     puts(words);
     puts(pt1);
-    words[8] = 'p';
+    words[8] = 'ф';
     puts(words);
 
     return 0;

@@ -1,4 +1,4 @@
-//  addresses.c  -- addresses of strings
+//  addresses.c  -- адреса строк
 #define MSG "I'm special."
 
 #include <stdio.h>
@@ -6,11 +6,11 @@ int main()
 {
     char ar[] = MSG;
     const char *pt = MSG;
-    printf("address of \"I'm special\": %p \n", "I'm special");
-    printf("              address ar: %p\n", ar);
-    printf("              address pt: %p\n", pt);
-    printf("          address of MSG: %p\n", MSG);
-    printf("address of \"I'm special\": %p \n", "I'm special");
+    printf("адрес \"Я особенный.\": %p \n", "Я особенный.");
+    printf("              адрес ar: %p\n", ar);
+    printf("              адрес pt: %p\n", pt);
+    printf("          адрес MSG: %p\n", MSG);
+    printf("адрес\"Я особенный\": %p \n", "Я особенный.");
 
     return 0;
 }

@@ -1,4 +1,4 @@
-/* zippo2.c --  zippo info via a pointer variable */
+/* zippo2.c --  получение информации о массиве zippo с помощью переменной типа */
 #include <stdio.h>
 int main(void)
 {
