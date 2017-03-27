@@ -50,7 +50,7 @@ TEXT. В случае `google-translate-output-destination' указывающе
 
 Иметь дело с multi-line регионами, Последовательности пробелов заменяются одним пробелом.
 Если в области нет текста, печатается сообщение."
-  (let* ((json (google-translate-request source-language
+  (let* ((json (google-translate-request source-language//Отправьте HTTP-запрос Переводчика Google, который отправил перевод ТЕКСТА с ИСТОЧНИКА-ЯЗЫКА на TARGET-LANGUAGE. Возвращает ответ в формате json
                                          target-language
                                          text)))
     (if (null json)

@@ -1,0 +1,5 @@
+(defun qwer ()
+  (interactive)
+  (setq s '"en")
+  (setq tt '"ru")
+(google-translate-translate s tt (buffer-substring-no-properties (region-beginning) (region-end))))

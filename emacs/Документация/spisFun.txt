@@ -1,0 +1,30 @@
+Click on a completion to select it.
+In this buffer, type RET to select the completion near point.
+
+Possible completions are:
+edebug-Continue-fast-mode 	edebug-Go-nonstop-mode
+edebug-Trace-fast-mode 	edebug-all-defs
+edebug-all-defuns 	edebug-all-forms
+edebug-backtrace 	edebug-bounce-point
+edebug-continue-mode 	edebug-defun
+edebug-delete-eval-item 	edebug-display-freq-count
+edebug-eval-defun 	edebug-eval-expression
+edebug-eval-last-sexp 	edebug-eval-mode
+edebug-eval-print-last-sexp 	edebug-eval-top-level-form
+edebug-forward-sexp 	edebug-go-mode
+edebug-goto-here 	edebug-help
+edebug-install-read-eval-functions 	edebug-instrument-callee
+edebug-menu 	edebug-mode
+edebug-next-breakpoint 	edebug-next-mode
+edebug-on-entry 	edebug-original-debug-on-entry
+edebug-original-eval-defun 	edebug-previous-result
+edebug-set-breakpoint 	edebug-set-conditional-breakpoint
+edebug-set-global-break-condition 	edebug-step-in
+edebug-step-mode 	edebug-step-out
+edebug-step-through-mode 	edebug-stop
+edebug-temp-display-freq-count 	edebug-toggle-save-all-windows
+edebug-toggle-save-selected-window 	edebug-toggle-save-windows
+edebug-top-level-nonstop 	edebug-trace-mode
+edebug-uninstall-read-eval-functions 	edebug-unset-breakpoint
+edebug-update-eval-list 	edebug-view-outside
+edebug-visit-eval-list 	edebug-where
