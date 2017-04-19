@@ -1,0 +1,82 @@
+\input texinfo   @c -*-texinfo-*-
+@comment %**start of header
+@setfilename gnu-c-manual.info
+@settitle The GNU C Reference Manual
+@c @smallbook
+@comment %**end of header
+
+@copying
+Copyright @copyright{} 2007-2015 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts and no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU Free
+Documentation License.''
+@end copying
+
+@dircategory Software development
+@direntry
+* C: (gnu-c-manual).            GNU C reference manual.
+@end direntry
+
+@titlepage
+@title The GNU C Reference Manual
+@author Trevis Rothwell
+@author James Youngman
+
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top The GNU C Reference Manual
+
+This is the GNU C reference manual.
+@end ifnottex
+
+@menu
+* Preface::
+* Lexical Elements::
+* Data Types::
+* Expressions and Operators::
+* Statements::
+* Functions::
+* Program Structure and Scope::
+* A Sample Program::
+* Overflow::
+* GNU Free Documentation License::
+* Index::
+@end menu
+
+@include preface.texi
+@include lexical.texi
+@include types.texi
+@include expressions.texi
+@include statements.texi
+@include functions.texi
+@include program.texi
+@include sample.texi
+@include overflow.texi
+
+@node GNU Free Documentation License
+@unnumbered GNU Free Documentation License
+
+@include fdl.texi
+
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye
+
+
+
+
