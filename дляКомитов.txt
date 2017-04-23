@@ -1,4 +1,6 @@
 find -name '*.*~' -delete
 find -name '*.*#' -delete
-git push -u shkola master
+git push origin master//для пердуна
+git push -u shkola master//для 64 предун ubuntu
+git pull //получить изменения с основного сервера
 git config --local core.quotepath false//отображение русских букв в именах файлов
