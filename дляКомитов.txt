@@ -1,3 +1,4 @@
 find -name '*.*~' -delete
 find -name '*.*#' -delete
 git push -u shkola master
+git config --local core.quotepath false//отображение русских букв в именах файлов
