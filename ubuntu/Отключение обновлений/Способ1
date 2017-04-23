@@ -1,0 +1,25 @@
+Способ 1
+Первый способ - это перенастроить unattended-updates, для этого необходимо отредактировать конфигурационный файл:  /etc/apt/apt.conf.d/50unattended-upgrades. Здесь можно выборочно закомментировать (добавив // перед строкой) определенные источники обновлений в секции: "Unattended-Upgrade::Allowed-Origins", например:
+
+$ nano /etc/apt/apt.conf.d/50unattended-upgrades
+Unattended-Upgrade::Allowed-Origins {
+// "${distro_id}:${distro_codename}-security";
+// "${distro_id}:${distro_codename}-updates";
+// "${distro_id}:${distro_codename}-proposed";
+// "${distro_id}:${distro_codename}-backports";
+};
+Также можно отключить обновление только для определенных программ, добавив имена их пакетов в секцию "Unattended-Upgrade::Package-Blacklist":
+
+Unattended-Upgrade::Package-Blacklist {
+"vim";
+"libc6";
+};
+Способ 2
+Если вы хотите полностью отключить автоматическое обновление, можно добавить следующий код в файл  /etc/apt/apt.conf.d/10periodic:
+
+$ sudo nano /etc/apt/apt.conf.d/10periodic
+APT::Periodic::Unattended-Upgrade "0";
+Эта опция отключит даже проверку обновлений.
+*************************************************
+Изменил /etc/apt/apt.conf.d/10periodic
+Изменил /etc/apt/apt.conf.d/50unattended-upgrades

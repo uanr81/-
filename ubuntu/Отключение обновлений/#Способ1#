@@ -1,0 +1,6 @@
+Способ 2
+Если вы хотите полностью отключить автоматическое обновление, можно добавить следующий код в файл  /etc/apt/apt.conf.d/10periodic:
+
+$ sudo nano /etc/apt/apt.conf.d/10periodic
+APT::Periodic::Unattended-Upgrade "0";
+Эта опция отключит даже проверку обновлений.
