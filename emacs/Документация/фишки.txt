@@ -1,0 +1,4 @@
+C-x <enter> r iso-8859-5 ;для техинфо ру 4
+M-x revert-buffer-with-coding-system ;определить кодировку
+C-x C-m f ;выбрать кодировку для сохранения
+C-x C-m c <кодировка> RET C-x C-w RET сохранить файл в другой кодировке
