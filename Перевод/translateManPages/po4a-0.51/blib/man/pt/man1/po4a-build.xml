@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry id="po4a-build" xml:lang="pt">
+  <refentryinfo>
+<productname>po4a-build</productname> <productnumber/></refentryinfo>
+  <refmeta>
+    <refentrytitle>po4a-build</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">PO4A</refmiscinfo>
+    <refmiscinfo class="manual">PO4A</refmiscinfo>
+  </refmeta>
+  <refnamediv id="name">
+    <refname>po4a-build</refname>
+    <refpurpose>Documentação traduzida de construção</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+<command>po4a-build</command> <group> <arg
+choice='plain'><option>-f</option></arg> <arg
+choice='plain'><option>--ficheiro</option></arg> <replaceable>
+FICHEIRO</replaceable> </group> <arg><option>--pot-apenas</option></arg></cmdsynopsis>
+    <cmdsynopsis>
+<command>po4a-build</command> <group> <arg
+choice='plain'><option>-?</option></arg> <arg
+choice='plain'><option>-h</option></arg> <arg
+choice='plain'><option>--Ajuda</option></arg> <arg
+choice='plain'><option>--versão</option></arg> </group></cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="description">
+    <title>DESCRIÇÃO</title>
+    <para><command>po4a-build</command> tem a intenção de tornar muito fácil de exibir
+como pode ser documentação traduzida para produzir o conteúdo atual sem
+tradução.
+    </para>
+    <para>Quando <command>po4a</command> prepara o conteúdo traduzido como POD
+ouDocBook XML, a documentação final pode então ser construída
+usando<command>po4a-build</command>.Tanto o conteúdo sem tradução e
+traduzidoé construído como um único processo, atualizando os arquivos POT ao
+mesmo tempo.
+    </para>
+    <para>Instruções de construção existentes são substituídas por uma única chamada
+para <command>po4a-build</command> e um ficheiro de configuração simples é
+usado para dizer <command>po4a-build</command> como formar cada elemento e
+que pacotes binários irá incluir o conteúdo traduzido e sem tradução.
+    </para>
+    <para>Uma vez construído, o conteúdo estará no pacote de diretórios específicos
+sob o <option>BASEDIR</option> especificado no arquivo de configuração. Para
+um pacote binário foo, com traduções para o Alemão e Francês, isso
+resultaria em:
+    </para>
+    <programlisting>
+BASEDIR/foo/man/man1/foo.1
+BASEDIR/foo/man/de/man1/foo.1
+BASEDIR/foo/man/fr/man1/foo.1
+    </programlisting>
+    <para>Isto torna mais fácil para incluir todo o conteúdo gerado no pacote binário
+com um único local de instalação:
+    </para>
+    <programlisting>
+doc/foo/man/* ./usr/share/man/
+doc/foo/html/* ./usr/share/doc/foo/
+    </programlisting>
+    <para>Esta regra não precisa de ser atualizada quando novas traduções são
+adicionadas e adicionando um segundo pacote binário (bar) permite que o
+conteúdo para esse pacote seja mantido separado.
+    </para>
+    <refsect2 id="formats">
+      <title>Formatos Suportados</title>
+      <para>Atualmente, <command>po4a-build</command> suporta as seguintes combinações:
+      </para>
+      <orderedlist>
+        <listitem>
+          <para>DocBook XML para a parte 1.</para>
+        </listitem>
+        <listitem>
+          <para>DocBook XML para a parte 3.</para>
+        </listitem>
+        <listitem>
+          <para>DocBook XML para HTML.</para>
+        </listitem>
+        <listitem>
+          <para>POD para a parte 1.</para>
+        </listitem>
+        <listitem>
+          <para>POD para a parte 3.</para>
+        </listitem>
+        <listitem>
+          <para>POD para a parte 5.</para>
+        </listitem>
+        <listitem>
+          <para>POD para a parte 7.</para>
+        </listitem>
+      </orderedlist>
+      <para>Todos os formatos suportados, em todas as combinações suportadas, podem ser
+tratados em uma simples <filename>po4a build.conf-file</filename>
+configuração e em uma única chamada para <command>po4a-build</command>. Veja
+<citerefentry><refentrytitle>po4a-build.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      </para>
+    </refsect2>
+  </refsect1>
+  <refsect1 id="config">
+    <title>CONFIGURAÇÃO</title>
+    <para><command>po4a-build</command> usa um arquivo de configuração padrão,
+<filename>po4a-build.conf</filename> que deve estar no diretório de nível
+mais alto do seu pacote VCS. (Use a <option>-f</option> opçãopara
+especificar um ficheiro diferente.) Ver
+<citerefentry><refentrytitle>po4a-build.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+    </para>
+    <example id="config">
+      <title>exemplo de um ficheiro de configuração</title>
+      <para>Um exemplo de um ficheiro de configuração está disponível em:
+    </para>
+<programlisting>
+/usr/share/doc/po4a/examples/po4a-build.conf.example
+    </programlisting></example>
+    <refsect2 id="layout">
+      <title>Apresentação de um ficheiro de configuração</title>
+      <para>O ficheiro de configuração é composto, em geral, por várias secções, suporte
+XML/XSL para apoio, POD e HTML.
+      </para>
+      <para>Geralmente inclui o nome e a localização do ficheiro de configuração po4a
+(provavelmente o melhor é deixar isso como
+<filename>po4a.config</filename>), o diretório po contendo a documentação
+dos ficheiros PO (muitas vezes <filename>doc/po</filename>), o nome completo
+do ficheiro POT usado para criar as traduções, o BASEDIR para a saída
+gerada, se o pacote contém páginas do manual na secção 3 em vez de apenas a
+secção 1 e os nomes dos pacotes binários que devem conter a saída gerada.
+      </para>
+      <para>O suporte XML/XSL inclui a especificação de que os pacotes binários usam
+suporte XSL na variável XMLPACKAGES, o ficheiro de nível superior DocBook
+para passar <command>xsltproc</command> e da localização dos ficheiros XML
+ou DocBook. O XSLFILE A pode ser substituído, se necessário.
+      </para>
+      <para>O suporte POD inclui a especificação de que os pacotes binários usam o
+suporte POD na variável PODPACKAGES e o nome completo do ficheiro POD.
+      </para>
+      <para>O suporte HTML especifica o subdiretório para criar abaixo do BASEDIR para o
+conteúdo HTML sem tradução e traduzido e o ficheiro DocBook para gerar o
+HTML.O ficheiro HTMLXSL pode ser substituído, se necessário.
+      </para>
+    </refsect2>
+  </refsect1>
+  <refsect1 id="commands">
+    <title>COMANDOS</title>
+    <variablelist remap="TP">
+      <varlistentry>
+        <term>
+          <option>--pot-only</option>
+        </term>
+        <listitem>
+          <para>As atualizações apenas do ficheiro(s) POT. <option>--pot-only</option>
+destinam-se a suportar pacotes, incluindo todos os ficheiros POT do pacote
+de origem. Pacotes usando Autotools podem facilmente adicionar ficheiro(s)
+POT via EXTRA_DIST mas os pacotes que usam apenas um Makefile ou certos
+ajudantes de construção VCS podem achar que é estranho adicionar o ficheiro
+POT (que é um ficheiro gerado), sem colocarem o ficheiro POT na VCS. Para
+evitar esse trabalho feio e desnecessário, <command>po4a-build</command>
+pode atualizar o ficheiro(s) POT no início da construção, para que
+<command>dpkg-source</command> os inclua na fonte tarball.
+          </para>
+        </listitem>
+          <example id="svn">
+            <title>exemplo de svn-buildpackage</title>
+            <para><command>svn-buildpackage</command> tem suporte explícito para esse tipo de
+adição, usando a <option>useNativeDist</option> propriedade SVN e tornar o
+destino<option>nativo-dist</option>.
+            </para>
+<programlisting>
+# Adiciona o ficheiro POT para a fonte tarball
+native-dist: Makefile
+	po4a-build --pot-only
+            </programlisting> <programlisting>
+$ svn propset useNativeDist 1 debian
+            </programlisting></example>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-h</option>|<option>--help</option></term>
+        <listitem>
+          <para>imprimir a mensagem de uso e sair.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>--versão</option>
+        </term>
+        <listitem>
+          <para>imprimir a mensagem de uso e sair.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1 id="options">
+    <title>OPÇÕES</title>
+    <variablelist remap="TP">
+      <varlistentry>
+        <term><option>-f</option>|<option>--file</option><replaceable> FILE</replaceable></term>
+        <listitem>
+          <para>Substituir o <command>po4a-build</command> ficheiro de configuração padrão
+(<filename>po4a-build.conf</filename>) e fornecer o seu próprio.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1>
+    <title>Autor</title>
+    <para><command>po4a-build</command> foi escrito por Neil Williams
+<email>codehelp@debian.org</email>.
+    </para>
+    <para>Esta página do manual foi escrita por Neil Williams
+<email>codehelp@debian.org</email>
+    </para>
+  </refsect1>
+</refentry>

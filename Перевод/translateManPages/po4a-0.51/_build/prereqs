@@ -1,0 +1,17 @@
+do{ my $x = {
+       'build_requires' => {},
+       'conflicts' => {},
+       'recommends' => {
+                         'Locale::gettext' => '1.01',
+                         'SGMLS' => 0,
+                         'Term::ReadKey' => 0,
+                         'Text::WrapI18N' => 0,
+                         'Unicode::GCString' => 0
+                       },
+       'requires' => {},
+       'test_requires' => {
+                            'SGMLS' => 0,
+                            'Unicode::GCString' => 0
+                          }
+     };
+$x; }

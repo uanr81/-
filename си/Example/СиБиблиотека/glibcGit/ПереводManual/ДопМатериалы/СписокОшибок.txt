@@ -1,0 +1,29 @@
+/libc.texinfo:21: @include: невозможно найти dir-add.texi *
+./libc.texinfo:23: @include: невозможно найти pkgvers.texi
+./libc.texinfo:38: @include: невозможно найти version.texi
+./libc.texinfo:53: warning: неопределенный флаг: VERSION
+./libc.texinfo:53: warning: неопределенный флаг: PKGVERSION
+./libc.texinfo:87: warning: неопределенный флаг: VERSION
+./libc.texinfo:90: warning: неопределенный флаг: PKGVERSION
+./libc.texinfo:117: warning: неопределенный флаг: VERSION
+./libc.texinfo:119: warning: неопределенный флаг: PKGVERSION
+./libc.texinfo:124: @include: невозможно найти top-menu.texi
+./libc.texinfo:125: @include: невозможно найти chapters.texi
+./libc.texinfo:112: Next ссылается на несуществующий «Introduction»
+./libc.texinfo:127: warning: на ноду «Free Manuals» нет ссылок
+./libc.texinfo:127: Prev ссылается на несуществующий «Contributors»
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «Free Manuals», хотя на неё ссылается цель Up
+./libc.texinfo:131: warning: на ноду «Copying» нет ссылок
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «Copying», хотя на неё ссылается цель Up
+./libc.texinfo:135: warning: на ноду «Documentation License» нет ссылок
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «Documentation License», хотя на неё ссылается цель Up
+./libc.texinfo:140: warning: на ноду «Concept Index» нет ссылок
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «Concept Index», хотя на неё ссылается цель Up
+./libc.texinfo:145: warning: на ноду «Type Index» нет ссылок
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «Type Index», хотя на неё ссылается цель Up
+./libc.texinfo:150: warning: на ноду «Function Index» нет ссылок
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «Function Index», хотя на неё ссылается цель Up
+./libc.texinfo:155: warning: на ноду «Variable Index» нет ссылок
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «Variable Index», хотя на неё ссылается цель Up
+./libc.texinfo:160: warning: на ноду «File Index» нет ссылок
+./libc.texinfo:112: нода «Top» не имеет пункта меню для «File Index», хотя на неё ссылается цель Up

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry id="po4a-build" xml:lang="ja">
+  <refentryinfo>
+<productname>po4a-build</productname> <productnumber/></refentryinfo>
+  <refmeta>
+    <refentrytitle>po4a-build</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">PO4A</refmiscinfo>
+    <refmiscinfo class="manual">PO4A</refmiscinfo>
+  </refmeta>
+  <refnamediv id="name">
+    <refname>po4a-build</refname>
+    <refpurpose>翻訳済みドキュメントのビルド</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+<command>po4a-build</command> <group> <arg
+choice='plain'><option>-f</option></arg> <arg
+choice='plain'><option>--file</option></arg> <replaceable>
+FILE</replaceable> </group> <arg><option>--pot-only</option></arg></cmdsynopsis>
+    <cmdsynopsis>
+<command>po4a-build</command> <group> <arg
+choice='plain'><option>-?</option></arg> <arg
+choice='plain'><option>-h</option></arg> <arg
+choice='plain'><option>--help</option></arg> <arg
+choice='plain'><option>--version</option></arg> </group></cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1 id="description">
+    <title>説明</title>
+    <para><command>po4a-build</command>
+は、未訳を提供するのと同じ簡単さで、翻訳済みドキュメントを提供できるようにすることを意図しています。
+    </para>
+    <para><command>po4a</command> が POD や DocBook XML
+として翻訳済み内容を用意すると、<command>po4a-build</command>
+を使用して最終ドキュメントをビルドできます。未訳と翻訳済みの両方の内容は一度の処理でビルドされ、併せて同時に POT ファイルの更新も行われます。
+    </para>
+    <para>既存のビルド手順は <command>po4a-build</command>
+の一回の呼び出しに置き換えられます。<command>po4a-build</command>
+が参照するシンプルな設定ファイルが使用され、その中には各要素をビルドする方法や、翻訳済みと未訳の内容をインクルードするバイナリパッケージの指定が記述されます。
+    </para>
+    <para>ビルドされた内容は、設定ファイルで指定された <option>BASEDIR</option>
+の下のパッケージ固有のディレクトリに置かれます。バイナリパッケージ foo にドイツ語とフランス語の翻訳がある場合、以下のような結果になります:
+    </para>
+    <programlisting>
+BASEDIR/foo/man/man1/foo.1
+BASEDIR/foo/man/de/man1/foo.1
+BASEDIR/foo/man/fr/man1/foo.1
+    </programlisting>
+    <para>これにより、同じ位置にインストールするバイナリパッケージに生成した内容をすべて収録するのが簡単になります:
+    </para>
+    <programlisting>
+doc/foo/man/* ./usr/share/man/
+doc/foo/html/* ./usr/share/doc/foo/
+    </programlisting>
+    <para>新しい翻訳を追加する際にこの規則を更新する必要はなく、別個のバイナリパッケージ (bar)
+を追加することによってそのパッケージの内容を分けておくことが可能となります。
+    </para>
+    <refsect2 id="formats">
+      <title>サポートするフォーマット</title>
+      <para>現在、<command>po4a-build</command> は以下の組み合わせをサポートしています:
+      </para>
+      <orderedlist>
+        <listitem>
+          <para>セクション 1 用 DocBook XML。</para>
+        </listitem>
+        <listitem>
+          <para>セクション 3 用 DocBook XML。</para>
+        </listitem>
+        <listitem>
+          <para>HTML 用 DocBook XML。</para>
+        </listitem>
+        <listitem>
+          <para>セクション 1 用 POD。</para>
+        </listitem>
+        <listitem>
+          <para>セクション 3 用 POD。</para>
+        </listitem>
+        <listitem>
+          <para>セクション 5 用 POD。</para>
+        </listitem>
+        <listitem>
+          <para>セクション 7 用 POD。</para>
+        </listitem>
+      </orderedlist>
+      <para>対応しているあらゆるフォーマットにおいて、サポートするあらゆる組み合わせを単一の設定ファイル
+<filename>po4a-build.conf</filename> で指示し、ただ <command>po4a-build</command>
+を呼び出すだけで処理させられます。<citerefentry><refentrytitle>po4a-build.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+を参照してください。
+      </para>
+    </refsect2>
+  </refsect1>
+  <refsect1 id="config">
+    <title>設定</title>
+    <para><command>po4a-build</command> は、パッケージの VCS 最上位ディレクトリに置かれるべき
+<filename>po4a-build.conf</filename> をデフォルト設定ファイルとして使用します (ほかのファイルを使用するには
+<option>-f</option>
+オプションを使用してください)。<citerefentry><refentrytitle>po4a-build.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+を参照してください。
+    </para>
+    <example id="config">
+      <title>設定例のファイル</title>
+      <para>設定例が書かれたファイルは以下の場所にインストールされています:
+    </para>
+<programlisting>
+/usr/share/doc/po4a/examples/po4a-build.conf.example
+    </programlisting></example>
+    <refsect2 id="layout">
+      <title>設定ファイルのレイアウト</title>
+      <para>設定ファイルは、全般、XML/XSL サポート、POD サポート、HTML サポートの節で構成されます。
+      </para>
+      <para>全般には、po4a 設定ファイルの名前や位置 (<filename>po4a.config</filename> のままにしておくのが最善でしょう)
+や、ドキュメントの PO ファイルがある po ディレクトリ (通常は <filename>doc/po</filename>)、翻訳を作成する POT
+ファイルのフルネーム、生成物を出力する BASEDIR、パッケージの manpage をセクション 1 ではなくてセクション 3
+に格納するかどうか、生成物を格納するバイナリパッケージ名が含まれます。
+      </para>
+      <para>XML/XSL サポートには、XMLPACKAGES 変数により XSL
+サポートを使うバイナリパッケージの指定や、<command>xsltproc</command> に渡す最上位の DocBook ファイル、XML や
+DocBook ファイルの位置が含まれます。必要なら XSLFILE を上書きできます。
+      </para>
+      <para>POD サポートには、PODPACKAGES 変数により POD サポートを使うバイナリパッケージの指定や、POD ファイルのフルネームが含まれます。
+      </para>
+      <para>HTML サポートでは、BASEDIR 以下に作成する未訳と翻訳済みの HTML 内容のサブディレクトリや、HTML を生成する DocBook
+ファイルを指定します。必要なら HTMLXSL を上書きできます。
+      </para>
+    </refsect2>
+  </refsect1>
+  <refsect1 id="commands">
+    <title>コマンド</title>
+    <variablelist remap="TP">
+      <varlistentry>
+        <term>
+          <option>--pot-only</option>
+        </term>
+        <listitem>
+          <para>POT ファイルの更新のみ行います。<option>--pot-only</option> は、パッケージソースにある全 POT
+ファイルを収録するパッケージをサポートすることを意図しています。Autotools を使用したパッケージは、EXTRA_DIST により POT
+ファイルを簡単に追加できますが、単に Makefile を使用したり、特定の VCS ヘルパーを使用したパッケージは、VCS に POT
+ファイルを追加せずに (生成した) POT
+ファイルを追加するのは厄介であることがわかります。面倒で不要な作業を避けるために、<command>po4a-build</command>
+はビルド開始時に POT ファイルを更新できるようになっていて、<command>dpkg-source</command> がそれらをソース
+tarball に収録します。
+          </para>
+        </listitem>
+          <example id="svn">
+            <title>svn-buildpackage の例</title>
+            <para><command>svn-buildpackage</command> は、SVN 属性の <option>useNativeDist</option>
+や Make ターゲットの <option>native-dist</option> を使用して、この種の追加を明示的にサポートしています。
+            </para>
+<programlisting>
+# POT ファイルをソース tarball に追加
+native-dist: Makefile
+	po4a-build --pot-only
+            </programlisting> <programlisting>
+$ svn propset useNativeDist 1 debian
+            </programlisting></example>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-h</option>|<option>--help</option></term>
+        <listitem>
+          <para>使用方法のメッセージを表示して終了します。</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>--version</option>
+        </term>
+        <listitem>
+          <para>使用方法のメッセージを表示して終了します。</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1 id="options">
+    <title>オプション</title>
+    <variablelist remap="TP">
+      <varlistentry>
+        <term><option>-f</option>|<option>--file</option><replaceable> FILE</replaceable></term>
+        <listitem>
+          <para><command>po4a-build</command> は、デフォルトの設定ファイル
+(<filename>po4a-build.conf</filename>) の代わりにオプションで指定したファイルを使用します。
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1>
+    <title>著者</title>
+    <para><command>po4a-build</command> は Neil Williams
+<email>codehelp@debian.org</email> によって書かれました。
+    </para>
+    <para>このマニュアルページは Neil Williams <email>codehelp@debian.org</email> によって書かれました
+    </para>
+  </refsect1>
+</refentry>

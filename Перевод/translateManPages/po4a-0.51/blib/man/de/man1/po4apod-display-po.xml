@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<!-- lifted from troff+man by doclifter -->
+<refentry id='po4apoddisplaypo1' xml:lang="de">
+<refentryinfo><date>2009-03-16</date></refentryinfo>
+<refmeta>
+<refentrytitle>PO4APOD-DISPLAY-PO</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class='date'>2009-03-16</refmiscinfo>
+<refmiscinfo class='source'>Po4a-Werkzeuge</refmiscinfo>
+<refmiscinfo class='manual'>Po4a-Werkzeuge</refmiscinfo>
+</refmeta>
+<refnamediv id='name'>
+<refname>po4apod-display-po</refname>
+<refpurpose>Handbuchanzeige einer übersetzten POD-Datei entsprechend der PO-Datei</refpurpose>
+</refnamediv>
+
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis>
+  <command>po4apod-display-po</command> <arg choice='plain'><option>-p
+</option></arg> <arg
+choice='plain'><replaceable>PO_DATEI</replaceable></arg> <arg
+choice='plain'><option>-m </option></arg> <arg
+choice='plain'><replaceable>POD_DATEI</replaceable></arg> <arg
+choice='opt'><arg choice='plain'><option>-o </option></arg><arg
+choice='plain'><replaceable>PO4A_OPT</replaceable></arg></arg>
+    <sbr/>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id='description'><title>BESCHREIBUNG</title>
+<para><command>po4apod-display-po</command> kann von Übersetzern benutzt werden,
+die überprüfen wollen, wie die aus einer POD-Datei erstellte Handbuchseite,
+die in einer PO-Datei übersetzt wurde, angezeigt wird. Im Allgemeinen ist
+die POD-Datei nur im Quellpaket oder in einem Perl-Skript eingebettet
+verfügbar.</para>
+
+</refsect1>
+
+<refsect1 id='options'><title>OPTIONEN</title>
+<variablelist remap='TP'>
+  <varlistentry>
+  <term><option>-p </option><replaceable>PO_DATEI</replaceable></term>
+  <listitem>
+<para>Die PO-Datei, die Übersetzungen enthält.</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-m </option><replaceable>POD_DATEI</replaceable></term>
+  <listitem>
+<para>die ursprüngliche POD-Datei, die von Po4a zum Erstellen der PO-Datei
+verwandt wurde</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-o </option><replaceable>PO4A_OPT</replaceable></term>
+  <listitem>
+<para>Optionen, die an
+<citerefentry><refentrytitle>po4a-translate</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+übergeben werden sollen.</para>
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id='see_also'><title>SIEHE AUCH</title>
+<para>
+  <citerefentry>
+<refentrytitle>po4aman-display-po</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>
+</para>
+</refsect1>
+
+<refsect1 id='author'><title>AUTOR</title>
+<para>Florentin Duneau</para>
+</refsect1>
+</refentry>
+

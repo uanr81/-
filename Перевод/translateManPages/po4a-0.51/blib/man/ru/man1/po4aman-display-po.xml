@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<!-- lifted from troff+man by doclifter -->
+<refentry id='po4amandisplaypo1' xml:lang="ru">
+<refentryinfo><date>2006-04-08</date></refentryinfo>
+<refmeta>
+<refentrytitle>PO4AMAN-DISPLAY-PO</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class='date'>2006-04-08</refmiscinfo>
+<refmiscinfo class='source'>Инструменты Po4a</refmiscinfo>
+<refmiscinfo class='manual'>Инструменты Po4a</refmiscinfo>
+</refmeta>
+<refnamediv id='name'>
+<refname>po4aman-display-po</refname>
+<refpurpose>отобразить переведенную man-страницу в соответствии с PO</refpurpose>
+</refnamediv>
+
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis>
+  <command>po4aman-display-po</command> <arg
+choice='plain'><option>-p</option> </arg> <arg
+choice='plain'><replaceable>PO_FILE</replaceable></arg> <arg
+choice='opt'><arg choice='plain'><option>-m</option> </arg><arg
+choice='plain'><replaceable>MASTER_FILE</replaceable></arg></arg> <arg
+choice='opt'><arg choice='plain'><option>-o</option> </arg><arg
+choice='plain'><replaceable>PO4A_OPT</replaceable></arg></arg>
+    <sbr/>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id='description'><title>ОПИСАНИЕ</title>
+<para><command>po4aman-display-po</command> может использоваться переводчиком, для
+просмотра того, как выглядит переведенная man-страница приведенная в
+соответствии с PO файлом.</para>
+
+<para>man-страница должна иметь один из форматов, поддерживаемых <emphasis
+remap='I'>man</emphasis> модулем po4a. man-страницы могут быть отображены в
+консоли или установлены в системе.</para>
+
+<para>Man-страницы созданные из других форматов, таких как DocBook или POD не
+поддерживаются.
+См.
+<citerefentry><refentrytitle>po4apod-display-po</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+для поиска эквивалентных, поддерживающих  <emphasis remap='I'>POD</emphasis>
+документов.</para>
+
+</refsect1>
+
+<refsect1 id='options'><title>ПАРАМЕТРЫ</title>
+<variablelist remap='TP'>
+  <varlistentry>
+  <term><option>-p </option><replaceable>PO_FILE</replaceable></term>
+  <listitem>
+<para>PO файл содержащий переводы.</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-m </option><replaceable>MASTER_FILE</replaceable></term>
+  <listitem>
+<para><!-- .br -->
+Оригинальная man-страница. Это может быть абсолютный или относительный путь
+к оригинальной man-странице (в архиве gzip или нет), имя man-страницы или
+имя и раздел man-страницы (используя формат man.номер_раздела). Когда
+основной документ обрабатывается без указания параметра <option>-m</option>,
+команда <command>po4aman-display-po</command> пытается отыскать оригинальную
+man-страницу в строке ссылок, первой строки в PO файле.</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-o </option><replaceable>PO4A_OPT</replaceable></term>
+  <listitem>
+<para>Некоторые параметры для выполнения
+<citerefentry><refentrytitle>po4a-translate</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
+
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id='see_also'><title>СМ. ТАКЖЕ</title>
+<para>
+  <citerefentry>
+<refentrytitle>po4apod-display-po</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>
+</para>
+
+</refsect1>
+
+<refsect1 id='author'><title>АВТОР</title>
+<para>Thomas Huriaux</para>
+</refsect1>
+</refentry>
+

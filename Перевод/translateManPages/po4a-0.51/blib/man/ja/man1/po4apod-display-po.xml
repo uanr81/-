@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<!-- lifted from troff+man by doclifter -->
+<refentry id='po4apoddisplaypo1' xml:lang="ja">
+<refentryinfo><date>2009-03-16</date></refentryinfo>
+<refmeta>
+<refentrytitle>PO4APOD-DISPLAY-PO</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class='date'>2009-03-16</refmiscinfo>
+<refmiscinfo class='source'>Po4a Tools</refmiscinfo>
+<refmiscinfo class='manual'>Po4a Tools</refmiscinfo>
+</refmeta>
+<refnamediv id='name'>
+<refname>po4apod-display-po</refname>
+<refpurpose>PO により翻訳済みの POD ファイルの man ページを表示</refpurpose>
+</refnamediv>
+
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis>
+  <command>po4apod-display-po</command> <arg choice='plain'><option>-p
+</option></arg> <arg choice='plain'><replaceable>PO_FILE</replaceable></arg>
+<arg choice='plain'><option>-m </option></arg> <arg
+choice='plain'><replaceable>POD_FILE</replaceable></arg> <arg
+choice='opt'><arg choice='plain'><option>-o </option></arg><arg
+choice='plain'><replaceable>PO4A_OPT</replaceable></arg></arg>
+    <sbr/>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id='description'><title>説明</title>
+<para><command>po4apod-display-po</command> は、PO で翻訳し、POD ファイルから生成した man
+ページがどのように表示されるかを翻訳者が確認するのに使用できます。一般的に、POD ファイルはソースパッケージや Perl
+スクリプト内部に埋め込まれています。</para>
+
+</refsect1>
+
+<refsect1 id='options'><title>オプション</title>
+<variablelist remap='TP'>
+  <varlistentry>
+  <term><option>-p </option><replaceable>PO_FILE</replaceable></term>
+  <listitem>
+<para>翻訳を収録している PO ファイル。</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-m </option><replaceable>POD_FILE</replaceable></term>
+  <listitem>
+<para>po4a が PO ファイルを生成するのに使用するオリジナル POD ファイルです。</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-o </option><replaceable>PO4A_OPT</replaceable></term>
+  <listitem>
+<para><citerefentry><refentrytitle>po4a-translate</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+に渡すオプション。</para>
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id='see_also'><title>関連項目</title>
+<para>
+  <citerefentry>
+<refentrytitle>po4aman-display-po</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>
+</para>
+</refsect1>
+
+<refsect1 id='author'><title>著者</title>
+<para>Florentin Duneau</para>
+</refsect1>
+</refentry>
+

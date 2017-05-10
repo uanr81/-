@@ -1,0 +1,102 @@
+Introduction to Po4a
+====================
+
+po4a (PO для всего) Цель проекта - облегчить перевод (и
+что более интересно, обслуживание переводов) с помощью gettext
+инструментами в тех областях, где они не ожидались, как документация.
+
+В po4a каждый формат документации обрабатывается модулем. На данный момент у
+нас есть модули для следующих форматов:
+
+  - asciidoc: AsciiDoc format.
+  - dia: uncompressed Dia diagrams.
+  - docbook: DocBook XML.
+  - guide: Gentoo Linux's XML documentation format.
+  - ini: INI format.
+  - kernelhelp: Help messages of each kernel compilation option.
+  - latex: LaTeX format.
+  - man: Good old manual page format.
+  - pod: Perl Online Documentation format.
+  - sgml: either DebianDoc or DocBook DTD.
+  - texinfo: The info page format.
+  - tex: generic TeX documents (see also latex).
+  - text: simple text document.
+  - wml: WML documents.
+  - xhtml: XHTML documents.
+  - xml: generic XML documents (see also docbook).
+
+Установка
+
+Чтобы установить этот модуль, введите следующую команду:
+
+   perl Build.PL
+   ./Build
+   ./Build install
+
+
+ИСПОЛЬЗОВАНИЕ БЕЗ УСТАНОВКИ
+
+Если вы хотите использовать версию без ее установки (например, напрямую из
+Git tree), используйте переменную среды PERLLIB как таковую:
+ 
+   PERLLIB=~/git-checkouts/po4a/lib ~/git-checkouts/po4a/po4a-gettextize [usual args]
+
+
+PO4A ЗАВИСИМОСТЬ
+
+  Locale::gettext (v1.01): 
+    Этот модуль, будучи интернационализированным, нуждается в Locale :: gettext
+    библиотека для перевода собственных сообщений.
+    Если его нет, то сообщения po4a не будут переводиться, но
+    po4a останется полностью функциональным.
+
+  Text::WrapI18N:
+    Этот модуль используется для форматирования предупреждений po4a и сообщений
+    об ошибках. Это позволяет обернуть длинные сообщения об ошибках без
+    разделения слов. Если его нет, форматирование сообщений будет отличаться,
+    но po4a останется полностью функциональным.
+
+  Term::ReadKey:
+    Этот модуль используется для извлечения ширины линии терминала. Это не
+    используется, если Text :: WrapI18N недоступен.
+    Если он отсутствует, ширина строки может быть задана с помощью COLUMN
+    переменная среды.
+
+
+SGML КОНКРЕТНЫЕ ЗАВИСИМОСТИ МОДУЛЯ
+
+  SGMLS (1.03ii):
+    Это набор процедур Perl5 для обработки вывода из onsgmls
+    анализатора SGML.
+ 
+  opensp (1.5.2): Инструменты разбора SGML для OpenJade группы
+  это SGML-анализатор, который мы используем.
+
+
+МОДУЛЬ ТЕКСТА КОНКРЕТНЫЕ ЗАВИСИМОСТИ
+
+  Unicode::GCString:
+    Этот модуль используется для вычисления ширины текста; AsciiDoc необходим
+    для определения двух названиий строк в кодировках, отличных от ASCII.
+    http://hatuka.nezumi.nu/repos/Unicode-LineBreak/
+
+
+ХОСТИНГ ПРОЕКТА
+
+Проект po4a размещается в основном на alioth:  
+
+ - Webpage: http://po4a.alioth.debian.org
+ - Source code: https://alioth.debian.org/scm/?group_id=30267
+ - Bug tracker: https://alioth.debian.org/tracker/?atid=410622&group_id=30267&func=browse
+
+
+АВТОРСКИЕ ПРАВА И ЛИЦЕНЗИЯ
+
+Эта программа является свободным программным обеспечением; Вы можете
+распространять его и/или изменять его в соответствии с условиями GPL
+(see COPYING file).
+       
+Copyright (C) 2002-2O16 by SPI, inc.
+Authors:
+        Denis Barbier <barbier@linuxfr.org>
+        Martin Quinson (mquinson#debian.org)

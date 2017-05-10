@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<!-- lifted from troff+man by doclifter -->
+<refentry id='po4amandisplaypo1' xml:lang="pt">
+<refentryinfo><date>2006-04-08</date></refentryinfo>
+<refmeta>
+<refentrytitle>PO4AMAN-DISPLAY-PO</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class='date'>2006-04-08</refmiscinfo>
+<refmiscinfo class='source'>Ferramentas Po4a</refmiscinfo>
+<refmiscinfo class='manual'>Ferramentas Po4a</refmiscinfo>
+</refmeta>
+<refnamediv id='name'>
+<refname>po4aman-display-po</refname>
+<refpurpose>exibir uma página do manual traduzida de acordo com um PO</refpurpose>
+</refnamediv>
+
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis>
+  <command>po4aman-display-po</command> <arg
+choice='plain'><option>-p</option> </arg> <arg
+choice='plain'><replaceable>PO_FILE</replaceable></arg> <arg
+choice='opt'><arg choice='plain'><option>-m</option> </arg><arg
+choice='plain'><replaceable>MASTER_FILE</replaceable></arg></arg> <arg
+choice='opt'><arg choice='plain'><option>-o</option> </arg><arg
+choice='plain'><replaceable>PO4A_OPT</replaceable></arg></arg>
+    <sbr/>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id='description'><title>DESCRIÇÃO</title>
+<para><command>po4aman-display-po</command> pode ser usado por um tradutor que
+quer verificar como a página do manual a ser traduzida em um PO será
+exibida.</para>
+
+<para>A página do manual deve estar em um dos formatos suportados pelo módulo
+<emphasis remap='I'>man</emphasis> do po4a. A página do manual pode ser
+fornecida na linha de comando, ou instalada no sistema.</para>
+
+<para>Páginas de manual geradas a partir de outros formatos, como DocBook ou POD,
+não
+sãosuportado.
+Veja<citerefentry><refentrytitle>po4apod-display-po</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+para um equivalente suporte de <emphasis remap='I'>POD</emphasis>
+documentos.</para>
+
+</refsect1>
+
+<refsect1 id='options'><title>OPÇÕES</title>
+<variablelist remap='TP'>
+  <varlistentry>
+  <term><option>-p </option><replaceable>PO_FILE</replaceable></term>
+  <listitem>
+<para>O ficheiro PO que contém as traduções.</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-m </option><replaceable>MASTER_FILE</replaceable></term>
+  <listitem>
+<para><!-- .br -->
+A página do manual original. Pode ser o caminho absoluto ou relativo para a
+página do manual original (compactada ou não), o nome da página do manual e
+secção da página do manual (usando o formato man.section). Quando o
+documento mestre não é fornecido com a <option>-m</option> opção
+<command>po4aman-display-po</command> tenta encontrar a página do manual
+original, baseada na linha de referência da primeira linha no PO.</para>
+  </listitem>
+  </varlistentry>
+  <varlistentry>
+  <term><option>-o </option><replaceable>PO4A_OPT</replaceable></term>
+  <listitem>
+<para>Algumas opções para passar para
+<citerefentry><refentrytitle>po4a-translate</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
+
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id='see_also'><title>VER TAMBÉM</title>
+<para>
+  <citerefentry>
+<refentrytitle>po4apod-display-po</refentrytitle><manvolnum>1</manvolnum>
+</citerefentry>
+</para>
+
+</refsect1>
+
+<refsect1 id='author'><title>AUTOR</title>
+<para>Thomas Huriaux</para>
+</refsect1>
+</refentry>
+
