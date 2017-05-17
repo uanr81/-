@@ -1,0 +1,29 @@
+@item 1. Brace commands
+Эти команды начинаются с @@ followed by a letter or a word, followed by an
+argument within braces.  For example, the command @code{@@dfn} indicates
+the introductory or defining use of a term; it is used as follows: @samp{In
+Texinfo, @@@@-commands are @@dfn@{mark-up@} commands.}
+
+@item 2. Line commands
+These commands occupy an entire line.  The line starts with @@,
+followed by the name of the command (a word); for example, @code{@@center}
+or @code{@@cindex}.  If no argument is needed, the word is followed by
+the end of the line.  If there is an argument, it is separated from
+the command name by a space.  Braces are not used.
+
+@item 3. Block commands
+These commands are written at the start of a line, with general text on
+following lines, terminated by a matching @code{@@end} command on a
+line of its own.  For example, @code{@@example}, then the lines of a
+coding example, then @code{@@end example}.  Some of these block commands
+take arguments as line commands do; for example, @code{@@enumerate A}
+opening an environment terminated by @code{@@end enumerate}.  Here
+@samp{A} is the argument.
+
+@item 4. Symbol insertion commands with no arguments
+These commands start with @@ followed by a word followed by a
+left and right- brace.  These commands insert special symbols in
+the document; they do not take arguments.  Some examples:
+@code{@@dots@{@}} @result{} @samp{@dots{}}, @code{@@equiv@{@}}
+@result{} @samp{@equiv{}}, @code{@@TeX@{@}} @result{} `@TeX{}', and
+@code{@@bullet@{@}} @result{} @samp{@bullet{}}.

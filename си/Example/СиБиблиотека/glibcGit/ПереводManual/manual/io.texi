@@ -2,161 +2,161 @@
 @c %MENU% Introduction to the I/O facilities
 @chapter Input/Output Overview
 
-Most programs need to do either input (reading data) or output (writing
-data), or most frequently both, in order to do anything useful.  @Theglibc{}
-provides such a large selection of input and output functions
-that the hardest part is often deciding which function is most
-appropriate!
+Большинству программ нужно делать либо ввод (чтение данных), либо вывод (запись
+данных), или чаще всего оба, чтобы сделать что-нибудь полезное.  @Theglibc{}
+обеспечивает такой большой выбор входных и выходных функций
+что самая сложная часть часто решает, какая функция больше всего
+подходит!
 
-This chapter introduces concepts and terminology relating to input
-and output.  Other chapters relating to the GNU I/O facilities are:
+В этой главе представлены концепции и терминология, относящиеся к входным и выходным
+данным. Другие главы, относящиеся к средствам ввода-вывода GNU:
 
 @itemize @bullet
 @item
-@ref{I/O on Streams}, which covers the high-level functions
-that operate on streams, including formatted input and output.
+@ref{I/O on Streams}, охватывает функции высокого уровня
+которые работают с потоками, включая форматированный ввод и вывод.
 
 @item
-@ref{Low-Level I/O}, which covers the basic I/O and control
-functions on file descriptors.
+@ref{Low-Level I/O}, охватывает основные операции ввода-вывода и управления
+функции над файловыми дескрипторами.
 
 @item
-@ref{File System Interface}, which covers functions for operating on
-directories and for manipulating file attributes such as access modes
-and ownership.
+@ref{File System Interface}, охватывает функции для работы с
+каталогами и для управления атрибутами файлов, такими как режимы доступа
+и владение.
 
 @item
-@ref{Pipes and FIFOs}, which includes information on the basic interprocess
-communication facilities.
+@ref{Pipes and FIFOs}, включает информацию об основных межпроцессорных
+средствах связи.
 
 @item
-@ref{Sockets}, which covers a more complicated interprocess communication
-facility with support for networking.
+@ref{Sockets}, который охватывает более сложную межпроцессную связь
+с поддержкой сетей.
 
 @item
-@ref{Low-Level Terminal Interface}, which covers functions for changing
-how input and output to terminals or other serial devices are processed.
+@ref{Low-Level Terminal Interface}, охватывает функции для изменения
+как обрабатываются ввод и вывод на терминалы или другие последовательные устройства.
 @end itemize
 
 
 @menu
-* I/O Concepts::       Some basic information and terminology.
-* File Names::         How to refer to a file.
+* I/O Concepts::       Некоторая основная информация и терминология.
+* File Names::         Как обратиться к файлу.
 @end menu
 
 @node I/O Concepts, File Names,  , I/O Overview
 @section Input/Output Concepts
 
-Before you can read or write the contents of a file, you must establish
-a connection or communications channel to the file.  This process is
-called @dfn{opening} the file.  You can open a file for reading, writing,
-or both.
+Прежде чем вы сможете прочитать или записать содержимое файла, вы должны установить
+канал связи связи с файлом. Этот процесс
+называется @dfn{opening} файла. Вы можете открыть файл для чтения, записи,
+или для для всех сразу.
 @cindex opening a file
 
-The connection to an open file is represented either as a stream or as a
-file descriptor.  You pass this as an argument to the functions that do
-the actual read or write operations, to tell them which file to operate
-on.  Certain functions expect streams, and others are designed to
-operate on file descriptors.
+Соединение с открытым файлом представляется либо как поток, либо как
+файловый дескриптор. Вы передаете это как аргумент для функций, которые выполняют
+фактические операции чтения или записи, чтобы сообщить им, какой файл использовать.
+Некоторые функции ожидают потоки, а другие предназначены для
+работают с файловыми дескрипторами.
 
-When you have finished reading to or writing from the file, you can
-terminate the connection by @dfn{closing} the file.  Once you have
-closed a stream or file descriptor, you cannot do any more input or
-output operations on it.
+Когда вы закончите чтение или запись в файле, вы можете
+прекратить соединение @dfn{closing} c файлом. Как только вы
+закрыли поток или файловый дескриптор, вы не можете больше вводить или
+выводить.
 
 @menu
-* Streams and File Descriptors::    The GNU C Library provides two ways
-			             to access the contents of files.
-* File Position::                   The number of bytes from the
-                                     beginning of the file.
+* Streams and File Descriptors::    Библиотека GNU C предоставляет два способа
+                                    для доступа к содержимому файлов.
+* File Position::                   Количество байтов с
+                                    начало файла.
 @end menu
 
 @node Streams and File Descriptors, File Position,  , I/O Concepts
 @subsection Streams and File Descriptors
 
-When you want to do input or output to a file, you have a choice of two
-basic mechanisms for representing the connection between your program
-and the file: file descriptors and streams.  File descriptors are
-represented as objects of type @code{int}, while streams are represented
-as @code{FILE *} objects.
+Когда вы хотите сделать ввод или вывод в файл, у вас есть выбор из двух
+основных механизмов представления связи между вашей программой -
+файловые дескрипторы и потоки файлов. Файловые дескрипторы
+представленны как объекты типа @code{int}, в то время как потоки представлены
+в виде @code{FILE *} объектов.
 
-File descriptors provide a primitive, low-level interface to input and
-output operations.  Both file descriptors and streams can represent a
-connection to a device (such as a terminal), or a pipe or socket for
-communicating with another process, as well as a normal file.  But, if
-you want to do control operations that are specific to a particular kind
-of device, you must use a file descriptor; there are no facilities to
-use streams in this way.  You must also use file descriptors if your
-program needs to do input or output in special modes, such as
-nonblocking (or polled) input (@pxref{File Status Flags}).
+Файловые дескрипторы обеспечивают примитивный, низкоуровневый интерфейс для ввода и
+вывода. Оба и файловые дескрипторы и потоки могут представлять собой
+подключение к устройству (например, терминалу) или к трубе или гнезду для
+взаимодействуя с другим процессом, а также с обычным файлом. Но если
+вы хотите выполнять управляющие операции, специфичные для конкретного вида
+устройства, вы должны использовать файловый дескриптор; Нет средств для
+использовать потоки таким образом. Вы также должны использовать файловые дескрипторы, если ваша
+программа должна делать ввод или вывод в специальных режимах, таких как
+неблокирующий (или опросный) вход (@pxref{File Status Flags}).
 
-Streams provide a higher-level interface, layered on top of the
-primitive file descriptor facilities.  The stream interface treats all
-kinds of files pretty much alike---the sole exception being the three
-styles of buffering that you can choose (@pxref{Stream Buffering}).
+Потоки обеспечивают интерфейс более высокого уровня, расположенный поверх
+примитивного файлового дескриптора. Интерфейс stream обрабатывает все
+типы файлов практически одинаково - единственным исключением являются три
+стиля буферизации, которые вы можете выбрать (@pxref{Stream Buffering}).
 
-The main advantage of using the stream interface is that the set of
-functions for performing actual input and output operations (as opposed
-to control operations) on streams is much richer and more powerful than
-the corresponding facilities for file descriptors.  The file descriptor
-interface provides only simple functions for transferring blocks of
-characters, but the stream interface also provides powerful formatted
-input and output functions (@code{printf} and @code{scanf}) as well as
-functions for character- and line-oriented input and output.
-@c !!! glibc has dprintf, which lets you do printf on an fd.
+Основным преимуществом использования интерфейса потока является то, что набор
+aункции для выполнения фактических операций ввода и вывода (в отличие от
+управления операциями) на потоках намного богаче и мощнее, чем
+cоответствующие средства для дескрипторов файлов. Интерфейс дескриптора файла
+предоставляет только простые функции для передачи блоков
+символов, но интерфейс потока также обеспечивает мощный формат
+функций ввода и вывода (@code{printf} и @code{scanf}) так же как
+функции для ввода и вывода с символьной и линейной ориентацией.
+@c !!! Glibc имеет dprintf, который позволяет вам делать printf на fd.
 
-Since streams are implemented in terms of file descriptors, you can
-extract the file descriptor from a stream and perform low-level
-operations directly on the file descriptor.  You can also initially open
-a connection as a file descriptor and then make a stream associated with
-that file descriptor.
+Поскольку потоки реализуются в терминах файловых дескрипторов, вы можете
+извлечь дескриптор файла из потока и выполнить низкоуровневые
+операции непосредственно в файловом дескрипторе. Вы также можете сначала открыть
+соединение как файловый дескриптор, а затем создать поток, связанный с
+этим файловым дескриптором.
 
-In general, you should stick with using streams rather than file
-descriptors, unless there is some specific operation you want to do that
-can only be done on a file descriptor.  If you are a beginning
-programmer and aren't sure what functions to use, we suggest that you
-concentrate on the formatted input functions (@pxref{Formatted Input})
-and formatted output functions (@pxref{Formatted Output}).
+В общем, вы должны придерживаться использования потоков, а не файловых
+дескрипторов, если не будет какой-то конкретной операции, которую вы хотите сделать
+только для дескриптора файла. Если вы начинающий
+программист, и не уверены, какие функции использовать, мы предлагаем вам
+сконцентрировать на форматированных входных функциях (@pxref{Formatted Input})
+и форматированных выходных функциях (@pxref{Formatted Output}).
 
-If you are concerned about portability of your programs to systems other
-than GNU, you should also be aware that file descriptors are not as
-portable as streams.  You can expect any system running @w{ISO C} to
-support streams, but @nongnusystems{} may not support file descriptors at
-all, or may only implement a subset of the GNU functions that operate on
-file descriptors.  Most of the file descriptor functions in @theglibc{}
-are included in the POSIX.1 standard, however.
+Если вы беспокоитесь о переносимости ваших программ в другие системы
+чем GNU, вы также должны знать, что дескрипторы файлов не являются
+универсальными как потоки. Вы можете ожидать, что любая работающая система @w{ISO C} с
+поддержкой потоков, но @nongnusystems{} может не поддерживать файловые дескрипторы 
+или может реализовывать только подмножество функций GNU, которые работают на
+файловых дескрипторах. Большинство файловых дескрипторов в @theglibc{}
+однако включены в стандарт POSIX.1.
 
 @node File Position,  , Streams and File Descriptors, I/O Concepts
 @subsection File Position
 
-One of the attributes of an open file is its @dfn{file position} that
-keeps track of where in the file the next character is to be read or
-written.  On @gnusystems{}, and all POSIX.1 systems, the file position
-is simply an integer representing the number of bytes from the beginning
-of the file.
+Одним из атрибутов открытого файла является его @dfn{file position} которая
+отслеживает, где в файле должен читаться или записываться следующий символ. 
+На @gnusystems{}, и всех POSIX.1 системах, Положение файла
+это просто целое число, представляющее число байтов с начала
+файла.
 
-The file position is normally set to the beginning of the file when it
-is opened, and each time a character is read or written, the file
-position is incremented.  In other words, access to the file is normally
+Положение файла обычно устанавливается в начале файла, и каждый раз,
+когда символ читается или записывается, позиция файла
+увеличивается. Другими словами, доступ к файлу обычно
 @dfn{sequential}.
 @cindex file position
 @cindex sequential-access files
 
-Ordinary files permit read or write operations at any position within
-the file.  Some other kinds of files may also permit this.  Files which
-do permit this are sometimes referred to as @dfn{random-access} files.
-You can change the file position using the @code{fseek} function on a
-stream (@pxref{File Positioning}) or the @code{lseek} function on a file
-descriptor (@pxref{I/O Primitives}).  If you try to change the file
-position on a file that doesn't support random access, you get the
-@code{ESPIPE} error.
+Обычные файлы разрешают операции чтения или записи в любой позиции в пределах
+файл. Это могут также разрешить некоторые другие типы файлов. Файлы, которые
+допускают это, иногда упоминаются как @dfn{random-access} файлы.
+Вы можете изменить положение файла, используя @code{fseek} функции на
+потоке (@pxref{File Positioning}) или @code{lseek} функция дескриптора
+файла (@pxref{I/O Primitives}).  Если вы попытаетесь изменить позицию файла
+в файле, который не поддерживает произвольный доступ, вы получаете
+@code{ESPIPE} ошибку.
 @cindex random-access files
 
-Streams and descriptors that are opened for @dfn{append access} are
-treated specially for output: output to such files is @emph{always}
-appended sequentially to the @emph{end} of the file, regardless of the
-file position.  However, the file position is still used to control where in
-the file reading is done.
+Потоки и дескрипторы, которые открыты для @dfn{append access} 
+обрабатывается специально для вывода: вывод в такие файлы @emph{always}
+добавляется последовательно к @emph{end} файла, независимо от
+положения файла. Однако позиция файла по-прежнему используется для управления 
+чтение файла до завершения.
 @cindex append-access files
 
 If you think about it, you'll realize that several programs can read a

@@ -1,0 +1,1002 @@
+Type RET on a type label to view its full documentation.
+
+:search-function
+  Variable: (not documented)
+Buffer-menu-isearch-buffers
+  Command: Искать строку через все маркированные буферы, используя
+  	   Isearch.
+Buffer-menu-isearch-buffers-regexp
+  Command: Искать регулярное выражение через все маркированные буферы, используя
+  	   Isearch.
+auth-source-macos-keychain-search
+  Function: Поиск в Keychain для MacOS; Spec похож на `auth-source'.
+auth-source-macos-keychain-search-items
+  Function: (not documented)
+auth-source-netrc-search
+  Function: Учитывая список свойств SPEC, возвращает результаты поиска из
+            :backend.
+auth-source-plstore-search
+  Function: Поиск в PLSTORE; Spec похож на `auth-source'.
+auth-source-search
+  Function: Искать или изменять серверы аутентификации в соответствии с
+            SPEC.
+auth-source-search-backends
+  Function: (not documented)
+auth-source-search-collection
+  Function: Returns t is VALUE is t or COLLECTION is t or COLLECTION
+            содержит VALUE.
+auth-source-secrets-search
+  Function: Search the Secrets API; spec is like `auth-source'.
+bibtex-search-entry
+  Command: Переместить точку в начало BibTeX запись названа KEY.
+bookmark-bmenu-search
+  Command: Пошаговый поиск закладок, скрытие несоответствий как
+  	   мы идем.
+case-fold-search
+  User option: Не-nil если поиск и совпадения должны игнорировать регистр.
+  Properties: standard-value event-symbol-element-mask
+              event-symbol-elements modifier-cache
+              variable-documentation
+cl-search
+  Function: Искать SEQ1 как подпоследовательность SEQ2.
+  Properties: autoload
+cl-struct-isearch--state-tags
+  Variable: (not documented)
+comment-search-backward
+  Function: Найти начало комментария между LIMIT и точкой.
+comment-search-forward
+  Function: Найти начало комментария между точкой и LIMIT.
+compilation-search-path
+  User option: Список каталогов для поиска исходных файлов, названных в
+       	       сообщения об ошибках.
+  Properties: variable-documentation custom-autoload custom-loads
+dabbrev-case-fold-search
+  Properties: risky-local-variable
+default-case-fold-search
+  Variable: Значение по умолчанию `case-fold-search 'для буферов, которые не
+  	    переопределить его.
+  Properties: byte-obsolete-variable variable-documentation
+directory-search
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+dired-do-isearch
+  Command: Искать строку со всеми отмеченными файлами с помощью Isearch.
+  Properties: autoload
+dired-do-isearch-regexp
+  Command: Искать регулярное выражение для всех отмеченных файлов с помощью Isearch.
+  Properties: autoload
+dired-do-search
+  Command: Поиск по всем отмеченным файлам для соответствия REGEXP.
+  Properties: autoload
+dired-isearch-filenames
+  Command: Искать строку, используя Isearch только в именах файлов в
+           Dired буфере.
+  User option: Non-nil to Isearch in file names only.
+  Properties: standard-value custom-type custom-version
+              custom-requests variable-documentation autoload
+dired-isearch-filenames-end
+  Function: Очистка поиска имени файла после завершения
+  	    Isearch.
+dired-isearch-filenames-mode
+  Command: Включение и отключение поиска имен файлов.
+  Variable: Non-nil if Dired-Isearch-Filenames mode is enabled.
+  Properties: variable-documentation
+dired-isearch-filenames-mode-hook
+  Variable: Крючок работает после входа или выхода
+            `dired-isearch-filenames-mode'.
+  Properties: variable-documentation
+dired-isearch-filenames-regexp
+  Command: Поиск регулярного выражения с использованием Isearch только в именах
+  	   файлов в Dired буфере.
+  Properties: autoload
+dired-isearch-filenames-setup
+  Function: Настроить isearch для поиска в Dired имена файлов.
+  Properties: autoload
+dired-isearch-filter-filenames
+  Function: Проверьте, является ли текущий поиск удаленным именем файла.
+ebrowse-tags-search
+  Command: Искать REGEXP во всех файлах в дереве.
+ebrowse-tags-search-member-use
+  Command: Искать сайты звонков участника.
+elisp-index-search
+  Command: Погляди TOPIC в индексах справочника Emacs Lisp
+  	   руководство.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+emacs-index-search
+  Command: Погляди TOPIC в показателях Emacs User Manual.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+eproject-multi-isearch-buffers
+  Command: Сделайте `multi-isearch' по открытым буферам в текущем
+  	   проект.
+find-function-search-for-symbol
+  Function: Искать SYMBOL's определение типа TYPE в LIBRARY.
+  Properties: autoload
+font-lock-keywords-case-fold-search
+  Variable: Не-nil означает шаблоны в `font-lock-keywords' находятся
+  	    без учета регистра.
+  Properties: variable-documentation
+google-translate--search-tkk
+  Function: Поиск TKK.
+i-search
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+image-search-load-path
+  Function: (not documented)
+imenu-case-fold-search
+  Variable: (not documented)
+isearch
+  Group: Инкрементальный поиск второстепенного режима.
+  Face: Лицо для выделения совпадений Isearch.
+  Properties: group-documentation custom-links custom-prefix
+              custom-group face-defface-spec face-modified face
+              face-documentation event-symbol-element-mask
+              event-symbol-elements modifier-cache
+isearch--display-help-action
+  Variable: (not documented)
+isearch--get-state
+  Function: (not documented)
+  Properties: side-effect-free
+isearch--saved-overriding-local-map
+  Variable: (not documented)
+isearch--set-state
+  Function: (not documented)
+isearch--state
+  Properties: cl-struct-slots cl-struct-type cl-struct-include
+              cl-struct-print
+isearch--state-barrier
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-case-fold-search
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-error
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-forward
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-message
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-other-end
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-p
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-point
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-pop-fun
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-string
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-success
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-word
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch--state-wrapped
+  Function: (not documented)
+  Properties: compiler-macro side-effect-free
+isearch-abort
+  Command: Прервите инкрементный режим поиска, если поиск прошел успешно,
+  	   сигнализация выхода.
+isearch-adjusted
+  Variable: (not documented)
+isearch-allow-prefix
+  User option: Допустимы ли аргументы префикса при добавочном
+       	       поиске.
+  Properties: standard-value custom-version custom-type
+              custom-requests variable-documentation
+isearch-allow-scroll
+  User option: Разрешена ли прокрутка при инкрементном поиске.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+isearch-back-into-window
+  Function: Прокрутите окно, чтобы вернуть строку поиска
+  	    для просмотра.
+isearch-backslash
+  Function: Возвращает t, если STR Заканчивается нечетным числом обратных косых черт.
+isearch-backward
+  Command: Поэтапный поиск назад.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+isearch-backward-regexp
+  Command: Делать инкрементный поиск назад для регулярного выражения.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+isearch-barrier
+  Variable: Записанная минимальная/максимальная точка для текущего поиска.
+  Properties: variable-documentation
+isearch-cancel
+  Command: Завершите поиск и вернитесь к начальной точке.
+isearch-case-fold-search
+  Variable: (not documented)
+isearch-char-by-name
+  Command: Прочитайте символ по его Unicode-имени и добавьте его в
+  	   строке поиска.
+isearch-clean-overlays
+  Function: (not documented)
+isearch-close-unnecessary-overlays
+  Function: (not documented)
+isearch-cmds
+  Variable: Стек элементов поиска.
+  Properties: variable-documentation
+isearch-complete
+  Command: Заполните строку поиска в строках поиска
+  	   кольца.
+isearch-complete-edit
+  Command: Такой же как `isearch-complete' только в минибуфере.
+isearch-complete1
+  Function: (not documented)
+isearch-dehighlight
+  Function: (not documented)
+isearch-del-char
+  Command: Удалить символ из конца строки поиска и поиск
+           еще раз.
+isearch-delete-char
+  Command: Отменить последний элемент ввода и переместить точку назад.
+isearch-describe-bindings
+  Command: Показать список всех ключей, определенных в режиме Isearch, и их
+  	   определения.
+isearch-describe-key
+  Command: Показать документацию функции, вызываемой isearch
+  	   ключ.
+isearch-describe-mode
+  Command: Показать документацию о режиме Isearch.
+isearch-done
+  Function: Выйдите из режима поиска.
+isearch-edit-string
+  Command: Отредактируйте строку поиска в минибуфере.
+  Properties: :advertised-binding
+isearch-error
+  Variable: (not documented)
+isearch-exit
+  Command: Выйдите обычным путем.
+isearch-face
+  Variable: (not documented)
+isearch-fail
+  Face: Лицо для выделения неудачной части в эхо-области Isearch
+  	сообщение.
+  Properties: face-defface-spec face-modified face face-documentation
+              custom-version
+isearch-fail-pos
+  Function: Возвращает позицию первого несоответствия в строке поиска или nil
+  	    если нет.
+isearch-fallback
+  Function: Вернуть точку к предыдущему успешному совпадению, чтобы разрешить
+  	    регулярное выражение либерализация.
+isearch-filenames
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+isearch-filenames-regexp
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+isearch-filter-predicate
+  Variable: Предикат, который фильтрует поисковые запросы, которые обычно
+  	    доступны.
+  Properties: variable-documentation
+isearch-filter-visible
+  Function: Проверить, видимо ли текущее
+  	    частично.
+isearch-forward
+  Command: Делать инкрементный поиск вперед.
+  Variable: (not documented)
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+isearch-forward-exit-minibuffer
+  Command: Продолжить поиск вперед из минибуфера, в котором редактируют
+  	   строку поиска.
+isearch-forward-regexp
+  Command: Делать инкрементный поиск вперед для регулярного выражения.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+isearch-forward-symbol
+  Command: Делать инкрементный поиск вперед для символа.
+isearch-forward-symbol-at-point
+  Command: Сделайте инкрементный поиск вперед для символа, найденного рядом
+  	   с точкой.
+isearch-forward-word
+  Command: Делать инкрементный поиск вперед для последовательности слов.
+isearch-help-for-help
+  Command: Отобразить меню справки Isearch.
+isearch-help-for-help-internal
+  Command: Команда справки.
+isearch-help-for-help-internal-doc
+  Function: Вы набрали %THIS-KEY%, символ помощи. Введите
+  	    вариант справки:
+isearch-help-map
+  Variable: Раскладка клавиатуры для символов, следующих за клавишей Справка для
+  	    Isearch режима.
+  Properties: variable-documentation
+isearch-hidden
+  Variable: (not documented)
+isearch-hide-immediately
+  User option: Если не-nil, сразу же спрятать невидимую спичку.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+isearch-highlight
+  Function: (not documented)
+isearch-highlight-regexp
+  Command: Запустить `highlight-regexp' с регулярным выражением из текущего поиска
+  	   строки.
+isearch-input-method-function
+  Variable: (not documented)
+isearch-input-method-local-p
+  Variable: (not documented)
+isearch-intersects-p
+  Function: Возвращает t если регионы START0..END0 и START1..END1
+            пересекаются.
+isearch-invisible
+  Variable: (not documented)
+isearch-just-started
+  Variable: (not documented)
+isearch-last-case-fold-search
+  Variable: (not documented)
+isearch-lax-whitespace
+  Variable: Если не-nil, пробел будет соответствовать последовательности пробельных
+            символов.
+  Properties: variable-documentation
+isearch-lazy-highlight
+  User option: Управляет отложенной подсветкой во время инкрементальной
+       	       поиска.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+isearch-lazy-highlight-case-fold-search
+  Variable: (not documented)
+isearch-lazy-highlight-cleanup
+  Command: Прекратить ленивую подсветку и убрать лишнюю подсветку с
+  	   текущего буфера.
+  User option: (not documented)
+  Properties: variable-documentation byte-obsolete-variable
+              byte-obsolete-info
+isearch-lazy-highlight-end
+  Variable: (not documented)
+isearch-lazy-highlight-end-limit
+  Variable: (not documented)
+isearch-lazy-highlight-error
+  Variable: (not documented)
+isearch-lazy-highlight-face
+  Variable: (not documented)
+  Face: Obsolete alias for the face `lazy-highlight'.
+  Properties: face-alias obsolete-face variable-documentation
+              byte-obsolete-variable
+isearch-lazy-highlight-forward
+  Variable: (not documented)
+isearch-lazy-highlight-initial-delay
+  User option: (not documented)
+  Properties: variable-documentation byte-obsolete-variable
+isearch-lazy-highlight-interval
+  User option: (not documented)
+  Properties: variable-documentation byte-obsolete-variable
+isearch-lazy-highlight-last-string
+  Variable: (not documented)
+isearch-lazy-highlight-lax-whitespace
+  Variable: (not documented)
+isearch-lazy-highlight-max-at-a-time
+  User option: (not documented)
+  Properties: variable-documentation byte-obsolete-variable
+isearch-lazy-highlight-new-loop
+  Function: Очистить все предыдущие `lazy-highlight' И начните 
+  	    одну новую.
+isearch-lazy-highlight-overlays
+  Variable: (not documented)
+isearch-lazy-highlight-regexp
+  Variable: (not documented)
+isearch-lazy-highlight-regexp-lax-whitespace
+  Variable: (not documented)
+isearch-lazy-highlight-search
+  Function: Искать вперед для следующего или предыдущего матча, для ленивых
+  	    подсветка.
+isearch-lazy-highlight-start
+  Variable: (not documented)
+isearch-lazy-highlight-start-limit
+  Variable: (not documented)
+isearch-lazy-highlight-timer
+  Variable: (not documented)
+isearch-lazy-highlight-update
+  Function: Обновить выделение других совпадений для текущего поиска.
+isearch-lazy-highlight-window
+  Variable: (not documented)
+isearch-lazy-highlight-window-end
+  Variable: (not documented)
+isearch-lazy-highlight-window-start
+  Variable: (not documented)
+isearch-lazy-highlight-word
+  Variable: (not documented)
+isearch-lazy-highlight-wrapped
+  Variable: (not documented)
+isearch-message
+  Function: (not documented)
+  Variable: (not documented)
+isearch-message-function
+  Variable: Функция вызова для отображения подсказки поиска.
+  Properties: variable-documentation
+isearch-message-prefix
+  Function: (not documented)
+isearch-message-prefix-add
+  Variable: (not documented)
+isearch-message-suffix
+  Function: (not documented)
+isearch-message-suffix-add
+  Variable: (not documented)
+isearch-mode
+  Function: Запустить минорный режим Isearch.
+  Variable: (not documented)
+isearch-mode-end-hook
+  Variable: Функция(ы) для вызова после завершения инкрементного
+  	    поиска.
+  Properties: variable-documentation
+isearch-mode-end-hook-quit
+  Variable: Не-nil во время бега `isearch-mode-end-hook' Если пользователь
+  	    завершает поиск.
+  Properties: variable-documentation
+isearch-mode-help
+  Command: Показать документацию о режиме Isearch.
+isearch-mode-hook
+  Variable: Функция(ы) для вызова после запуска инкрементного
+  	    поиска.
+  Properties: variable-documentation
+isearch-mode-map
+  Variable: Раскладка для `isearch-mode'.
+  Properties: variable-documentation
+isearch-mouse-2
+  Command: Управляйте мышью-2 в режиме Isearch.
+isearch-new-forward
+  Variable: (not documented)
+isearch-no-upper-case-p
+  Function: Возвращает t если в верхнем регистре отсутствуют символы STRING.
+isearch-nonincremental
+  Variable: (not documented)
+isearch-nonincremental-exit-minibuffer
+  Command: (not documented)
+  Properties: byte-obsolete-info
+isearch-occur
+  Command: Запуск `occur' Используя последнюю строку поиска в качестве регулярного
+  	   выражения.
+isearch-op-fun
+  Variable: (not documented)
+isearch-open-necessary-overlays
+  Function: (not documented)
+isearch-open-overlay-temporary
+  Function: (not documented)
+isearch-opened-overlays
+  Variable: (not documented)
+isearch-opoint
+  Variable: (not documented)
+isearch-original-minibuffer-message-timeout
+  Variable: (not documented)
+isearch-other-end
+  Variable: (not documented)
+isearch-overlay
+  Variable: (not documented)
+isearch-pop-state
+  Function: (not documented)
+isearch-post-command-hook
+  Function: (not documented)
+isearch-pre-command-hook
+  Function: Определите, следует ли выйти из режима Isearch перед выполнением
+  	    команды.
+isearch-pre-scroll-point
+  Variable: (not documented)
+isearch-printing-char
+  Command: Добавьте эту обычную печать CHAR в строку поиска и
+  	   поиск.
+isearch-process-search-char
+  Function: (not documented)
+isearch-process-search-multibyte-characters
+  Function: (not documented)
+isearch-process-search-string
+  Function: (not documented)
+isearch-push-state
+  Function: (not documented)
+isearch-push-state-function
+  Variable: Функция сохранения функции, восстанавливающей специфичный для режима
+  	    Isearch state
+  Properties: variable-documentation
+isearch-query-replace
+  Command: Старт `query-replace' cо строкой, чтобы заменить последнюю
+  	   строку поиска.
+isearch-query-replace-regexp
+  Command: Старт `query-replace-regexp' c строкой для замены из
+  	   последней строки поиска.
+isearch-quote-char
+  Command: Цитируйте специальные символы для инкрементного поиска.
+isearch-range-invisible
+  Function: Вернет t если весь текст из BEG до END невидимый.
+isearch-recursive-edit
+  Variable: (not documented)
+isearch-regexp
+  Variable: (not documented)
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+isearch-regexp-lax-whitespace
+  Variable: Если не-nil, Пробел будет соответствовать последовательности пробельных
+  	    символов.
+  Properties: variable-documentation
+isearch-repeat
+  Function: (not documented)
+isearch-repeat-backward
+  Command: Повторите инкрементный поиск в обратном направлении.
+isearch-repeat-forward
+  Command: Повторите пошаговый поиск вперед.
+isearch-resume
+  Function: Возобновите инкрементный поиск.
+isearch-resume-in-command-history
+  User option: Усли не-nil, `isearch-resume' команды добавляются в
+       	       историю команд.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+isearch-reverse-exit-minibuffer
+  Command: Продолжить isearching назад от минибуфера, который редактирует
+  	   строку поиска.
+isearch-ring-adjust
+  Function: (not documented)
+isearch-ring-adjust1
+  Function: (not documented)
+isearch-ring-advance
+  Command: Перейти к следующей строке поиска в кольце.
+isearch-ring-retreat
+  Command: Возврат к предыдущей строке поиска в кольце.
+isearch-search
+  Function: (not documented)
+isearch-search-and-update
+  Function: (not documented)
+isearch-search-fun
+  Function: Возвращает функцию, используемую для поиска.
+isearch-search-fun-default
+  Function: Возвращаемые по умолчанию функции, используемые для поиска.
+isearch-search-fun-function
+  Variable: Значение, отличное от значения по умолчанию, переопределяет поведение
+            `isearch-search-fun-default'.
+  Properties: variable-documentation
+isearch-search-string
+  Function: Найдите первое вхождение STRING или его
+  	    перевод.
+isearch-slow-terminal-mode
+  Variable: (not documented)
+isearch-small-window
+  Variable: (not documented)
+isearch-start-hscroll
+  Variable: (not documented)
+isearch-string
+  Variable: (not documented)
+isearch-string-out-of-window
+  Function: Проверить, находится ли строка поиска в настоящий момент за пределами
+  	    окна.
+isearch-success
+  Variable: (not documented)
+isearch-symbol-regexp
+  Function: Возвращает регулярное выражение, которое соответствует STRING в
+  	    качестве символа.
+  Properties: isearch-message-prefix
+isearch-text-char-description
+  Function: (not documented)
+isearch-toggle-case-fold
+  Command: Включает или выключает поиск фальцовки фреймов.
+  Properties: :advertised-binding
+isearch-toggle-input-method
+  Command: Переключить метод ввода в интерактивном поиске.
+isearch-toggle-invisible
+  Command: Включает или отключает поиск невидимого текста.
+isearch-toggle-lax-whitespace
+  Command: Включить или отключить поиск пробелов при поиске.
+isearch-toggle-regexp
+  Command: Включить или отключить поиск регулярного выражения.
+  Properties: :advertised-binding
+isearch-toggle-specified-input-method
+  Command: Выберите метод ввода и включите его в интерактивном режиме
+  	   поиска.
+isearch-toggle-symbol
+  Command: Включить или отключить поиск символов.
+isearch-toggle-word
+  Command: Включение или отключение поиска слов.
+isearch-unread
+  Function: (not documented)
+isearch-update
+  Function: Это вызывается после каждой команды isearch для обновления
+  	    дисплея.
+isearch-update-post-hook
+  Variable: Функция(ы) для вызова после isearch находит совпадения в
+  	    буфер.
+  Properties: variable-documentation
+isearch-update-ring
+  Function: Добавить STRING к началу поискового звонка.
+isearch-window-configuration
+  Variable: (not documented)
+isearch-word
+  Variable:Режим поиска на основе Regexp для слов/символов.
+  Properties: variable-documentation
+isearch-wrap-function
+  Variable: Function to call to wrap the search when search is failed.
+  Properties: variable-documentation
+isearch-wrapped
+  Variable: (not documented)
+isearch-yank-char
+  Command: Вытянуть следующий символ из буфера в строку поиска.
+isearch-yank-char-in-minibuffer
+  Command: Вытянуть следующий символ из буфера в конец строки поиска
+  	   в минибуфере.
+isearch-yank-flag
+  Variable: (not documented)
+isearch-yank-internal
+  Function: Вытяните текст от точки до точки, JUMPFORM.
+isearch-yank-kill
+  Command: Вытяните строку из kill ring в строку поиска.
+isearch-yank-line
+  Command: Потяните остальную строку из буфера в строку поиска.
+isearch-yank-pop
+  Command: Заменить только что-искаженную строку поиска ранее убитой
+  	   строкой.
+isearch-yank-string
+  Function: Тянуть STRING в строку поиска.
+isearch-yank-word
+  Command: Вытяните следующее слово из буфера в строку поиска.
+isearch-yank-word-or-char
+  Command: Вытянуть следующий символ, подслово или слово из буфера в
+  	   строку поиска.
+isearch-yank-x-selection
+  Command: Вытяните текущий выбор X в строку поиска.
+isearchb-activate
+  Command: Активный режим isearchb для последующих алфавитно-цифровых
+  	   нажатия клавиш.
+menu-bar-i-search-menu
+  Variable: (not documented)
+menu-bar-last-search-type
+  Variable: Используйте последнюю неинкрементную команду поиска, вызываемой из
+            меню.
+  Properties: variable-documentation
+menu-bar-search-documentation-menu
+  Variable: (not documented)
+menu-bar-search-menu
+  Variable: (not documented)
+minibuffer-history-isearch-end
+  Function:Очистите минибуфер после завершения поиска в
+  минибуфере.
+minibuffer-history-isearch-message
+  Function: Отобразить запрос поиска истории минибуфера.
+minibuffer-history-isearch-message-overlay
+  Variable: (not documented)
+minibuffer-history-isearch-pop-state
+  Function: Восстановите состояние поиска истории минибуфера.
+minibuffer-history-isearch-push-state
+  Function: Сохранить функцию, восстанавливающую состояние истории минибуфера
+  	    поиска.
+minibuffer-history-isearch-search
+  Function: Возвращает надлежащую функцию поиска, для isearch in
+  	    истории минибуфера.
+minibuffer-history-isearch-setup
+  Function: Настройте минибуфер для использования isearch для поиска
+  	    в истории минибуфера.
+minibuffer-history-isearch-wrap
+  Function: Завершите поиск истории мини-буфера, когда поиск завершится неудачно.
+minibuffer-history-search-history
+  Variable: (not documented)
+minibuffer-local-isearch-map
+  Variable: Keymap для редактирования строк Isearch в минибуфере.
+  Properties: variable-documentation
+multi-isearch-buffers
+  Command: Запустить многобуквенный Isearch в списке BUFFERS.
+multi-isearch-buffers-regexp
+  Command: Запустить многобукное регулярное выражение Isearch в списке BUFFERS.
+multi-isearch-current-buffer
+  Variable: Буфер, в котором в настоящий момент выполняется поиск.
+  Properties: variable-documentation
+multi-isearch-files
+  Command: Запустить многобуквенный Isearch в списке FILES.
+multi-isearch-files-regexp
+  Command: Запустить многобукное регулярное выражение Isearch в списке FILES.
+multi-isearch-next-buffer-current-function
+  Variable: Текущая активная функция для получения следующего буфера
+  	    поиска.
+  Properties: variable-documentation
+multi-isearch-next-buffer-function
+  Variable: Функция для вызова следующего буфера для поиска.
+  Properties: variable-documentation
+multi-isearch-setup
+  Function: Настройте isearch для поиска нескольких буферов.
+nonincremental-re-search-backward
+  Command: Чтение регулярного выражения и поиск в обратном направлении
+  	   без пошагово.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+nonincremental-re-search-forward
+  Command: Читать регулярное выражение и искать его
+  	   без пошагово.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+nonincremental-repeat-search-backward
+  Command: Искать назад для предыдущей строки поиска или регулярного выражения.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+nonincremental-repeat-search-forward
+  Command: Искать вперед для предыдущей строки поиска или регулярного выражения.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+nonincremental-search-backward
+  Command: Чтение строки и поиск в обратном направлении.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+nonincremental-search-forward
+  Command: Прочитайте строку и выполните поиск нестандартно.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+org-search-view
+  Command: Показать все записи, содержащие фразу или слова или обычные
+  	   выражения.
+posix-search-backward
+  Command: Искать назад от точки для соответствия регулярному выражения
+           REGEXP.
+posix-search-forward
+  Command: Искать вперед от точки для регулярного выражения REGEXP.
+re-search-backward
+  Command: Искать назад от точки для соответствия регулярному выражению
+           REGEXP.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+re-search-backward-lax-whitespace
+  Function: Искать назад для REGEXP, сопоставление последовательности
+  	    пробельных символов.
+re-search-forward
+  Command: Искать вперед от точки для регулярного выражения REGEXP.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+re-search-forward-lax-whitespace
+  Function: Искать вперед для REGEXP, сопоставление последовательности
+  	    пробельных символов.
+reftex-isearch-minor-mode
+  Command: Когда on, isearch ищет весь документ, а не только
+  	   текущий файл.
+regexp-search-ring
+  Variable: Список последовательностей последовательности поиска регулярного
+  	    выражения.
+  Properties: variable-documentation
+regexp-search-ring-max
+  User option: Максимальная длина кольца поиска регулярного выражения перед самым
+       	       старым элементы отбрасываются.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+regexp-search-ring-yank-pointer
+  Variable: Индекс в `regexp-search-ring' последней использованной строки.
+  Properties: variable-documentation
+repeat-search-back
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+repeat-search-fwd
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+replace-re-search-function
+  Variable: Функция, используемая при поиске заменяемых регулярных выражений.
+  Properties: variable-documentation
+replace-search
+  Function: Искать следующее вхождение SEARCH-STRING в
+  	    и заменить.
+replace-search-function
+  Variable: Функция, которую следует использовать при поиске заменяемых строк.
+  Properties: variable-documentation
+search
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+search-backward
+  Command: Искать назад от точки STRING.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+search-backward-lax-whitespace
+  Function: Искать назад STRING, Сопоставление последовательности
+  	    пробельных символов.
+search-backward-regexp
+  Command: Искать назад от точки для соответствия регулярному выражению
+           REGEXP.
+search-documentation
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+search-documentation-strings
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+search-emacs-glossary
+  Command: Отобразите узел Глоссарий руководства Emacs в инфо-режиме.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+search-exit-option
+  User option: Не-nil означает, что случайные управляющие символы заканчиваются
+       	       инкрементный поиск.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-failed
+  Properties: error-conditions error-message
+********************************************************************************
+search-forward
+  Command: Искать вперед от точки STRING.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+Искать вперед от точки для STRING.
+Установите точку в конце найденного вхождения и точку возврата.
+Необязательный второй аргумент ограничивает поиск; Это буферная позиция.
+Найденный матч не должен распространяться после этой позиции. Значение nil равно
+эквивалент (point-max).
+Необязательный третий аргумент, если t, Означает, что в случае неудачи вернуть nil
+(Нет ошибки).
+  Если не nil и не t, перейти к пределу поиска и возврат nil.
+Необязательный четвертый аргумент COUNT, если не-nil, означает поиск COUNT
+ последовательные события.  Если COUNT отрицательный, поиск назад,
+ вместо вперед, для -COUNT вхождений.
+
+Чувствительность к регистру поиска определяется значением переменной
+`case-fold-search', которые видят.
+
+См. Также функции `match-beginning', `match-end' и `replace-match'.
+
+(match-beginning SUBEXP)
+
+Возвращаемое положение начала текста, совпадающего с последним поиском
+SUBEXP, число, указывает, какое выражение в скобках в последнем
+регулярном выражении.
+Значение nil если SUBEXPth пара не совпадают, или их было меньше
+  SUBEXP пар.
+Ноль означает весь текст, соответствующий целому регулярному выражению или целой
+строке.
+
+(match-end SUBEXP)
+
+Возвращает позицию конца текста, совпадающего с последним поиском.
+SUBEXP, число, указывает, какое выражение в скобках в последнем
+регулярном выражении.
+Значение ноль nil если SUBEXPth пара не совпадают, или их было меньше
+  SUBEXP пар.
+Ноль означает весь текст, соответствующий целому регулярному выражению или целой
+строке.
+
+(replace-match NEWTEXT &optional FIXEDCASE LITERAL STRING SUBEXP)
+
+Заменить текст, совпадающий с последним поиском, NEWTEXT.
+Оставьте точку в конце текста замены.
+
+Если необязательный второй аргумент FIXEDCASE не-nil, не изменяйте
+заменяющий текст. В противном случае, возможно, весь текст заглавными буквами или
+возможно, только инициалы слов, основанные на заменяемом тексте. Если заменить
+текст имеет только заглавные буквы и имеет, по крайней мере, одно слово multiletter,
+конвертировать NEWTEXT на все шапки.  В противном случае, если все слова заглавные
+в заменяемом тексте заглавными буквами каждое слово в NEWTEXT.
+
+Если необязательный третий аргумент LITERAL не-nil, вставить NEWTEXT буквально.
+В противном случае обработать `\' В качестве специального:
+  `\&' в NEWTEXT означает заменять исходный сопоставленный текст.
+  `\N' Означает замену того, что соответствует Nth `\(...\)'.
+       Если Nth Parens не совпадают, ничего не заменяет.
+  `\\' Означает вставить один `\'.
+  `\?' Рассматривается буквально
+       (Для совместимости с `query-replace-regexp').
+  Любой другой персонаж, следующий за `\' Сигнализирует об ошибке.
+Преобразование регистра не применяется к этим заменам.
+
+Если необязательный четвертый аргумент STRING не-nil, Это должна быть действительно
+строка; Это должна быть строка, в которой предыдущий матч был
+сделано через `string-match'.  В этом случае, `replace-match' Создает и
+возвращает новую строку, созданную путем копирования STRING И заменяя часть
+STRING который был сопоставлен (оригинал STRING не изменяется).
+
+Необязательный пятый аргумент SUBEXP определяет подвыражение;
+он говорит, чтобы заменить только это подвыражение NEWTEXT,
+вместо замены всего согласованного текста.
+Это, в неясном смысле, противоположно использованию `\N' в NEWTEXT;
+`\N' Копирует подвыражение N в NEWTEXT, Но используя N в виде SUBEXP путы
+NEWTEXT вместо подвыражения N.
+Это полезно только после поиска регулярного выражения или совпадения,
+Поскольку только регулярные выражения отличаются подвыражениями.
+****************************************************************************
+search-forward-lax-whitespace
+  Function: Искать вперед для STRING, сопоставление последовательности
+  	    пробельные символы.
+search-forward-regexp
+  Command: Искать вперед от точки для регулярного выражения REGEXP.
+search-highlight
+  User option: Не-nil Означает пошаговый поиск совпадений.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-invisible
+  User option: Если t Инкрементный поиск/запрос-замена может соответствовать
+       	       скрытому тексту.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-map
+  Variable: Раскладка для команд, связанных с поиском.
+  Properties: variable-documentation
+search-nonincremental-instead
+  User option: Если не-nil, выполнить неискренний поиск вместо
+       	       выход немедленно.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-ring
+  Variable: Список последовательностей строк поиска.
+  Properties: variable-documentation
+search-ring-max
+  User option: Максимальная длина поискового кольца до выбрасывания самых старых
+       	       элементов.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-ring-update
+  User option: Не-nil при продвижении или отходе в поисковом кольце
+       	       должно вызывать поиск.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-ring-yank-pointer
+  Variable: Индекс в `search-ring' последней использованной строки.
+  Properties: variable-documentation
+search-slow-speed
+  User option: Максимальная скорость терминала при использовании "slow" стиль
+       	       инкрементный поиск.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-slow-window-lines
+  User option: Количество строк в окнах отображения медленного поиска.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-spaces-regexp
+  Variable: Regexp для замены пучков пробелов в regexp
+  	    поиске.
+  Properties: variable-documentation
+search-unencodable-char
+  Command: Искать вперед от точки для символа, который не является кодируемый.
+search-upper-case
+  User option: Если не-nil, Верхний регистр поиск.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+search-whitespace-regexp
+  User option: Если не-nil, Регулярное выражение для соответствия последовательности
+       	       пробельным символам.
+  Properties: standard-value custom-type custom-version
+              custom-requests variable-documentation
+secrets-search-items
+  Function: (not documented)
+separator-repeat-search
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+separator-search
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+separator-tag-isearch
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+separator-tag-search
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+tags-case-fold-search
+  User option: Должны ли учитываться операции с тегами.
+  Properties: variable-documentation custom-autoload custom-loads
+tags-search
+  Command: Поиск по всем файлам, указанным в таблице тегов для соответствия
+           REGEXP.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+toggle-case-fold-search
+  Command: Переключить, игнорировать ли регистр букв в командах поиска.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+url-do-auth-source-search
+  Function: (not documented)
+vc-sccs-search-project-dir
+  Function: Возвращает имя основного файла в проекте SCCS
+  	    каталога.
+with-isearch-suspended
+  Macro: Выйдите из режима поиска, запустите BODY и повторно активируйте ожидающий
+  поиск.
+word-search-backward
+  Command: Искать назад от точки для STRING, игнорируя различия пунктуации.
+word-search-backward-lax
+  Command: Искать назад от точки для STRING, игнорируя различия
+  	   в пунктуации.
+word-search-forward
+  Command: Искать вперед от точки STRING, игнорируя различия
+  	   в пунктуации.
+word-search-forward-lax
+  Command: Искать вперед от точки для STRING, игнорирование различий
+  	   в пунктуации.
+word-search-regexp
+  Function: Возвращает регулярное выражение, которое соответствует словам, игнорируя
+  	    знаки препинания.

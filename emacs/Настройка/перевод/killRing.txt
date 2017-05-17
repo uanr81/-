@@ -1,0 +1,37 @@
+Type RET on a type label to view its full documentation.
+
+boxquote-kill-ring-save
+  Command: подобно `kill-ring-save' Но помнит название, если это возможно.
+browse-kill-ring
+  Command: Показать элементы в `kill-ring' в другом буфере.
+  Properties: Настраиваемые загрузки пользовательских ссылок на групповую документацию
+browse-kill-ring-default-keybindings
+  Command: Настроить M-y (`yank-pop') Так что он может вызвать
+           `browse-kill-ring'.
+clipboard-kill-ring-save
+  Command: Копировать область, чтобы убить кольцо, и сохранить в буфере обмена X.
+  Properties: menu-enable
+google-translate-kill-ring-output-translation
+  Function: Вывести перевод на кольцо уничтожения.
+kill-ring
+  Variable: Список убитых текстовых последовательностей.
+  Properties: variable-documentation
+kill-ring-max
+  User option: Максимальная длина кольца уничтожения до самых старых элементов
+       	       выброшенный.
+  Properties: standard-value custom-type custom-requests
+              variable-documentation
+kill-ring-save
+  Command: Сохраните регион, как будто его убили, но не убивайте его.
+  Properties: event-symbol-element-mask event-symbol-elements
+              modifier-cache
+kill-ring-yank-pointer
+  Variable: Хвост убивающего кольца, car - последняя вещь которая 
+  	    дернута.
+  Properties: variable-documentation
+menu-bar-kill-ring-save
+  Command: Сохраните регион, как будто его убили, но не убивайте его.
+  Properties: byte-obsolete-info
+mouse-kill-ring-save
+  Command: Копирование области между точкой и щелчком мыши в области
+  	   кольца уничтожений.

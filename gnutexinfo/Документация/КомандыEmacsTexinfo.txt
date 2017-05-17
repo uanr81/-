@@ -1,0 +1,350 @@
+(Информация этих второстепенных режимов соответствует основной информации режима.)
+
+Texinfo режим, определенный в `texinfo.el':
+Основной режим для редактирования Texinfo-файлов.
+
+  It has these extra commands:
+key             binding
+---             -------
+
+C-c		Prefix Command
+ESC		Prefix Command
+"		texinfo-insert-quote  вставьте соответствующий знак кавычки для
+		Texinfo. Обычно вставляет значение `texinfo-open-quote'
+		(normally ``) или `texinfo-close-quote' (normally ''),
+		в зависимости от контекста. С аргументом префикса или внутри
+		@code или @example, вставляет равнину ".
+
+M-RET		texinfo-insert-@item
+		(texinfo-insert-@item &optional STR ARG)
+
+C-c C-c		Prefix Command
+C-c C-e		Prefix Command
+C-c RET		Prefix Command
+C-c C-o		texinfo-insert-block
+C-c C-s		texinfo-show-structure
+C-c C-t		Prefix Command
+C-c C-u		Prefix Command
+C-c /		texinfo-insert-@end
+C-c ]		up-list
+C-c {		texinfo-insert-braces
+C-c }		up-list
+
+C-M-i		ispell-complete-word
+
+C-c C-c C-d	texinfo-start-menu-description
+C-c C-c C-e	texinfo-insert-@emph
+C-c C-c C-s	texinfo-insert-@strong
+C-c C-c c	texinfo-insert-@code
+C-c C-c d	texinfo-insert-@dfn
+C-c C-c e	texinfo-insert-@end
+C-c C-c f	texinfo-insert-@file
+C-c C-c i	texinfo-insert-@item
+C-c C-c k	texinfo-insert-@kbd
+C-c C-c m	texinfo-insert-@email
+C-c C-c n	texinfo-insert-@node
+C-c C-c o	texinfo-insert-@noindent
+C-c C-c q	texinfo-insert-@quotation
+C-c C-c s	texinfo-insert-@samp
+C-c C-c t	texinfo-insert-@table
+C-c C-c u	texinfo-insert-@uref
+C-c C-c v	texinfo-insert-@var
+C-c C-c x	texinfo-insert-@example
+
+C-c C-u C-a	texinfo-all-menus-update
+C-c C-u C-e	texinfo-every-node-update
+C-c C-u RET	texinfo-make-menu
+C-c C-u C-n	texinfo-update-node
+C-c C-u m	texinfo-master-menu
+
+C-c C-e C-b	texinfo-format-buffer
+C-c C-e C-r	texinfo-format-region
+
+C-c RET C-b	makeinfo-buffer
+C-c RET C-k	kill-compilation
+C-c RET C-l	makeinfo-recenter-compilation-buffer
+C-c RET C-r	makeinfo-region
+
+C-c C-t C-b	texinfo-tex-buffer
+C-c C-t C-d	texinfo-delete-from-print-queue
+C-c C-t TAB	texinfo-texindex
+C-c C-t C-k	tex-kill-job
+C-c C-t C-l	tex-recenter-output-buffer
+C-c C-t C-p	texinfo-tex-print
+C-c C-t C-q	tex-show-print-queue
+C-c C-t C-r	texinfo-tex-region
+C-c C-t C-v	texinfo-tex-view
+C-c C-t C-x	texinfo-quit-job
+
+
+
+  These are files that are used as input for TeX to make printed manuals
+and also to be turned into Info files with C-c RET C-b or
+the `makeinfo' program.  These files must be written in a very restricted and
+modified version of TeX input format.
+
+  Editing commands are like text-mode except that the syntax table is
+set up so expression commands skip Texinfo bracket groups.  To see
+what the Info version of a region of the Texinfo file will look like,
+use C-c RET C-r, which runs `makeinfo' on the current region.
+
+  You can show the structure of a Texinfo file with C-c C-s.
+This command shows the structure of a Texinfo file by listing the
+lines with the @-sign commands for @chapter, @section, and the like.
+These lines are displayed in another window called the *Occur* window.
+In that window, you can position the cursor over one of the lines and
+use M-x occur-mode-goto-occurrence, to jump to the corresponding spot
+in the Texinfo file.
+
+  In addition, Texinfo mode provides commands that insert various
+frequently used @-sign commands into the buffer.  You can use these
+commands to save keystrokes.  And you can insert balanced braces with
+C-c { and later use the command C-c ] to
+move forward past the closing brace.
+
+Also, Texinfo mode provides functions for automatically creating or
+updating menus and node pointers.  These functions
+
+  * insert the `Next', `Previous' and `Up' pointers of a node,
+  * insert or update the menu for a section, and
+  * create a master menu for a Texinfo source file.
+
+Here are the functions:
+
+    texinfo-update-node                C-c C-u C-n
+    texinfo-every-node-update          C-c C-u C-e
+    texinfo-sequential-node-update
+
+    texinfo-make-menu                  C-c C-u RET
+    texinfo-all-menus-update           C-c C-u C-a
+    texinfo-master-menu
+
+    texinfo-indent-menu-description (column &optional region-p)
+
+The `texinfo-column-for-description' variable specifies the column to
+which menu descriptions are indented.
+
+Passed an argument (a prefix argument, if interactive), the
+`texinfo-update-node' and `texinfo-make-menu' functions do their jobs
+in the region.
+
+To use the updating commands, you must structure your Texinfo file
+hierarchically, such that each `@node' line, with the exception of the
+Top node, is accompanied by some kind of section line, such as an
+`@chapter' or `@section' line.
+
+If the file has a `top' node, it must be called `top' or `Top' and
+be the first node in the file.
+
+Entering Texinfo mode calls the value of `text-mode-hook', and then the
+value of `texinfo-mode-hook'.
+
+Auto-Composition minor mode (no indicator):
+Toggle Auto Composition mode.
+With a prefix argument ARG, enable Auto Composition mode if ARG
+is positive, and disable it otherwise.  If called from Lisp,
+enable the mode if ARG is omitted or nil.
+
+When Auto Composition mode is enabled, text characters are
+automatically composed by functions registered in
+`composition-function-table'.
+
+You can use `global-auto-composition-mode' to turn on
+Auto Composition mode in all buffers (this is the default).
+
+Auto-Compression minor mode (no indicator):
+Toggle Auto Compression mode.
+With a prefix argument ARG, enable Auto Compression mode if ARG
+is positive, and disable it otherwise.  If called from Lisp,
+enable the mode if ARG is omitted or nil.
+
+Auto Compression mode is a global minor mode.  When enabled,
+compressed files are automatically uncompressed for reading, and
+compressed when writing.
+
+Auto-Encryption minor mode (no indicator):
+Toggle automatic file encryption/decryption (Auto Encryption mode).
+With a prefix argument ARG, enable Auto Encryption mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+(fn &optional ARG)
+
+Blink-Cursor minor mode (no indicator):
+Toggle cursor blinking (Blink Cursor mode).
+With a prefix argument ARG, enable Blink Cursor mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+If the value of `blink-cursor-blinks' is positive (10 by default),
+the cursor stops blinking after that number of blinks, if Emacs
+gets no input during that time.
+
+See also `blink-cursor-interval' and `blink-cursor-delay'.
+
+This command is effective only on graphical frames.  On text-only
+terminals, cursor blinking is controlled by the terminal.
+
+Electric-Indent minor mode (no indicator):
+Toggle on-the-fly reindentation (Electric Indent mode).
+With a prefix argument ARG, enable Electric Indent mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+When enabled, this reindents whenever the hook `electric-indent-functions'
+returns non-nil, or if you insert a character from `electric-indent-chars'.
+
+This is a global minor mode.  To toggle the mode in a single buffer,
+use `electric-indent-local-mode'.
+
+File-Name-Shadow minor mode (no indicator):
+Toggle file-name shadowing in minibuffers (File-Name Shadow mode).
+With a prefix argument ARG, enable File-Name Shadow mode if ARG
+is positive, and disable it otherwise.  If called from Lisp,
+enable the mode if ARG is omitted or nil.
+
+File-Name Shadow mode is a global minor mode.  When enabled, any
+part of a filename being read in the minibuffer that would be
+ignored (because the result is passed through
+`substitute-in-file-name') is given the properties in
+`file-name-shadow-properties', which can be used to make that
+portion dim, invisible, or otherwise less visually noticeable.
+
+Font-Lock minor mode (no indicator):
+Toggle syntax highlighting in this buffer (Font Lock mode).
+With a prefix argument ARG, enable Font Lock mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+When Font Lock mode is enabled, text is fontified as you type it:
+
+ - Comments are displayed in `font-lock-comment-face';
+ - Strings are displayed in `font-lock-string-face';
+ - Certain other expressions are displayed in other faces according to the
+   value of the variable `font-lock-keywords'.
+
+To customize the faces (colors, fonts, etc.) used by Font Lock for
+fontifying different parts of buffer text, use M-x customize-face.
+
+You can enable Font Lock mode in any major mode automatically by turning on in
+the major mode's hook.  For example, put in your ~/.emacs:
+
+ (add-hook 'c-mode-hook 'turn-on-font-lock)
+
+Alternatively, you can use Global Font Lock mode to automagically turn on Font
+Lock mode in buffers whose major mode supports it and whose major mode is one
+of `font-lock-global-modes'.  For example, put in your ~/.emacs:
+
+ (global-font-lock-mode t)
+
+Where major modes support different levels of fontification, you can use
+the variable `font-lock-maximum-decoration' to specify which level you
+generally prefer.  When you turn Font Lock mode on/off the buffer is
+fontified/defontified, though fontification occurs only if the buffer is
+less than `font-lock-maximum-size'.
+
+To add your own highlighting for some major mode, and modify the highlighting
+selected automatically via the variable `font-lock-maximum-decoration', you can
+use `font-lock-add-keywords'.
+
+To fontify a buffer, without turning on Font Lock mode and regardless of buffer
+size, you can use M-x font-lock-fontify-buffer.
+
+To fontify a block (the function or paragraph containing point, or a number of
+lines around point), perhaps because modification on the current line caused
+syntactic change on other lines, you can use M-o M-o.
+
+You can set your own default settings for some mode, by setting a
+buffer local value for `font-lock-defaults', via its mode hook.
+
+The above is the default behavior of `font-lock-mode'; you may specify
+your own function which is called when `font-lock-mode' is toggled via
+`font-lock-function'. 
+
+Global-Font-Lock minor mode (no indicator):
+Toggle Font-Lock mode in all buffers.
+With prefix ARG, enable Global-Font-Lock mode if ARG is positive;
+otherwise, disable it.  If called from Lisp, enable the mode if
+ARG is omitted or nil.
+
+Font-Lock mode is enabled in all buffers where
+`turn-on-font-lock-if-desired' would do it.
+See `font-lock-mode' for more information on Font-Lock mode.
+
+Line-Number minor mode (no indicator):
+Toggle line number display in the mode line (Line Number mode).
+With a prefix argument ARG, enable Line Number mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+Line numbers do not appear for very large buffers and buffers
+with very long lines; see variables `line-number-display-limit'
+and `line-number-display-limit-width'.
+
+(fn &optional ARG)
+
+Menu-Bar minor mode (no indicator):
+Toggle display of a menu bar on each frame (Menu Bar mode).
+With a prefix argument ARG, enable Menu Bar mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+Menu Bar mode if ARG is omitted or nil.
+
+This command applies to all frames that exist and frames to be
+created in the future.
+
+Mouse-Wheel minor mode (no indicator):
+Toggle mouse wheel support (Mouse Wheel mode).
+With a prefix argument ARG, enable Mouse Wheel mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+the mode if ARG is omitted or nil.
+
+Tool-Bar minor mode (no indicator):
+Toggle the tool bar in all graphical frames (Tool Bar mode).
+With a prefix argument ARG, enable Tool Bar mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+Tool Bar mode if ARG is omitted or nil.
+
+See `tool-bar-add-item' and `tool-bar-add-item-from-menu' for
+conveniently adding tool bar items.
+
+Tooltip minor mode (no indicator):
+Toggle Tooltip mode.
+With a prefix argument ARG, enable Tooltip mode if ARG is positive,
+and disable it otherwise.  If called from Lisp, enable the mode
+if ARG is omitted or nil.
+
+When this global minor mode is enabled, Emacs displays help
+text (e.g. for buttons and menu items that you put the mouse on)
+in a pop-up window.
+
+When Tooltip mode is disabled, Emacs displays help text in the
+echo area, instead of making a pop-up window.
+
+Transient-Mark minor mode (no indicator):
+Toggle Transient Mark mode.
+With a prefix argument ARG, enable Transient Mark mode if ARG is
+positive, and disable it otherwise.  If called from Lisp, enable
+Transient Mark mode if ARG is omitted or nil.
+
+Transient Mark mode is a global minor mode.  When enabled, the
+region is highlighted with the `region' face whenever the mark
+is active.  The mark is "deactivated" by changing the buffer,
+and after certain other operations that set the mark but whose
+main purpose is something else--for example, incremental search,
+<, and >.
+
+You can also deactivate the mark by typing C-g or
+M-ESC ESC.
+
+Many commands change their behavior when Transient Mark mode is
+in effect and the mark is active, by acting on the region instead
+of their usual default part of the buffer's text.  Examples of
+such commands include M-;, M-x flush-lines, M-x keep-lines,
+M-%, C-M-%, M-x ispell, and C-x u.
+To see the documentation of commands which are sensitive to the
+Transient Mark mode, invoke C-h d and type "transient"
+or "mark.*active" at the prompt.
+
+(fn &optional ARG)
+
+[back]

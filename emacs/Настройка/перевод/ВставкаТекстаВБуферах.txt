@@ -1,0 +1,235 @@
+
+31.4 Inserting Text
+===================
+
+"Insertion" означает добавление нового текста в буфер. Вставлется текст
+в точке между символом перед точкой и символом после
+точки. Некоторые функции вставки оставляют точку перед вставленным текстом,
+в то время как другие функции оставляют его после. Мы называем бывшую вставку
+"after point" и последняя вставка "before point".
+
+   Вставка перемещает маркеры, расположенные в позициях после вставки
+точки, чтобы они оставались с окружающим текстом (*note Markers::).
+Когда маркер указывает на место вставки, вставка может или не может
+переместить маркер, в зависимости от типа вставки маркера (*note
+Marker Insertion Types::).  Некоторые специальные функции, такие как
+‘insert-before-markers’ перемещают все такие маркеры до точки после
+вставленного текста, независимо от типа вставки маркера.
+
+   Вставляющие функции сигнализируют об ошибке, если текущий буфер
+только для чтения (*note Read Only Buffers::) или если они вставляются в режиме
+только для чтения текста (*note Special Properties::).
+
+   Эти функции копируют текстовые символы из строк и буферов
+ с их свойствами. Вставленные символы имеют одинаковые символы
+как символы, из которых они были скопированы. В отличие от этого,
+символы, указанные как отдельные аргументы, не являющиеся частью строки или
+буфера, наследуют их свойства текста от соседнего текста.
+
+   Функции вставки преобразуют текст из unibyte в многобайтовый 
+для вставки в многобайтовый буфер, и наоборот - если текст приходит
+из строки или из буфера.  Однако, они не конвертируют unibyte
+коды символов с 128 по 255 на многобайтовые символы, даже если
+текущий буфер - это многобайтовый буфер.  *Note Converting
+Representations::.
+
+ -- Function: insert &rest args
+     Эта функция вставляет строки и/или символы ARGS в текущий буфер,
+     в точке, передвигая точку вперед. Другими словами, это вставляет текст
+     перед точкой.  Ошибка происходит, если не все
+     ARGS являются либо строками, либо символами. Значение равно ‘nil’.
+
+ -- Function: insert-before-markers &rest args
+     Эта функция вставляет строки и/или символыn ARGS в
+     текущий буфер, в точке, перемещая точку вперед. Происходит ошибка,
+     если только не все ARGS являются либо строками, либо символами.  Значение
+     равно ‘nil’.
+
+     Эта функция отличается от других функций вставки тем, что она
+     перемещает маркеры, первоначально указывающие на точку ввода,
+     после вставленного текста. Если вставка начинается на точке ввода,
+     вставленный текст выходит за пределы наложения; если
+     непустой оверлей заканчивается в точке вставки, вставленный текст
+     попадает внутрь этого оверлея.
+
+ -- Command: insert-char character &optional count inherit
+     Эта команда вставляет COUNT примеры CHARACTER в текущий
+     буфер перед точкой. Аргумент COUNT должно быть целым числом, и
+     CHARACTER должен быть символом.
+
+     Если вызывается интерактивно, эта команда запрашивает использование CHARACTER
+     его Юникод или его кодовую точку.  *Note (emacs)Inserting Text::.
+
+     Эта функция не преобразует однобайтовые коды символов с 128 по
+     255 до многобайтовых символов, даже если текущий буфер является
+     многобайтовый буфер.  *Note Converting Representations::.
+
+     Если INHERIT не-‘nil’, вставленные символы наследуют липкие
+     текстовые свойства от двух символов до и после
+     точка вставки.  *Note Sticky Properties::.
+
+ -- Function: insert-buffer-substring from-buffer-or-name &optional
+          start end
+     Эта функция вставляет часть буфера FROM-BUFFER-OR-NAME в
+     текущий буфер перед точкой. Вставленный текст - это область
+     между START (включительно) и  END (эксклюзивный).  (Эти аргументы
+     по умолчанию к началу и концу доступной части этого
+     буфера). Эта функция возвращает ‘nil’.
+
+     В этом примере форма выполняется с буфером ‘bar’ в качестве
+     текущего буфера. Будем считать, что буфер ‘bar’ изначально пуст.
+
+          ---------- Buffer: foo ----------
+          We hold these truths to be self-evident, that all
+          ---------- Buffer: foo ----------
+
+          (insert-buffer-substring "foo" 1 20)
+               ⇒ nil
+
+          ---------- Buffer: bar ----------
+          We hold these truth★
+          ---------- Buffer: bar ----------
+
+ -- Function: insert-buffer-substring-no-properties from-buffer-or-name
+          &optional start end
+     Это как ‘insert-buffer-substring’ кроме того, что не копирует
+     любые текстовые свойства.
+
+   *Note Sticky Properties::, для других функций вставки, которые наследуют
+текстовые свойства из соседнего текста в дополнение к его вставке.
+пробел, вставленный функциями отступа, также наследует свойства текста.
+
+31.6 Deleting Text
+==================
+
+Удаление означает удаление части текста в буфере без его сохранения
+В кольце уничтожения (*note The Kill Ring::).  Удаленный текст нельзя выдернуть,
+но может быть повторно использован с помощью механизма отмены (*note Undo::).Некоторые
+функции удаления позволяют сохранять текст в кольце удаления в некоторых особых
+случаях.
+
+   All of the deletion functions operate on the current buffer.
+
+ -- Command: erase-buffer
+     This function deletes the entire text of the current buffer (_not_
+     just the accessible portion), leaving it empty.  If the buffer is
+     read-only, it signals a ‘buffer-read-only’ error; if some of the
+     text in it is read-only, it signals a ‘text-read-only’ error.
+     Otherwise, it deletes the text without asking for any confirmation.
+     It returns ‘nil’.
+
+     Normally, deleting a large amount of text from a buffer inhibits
+     further auto-saving of that buffer “because it has shrunk”.
+     However, ‘erase-buffer’ does not do this, the idea being that the
+     future text is not really related to the former text, and its size
+     should not be compared with that of the former text.
+
+ -- Command: delete-region start end
+     This command deletes the text between positions START and END in
+     the current buffer, and returns ‘nil’.  If point was inside the
+     deleted region, its value afterward is START.  Otherwise, point
+     relocates with the surrounding text, as markers do.
+
+ -- Function: delete-and-extract-region start end
+     This function deletes the text between positions START and END in
+     the current buffer, and returns a string containing the text just
+     deleted.
+
+     If point was inside the deleted region, its value afterward is
+     START.  Otherwise, point relocates with the surrounding text, as
+     markers do.
+
+ -- Command: delete-char count &optional killp
+     This command deletes COUNT characters directly after point, or
+     before point if COUNT is negative.  If KILLP is non-‘nil’, then it
+     saves the deleted characters in the kill ring.
+
+     In an interactive call, COUNT is the numeric prefix argument, and
+     KILLP is the unprocessed prefix argument.  Therefore, if a prefix
+     argument is supplied, the text is saved in the kill ring.  If no
+     prefix argument is supplied, then one character is deleted, but not
+     saved in the kill ring.
+
+     The value returned is always ‘nil’.
+
+ -- Command: delete-backward-char count &optional killp
+     This command deletes COUNT characters directly before point, or
+     after point if COUNT is negative.  If KILLP is non-‘nil’, then it
+     saves the deleted characters in the kill ring.
+
+     In an interactive call, COUNT is the numeric prefix argument, and
+     KILLP is the unprocessed prefix argument.  Therefore, if a prefix
+     argument is supplied, the text is saved in the kill ring.  If no
+     prefix argument is supplied, then one character is deleted, but not
+     saved in the kill ring.
+
+     The value returned is always ‘nil’.
+
+ -- Command: backward-delete-char-untabify count &optional killp
+     This command deletes COUNT characters backward, changing tabs into
+     spaces.  When the next character to be deleted is a tab, it is
+     first replaced with the proper number of spaces to preserve
+     alignment and then one of those spaces is deleted instead of the
+     tab.  If KILLP is non-‘nil’, then the command saves the deleted
+     characters in the kill ring.
+
+     Conversion of tabs to spaces happens only if COUNT is positive.  If
+     it is negative, exactly −COUNT characters after point are deleted.
+
+     In an interactive call, COUNT is the numeric prefix argument, and
+     KILLP is the unprocessed prefix argument.  Therefore, if a prefix
+     argument is supplied, the text is saved in the kill ring.  If no
+     prefix argument is supplied, then one character is deleted, but not
+     saved in the kill ring.
+
+     The value returned is always ‘nil’.
+
+ -- User Option: backward-delete-char-untabify-method
+     This option specifies how ‘backward-delete-char-untabify’ should
+     deal with whitespace.  Possible values include ‘untabify’, the
+     default, meaning convert a tab to many spaces and delete one;
+     ‘hungry’, meaning delete all tabs and spaces before point with one
+     command; ‘all’ meaning delete all tabs, spaces and newlines before
+     point, and ‘nil’, meaning do nothing special for whitespace
+     characters.
+***************************************************************************
+Сохраните регион, как будто его убили, но не убивайте его.
+В режиме Transient Mark отмените отметку.
+Если `interprogram-cut-function' не-nil, также сохранить текст для системы окна
+вырезать и вставить.
+
+Если вы хотите добавить убитую строку к последнему убитому тексту,
+использование C-M-w до M-w.
+
+Опциональный аргумент REGION если не-nil, означает, что мы не просто копируем
+некоторый текст между BEG и END, но мы копируем регион.
+
+Эта команда похожа на `copy-region-as-kill', кроме того, что дает
+визуальную обратную связь, указывающую объем копируемого региона.
+ *********************************************************************
+ copy-abbrev-table
+ copy-alist
+ copy-case-table
+ copy-category-table
+ copy-dir-locals-to-file-locals
+ copy-dir-locals-to-file-locals-prop-line
+ copy-directory
+ copy-face
+ copy-file
+ copy-file-locals-to-dir-locals
+ copy-gtos
+ copy-hash-table
+ copy-keymap
+ copy-line ;;Скопируйте целую строку в кольцо уничтожения
+ copy-marker
+ copy-overlay
+ copy-package--bi-desc
+ copy-package-desc
+ copy-rectangle-as-kill;;Скопируйте область-прямоугольник и сохраните его как последний убитый.
+ copy-rectangle-to-register
+ copy-region-as-kill
+ copy-sequence
+ copy-syntax-table
+ copy-to-buffer
+ copy-to-register
+ copy-tree

@@ -1,0 +1,1 @@
+(setq find-function-C-source-directory "~/shkola/moiashkola/emacs/source/emacs-24.5/src/"); в инициализацию засуну, чтобы показывал код си в справке
