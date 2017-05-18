@@ -2643,8 +2643,8 @@ They default to the values of (point-min) and (point-max) in BUFFER.  */)
 
 DEFUN ("compare-buffer-substrings", Fcompare_buffer_substrings, Scompare_buffer_substrings,
        6, 6, 0,
-       doc: /* Compare two substrings of two buffers; return result as number.
-Return -N if first string is less after N-1 chars, +N if first string is
+       doc: /* Сравните две подстроки двух буферов; Возвращает результат как число.
+Возврат -N если первая строка меньше после N-1 chars, +N if first string is
 greater after N-1 chars, or 0 if strings match.  Each substring is
 represented as three arguments: BUFFER, START and END.  That makes six
 args in all, three for each substring.

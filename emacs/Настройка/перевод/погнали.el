@@ -1,0 +1,3 @@
+(defun eqwer()
+  (interactive)
+  (poi))
