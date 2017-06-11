@@ -1,9 +1,9 @@
 \input texinfo                       @c -*- mode: texinfo; coding: utf-8 -*-
 @comment %**start of header
-@setfilename eintr.info
+@setfilename ../../info/eintr.info
 @c setfilename emacs-lisp-intro.info
 @c sethtmlfilename emacs-lisp-intro.html
-@settitle Программирование в Emacs Lisp
+@settitle Programming in Emacs Lisp
 @include docstyle.texi
 @syncodeindex vr cp
 @syncodeindex fn cp
@@ -13,8 +13,8 @@
 
 @c ================ How to Print a Book in Various Sizes ================
 
-@c Эта книга может быть напечатана в любом из трех разных размеров.
-@c Установите следующие параметры @-commands надлежащим образом.
+@c This book can be printed in any of three different sizes.
+@c Set the following @-commands appropriately.
 
 @c     7 by 9.25 inches:
 @c              @smallbook
@@ -29,12 +29,12 @@
 @c              @afourpaper
 @c              @set largebook
 
-@c (Примечание. Если вы редактируете книгу, чтобы изменить длину
-@c содержания, вам, возможно, придется изменить значение 'pageno' ниже.)
+@c (Note: if you edit the book so as to change the length of the
+@c table of contents, you may have to change the value of 'pageno' below.)
 
-@c <<<< Для печати в печатном виде этот файл теперь
-@c      набор для smallbook, который работает для всех размеров
-@c      Из бумаги, и с рисунками PostScript >>>>
+@c <<<< For hard copy printing, this file is now
+@c      set for smallbook, which works for all sizes
+@c      of paper, and with PostScript figures >>>>
 
 @set smallbook
 @ifset smallbook
@@ -44,17 +44,17 @@
 
 @c ================ Included Figures ================
 
-@c Если вы очистите это, цифры будут напечатаны как диаграммы ASCII
-@c а не PostScript / PDF.
-@c (Это не относится к Info, поскольку Info обрабатывает только ASCII.)
+@c If you clear this, the figures will be printed as ASCII diagrams
+@c rather than PostScript/PDF.
+@c (This is not relevant to Info, since Info only handles ASCII.)
 @set print-postscript-figures
 @c clear print-postscript-figures
 
 @comment %**end of header
 
-@c По среднеквадратичным значениям и peterb, используйте 10pt Шрифты для основного
-@c текста, в основном для экономии бумаги.
-@c Сделайте это внутри @tex На данный момент, поэтому текущий makeinfo не жалуется.
+@c per rms and peterb, use 10pt fonts for the main text, mostly to
+@c save on paper cost.
+@c Do this inside @tex for now, so current makeinfo does not complain.
 @tex
 @ifset smallbook
 @fonttextsize 10
@@ -63,27 +63,27 @@
 \global\hbadness=6666 % don't worry about not-too-underfull boxes
 @end tex
 
-@c Они относятся к печатной книге, продаваемой FSF.
+@c These refer to the printed book sold by the FSF.
 @set edition-number 3.10
 @set update-date 28 October 2009
 
-@c Для следующего или последующего издания:
-@c   Создать функцию, используя with-output-to-temp-buffer
-@c   Создать основной режим с раскладками
-@c   Выполните асинхронный процесс, например grep или diff.
+@c For next or subsequent edition:
+@c   create function using with-output-to-temp-buffer
+@c   create a major mode, with keymaps
+@c   run an asynchronous process, like grep or diff
 
-@c Для формата 8,5 х 11 дюймов: не используйте такое небольшое количество
-@c пробелы между параграфами в формате малой книги
+@c For 8.5 by 11 inch format: do not use such a small amount of
+@c whitespace between paragraphs as smallbook format
 @ifset largebook
 @tex
 \global\parskip 6pt plus 1pt
 @end tex
 @end ifset
 
-@c Для всех форматов:  печать внутри книги крест
-@c ссылка с ``...''  скорее, чем [...]
+@c For all sized formats:  print within-book cross
+@c reference with ``...''  rather than [...]
 
-@c Это работает с файлом texinfo.tex, версия 2003-05-04.08,
+@c This works with the texinfo.tex file, version 2003-05-04.08,
 @c in the Texinfo version 4.6 of the 2003 Jun 13 distribution.
 
 @tex
@@ -96,13 +96,12 @@
 @end tex
 
 @c ----------------------------------------------------
-@ignore
+
 @dircategory Emacs lisp
 @direntry
-* Emacs Lisp Intro: (eintr).    A simple introduction to Emacs Lisp programming.
+* Emacs Lisp Intro: (eintr).    Простое введение в программирование Emacs Lisp.
 @end direntry
 
-@end ignore
 @copying
 This is an @cite{Introduction to Programming in Emacs Lisp}, for
 people who are not programmers.
@@ -114,7 +113,7 @@ Edition @value{edition-number}, @value{update-date}
 Distributed with Emacs version @value{EMACSVER}.
 @end ifnottex
 @sp 1
-Copyright @copyright{} 1990--1995, 1997, 2001--2016 Free Software
+Copyright @copyright{} 1990--1995, 1997, 2001--2017 Free Software
 Foundation, Inc.
 @sp 1
 
@@ -238,25 +237,25 @@ every node in every chapter.
 * Preface::                     Что искать.
 * List Processing::             Что такое Lisp?
 * Practicing Evaluation::       Запуск нескольких программ.
-* Writing Defuns::              Как писать определения функций.
+* Writing Defuns::              Как написать определения функций.
 * Buffer Walk Through::         Изучение нескольких связанных с буфером функций.
 * More Complex::                Несколько, еще более сложные функции.
 * Narrowing & Widening::        Ограничение вашего внимания и Emacs
-                                    в области.
+                                    для области текста.
 * car cdr & cons::              Фундаментальные функции в Лиспе.
 * Cutting & Storing Text::      Удаление текста и его сохранение.
 * List Implementation::         Как списки реализуются на компьютере.
 * Yanking::                     Вставка сохраненного текста.
 * Loops & Recursion::           Как повторить процесс.
-* Regexp Search::               Поиск с помощью регулярных выражений.
+* Regexp Search::               Поиск регулярных выражений.
 * Counting Words::              Обзор повторений и регулярных выражений.
 * Words in a defun::            Подсчет слов в @code{defun}.
-* Readying a Graph::            Прототип функции печати графа.
+* Readying a Graph::            Функция печати графика.
 * Emacs Initialization::        Как написать @file{.emacs} файл.
 * Debugging::                   Как запустить отладчики Emacs Lisp.
 * Conclusion::                  Теперь у вас есть основы.
-* the-the::                     Приложение: как найти дублированные слова.
-* Kill Ring::                   Приложение: как работает кольцо уничтожений.
+* the-the::                     Приложение: Как найти дублированные слова.
+* Kill Ring::                   Приложение: Как работает кольцо уничтожений.
 * Full Graph::                  Как создать график с маркированными осями.
 * Free Software and Free Manuals::
 * GNU Free Documentation License::
@@ -283,7 +282,7 @@ List Processing
 * Names & Definitions::         Имена символов и определения функций.
 * Lisp Interpreter::            Что делает интерпретатор Lisp.
 * Evaluation::                  Запуск программы.
-* Variables::                   Возврат значения переменной.
+* Variables::                   Возврат значения из переменной.
 * Arguments::                   Передача информации функции.
 * set & setq::                  Установка значения переменной.
 * Summary::                     Основные моменты.
@@ -291,154 +290,154 @@ List Processing
 
 Lisp Lists
 
-* Numbers Lists::               В списке могут быть числа, другие списки.
-* Lisp Atoms::                  Элементальные сущности.
+* Numbers Lists::               В списке есть числа и другие списки в них.
+* Lisp Atoms::                  Элементальные сущности(атомы Лиспа).
 * Whitespace in Lists::         Форматирование списков для чтения.
-* Typing Lists::                Как GNU Emacs помогает вам печатать списки.
+* Typing Lists::                Как GNU Emacs помогает вам программировать.
 
 The Lisp Interpreter
 
-* Complications::               Variables, Special forms, Lists within.
-* Byte Compiling::              Specially processing code for speed.
+* Complications::               Переменные, специальные формы, списки внутри.
+* Byte Compiling::              Специально обработанный код для скорости выполнения.
 
 Evaluation
 
-* How the Interpreter Acts::    Returns and Side Effects...
-* Evaluating Inner Lists::      Lists within lists...
+* How the Interpreter Acts::    Возврат значения и побочные эффекты...
+* Evaluating Inner Lists::      Списки в списках...
 
 Variables
 
 * fill-column Example::
-* Void Function::               The error message for a symbol
-                                  without a function.
-* Void Variable::               The error message for a symbol without a value.
+* Void Function::               Сообщение об ошибке для символа
+                                  без привязаной функции.
+* Void Variable::               Сообщение об ошибке для символа без значения.
 
 Arguments
 
-* Data types::                  Types of data passed to a function.
-* Args as Variable or List::    An argument can be the value
-                                  of a variable or list.
-* Variable Number of Arguments::  Some functions may take a
-                                  variable number of arguments.
-* Wrong Type of Argument::      Passing an argument of the wrong type
-                                  to a function.
-* message::                     A useful function for sending messages.
+* Data types::                  Типы данных, переданные функции.
+* Args as Variable or List::    Аргументом может быть значение
+                                  переменной или списка.
+* Variable Number of Arguments::  Некоторые функции могут принимать
+                                  переменное количество аргументов.
+* Wrong Type of Argument::      Передача аргумента неправильного типа
+                                  в функцию.
+* message::                     Полезная функция для отправки сообщений.
 
 Setting the Value of a Variable
 
-* Using set::                  Setting values.
-* Using setq::                 Setting a quoted value.
-* Counting::                   Using @code{setq} to count.
+* Using set::                  Установка значений.
+* Using setq::                 Установка значения.
+* Counting::                   Вычислить с помощью @code{setq}.
 
 Practicing Evaluation
 
-* How to Evaluate::            Typing editing commands or @kbd{C-x C-e}
-                                 causes evaluation.
-* Buffer Names::               Buffers and files are different.
-* Getting Buffers::            Getting a buffer itself, not merely its name.
-* Switching Buffers::          How to change to another buffer.
-* Buffer Size & Locations::    Where point is located and the size of
-                               the buffer.
+* How to Evaluate::            Ввод команд редактирования или @kbd{C-x C-e}
+                                 вызывает оценку.
+* Buffer Names::               Отличия буфера и файла.
+* Getting Buffers::            Получение самого буфера, а не просто его имя.
+* Switching Buffers::          Как перейти на другой буфер.
+* Buffer Size & Locations::    Где находится точка и размер
+                               буфера.
 * Evaluation Exercise::
 
 How To Write Function Definitions
 
 * Primitive Functions::
-* defun::                        The @code{defun} macro.
-* Install::                      Install a function definition.
-* Interactive::                  Making a function interactive.
-* Interactive Options::          Different options for @code{interactive}.
-* Permanent Installation::       Installing code permanently.
-* let::                          Creating and initializing local variables.
-* if::                           What if?
-* else::                         If--then--else expressions.
-* Truth & Falsehood::            What Lisp considers false and true.
-* save-excursion::               Keeping track of point and buffer.
+* defun::                        Макрос @code{defun}.
+* Install::                      Установите определение функции.
+* Interactive::                  Создание интерактивной функции.
+* Interactive Options::          Различные варианты @code{interactive}.
+* Permanent Installation::       Установка кода надолго.
+* let::                          Создание и инициализация локальных переменных.
+* if::                           Особая форма if?
+* else::                         If--then--else выражения.
+* Truth & Falsehood::            Что Lisp считает ложным и истинным.
+* save-excursion::               Отслеживание полжения точки и буфера.
 * Review::
 * defun Exercises::
 
 Install a Function Definition
 
 * Effect of installation::
-* Change a defun::              How to change a function definition.
+* Change a defun::              Как изменить определение функции.
 
 Make a Function Interactive
 
-* Interactive multiply-by-seven::  An overview.
-* multiply-by-seven in detail::    The interactive version.
+* Interactive multiply-by-seven::  Обзор.
+* multiply-by-seven in detail::    Интерактивная версия.
 
 @code{let}
 
 * Prevent confusion::
-* Parts of let Expression::
-* Sample let Expression::
-* Uninitialized let Variables::
+* Parts of let Expression:: Части выражения let
+* Sample let Expression:: Пример выражения let
+* Uninitialized let Variables:: Неинициализированные переменные в операторе let
 
 The @code{if} Special Form
 
-* if in more detail::
-* type-of-animal in detail::    An example of an @code{if} expression.
+* if in more detail:: 
+* type-of-animal in detail::    Пример @code{if} выражения.
 
 Truth and Falsehood in Emacs Lisp
 
-* nil explained::               @code{nil} has two meanings.
+* nil explained::               @code{nil} имеет два значения.
 
 @code{save-excursion}
 
-* Point and mark::              A review of various locations.
-* Template for save-excursion::
+* Point and mark::              Обзор различных мест.
+* Template for save-excursion:: Шаблон для выражение save-excursion 
 
 A Few Buffer-Related Functions
 
-* Finding More::                How to find more information.
-* simplified-beginning-of-buffer::  Shows @code{goto-char},
-                                @code{point-min}, and @code{push-mark}.
-* mark-whole-buffer::           Almost the same as @code{beginning-of-buffer}.
-* append-to-buffer::            Uses @code{save-excursion} and
+* Finding More::                Как найти дополнительную информацию.
+* simplified-beginning-of-buffer::  Обзор @code{goto-char},
+                                @code{point-min}, и @code{push-mark}.
+* mark-whole-buffer::           Почти так же, как @code{beginning-of-buffer}.
+* append-to-buffer::            Использование @code{save-excursion} и
                                 @code{insert-buffer-substring}.
-* Buffer Related Review::       Review.
+* Buffer Related Review::       Обзор.
 * Buffer Exercises::
 
 The Definition of @code{mark-whole-buffer}
 
 * mark-whole-buffer overview::
-* Body of mark-whole-buffer::   Only three lines of code.
+* Body of mark-whole-buffer::   Тело функции. Только три строки кода.
 
 The Definition of @code{append-to-buffer}
 
 * append-to-buffer overview::
-* append interactive::          A two part interactive expression.
-* append-to-buffer body::       Incorporates a @code{let} expression.
-* append save-excursion::       How the @code{save-excursion} works.
+* append interactive::          Интерактивное выражение в append-to-buffer.
+* append-to-buffer body::       Включечение в теле @code{let} выражения.
+* append save-excursion::       @code{save-excursion} в append-to-buffer.
 
 A Few More Complex Functions
 
-* copy-to-buffer::              With @code{set-buffer}, @code{get-buffer-create}.
-* insert-buffer::               Read-only, and with @code{or}.
-* beginning-of-buffer::         Shows @code{goto-char},
-                                @code{point-min}, and @code{push-mark}.
+* copy-to-buffer::              С @code{set-buffer}, @code{get-buffer-create}.
+* insert-buffer::               Только для чтения и @code{or}.
+* beginning-of-buffer::         Взгляд на @code{goto-char},
+                                @code{point-min}, и @code{push-mark}.
 * Second Buffer Related Review::
 * optional Exercise::
 
 The Definition of @code{insert-buffer}
 
 * insert-buffer code::
-* insert-buffer interactive::   When you can read, but not write.
-* insert-buffer body::          The body has an @code{or} and a @code{let}.
-* if & or::                     Using an @code{if} instead of an @code{or}.
-* Insert or::                   How the @code{or} expression works.
-* Insert let::                  Two @code{save-excursion} expressions.
+* insert-buffer interactive::   Когда вы можете читать, а не писать.
+* insert-buffer body::          Тело имеет @code{or} и @code{let}.
+* if & or::                     Использование @code{if} вместо @code{or}.
+* Insert or::                   Как @code{or} выражение работает.
+* Insert let::                  Два @code{save-excursion} выражения.
 * New insert-buffer::
 
 The Interactive Expression in @code{insert-buffer}
 
-* Read-only buffer::            When a buffer cannot be modified.
-* b for interactive::           An existing buffer or else its name.
+* Read-only buffer::            Когда буфер не может быть изменен.
+* b for interactive::           Существующий буфер или его имя.
 
 Complete Definition of @code{beginning-of-buffer}
 
 * Optional Arguments::
-* beginning-of-buffer opt arg::  Example with optional argument.
+* beginning-of-buffer opt arg::  Пример с необязательным аргументом.
 * beginning-of-buffer complete::
 
 @code{beginning-of-buffer} with an Argument
@@ -449,57 +448,57 @@ Complete Definition of @code{beginning-of-buffer}
 
 Narrowing and Widening
 
-* Narrowing advantages::        The advantages of narrowing
-* save-restriction::            The @code{save-restriction} special form.
-* what-line::                   The number of the line that point is on.
+* Narrowing advantages::        Преимущества сужения
+* save-restriction::            @code{save-restriction} специальная форма.
+* what-line::                   Номер строки, в которой находится точка.
 * narrow Exercise::
 
-@code{car}, @code{cdr}, @code{cons}: Fundamental Functions
+@code{car}, @code{cdr}, @code{cons}: Основные функции
 
-* Strange Names::               An historical aside: why the strange names?
-* car & cdr::                   Functions for extracting part of a list.
-* cons::                        Constructing a list.
-* nthcdr::                      Calling @code{cdr} repeatedly.
+* Strange Names::               Историческое в сторону: почему странные имена?
+* car & cdr::                   Функции для извлечения части списка.
+* cons::                        Построение списка.
+* nthcdr::                      Вызов @code{cdr} неоднократно.
 * nth::
-* setcar::                      Changing the first element of a list.
-* setcdr::                      Changing the rest of a list.
+* setcar::                      Изменение первого элемента списка.
+* setcdr::                      Изменение остальной части списка.
 * cons Exercise::
 
 @code{cons}
 
 * Build a list::
-* length::                      How to find the length of a list.
+* length::                      Как найти длину списка.
 
 Cutting and Storing Text
 
-* Storing Text::                Text is stored in a list.
-* zap-to-char::                 Cutting out text up to a character.
-* kill-region::                 Cutting text out of a region.
-* copy-region-as-kill::         A definition for copying text.
-* Digression into C::           Minor note on C programming language macros.
-* defvar::                      How to give a variable an initial value.
+* Storing Text::                Текст сохраняется в списке.
+* zap-to-char::                 Вырезание текста до символа.
+* kill-region::                 Вырезание текста из региона.
+* copy-region-as-kill::         Определение для копирования текста.
+* Digression into C::           Примечание о макросах языка программирования C.
+* defvar::                      Как дать переменной начальное значение.
 * cons & search-fwd Review::
 * search Exercises::
 
 @code{zap-to-char}
 
-* Complete zap-to-char::        The complete implementation.
-* zap-to-char interactive::     A three part interactive expression.
-* zap-to-char body::            A short overview.
-* search-forward::              How to search for a string.
-* progn::                       The @code{progn} special form.
-* Summing up zap-to-char::      Using @code{point} and @code{search-forward}.
+* Complete zap-to-char::        Полная реализация.
+* zap-to-char interactive::     Интерактивное выражение из трех частей.
+* zap-to-char body::            Краткий обзор.
+* search-forward::              Как искать строку.
+* progn::                       @code{progn} спациальная форма.
+* Summing up zap-to-char::      Использование @code{point} и @code{search-forward}.
 
 @code{kill-region}
 
-* Complete kill-region::        The function definition.
-* condition-case::              Dealing with a problem.
+* Complete kill-region::        Определение функции.
+* condition-case::              Решение проблемы.
 * Lisp macro::
 
 @code{copy-region-as-kill}
 
-* Complete copy-region-as-kill::  The complete function definition.
-* copy-region-as-kill body::      The body of @code{copy-region-as-kill}.
+* Complete copy-region-as-kill::  Полное определение функции.
+* copy-region-as-kill body::      Тело @code{copy-region-as-kill}.
 
 The Body of @code{copy-region-as-kill}
 
@@ -515,41 +514,41 @@ Initializing a Variable with @code{defvar}
 How Lists are Implemented
 
 * Lists diagrammed::
-* Symbols as Chest::            Exploring a powerful metaphor.
+* Symbols as Chest::            Изучение мощной метафоры.
 * List Exercise::
 
 Yanking Text Back
 
 * Kill Ring Overview::
-* kill-ring-yank-pointer::      The kill ring is a list.
-* yank nthcdr Exercises::       The @code{kill-ring-yank-pointer} variable.
+* kill-ring-yank-pointer::      Кольцо kill - это список.
+* yank nthcdr Exercises::       Переменная @code{kill-ring-yank-pointer}.
 
 Loops and Recursion
 
-* while::                       Causing a stretch of code to repeat.
+* while::                       Способы повторения кода.
 * dolist dotimes::
-* Recursion::                   Causing a function to call itself.
+* Recursion::                   Вызов функции рекурсивно.
 * Looping exercise::
 
 @code{while}
 
-* Looping with while::          Repeat so long as test returns true.
-* Loop Example::                A @code{while} loop that uses a list.
-* print-elements-of-list::      Uses @code{while}, @code{car}, @code{cdr}.
-* Incrementing Loop::           A loop with an incrementing counter.
+* Looping with while::          Повторяйте, пока тест вернется.
+* Loop Example::                @code{while} цикл, который использует список.
+* print-elements-of-list::      Применение @code{while}, @code{car}, @code{cdr}.
+* Incrementing Loop::           Цикл с увеличивающимся счетчиком.
 * Incrementing Loop Details::
-* Decrementing Loop::           A loop with a decrementing counter.
+* Decrementing Loop::           Цикл с уменьшающимся счетчиком.
 
 Details of an Incrementing Loop
 
-* Incrementing Example::        Counting pebbles in a triangle.
-* Inc Example parts::           The parts of the function definition.
-* Inc Example altogether::      Putting the function definition together.
+* Incrementing Example::        Подсчет гальки в треугольнике.
+* Inc Example parts::           Части определения функции.
+* Inc Example altogether::      Объяснение определения функции.
 
 Loop with a Decrementing Counter
 
-* Decrementing Example::        More pebbles on the beach.
-* Dec Example parts::           The parts of the function definition.
+* Decrementing Example::        Пример увеличения счетчика.
+* Dec Example parts::           Части определения функции.
 * Dec Example altogether::      Putting the function definition together.
 
 Save your time: @code{dolist} and @code{dotimes}
@@ -1060,59 +1059,62 @@ like flowers in a field with a stone wall around them.
 @unnumberedsubsec Numbers, Lists inside of Lists
 @end ifnottex
 
-Списки также могут содержать числа, как в этом списке: @code{(+ 2 2)}.
-Этот список имеет знак плюса, @samp{+}, и затем две @samp{2}ки, каждая
-разделенная пробелами.
+Lists can also have numbers in them, as in this list: @code{(+ 2 2)}.
+This list has a plus-sign, @samp{+}, followed by two @samp{2}s, each
+separated by whitespace.
 
-В Lisp данные и программы представлены одинаково; то есть,
-это список слов, цифр или других списков, разделенных
-пробелами и окруженные скобками. (Так как программа выглядит как данные, одна
-программа может легко служить в качестве данных для другой, это очень
-мощная особенность Lisp.) (Кстати, эти два замечания в скобках
-@emph{not} Lisp cписки, поскольку они содержат @samp{;} и
-@samp{.} знаки препинания.)
+In Lisp, both data and programs are represented the same way; that is,
+they are both lists of words, numbers, or other lists, separated by
+whitespace and surrounded by parentheses.  (Since a program looks like
+data, one program may easily serve as data for another; this is a very
+powerful feature of Lisp.)  (Incidentally, these two parenthetical
+remarks are @emph{not} Lisp lists, because they contain @samp{;} and
+@samp{.} as punctuation marks.)
 
 @need 1200
-Вот еще один список, на этот раз со списком внутри себя:
+Here is another list, this time with a list inside of it:
 
 @smallexample
-'(этот список содержит список (внутри себя))
+'(this list has (a list inside of it))
 @end smallexample
 
-Компонентами этого списка являются слова @samp{этот}, @samp{список},
-@samp{содержит}, @samp{список}, и список @samp{(внутри себя)}.  В дополнение
-список состоит из слов @samp{внутри}, @samp{себя}.
+The components of this list are the words @samp{this}, @samp{list},
+@samp{has}, and the list @samp{(a list inside of it)}.  The interior
+list is made up of the words @samp{a}, @samp{list}, @samp{inside},
+@samp{of}, @samp{it}.
 
 @node Lisp Atoms
 @subsection Lisp Atoms
 @cindex Lisp Atoms
 
-В Lisp то, что мы называем словами, называют @dfn{атомами}.  Этот
-термин происходит от исторического значения слова атом, что означает
-``неделимый''.  Что касается Лиспа, то слова, которые мы использовали в списках
-нельзя разделить на меньшие части, то же самое можно сказать о числах и
-одиночных символах, таких как @samp{+}.  С другой стороны, в отличие от
-атома, список можно разделить на части.  (@xref{car cdr & cons,
+In Lisp, what we have been calling words are called @dfn{atoms}.  This
+term comes from the historical meaning of the word atom, which means
+``indivisible''.  As far as Lisp is concerned, the words we have been
+using in the lists cannot be divided into any smaller parts and still
+mean the same thing as part of a program; likewise with numbers and
+single character symbols like @samp{+}.  On the other hand, unlike an
+ancient atom, a list can be split into parts.  (@xref{car cdr & cons,
 , @code{car} @code{cdr} & @code{cons} Fundamental Functions}.)
 
-В списке атомы отделены друг от друга пробелами. Они могут распологаться
-в плотную с круглой скобкой.
+In a list, atoms are separated from each other by whitespace.  They can be
+right next to a parenthesis.
 
 @cindex @samp{empty list} defined
-Технически говоря, список в Lisp состоит из круглых скобок, окружающих
-атомы, другие списки, или и списки, и атомы, разделенные пробелами. Список
-может содержать только один атом или вообще ничего не иметь. Список, в котором
-ничего нет, выглядит следующим образом: @code{()}, и называется
-@dfn{пустым списком}.  В отличие от всего остального, пустой список считается
-одновременно атомом и списком.
+Technically speaking, a list in Lisp consists of parentheses surrounding
+atoms separated by whitespace or surrounding other lists or surrounding
+both atoms and other lists.  A list can have just one atom in it or
+have nothing in it at all.  A list with nothing in it looks like this:
+@code{()}, and is called the @dfn{empty list}.  Unlike anything else, an
+empty list is considered both an atom and a list at the same time.
 
 @cindex Symbolic expressions, introduced
 @cindex @samp{expression} defined
 @cindex @samp{form} defined
-Печатное представление и атомов и списков называется
-@dfn{символическим выражением} или, говоря точнее, @dfn{s-выражениями}.
-Слово @dfn{выражение} может ссылаться либо как на печатное представление или атома или списка, поскольку он удерживается внутри
-компьютер. Часто люди используют термин @dfn{expression}
+The printed representation of both atoms and lists are called
+@dfn{symbolic expressions} or, more concisely, @dfn{s-expressions}.
+The word @dfn{expression} by itself can refer to either the printed
+representation, or to the atom or list as it is held internally in the
+computer.  Often, people use the term @dfn{expression}
 indiscriminately.  (Also, in many texts, the word @dfn{form} is used
 as a synonym for expression.)
 
@@ -17645,7 +17647,7 @@ Set the shape and color of the mouse cursor:
       (setq mpointer "132")) ; top_left_arrow
 @end group
 @group
-  (setq x-pointer-shape (string-to-number mpointer))
+  (setq x-pointer-shape (string-to-int mpointer))
   (set-mouse-color "white"))
 @end group
 @end smallexample
