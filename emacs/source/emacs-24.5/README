@@ -1,50 +1,50 @@
 Copyright (C) 2001-2015 Free Software Foundation, Inc.
-See the end of the file for license conditions.
+См. Конец файла для условий лицензии.
 
 
-This directory tree holds version 24.5 of GNU Emacs, the extensible,
-customizable, self-documenting real-time display editor.
+Это дерево каталогов содержит версию 24.5 GNU Emacs, Расширяемый,
+настраиваемый, самодокументирующий редактор отображения в реальном времени.
 
-The file INSTALL in this directory says how to build and install GNU
-Emacs on various systems, once you have unpacked or checked out the
-entire Emacs file tree.
+Файл INSTALL в этом каталоге говорит, как создавать и устанавливать GNU
+Emacs в различных системах, после того как вы распаковали и проверили
+полное дерево файлов Emacs.
 
-See the file etc/NEWS for information on new features and other
-user-visible changes in recent versions of Emacs.
+См. Файл etc/NEWS для получения информации о новых функциях и других
+видимые пользователем изменения в последних версиях Emacs.
 
-The file etc/PROBLEMS contains information on many common problems that
-occur in building, installing and running Emacs.
+Файл etc/PROBLEMS содержит информацию о многих распространенных проблемах, которые
+происходят при строительстве, установке и запуске Emacs.
 
-You may encounter bugs in this release.  If you do, please report
-them; your bug reports are valuable contributions to the FSF, since
-they allow us to notice and fix problems on machines we don't have, or
-in code we don't use often.  Please send bug reports to the mailing
-list bug-gnu-emacs@gnu.org.  If possible, use M-x report-emacs-bug.
+Вы можете столкнуться с ошибками в этой версии. Если да, пожалуйста, сообщите
+о них. Ваши отчеты об ошибках являются ценным вкладом в ФСФ, поскольку
+они позволяют нам замечать и исправлять проблемы на машинах, которых у нас нет, или
+в не часто используемом коде. Пожалуйста, отправьте сообщения об ошибках в рассылку
+списка bug-gnu-emacs@gnu.org.  Если возможно, используйте M-x report-emacs-bug.
 
-See the "Bugs" section of the Emacs manual for more information on how
-to report bugs.  (The file `BUGS' in this directory explains how you
-can find and read that section using the Info files that come with
-Emacs.)  For a list of mailing lists related to Emacs, see
-<http://savannah.gnu.org/mail/?group=emacs>.  For the complete
-list of GNU mailing lists, see <http://lists.gnu.org/>.
+См. Раздел «Ошибки» руководства Emacs для получения дополнительной информации о том, как
+сообщать об ошибках. (Файл `BUGS 'в этом каталоге объясняет, как вы
+можете найти и прочитать этот раздел, используя файлы Info, которые поставляются с
+Emacs.) Список списков рассылки, связанных с Emacs, см.
+<http://savannah.gnu.org/mail/?group=emacs>.  Для полного
+список списков рассылки GNU, см. <http://lists.gnu.org/>.
 
-The `etc' subdirectory contains several other files, named in capital
-letters, which you might consider looking at when installing GNU
+`etc' подкаталог содержит несколько других файлов, названных в капитале
+письма, которые вы можете рассмотреть при установке GNU
 Emacs.
 
-The file `configure' is a shell script to acclimate Emacs to the
-oddities of your processor and operating system.  It creates the file
-`Makefile' (a script for the `make' program), which automates the
-process of building and installing Emacs.  See INSTALL for more
-detailed information.
+Файл `configure' это сценарий оболочки для акклиматизации Emacs к
+особенностям вашего процессора и операционной системы. Он создает файл
+`Makefile' (script для `make' программы, который автоматизирует 
+процесс сборки и установки Emacs.  Смотри INSTALL для более
+детальной информации.
 
-The file `configure.ac' is the input used by the autoconf program to
-construct the `configure' script.  Since Emacs has some configuration
-requirements that autoconf can't meet directly, and for historical
-reasons, `configure.ac' uses an unholy marriage of custom-baked
-configuration code and autoconf macros.
+Файл `configure.ac' - это вход, используемый программой autoconf для
+сборки `configure' скрипта.  поскольку Emacs имеет некоторые конфигурационные
+требования, которые autoconf не может выполнить напрямую, и по историческим
+причинам, `configure.ac' использует обычно брак по коду
+конфигурации и макросу autoconf.
 
-The shell script `autogen.sh' generates 'configure' and other files by
+shell script `autogen.sh' генерирует 'configure' and other files by
 running the GNU build tools autoconf and automake, which in turn use
 GNU m4 and Perl.  If you want to use it, you will need to install
 recent versions of these build tools.  This should be needed only if

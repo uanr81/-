@@ -84,7 +84,7 @@
 @c ссылка с ``...''  скорее, чем [...]
 
 @c Это работает с файлом texinfo.tex, версия 2003-05-04.08,
-@c in the Texinfo version 4.6 of the 2003 Jun 13 distribution.
+@c в версии Texinfo 4.6 от 13 июня 2003 года.
 
 @tex
 \if \xrefprintnodename
@@ -298,74 +298,74 @@ Lisp Lists
 
 The Lisp Interpreter
 
-* Complications::               Variables, Special forms, Lists within.
-* Byte Compiling::              Specially processing code for speed.
+* Complications::               Переменные, специальные формы, в пределах списка.
+* Byte Compiling::              Специально обработанный код для скорости.
 
 Evaluation
 
-* How the Interpreter Acts::    Returns and Side Effects...
-* Evaluating Inner Lists::      Lists within lists...
+* How the Interpreter Acts::    Возврат значения и побочные эффекты...
+* Evaluating Inner Lists::      Списки в списках...
 
 Variables
 
 * fill-column Example::
-* Void Function::               The error message for a symbol
-                                  without a function.
-* Void Variable::               The error message for a symbol without a value.
+* Void Function::               Сообщение об ошибке для символа
+                                  без функции.
+* Void Variable::               Сообщение об ошибке для символа без значения.
 
 Arguments
 
-* Data types::                  Types of data passed to a function.
-* Args as Variable or List::    An argument can be the value
-                                  of a variable or list.
-* Variable Number of Arguments::  Some functions may take a
-                                  variable number of arguments.
-* Wrong Type of Argument::      Passing an argument of the wrong type
-                                  to a function.
-* message::                     A useful function for sending messages.
+* Data types::                  Типы данных, переданных функции.
+* Args as Variable or List::    Аргументом может быть значение
+                                  переменной или списка.
+* Variable Number of Arguments::  Некоторые функции могут
+                                  переменное количество аргументов.
+* Wrong Type of Argument::      Передача аргумента неправильного типа
+                                  в функцию.
+* message::                     Полезная функция для отправки сообщений.
 
 Setting the Value of a Variable
 
-* Using set::                  Setting values.
-* Using setq::                 Setting a quoted value.
-* Counting::                   Using @code{setq} to count.
+* Using set::                  Установка значений.
+* Using setq::                 Установка котировки.
+* Counting::                   Использование @code{setq} в счетчике.
 
 Practicing Evaluation
 
-* How to Evaluate::            Typing editing commands or @kbd{C-x C-e}
-                                 causes evaluation.
-* Buffer Names::               Buffers and files are different.
-* Getting Buffers::            Getting a buffer itself, not merely its name.
-* Switching Buffers::          How to change to another buffer.
-* Buffer Size & Locations::    Where point is located and the size of
-                               the buffer.
+* How to Evaluate::            Ввод команд редактирования или @kbd{C-x C-e}
+                                 вызов оценки.
+* Buffer Names::               Отличие буфера и файла.
+* Getting Buffers::            Получение самого буфера, а не только его название.
+* Switching Buffers::          Как перейти на другой буфер.
+* Buffer Size & Locations::    Где находится точка и размер
+                               буфера.
 * Evaluation Exercise::
 
 How To Write Function Definitions
 
 * Primitive Functions::
-* defun::                        The @code{defun} macro.
-* Install::                      Install a function definition.
-* Interactive::                  Making a function interactive.
-* Interactive Options::          Different options for @code{interactive}.
-* Permanent Installation::       Installing code permanently.
-* let::                          Creating and initializing local variables.
-* if::                           What if?
-* else::                         If--then--else expressions.
-* Truth & Falsehood::            What Lisp considers false and true.
-* save-excursion::               Keeping track of point and buffer.
+* defun::                        Макрос @code{defun}.
+* Install::                      Установите определение функции.
+* Interactive::                  Создание интерактивной функции.
+* Interactive Options::          Различные варианты @code{interactive}.
+* Permanent Installation::       Установка кода надолго.
+* let::                          Создание и инициализация локальных переменных.
+* if::                           Что такое if?
+* else::                         If--then--else выражения.
+* Truth & Falsehood::            Что Lisp считает ложным и истинным.
+* save-excursion::               Отслеживание точки и буфера.
 * Review::
 * defun Exercises::
 
 Install a Function Definition
 
 * Effect of installation::
-* Change a defun::              How to change a function definition.
+* Change a defun::              Как изменить определение функции.
 
 Make a Function Interactive
 
-* Interactive multiply-by-seven::  An overview.
-* multiply-by-seven in detail::    The interactive version.
+* Interactive multiply-by-seven::  Обзор.
+* multiply-by-seven in detail::    Интерактивная версия.
 
 @code{let}
 
@@ -377,69 +377,69 @@ Make a Function Interactive
 The @code{if} Special Form
 
 * if in more detail::
-* type-of-animal in detail::    An example of an @code{if} expression.
+* type-of-animal in detail::    Пример использования @code{if} выражения.
 
 Truth and Falsehood in Emacs Lisp
 
-* nil explained::               @code{nil} has two meanings.
+* nil explained::               @code{nil} Имеет два значения.
 
 @code{save-excursion}
 
-* Point and mark::              A review of various locations.
+* Point and mark::              Обзор различных местоположений.
 * Template for save-excursion::
 
 A Few Buffer-Related Functions
 
-* Finding More::                How to find more information.
-* simplified-beginning-of-buffer::  Shows @code{goto-char},
-                                @code{point-min}, and @code{push-mark}.
-* mark-whole-buffer::           Almost the same as @code{beginning-of-buffer}.
-* append-to-buffer::            Uses @code{save-excursion} and
+* Finding More::                Как найти дополнительную информацию.
+* simplified-beginning-of-buffer::  Обзор @code{goto-char},
+                                @code{point-min}, и @code{push-mark}.
+* mark-whole-buffer::           Почти так же, как @code{beginning-of-buffer}.
+* append-to-buffer::            Используя @code{save-excursion} и
                                 @code{insert-buffer-substring}.
-* Buffer Related Review::       Review.
+* Buffer Related Review::       Обзор.
 * Buffer Exercises::
 
 The Definition of @code{mark-whole-buffer}
 
 * mark-whole-buffer overview::
-* Body of mark-whole-buffer::   Only three lines of code.
+* Body of mark-whole-buffer::   Только три строки кода.
 
 The Definition of @code{append-to-buffer}
 
 * append-to-buffer overview::
-* append interactive::          A two part interactive expression.
-* append-to-buffer body::       Incorporates a @code{let} expression.
-* append save-excursion::       How the @code{save-excursion} works.
+* append interactive::          Двухстороннее интерактивное выражение.
+* append-to-buffer body::       Включает @code{let} выражение.
+* append save-excursion::       Как работает @code{save-excursion}.
 
 A Few More Complex Functions
 
-* copy-to-buffer::              With @code{set-buffer}, @code{get-buffer-create}.
-* insert-buffer::               Read-only, and with @code{or}.
-* beginning-of-buffer::         Shows @code{goto-char},
-                                @code{point-min}, and @code{push-mark}.
+* copy-to-buffer::              С @code{set-buffer}, @code{get-buffer-create}.
+* insert-buffer::               Только для чтения и с @code{or}.
+* beginning-of-buffer::         Обзор @code{goto-char},
+                                @code{point-min}, и @code{push-mark}.
 * Second Buffer Related Review::
 * optional Exercise::
 
 The Definition of @code{insert-buffer}
 
 * insert-buffer code::
-* insert-buffer interactive::   When you can read, but not write.
-* insert-buffer body::          The body has an @code{or} and a @code{let}.
-* if & or::                     Using an @code{if} instead of an @code{or}.
-* Insert or::                   How the @code{or} expression works.
-* Insert let::                  Two @code{save-excursion} expressions.
+* insert-buffer interactive::   Когда вы можете читать, а не писать.
+* insert-buffer body::          Тело имеет @code{or} и @code{let}.
+* if & or::                     Используем @code{if} вместо @code{or}.
+* Insert or::                   Как @code{or} выражение работает.
+* Insert let::                  Два @code{save-excursion} выражения.
 * New insert-buffer::
 
 The Interactive Expression in @code{insert-buffer}
 
-* Read-only buffer::            When a buffer cannot be modified.
-* b for interactive::           An existing buffer or else its name.
+* Read-only buffer::            Когда буфер не может быть изменен.
+* b for interactive::           Существующий буфер или его имя.
 
 Complete Definition of @code{beginning-of-buffer}
 
-* Optional Arguments::
-* beginning-of-buffer opt arg::  Example with optional argument.
-* beginning-of-buffer complete::
+* Optional Arguments::          Необязательные аргументы
+* beginning-of-buffer opt arg::  Пример с дополнительным аргументом.
+* beginning-of-buffer complete:: Полный текст функции
 
 @code{beginning-of-buffer} with an Argument
 
@@ -449,57 +449,57 @@ Complete Definition of @code{beginning-of-buffer}
 
 Narrowing and Widening
 
-* Narrowing advantages::        The advantages of narrowing
-* save-restriction::            The @code{save-restriction} special form.
-* what-line::                   The number of the line that point is on.
-* narrow Exercise::
+* Narrowing advantages::        Преимущества сужения
+* save-restriction::            @code{save-restriction} специальная форма.
+* what-line::                   Номер строки, в которой находится точка.
+* narrow Exercise::             Упражнения на сужение
 
-@code{car}, @code{cdr}, @code{cons}: Fundamental Functions
+@code{car}, @code{cdr}, @code{cons}: Фундаментальные функции
 
-* Strange Names::               An historical aside: why the strange names?
-* car & cdr::                   Functions for extracting part of a list.
-* cons::                        Constructing a list.
-* nthcdr::                      Calling @code{cdr} repeatedly.
+* Strange Names::               Историческая сторона: почему странные имена?
+* car & cdr::                   Функции для извлечения части списка.
+* cons::                        Построение списка.
+* nthcdr::                      Вызов @code{cdr} неоднократно.
 * nth::
-* setcar::                      Changing the first element of a list.
-* setcdr::                      Changing the rest of a list.
+* setcar::                      Изменение первого элемента списка.
+* setcdr::                      Изменение остальной части списка.
 * cons Exercise::
 
 @code{cons}
 
 * Build a list::
-* length::                      How to find the length of a list.
+* length::                      Как найти длину списка.
 
 Cutting and Storing Text
 
-* Storing Text::                Text is stored in a list.
-* zap-to-char::                 Cutting out text up to a character.
-* kill-region::                 Cutting text out of a region.
-* copy-region-as-kill::         A definition for copying text.
-* Digression into C::           Minor note on C programming language macros.
-* defvar::                      How to give a variable an initial value.
+* Storing Text::                Текст сохраняется в списке.
+* zap-to-char::                 Вырезание текста до символа.
+* kill-region::                 Вырезание текста из области.
+* copy-region-as-kill::         Определение для копирования текста.
+* Digression into C::           Незначительное примечание о макросах языка программирования C.
+* defvar::                      Как дать переменной начальное значение.
 * cons & search-fwd Review::
 * search Exercises::
 
 @code{zap-to-char}
 
-* Complete zap-to-char::        The complete implementation.
-* zap-to-char interactive::     A three part interactive expression.
-* zap-to-char body::            A short overview.
-* search-forward::              How to search for a string.
-* progn::                       The @code{progn} special form.
-* Summing up zap-to-char::      Using @code{point} and @code{search-forward}.
+* Complete zap-to-char::        Полная реализация.
+* zap-to-char interactive::     Интерактивное выражение из трех частей.
+* zap-to-char body::            Краткий обзор.
+* search-forward::              Как искать строку.
+* progn::                       Специальная форма @code{progn}.
+* Summing up zap-to-char::      Использование @code{point} и @code{search-forward}.
 
 @code{kill-region}
 
-* Complete kill-region::        The function definition.
-* condition-case::              Dealing with a problem.
+* Complete kill-region::        Определение функции.
+* condition-case::              Решение проблемы.
 * Lisp macro::
 
 @code{copy-region-as-kill}
 
-* Complete copy-region-as-kill::  The complete function definition.
-* copy-region-as-kill body::      The body of @code{copy-region-as-kill}.
+* Complete copy-region-as-kill::  Полное определение функции.
+* copy-region-as-kill body::      Тело @code{copy-region-as-kill}.
 
 The Body of @code{copy-region-as-kill}
 
@@ -515,42 +515,42 @@ Initializing a Variable with @code{defvar}
 How Lists are Implemented
 
 * Lists diagrammed::
-* Symbols as Chest::            Exploring a powerful metaphor.
+* Symbols as Chest::            Изучение мощной метафоры.
 * List Exercise::
 
 Yanking Text Back
 
 * Kill Ring Overview::
-* kill-ring-yank-pointer::      The kill ring is a list.
-* yank nthcdr Exercises::       The @code{kill-ring-yank-pointer} variable.
+* kill-ring-yank-pointer::      Кольцо kill - это список.
+* yank nthcdr Exercises::       Переменная @code{kill-ring-yank-pointer}.
 
 Loops and Recursion
 
-* while::                       Causing a stretch of code to repeat.
+* while::                       Вызов фрагмента кода для повторения.
 * dolist dotimes::
-* Recursion::                   Causing a function to call itself.
+* Recursion::                   Вызов функции вызывающую саму себя.
 * Looping exercise::
 
 @code{while}
 
-* Looping with while::          Repeat so long as test returns true.
-* Loop Example::                A @code{while} loop that uses a list.
-* print-elements-of-list::      Uses @code{while}, @code{car}, @code{cdr}.
-* Incrementing Loop::           A loop with an incrementing counter.
+* Looping with while::          Цикл повторения while.
+* Loop Example::                @code{while} который использует список.
+* print-elements-of-list::      Использование @code{while}, @code{car}, @code{cdr}.
+* Incrementing Loop::           Цикл с инкрементирующим счетчиком.
 * Incrementing Loop Details::
-* Decrementing Loop::           A loop with a decrementing counter.
+* Decrementing Loop::           Цикл с декрементирующим счетчиком.
 
 Details of an Incrementing Loop
 
-* Incrementing Example::        Counting pebbles in a triangle.
-* Inc Example parts::           The parts of the function definition.
-* Inc Example altogether::      Putting the function definition together.
+* Incrementing Example::        Подсчет камушкев в треугольнике.
+* Inc Example parts::           Части определения функции.
+* Inc Example altogether::      Объяснение определения функции.
 
 Loop with a Decrementing Counter
 
-* Decrementing Example::        More pebbles on the beach.
-* Dec Example parts::           The parts of the function definition.
-* Dec Example altogether::      Putting the function definition together.
+* Decrementing Example::        Пример с уменьшением счетчика.
+* Dec Example parts::           Части определения функции.
+* Dec Example altogether::      Объяснение определения функции.
 
 Save your time: @code{dolist} and @code{dotimes}
 
@@ -559,13 +559,13 @@ Save your time: @code{dolist} and @code{dotimes}
 
 Recursion
 
-* Building Robots::             Same model, different serial number ...
-* Recursive Definition Parts::  Walk until you stop ...
-* Recursion with list::         Using a list as the test whether to recurse.
+* Building Robots::             Такая же модель, другой серийный номер ...
+* Recursive Definition Parts::  Прогулка до остановки ...
+* Recursion with list::         Использование списка в качестве теста для рекурсии.
 * Recursive triangle function::
 * Recursion with cond::
-* Recursive Patterns::          Often used templates.
-* No Deferment::                Don't store up work ...
+* Recursive Patterns::          Часто используются шаблоны.
+* No Deferment::                Не храните работу ...
 * No deferment solution::
 
 Recursion in Place of a Counter
@@ -581,66 +581,66 @@ Recursive Patterns
 
 Regular Expression Searches
 
-* sentence-end::                The regular expression for @code{sentence-end}.
-* re-search-forward::           Very similar to @code{search-forward}.
-* forward-sentence::            A straightforward example of regexp search.
-* forward-paragraph::           A somewhat complex example.
+* sentence-end::                Регулярное выражение для @code{sentence-end}.
+* re-search-forward::           Очень похоже на @code{search-forward}.
+* forward-sentence::            Прямой пример поиска регулярных выражений.
+* forward-paragraph::           Несколько сложный пример.
 * Regexp Review::
 * re-search Exercises::
 
 @code{forward-sentence}
 
 * Complete forward-sentence::
-* fwd-sentence while loops::    Two @code{while} loops.
-* fwd-sentence re-search::      A regular expression search.
+* fwd-sentence while loops::    Два @code{while} цикла.
+* fwd-sentence re-search::      Поиск регулярного выражения.
 
-@code{forward-paragraph}: a Goldmine of Functions
+@code{forward-paragraph}: Золотая коллекция функций
 
-* forward-paragraph in brief::  Key parts of the function definition.
-* fwd-para let::                The @code{let*} expression.
-* fwd-para while::              The forward motion @code{while} loop.
+* forward-paragraph in brief::  Ключевые части определения функции.
+* fwd-para let::                @code{let*} выражение.
+* fwd-para while::              Движение вперед @code{while} цикла.
 
 Counting: Repetition and Regexps
 
 * Why Count Words::
-* @value{COUNT-WORDS}::         Use a regexp, but find a problem.
-* recursive-count-words::       Start with case of no words in region.
+* @value{COUNT-WORDS}::         Используйте регулярное выражение, но найдите проблему.
+* recursive-count-words::       Начните с случая без слов в регионе.
 * Counting Exercise::
 
 The @code{@value{COUNT-WORDS}} Function
 
-* Design @value{COUNT-WORDS}::  The definition using a @code{while} loop.
-* Whitespace Bug::              The Whitespace Bug in @code{@value{COUNT-WORDS}}.
+* Design @value{COUNT-WORDS}::  Определение с использованием @code{while} цикла.
+* Whitespace Bug::              Ошибка в пробеле @code{@value{COUNT-WORDS}}.
 
 Counting Words in a @code{defun}
 
 * Divide and Conquer::
-* Words and Symbols::           What to count?
-* Syntax::                      What constitutes a word or symbol?
-* count-words-in-defun::        Very like @code{@value{COUNT-WORDS}}.
-* Several defuns::              Counting several defuns in a file.
-* Find a File::                 Do you want to look at a file?
-* lengths-list-file::           A list of the lengths of many definitions.
-* Several files::               Counting in definitions in different files.
-* Several files recursively::   Recursively counting in different files.
-* Prepare the data::            Prepare the data for display in a graph.
+* Words and Symbols::           Что считать?
+* Syntax::                      Что представляет собой слово или символ?
+* count-words-in-defun::        Очень нравится @code{@value{COUNT-WORDS}}.
+* Several defuns::              Подсчет нескольких defuns в файле.
+* Find a File::                 Вы хотите посмотреть файл?
+* lengths-list-file::           Список длин многих определений.
+* Several files::               Подсчет в определениях в разных файлах.
+* Several files recursively::   Рекурсивный подсчет в разных файлах.
+* Prepare the data::            Подготовьте данные для отображения на графике.
 
 Count Words in @code{defuns} in Different Files
 
-* lengths-list-many-files::     Return a list of the lengths of defuns.
-* append::                      Attach one list to another.
+* lengths-list-many-files::     Возвращает список длин defuns.
+* append::                      Присоединить один список к другому.
 
 Prepare the Data for Display in a Graph
 
 * Data for Display in Detail::
-* Sorting::                     Sorting lists.
-* Files List::                  Making a list of files.
+* Sorting::                     Сортировка списков.
+* Files List::                  Создание списка файлов.
 * Counting function definitions::
 
 Readying a Graph
 
 * Columns of a graph::
-* graph-body-print::            How to print the body of a graph.
+* graph-body-print::            Как напечатать тело графа.
 * recursive-graph-body-print::
 * Printed Axes::
 * Line Graph Exercise::
@@ -648,35 +648,35 @@ Readying a Graph
 Your @file{.emacs} File
 
 * Default Configuration::
-* Site-wide Init::              You can write site-wide init files.
-* defcustom::                   Emacs will write code for you.
-* Beginning init File::         How to write a @file{.emacs} init file.
-* Text and Auto-fill::          Automatically wrap lines.
-* Mail Aliases::                Use abbreviations for email addresses.
-* Indent Tabs Mode::            Don't use tabs with @TeX{}
-* Keybindings::                 Create some personal keybindings.
-* Keymaps::                     More about key binding.
-* Loading Files::               Load (i.e., evaluate) files automatically.
-* Autoload::                    Make functions available.
-* Simple Extension::            Define a function; bind it to a key.
-* X11 Colors::                  Colors in X.
+* Site-wide Init::              Вы можете создавать файлы для всего сайта.
+* defcustom::                   Emacs будет писать код для вас.
+* Beginning init File::         Как написать @file{.emacs} файл инициализации.
+* Text and Auto-fill::          Автоматическое выравнивание линии.
+* Mail Aliases::                Используйте аббревиатуры для адресов электронной почты.
+* Indent Tabs Mode::            Не используйте вкладки с @TeX{}
+* Keybindings::                 Создайте отдельные личные привязки.
+* Keymaps::                     Подробнее о привязке клавиш.
+* Loading Files::               Загружать (то есть оценивать) файлы автоматически.
+* Autoload::                    Сделать доступными функции.
+* Simple Extension::            Определить функцию; Привяжите его к ключу.
+* X11 Colors::                  Цвета в X.
 * Miscellaneous::
-* Mode Line::                   How to customize your mode line.
+* Mode Line::                   Как настроить сторку режима.
 
 Debugging
 
-* debug::                       How to use the built-in debugger.
-* debug-on-entry::              Start debugging when you call a function.
-* debug-on-quit::               Start debugging when you quit with @kbd{C-g}.
-* edebug::                      How to use Edebug, a source level debugger.
+* debug::                       Как использовать встроенный отладчик.
+* debug-on-entry::              Начните отладку при вызове функции.
+* debug-on-quit::               Начать отладку при выходе с @kbd{C-g}.
+* edebug::                      Как использовать Edebug, отладчик исходного уровня.
 * Debugging Exercises::
 
 Handling the Kill Ring
 
 * What the Kill Ring Does::
 * current-kill::
-* yank::                        Paste a copy of a clipped element.
-* yank-pop::                    Insert element pointed to.
+* yank::                        Вставьте копию обрезанного элемента.
+* yank-pop::                    Вставить элемент, на который указывает.
 * ring file::
 
 The @code{current-kill} Function
@@ -687,25 +687,25 @@ The @code{current-kill} Function
 @code{current-kill} in Outline
 
 * Body of current-kill::
-* Digression concerning error::  How to mislead humans, but not computers.
+* Digression concerning error::  Как вводить в заблуждение людей, но не компьютеры.
 * Determining the Element::
 
 A Graph with Labeled Axes
 
 * Labeled Example::
-* print-graph Varlist::         @code{let} expression in @code{print-graph}.
-* print-Y-axis::                Print a label for the vertical axis.
-* print-X-axis::                Print a horizontal label.
-* Print Whole Graph::           The function to print a complete graph.
+* print-graph Varlist::         @code{let} выражение в @code{print-graph}.
+* print-Y-axis::                Распечатайте метку вертикальной оси.
+* print-X-axis::                Распечатайте метку горизонтальной оси.
+* Print Whole Graph::           Функция для печати полного графика.
 
 The @code{print-Y-axis} Function
 
 * print-Y-axis in Detail::
-* Height of label::             What height for the Y axis?
-* Compute a Remainder::         How to compute the remainder of a division.
-* Y Axis Element::              Construct a line for the Y axis.
-* Y-axis-column::               Generate a list of Y axis labels.
-* print-Y-axis Penultimate::    A not quite final version.
+* Height of label::             Какая высота для оси Y?
+* Compute a Remainder::         Как вычислить остаток деления.
+* Y Axis Element::              Построить линию для оси Y.
+* Y-axis-column::               Создайте список меток оси Y.
+* print-Y-axis Penultimate::    Не совсем окончательная версия.
 
 The @code{print-X-axis} Function
 
@@ -714,13 +714,13 @@ The @code{print-X-axis} Function
 
 Printing the Whole Graph
 
-* The final version::           A few changes.
-* Test print-graph::            Run a short test.
-* Graphing words in defuns::    Executing the final code.
-* lambda::                      How to write an anonymous function.
-* mapcar::                      Apply a function to elements of a list.
-* Another Bug::                 Yet another bug @dots{} most insidious.
-* Final printed graph::         The graph itself!
+* The final version::           Несколько изменений.
+* Test print-graph::            Проведите короткий тест.
+* Graphing words in defuns::    Выполнение окончательного кода.
+* lambda::                      Как написать анонимную функцию.
+* mapcar::                      Применить функцию к элементам списка.
+* Another Bug::                 Еще одна ошибка @dots{} самая коварная.
+* Final printed graph::         Сам график!
 
 @end detailmenu
 @end menu
@@ -728,28 +728,28 @@ Printing the Whole Graph
 @node Preface
 @unnumbered Preface
 
-Most of the GNU Emacs integrated environment is written in the programming
-language called Emacs Lisp.  The code written in this programming
-language is the software---the sets of instructions---that tell the
-computer what to do when you give it commands.  Emacs is designed so
-that you can write new code in Emacs Lisp and easily install it as an
-extension to the editor.
+Большая часть интегрированной среды GNU Emacs на языке программировании
+под названием Emacs Lisp. Код, написанный на этом языке программировании
+- это программное обеспечение --- наборы инструкций, которые сообщают
+компьютеру, что делать, когда вы даете ему команды. Emacs разработан таким образом
+что вы можете написать новый код в Emacs Lisp и легко установить его как
+расширение для редактора.
 
-(GNU Emacs is sometimes called an ``extensible editor'', but it does
-much more than provide editing capabilities.  It is better to refer to
-Emacs as an ``extensible computing environment''.  However, that
-phrase is quite a mouthful.  It is easier to refer to Emacs simply as
-an editor.  Moreover, everything you do in Emacs---find the Mayan date
-and phases of the moon, simplify polynomials, debug code, manage
-files, read letters, write books---all these activities are kinds of
-editing in the most general sense of the word.)
+(GNU Emacs иногда называют ``Расширяемый редактор'', Но это
+гораздо больше, чем предоставление возможностей редактирования. Лучше обратиться к
+Emacs как ``Расширяемая вычислительная среда''.  Однако это
+фраза довольно полна. Легче обращаться к Emacs просто как
+редактору. Кроме того, все, что вы делаете в Emacs---Найхождение даты майя
+и фазы Луны, упрощение полиномы, отлаживание кода, управление
+файлами, чтение писем, написание книги - все эти виды деятельности являются видами
+редактирование в самом общем смысле слова.)
 
 @menu
-* Why::                         Why learn Emacs Lisp?
-* On Reading this Text::        Read, gain familiarity, pick up habits....
-* Who You Are::                 For whom this is written.
+* Why::                         Зачем учиться Emacs Lisp?
+* On Reading this Text::        Читайте, приобретайте знакомство, выбирайте привычки....
+* Who You Are::                 Для кого это написано.
 * Lisp History::
-* Note for Novices::            You can read this as a novice.
+* Note for Novices::            Вы можете прочитать это как новичок.
 * Thank You::
 @end menu
 
@@ -758,75 +758,75 @@ editing in the most general sense of the word.)
 @unnumberedsec Why Study Emacs Lisp?
 @end ifnottex
 
-Although Emacs Lisp is usually thought of in association only with Emacs,
-it is a full computer programming language.  You can use Emacs Lisp as
-you would any other programming language.
+Хотя Emacs Lisp обычно ассоциируется только с Emacs,
+это полный компьютерный язык программирования. Вы можете использовать Emacs Lisp как
+вы бы использовали любой другой язык программирования.
 
-Perhaps you want to understand programming; perhaps you want to extend
-Emacs; or perhaps you want to become a programmer.  This introduction to
-Emacs Lisp is designed to get you started: to guide you in learning the
-fundamentals of programming, and more importantly, to show you how you
-can teach yourself to go further.
+Возможно, вы хотите понять программирование; Возможно, вы хотите расширить
+Emacs; Или, возможно, вы хотите стать программистом. Это введение в
+Emacs Lisp предназначен для вас: чтобы помочь вам изучить
+основы программирования и, что более важно, показать вам, как вы
+можете научить себя идти дальше.
 
 @node On Reading this Text
 @unnumberedsec On Reading this Text
 
-All through this document, you will see little sample programs you can
-run inside of Emacs.  If you read this document in Info inside of GNU
-Emacs, you can run the programs as they appear.  (This is easy to do and
-is explained when the examples are presented.)  Alternatively, you can
-read this introduction as a printed book while sitting beside a computer
-running Emacs.  (This is what I like to do; I like printed books.)  If
-you don't have a running Emacs beside you, you can still read this book,
-but in this case, it is best to treat it as a novel or as a travel guide
-to a country not yet visited: interesting, but not the same as being
-there.
+Во всем этом документе вы увидите небольшие примеры программ, которые вы можете
+запустить внутри Emacs. Если вы прочитали этот документ в Info внутри GNU
+Emacs, вы можете запускать программы по мере их появления. (Это легко сделать и
+объясняется, когда представлены примеры.) В качестве альтернативы вы можете
+прочитайте это введение как печатную книгу, сидя рядом с компьютером
+где работает Emacs. (Это то, что я люблю делать, мне нравятся печатные книги.) Если
+у вас нет действующего Emacs рядом с вами, вы все равно можете прочитать эту книгу,
+но в этом случае лучше рассматривать его как роман или как путеводитель
+в страну, которую еще не посетили: интересно, но не то же самое, что быть
+там.
 
-Much of this introduction is dedicated to walkthroughs or guided tours
-of code used in GNU Emacs.  These tours are designed for two purposes:
-first, to give you familiarity with real, working code (code you use
-every day); and, second, to give you familiarity with the way Emacs
-works.  It is interesting to see how a working environment is
-implemented.
-Also, I
-hope that you will pick up the habit of browsing through source code.
-You can learn from it and mine it for ideas.  Having GNU Emacs is like
-having a dragon's cave of treasures.
+Большая часть этого введения посвящена прохождению или экскурсиям по
+коду, используемого в GNU Emacs. Эти туры преследуют две цели:
+Во-первых, чтобы вы ознакомились с реальным рабочим кодом (код, который вы используете
+каждый день); И, во-вторых, чтобы вы ознакомились с тем, как Emacs
+работает. Интересно посмотреть, как работает и реализованна рабочая 
+среда.
+Как и я
+Надеюсь, что вы поймете привычку просматривать исходный код.
+Вы можете учиться у него и использовать его для идей. Наличие GNU Emacs похоже на
+обладание драконной пещеры сокровищ.
 
-In addition to learning about Emacs as an editor and Emacs Lisp as a
-programming language, the examples and guided tours will give you an
-opportunity to get acquainted with Emacs as a Lisp programming
-environment.  GNU Emacs supports programming and provides tools that
-you will want to become comfortable using, such as @kbd{M-.} (the key
-which invokes the @code{find-tag} command).  You will also learn about
-buffers and other objects that are part of the environment.
-Learning about these features of Emacs is like learning new routes
-around your home town.
+В дополнение к изучению Emacs в качестве редактора и Emacs Lisp в качестве
+язык программирования, примеры и экскурсии помогут вам
+познакомиться с Emacs в качестве программирования Lisp
+окружающей среды. GNU Emacs поддерживает программирование и предоставляет инструменты, которые
+вы захотите сделать удобными, например, @kbd{M-.} (ключ
+который вызывает @code{find-tag} команду).  Вы также узнаете о
+буферах и других объектах, которые являются частью среды.
+Изучение этих особенностей Emacs - это как изучение новых маршрутов
+вокруг вашего родного города.
 
 @ignore
-In addition, I have written several programs as extended examples.
-Although these are examples, the programs are real.  I use them.
-Other people use them.  You may use them.  Beyond the fragments of
-programs used for illustrations, there is very little in here that is
-just for teaching purposes; what you see is used.  This is a great
-advantage of Emacs Lisp: it is easy to learn to use it for work.
+Кроме того, я написал несколько программ в качестве расширенных примеров.
+Хотя это примеры, программы являются реальными. Я использую их.
+Другие люди используют их. Вы можете использовать их. Помимо фрагментов
+Программы, используемые для иллюстраций, здесь очень мало
+Только для учебных целей; То, что вы видите, используется. Это отличное
+Преимущество Emacs Lisp: легко научиться использовать его для работы.
 @end ignore
 
-Finally, I hope to convey some of the skills for using Emacs to
-learn aspects of programming that you don't know.  You can often use
-Emacs to help you understand what puzzles you or to find out how to do
-something new.  This self-reliance is not only a pleasure, but an
-advantage.
+Наконец, я надеюсь передать некоторые навыки использования Emacs для
+изучения аспектов программирования, которые вы не знаете. Вы часто можете использовать
+Emacs, чтобы помочь вам понять, что вас озадачивает или выяснить, как это сделать
+по другому. Эта уверенность в себе - это не только удовольствие, но и
+преимущество.
 
 @node Who You Are
 @unnumberedsec For Whom This is Written
 
-This text is written as an elementary introduction for people who are
-not programmers.  If you are a programmer, you may not be satisfied with
-this primer.  The reason is that you may have become expert at reading
-reference manuals and be put off by the way this text is organized.
+Этот текст написан как элементарное введение для людей, которые
+не программисты. Если вы программист, вы не можете быть удовлетворены
+этим примером. Причина в том, что вы, возможно, стали экспертом в чтении
+справочных руководств и не одобрить, как этот текст организован.
 
-An expert programmer who reviewed this text said to me:
+Эксперт-программист, который рассмотрел этот текст, сказал мне:
 
 @quotation
 @i{I prefer to learn from reference manuals.  I ``dive into'' each
@@ -840,11 +840,11 @@ will not have a lot of redundancy, and that it will have excellent
 pointers to the (one) place where the information I want is.}
 @end quotation
 
-This introduction is not written for this person!
+Это введение не написано для этого человека!
 
-Firstly, I try to say everything at least three times: first, to
-introduce it; second, to show it in context; and third, to show it in a
-different context, or to review it.
+Во-первых, я пытаюсь сказать все как минимум три раза: во-первых,
+ввести его; Во-вторых, показать его в контексте; И в-третьих, показать это в
+в другом контексте или для его обзора.
 
 Secondly, I hardly ever put all the information about a subject in one
 place, much less in one paragraph.  To my way of thinking, that imposes

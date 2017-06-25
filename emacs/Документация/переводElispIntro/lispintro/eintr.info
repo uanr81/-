@@ -1,4 +1,4 @@
-This is eintr.info, produced by makeinfo version 6.3 from
+This is eintr.info, produced by makeinfo version 5.2 from
 emacs-lisp-intro.texi.
 
 This is an ‘Introduction to Programming in Emacs Lisp’, for people who
@@ -134,74 +134,74 @@ Lisp Lists
 
 The Lisp Interpreter
 
-* Complications::               Variables, Special forms, Lists within.
-* Byte Compiling::              Specially processing code for speed.
+* Complications::               Переменные, специальные формы, в пределах списка.
+* Byte Compiling::              Специально обработанный код для скорости.
 
 Evaluation
 
-* How the Interpreter Acts::    Returns and Side Effects...
-* Evaluating Inner Lists::      Lists within lists...
+* How the Interpreter Acts::    Возврат значения и побочные эффекты...
+* Evaluating Inner Lists::      Списки в списках...
 
 Variables
 
 * fill-column Example::
-* Void Function::               The error message for a symbol
-                                  without a function.
-* Void Variable::               The error message for a symbol without a value.
+* Void Function::               Сообщение об ошибке для символа
+                                  без функции.
+* Void Variable::               Сообщение об ошибке для символа без значения.
 
 Arguments
 
-* Data types::                  Types of data passed to a function.
-* Args as Variable or List::    An argument can be the value
-                                  of a variable or list.
-* Variable Number of Arguments::  Some functions may take a
-                                  variable number of arguments.
-* Wrong Type of Argument::      Passing an argument of the wrong type
-                                  to a function.
-* message::                     A useful function for sending messages.
+* Data types::                  Типы данных, переданных функции.
+* Args as Variable or List::    Аргументом может быть значение
+                                  переменной или списка.
+* Variable Number of Arguments::  Некоторые функции могут
+                                  переменное количество аргументов.
+* Wrong Type of Argument::      Передача аргумента неправильного типа
+                                  в функцию.
+* message::                     Полезная функция для отправки сообщений.
 
 Setting the Value of a Variable
 
-* Using set::                  Setting values.
-* Using setq::                 Setting a quoted value.
-* Counting::                   Using ‘setq’ to count.
+* Using set::                  Установка значений.
+* Using setq::                 Установка котировки.
+* Counting::                   Использование ‘setq’ в счетчике.
 
 Practicing Evaluation
 
-* How to Evaluate::            Typing editing commands or ‘C-x C-e’
-                                 causes evaluation.
-* Buffer Names::               Buffers and files are different.
-* Getting Buffers::            Getting a buffer itself, not merely its name.
-* Switching Buffers::          How to change to another buffer.
-* Buffer Size & Locations::    Where point is located and the size of
-                               the buffer.
+* How to Evaluate::            Ввод команд редактирования или ‘C-x C-e’
+                                 вызов оценки.
+* Buffer Names::               Отличие буфера и файла.
+* Getting Buffers::            Получение самого буфера, а не только его название.
+* Switching Buffers::          Как перейти на другой буфер.
+* Buffer Size & Locations::    Где находится точка и размер
+                               буфера.
 * Evaluation Exercise::
 
 How To Write Function Definitions
 
 * Primitive Functions::
-* defun::                        The ‘defun’ macro.
-* Install::                      Install a function definition.
-* Interactive::                  Making a function interactive.
-* Interactive Options::          Different options for ‘interactive’.
-* Permanent Installation::       Installing code permanently.
-* let::                          Creating and initializing local variables.
-* if::                           What if?
-* else::                         If–then–else expressions.
-* Truth & Falsehood::            What Lisp considers false and true.
-* save-excursion::               Keeping track of point and buffer.
+* defun::                        Макрос ‘defun’.
+* Install::                      Установите определение функции.
+* Interactive::                  Создание интерактивной функции.
+* Interactive Options::          Различные варианты ‘interactive’.
+* Permanent Installation::       Установка кода надолго.
+* let::                          Создание и инициализация локальных переменных.
+* if::                           Что такое if?
+* else::                         If–then–else выражения.
+* Truth & Falsehood::            Что Lisp считает ложным и истинным.
+* save-excursion::               Отслеживание точки и буфера.
 * Review::
 * defun Exercises::
 
 Install a Function Definition
 
 * Effect of installation::
-* Change a defun::              How to change a function definition.
+* Change a defun::              Как изменить определение функции.
 
 Make a Function Interactive
 
-* Interactive multiply-by-seven::  An overview.
-* multiply-by-seven in detail::    The interactive version.
+* Interactive multiply-by-seven::  Обзор.
+* multiply-by-seven in detail::    Интерактивная версия.
 
 ‘let’
 
@@ -213,69 +213,69 @@ Make a Function Interactive
 The ‘if’ Special Form
 
 * if in more detail::
-* type-of-animal in detail::    An example of an ‘if’ expression.
+* type-of-animal in detail::    Пример использования ‘if’ выражения.
 
 Truth and Falsehood in Emacs Lisp
 
-* nil explained::               ‘nil’ has two meanings.
+* nil explained::               ‘nil’ Имеет два значения.
 
 ‘save-excursion’
 
-* Point and mark::              A review of various locations.
+* Point and mark::              Обзор различных местоположений.
 * Template for save-excursion::
 
 A Few Buffer-Related Functions
 
-* Finding More::                How to find more information.
-* simplified-beginning-of-buffer::  Shows ‘goto-char’,
-                                ‘point-min’, and ‘push-mark’.
-* mark-whole-buffer::           Almost the same as ‘beginning-of-buffer’.
-* append-to-buffer::            Uses ‘save-excursion’ and
+* Finding More::                Как найти дополнительную информацию.
+* simplified-beginning-of-buffer::  Обзор ‘goto-char’,
+                                ‘point-min’, и ‘push-mark’.
+* mark-whole-buffer::           Почти так же, как ‘beginning-of-buffer’.
+* append-to-buffer::            Используя ‘save-excursion’ и
                                 ‘insert-buffer-substring’.
-* Buffer Related Review::       Review.
+* Buffer Related Review::       Обзор.
 * Buffer Exercises::
 
 The Definition of ‘mark-whole-buffer’
 
 * mark-whole-buffer overview::
-* Body of mark-whole-buffer::   Only three lines of code.
+* Body of mark-whole-buffer::   Только три строки кода.
 
 The Definition of ‘append-to-buffer’
 
 * append-to-buffer overview::
-* append interactive::          A two part interactive expression.
-* append-to-buffer body::       Incorporates a ‘let’ expression.
-* append save-excursion::       How the ‘save-excursion’ works.
+* append interactive::          Двухстороннее интерактивное выражение.
+* append-to-buffer body::       Включает ‘let’ выражение.
+* append save-excursion::       Как работает ‘save-excursion’.
 
 A Few More Complex Functions
 
-* copy-to-buffer::              With ‘set-buffer’, ‘get-buffer-create’.
-* insert-buffer::               Read-only, and with ‘or’.
-* beginning-of-buffer::         Shows ‘goto-char’,
-                                ‘point-min’, and ‘push-mark’.
+* copy-to-buffer::              С ‘set-buffer’, ‘get-buffer-create’.
+* insert-buffer::               Только для чтения и с ‘or’.
+* beginning-of-buffer::         Обзор ‘goto-char’,
+                                ‘point-min’, и ‘push-mark’.
 * Second Buffer Related Review::
 * optional Exercise::
 
 The Definition of ‘insert-buffer’
 
 * insert-buffer code::
-* insert-buffer interactive::   When you can read, but not write.
-* insert-buffer body::          The body has an ‘or’ and a ‘let’.
-* if & or::                     Using an ‘if’ instead of an ‘or’.
-* Insert or::                   How the ‘or’ expression works.
-* Insert let::                  Two ‘save-excursion’ expressions.
+* insert-buffer interactive::   Когда вы можете читать, а не писать.
+* insert-buffer body::          Тело имеет ‘or’ и ‘let’.
+* if & or::                     Используем ‘if’ вместо ‘or’.
+* Insert or::                   Как ‘or’ выражение работает.
+* Insert let::                  Два ‘save-excursion’ выражения.
 * New insert-buffer::
 
 The Interactive Expression in ‘insert-buffer’
 
-* Read-only buffer::            When a buffer cannot be modified.
-* b for interactive::           An existing buffer or else its name.
+* Read-only buffer::            Когда буфер не может быть изменен.
+* b for interactive::           Существующий буфер или его имя.
 
 Complete Definition of ‘beginning-of-buffer’
 
-* Optional Arguments::
-* beginning-of-buffer opt arg::  Example with optional argument.
-* beginning-of-buffer complete::
+* Optional Arguments::          Необязательные аргументы
+* beginning-of-buffer opt arg::  Пример с дополнительным аргументом.
+* beginning-of-buffer complete:: Полный текст функции
 
 ‘beginning-of-buffer’ with an Argument
 
@@ -285,57 +285,57 @@ Complete Definition of ‘beginning-of-buffer’
 
 Narrowing and Widening
 
-* Narrowing advantages::        The advantages of narrowing
-* save-restriction::            The ‘save-restriction’ special form.
-* what-line::                   The number of the line that point is on.
-* narrow Exercise::
+* Narrowing advantages::        Преимущества сужения
+* save-restriction::            ‘save-restriction’ специальная форма.
+* what-line::                   Номер строки, в которой находится точка.
+* narrow Exercise::             Упражнения на сужение
 
-‘car’, ‘cdr’, ‘cons’: Fundamental Functions
+‘car’, ‘cdr’, ‘cons’: Фундаментальные функции
 
-* Strange Names::               An historical aside: why the strange names?
-* car & cdr::                   Functions for extracting part of a list.
-* cons::                        Constructing a list.
-* nthcdr::                      Calling ‘cdr’ repeatedly.
+* Strange Names::               Историческая сторона: почему странные имена?
+* car & cdr::                   Функции для извлечения части списка.
+* cons::                        Построение списка.
+* nthcdr::                      Вызов ‘cdr’ неоднократно.
 * nth::
-* setcar::                      Changing the first element of a list.
-* setcdr::                      Changing the rest of a list.
+* setcar::                      Изменение первого элемента списка.
+* setcdr::                      Изменение остальной части списка.
 * cons Exercise::
 
 ‘cons’
 
 * Build a list::
-* length::                      How to find the length of a list.
+* length::                      Как найти длину списка.
 
 Cutting and Storing Text
 
-* Storing Text::                Text is stored in a list.
-* zap-to-char::                 Cutting out text up to a character.
-* kill-region::                 Cutting text out of a region.
-* copy-region-as-kill::         A definition for copying text.
-* Digression into C::           Minor note on C programming language macros.
-* defvar::                      How to give a variable an initial value.
+* Storing Text::                Текст сохраняется в списке.
+* zap-to-char::                 Вырезание текста до символа.
+* kill-region::                 Вырезание текста из области.
+* copy-region-as-kill::         Определение для копирования текста.
+* Digression into C::           Незначительное примечание о макросах языка программирования C.
+* defvar::                      Как дать переменной начальное значение.
 * cons & search-fwd Review::
 * search Exercises::
 
 ‘zap-to-char’
 
-* Complete zap-to-char::        The complete implementation.
-* zap-to-char interactive::     A three part interactive expression.
-* zap-to-char body::            A short overview.
-* search-forward::              How to search for a string.
-* progn::                       The ‘progn’ special form.
-* Summing up zap-to-char::      Using ‘point’ and ‘search-forward’.
+* Complete zap-to-char::        Полная реализация.
+* zap-to-char interactive::     Интерактивное выражение из трех частей.
+* zap-to-char body::            Краткий обзор.
+* search-forward::              Как искать строку.
+* progn::                       Специальная форма ‘progn’.
+* Summing up zap-to-char::      Использование ‘point’ и ‘search-forward’.
 
 ‘kill-region’
 
-* Complete kill-region::        The function definition.
-* condition-case::              Dealing with a problem.
+* Complete kill-region::        Определение функции.
+* condition-case::              Решение проблемы.
 * Lisp macro::
 
 ‘copy-region-as-kill’
 
-* Complete copy-region-as-kill::  The complete function definition.
-* copy-region-as-kill body::      The body of ‘copy-region-as-kill’.
+* Complete copy-region-as-kill::  Полное определение функции.
+* copy-region-as-kill body::      Тело ‘copy-region-as-kill’.
 
 The Body of ‘copy-region-as-kill’
 
@@ -351,42 +351,42 @@ Initializing a Variable with ‘defvar’
 How Lists are Implemented
 
 * Lists diagrammed::
-* Symbols as Chest::            Exploring a powerful metaphor.
+* Symbols as Chest::            Изучение мощной метафоры.
 * List Exercise::
 
 Yanking Text Back
 
 * Kill Ring Overview::
-* kill-ring-yank-pointer::      The kill ring is a list.
-* yank nthcdr Exercises::       The ‘kill-ring-yank-pointer’ variable.
+* kill-ring-yank-pointer::      Кольцо kill - это список.
+* yank nthcdr Exercises::       Переменная ‘kill-ring-yank-pointer’.
 
 Loops and Recursion
 
-* while::                       Causing a stretch of code to repeat.
+* while::                       Вызов фрагмента кода для повторения.
 * dolist dotimes::
-* Recursion::                   Causing a function to call itself.
+* Recursion::                   Вызов функции вызывающую саму себя.
 * Looping exercise::
 
 ‘while’
 
-* Looping with while::          Repeat so long as test returns true.
-* Loop Example::                A ‘while’ loop that uses a list.
-* print-elements-of-list::      Uses ‘while’, ‘car’, ‘cdr’.
-* Incrementing Loop::           A loop with an incrementing counter.
+* Looping with while::          Цикл повторения while.
+* Loop Example::                ‘while’ который использует список.
+* print-elements-of-list::      Использование ‘while’, ‘car’, ‘cdr’.
+* Incrementing Loop::           Цикл с инкрементирующим счетчиком.
 * Incrementing Loop Details::
-* Decrementing Loop::           A loop with a decrementing counter.
+* Decrementing Loop::           Цикл с декрементирующим счетчиком.
 
 Details of an Incrementing Loop
 
-* Incrementing Example::        Counting pebbles in a triangle.
-* Inc Example parts::           The parts of the function definition.
-* Inc Example altogether::      Putting the function definition together.
+* Incrementing Example::        Подсчет камушкев в треугольнике.
+* Inc Example parts::           Части определения функции.
+* Inc Example altogether::      Объяснение определения функции.
 
 Loop with a Decrementing Counter
 
-* Decrementing Example::        More pebbles on the beach.
-* Dec Example parts::           The parts of the function definition.
-* Dec Example altogether::      Putting the function definition together.
+* Decrementing Example::        Пример с уменьшением счетчика.
+* Dec Example parts::           Части определения функции.
+* Dec Example altogether::      Объяснение определения функции.
 
 Save your time: ‘dolist’ and ‘dotimes’
 
@@ -395,13 +395,13 @@ Save your time: ‘dolist’ and ‘dotimes’
 
 Recursion
 
-* Building Robots::             Same model, different serial number ...
-* Recursive Definition Parts::  Walk until you stop ...
-* Recursion with list::         Using a list as the test whether to recurse.
+* Building Robots::             Такая же модель, другой серийный номер ...
+* Recursive Definition Parts::  Прогулка до остановки ...
+* Recursion with list::         Использование списка в качестве теста для рекурсии.
 * Recursive triangle function::
 * Recursion with cond::
-* Recursive Patterns::          Often used templates.
-* No Deferment::                Don’t store up work ...
+* Recursive Patterns::          Часто используются шаблоны.
+* No Deferment::                Не храните работу ...
 * No deferment solution::
 
 Recursion in Place of a Counter
@@ -417,66 +417,66 @@ Recursive Patterns
 
 Regular Expression Searches
 
-* sentence-end::                The regular expression for ‘sentence-end’.
-* re-search-forward::           Very similar to ‘search-forward’.
-* forward-sentence::            A straightforward example of regexp search.
-* forward-paragraph::           A somewhat complex example.
+* sentence-end::                Регулярное выражение для ‘sentence-end’.
+* re-search-forward::           Очень похоже на ‘search-forward’.
+* forward-sentence::            Прямой пример поиска регулярных выражений.
+* forward-paragraph::           Несколько сложный пример.
 * Regexp Review::
 * re-search Exercises::
 
 ‘forward-sentence’
 
 * Complete forward-sentence::
-* fwd-sentence while loops::    Two ‘while’ loops.
-* fwd-sentence re-search::      A regular expression search.
+* fwd-sentence while loops::    Два ‘while’ цикла.
+* fwd-sentence re-search::      Поиск регулярного выражения.
 
-‘forward-paragraph’: a Goldmine of Functions
+‘forward-paragraph’: Золотая коллекция функций
 
-* forward-paragraph in brief::  Key parts of the function definition.
-* fwd-para let::                The ‘let*’ expression.
-* fwd-para while::              The forward motion ‘while’ loop.
+* forward-paragraph in brief::  Ключевые части определения функции.
+* fwd-para let::                ‘let*’ выражение.
+* fwd-para while::              Движение вперед ‘while’ цикла.
 
 Counting: Repetition and Regexps
 
 * Why Count Words::
-* count-words-example::         Use a regexp, but find a problem.
-* recursive-count-words::       Start with case of no words in region.
+* count-words-example::         Используйте регулярное выражение, но найдите проблему.
+* recursive-count-words::       Начните с случая без слов в регионе.
 * Counting Exercise::
 
 The ‘count-words-example’ Function
 
-* Design count-words-example::  The definition using a ‘while’ loop.
-* Whitespace Bug::              The Whitespace Bug in ‘count-words-example’.
+* Design count-words-example::  Определение с использованием ‘while’ цикла.
+* Whitespace Bug::              Ошибка в пробеле ‘count-words-example’.
 
 Counting Words in a ‘defun’
 
 * Divide and Conquer::
-* Words and Symbols::           What to count?
-* Syntax::                      What constitutes a word or symbol?
-* count-words-in-defun::        Very like ‘count-words-example’.
-* Several defuns::              Counting several defuns in a file.
-* Find a File::                 Do you want to look at a file?
-* lengths-list-file::           A list of the lengths of many definitions.
-* Several files::               Counting in definitions in different files.
-* Several files recursively::   Recursively counting in different files.
-* Prepare the data::            Prepare the data for display in a graph.
+* Words and Symbols::           Что считать?
+* Syntax::                      Что представляет собой слово или символ?
+* count-words-in-defun::        Очень нравится ‘count-words-example’.
+* Several defuns::              Подсчет нескольких defuns в файле.
+* Find a File::                 Вы хотите посмотреть файл?
+* lengths-list-file::           Список длин многих определений.
+* Several files::               Подсчет в определениях в разных файлах.
+* Several files recursively::   Рекурсивный подсчет в разных файлах.
+* Prepare the data::            Подготовьте данные для отображения на графике.
 
 Count Words in ‘defuns’ in Different Files
 
-* lengths-list-many-files::     Return a list of the lengths of defuns.
-* append::                      Attach one list to another.
+* lengths-list-many-files::     Возвращает список длин defuns.
+* append::                      Присоединить один список к другому.
 
 Prepare the Data for Display in a Graph
 
 * Data for Display in Detail::
-* Sorting::                     Sorting lists.
-* Files List::                  Making a list of files.
+* Sorting::                     Сортировка списков.
+* Files List::                  Создание списка файлов.
 * Counting function definitions::
 
 Readying a Graph
 
 * Columns of a graph::
-* graph-body-print::            How to print the body of a graph.
+* graph-body-print::            Как напечатать тело графа.
 * recursive-graph-body-print::
 * Printed Axes::
 * Line Graph Exercise::
@@ -484,35 +484,35 @@ Readying a Graph
 Your ‘.emacs’ File
 
 * Default Configuration::
-* Site-wide Init::              You can write site-wide init files.
-* defcustom::                   Emacs will write code for you.
-* Beginning init File::         How to write a ‘.emacs’ init file.
-* Text and Auto-fill::          Automatically wrap lines.
-* Mail Aliases::                Use abbreviations for email addresses.
-* Indent Tabs Mode::            Don’t use tabs with TeX
-* Keybindings::                 Create some personal keybindings.
-* Keymaps::                     More about key binding.
-* Loading Files::               Load (i.e., evaluate) files automatically.
-* Autoload::                    Make functions available.
-* Simple Extension::            Define a function; bind it to a key.
-* X11 Colors::                  Colors in X.
+* Site-wide Init::              Вы можете создавать файлы для всего сайта.
+* defcustom::                   Emacs будет писать код для вас.
+* Beginning init File::         Как написать ‘.emacs’ файл инициализации.
+* Text and Auto-fill::          Автоматическое выравнивание линии.
+* Mail Aliases::                Используйте аббревиатуры для адресов электронной почты.
+* Indent Tabs Mode::            Не используйте вкладки с TeX
+* Keybindings::                 Создайте отдельные личные привязки.
+* Keymaps::                     Подробнее о привязке клавиш.
+* Loading Files::               Загружать (то есть оценивать) файлы автоматически.
+* Autoload::                    Сделать доступными функции.
+* Simple Extension::            Определить функцию; Привяжите его к ключу.
+* X11 Colors::                  Цвета в X.
 * Miscellaneous::
-* Mode Line::                   How to customize your mode line.
+* Mode Line::                   Как настроить сторку режима.
 
 Debugging
 
-* debug::                       How to use the built-in debugger.
-* debug-on-entry::              Start debugging when you call a function.
-* debug-on-quit::               Start debugging when you quit with ‘C-g’.
-* edebug::                      How to use Edebug, a source level debugger.
+* debug::                       Как использовать встроенный отладчик.
+* debug-on-entry::              Начните отладку при вызове функции.
+* debug-on-quit::               Начать отладку при выходе с ‘C-g’.
+* edebug::                      Как использовать Edebug, отладчик исходного уровня.
 * Debugging Exercises::
 
 Handling the Kill Ring
 
 * What the Kill Ring Does::
 * current-kill::
-* yank::                        Paste a copy of a clipped element.
-* yank-pop::                    Insert element pointed to.
+* yank::                        Вставьте копию обрезанного элемента.
+* yank-pop::                    Вставить элемент, на который указывает.
 * ring file::
 
 The ‘current-kill’ Function
@@ -523,25 +523,25 @@ The ‘current-kill’ Function
 ‘current-kill’ in Outline
 
 * Body of current-kill::
-* Digression concerning error::  How to mislead humans, but not computers.
+* Digression concerning error::  Как вводить в заблуждение людей, но не компьютеры.
 * Determining the Element::
 
 A Graph with Labeled Axes
 
 * Labeled Example::
-* print-graph Varlist::         ‘let’ expression in ‘print-graph’.
-* print-Y-axis::                Print a label for the vertical axis.
-* print-X-axis::                Print a horizontal label.
-* Print Whole Graph::           The function to print a complete graph.
+* print-graph Varlist::         ‘let’ выражение в ‘print-graph’.
+* print-Y-axis::                Распечатайте метку вертикальной оси.
+* print-X-axis::                Распечатайте метку горизонтальной оси.
+* Print Whole Graph::           Функция для печати полного графика.
 
 The ‘print-Y-axis’ Function
 
 * print-Y-axis in Detail::
-* Height of label::             What height for the Y axis?
-* Compute a Remainder::         How to compute the remainder of a division.
-* Y Axis Element::              Construct a line for the Y axis.
-* Y-axis-column::               Generate a list of Y axis labels.
-* print-Y-axis Penultimate::    A not quite final version.
+* Height of label::             Какая высота для оси Y?
+* Compute a Remainder::         Как вычислить остаток деления.
+* Y Axis Element::              Построить линию для оси Y.
+* Y-axis-column::               Создайте список меток оси Y.
+* print-Y-axis Penultimate::    Не совсем окончательная версия.
 
 The ‘print-X-axis’ Function
 
@@ -550,13 +550,13 @@ The ‘print-X-axis’ Function
 
 Printing the Whole Graph
 
-* The final version::           A few changes.
-* Test print-graph::            Run a short test.
-* Graphing words in defuns::    Executing the final code.
-* lambda::                      How to write an anonymous function.
-* mapcar::                      Apply a function to elements of a list.
-* Another Bug::                 Yet another bug ... most insidious.
-* Final printed graph::         The graph itself!
+* The final version::           Несколько изменений.
+* Test print-graph::            Проведите короткий тест.
+* Graphing words in defuns::    Выполнение окончательного кода.
+* lambda::                      Как написать анонимную функцию.
+* mapcar::                      Применить функцию к элементам списка.
+* Another Bug::                 Еще одна ошибка … самая коварная.
+* Final printed graph::         Сам график!
 
 
 
@@ -565,29 +565,29 @@ File: eintr.info,  Node: Preface,  Next: List Processing,  Prev: Top,  Up: Top
 Preface
 *******
 
-Most of the GNU Emacs integrated environment is written in the
-programming language called Emacs Lisp.  The code written in this
-programming language is the software—the sets of instructions—that tell
-the computer what to do when you give it commands.  Emacs is designed so
-that you can write new code in Emacs Lisp and easily install it as an
-extension to the editor.
+Большая часть интегрированной среды GNU Emacs на языке программировании
+под названием Emacs Lisp.  Код, написанный на этом языке
+программировании - это программное обеспечение — наборы инструкций,
+которые сообщают компьютеру, что делать, когда вы даете ему команды.
+Emacs разработан таким образом что вы можете написать новый код в Emacs
+Lisp и легко установить его как расширение для редактора.
 
-   (GNU Emacs is sometimes called an “extensible editor”, but it does
-much more than provide editing capabilities.  It is better to refer to
-Emacs as an “extensible computing environment”.  However, that phrase is
-quite a mouthful.  It is easier to refer to Emacs simply as an editor.
-Moreover, everything you do in Emacs—find the Mayan date and phases of
-the moon, simplify polynomials, debug code, manage files, read letters,
-write books—all these activities are kinds of editing in the most
-general sense of the word.)
+   (GNU Emacs иногда называют “Расширяемый редактор”, Но это гораздо
+больше, чем предоставление возможностей редактирования.  Лучше
+обратиться к Emacs как “Расширяемая вычислительная среда”.  Однако это
+фраза довольно полна.  Легче обращаться к Emacs просто как редактору.
+Кроме того, все, что вы делаете в Emacs—Найхождение даты майя и фазы
+Луны, упрощение полиномы, отлаживание кода, управление файлами, чтение
+писем, написание книги - все эти виды деятельности являются видами
+редактирование в самом общем смысле слова.)
 
 * Menu:
 
-* Why::                         Why learn Emacs Lisp?
-* On Reading this Text::        Read, gain familiarity, pick up habits....
-* Who You Are::                 For whom this is written.
+* Why::                         Зачем учиться Emacs Lisp?
+* On Reading this Text::        Читайте, приобретайте знакомство, выбирайте привычки....
+* Who You Are::                 Для кого это написано.
 * Lisp History::
-* Note for Novices::            You can read this as a novice.
+* Note for Novices::            Вы можете прочитать это как новичок.
 * Thank You::
 
 
@@ -596,15 +596,15 @@ File: eintr.info,  Node: Why,  Next: On Reading this Text,  Up: Preface
 Why Study Emacs Lisp?
 =====================
 
-Although Emacs Lisp is usually thought of in association only with
-Emacs, it is a full computer programming language.  You can use Emacs
-Lisp as you would any other programming language.
+Хотя Emacs Lisp обычно ассоциируется только с Emacs, это полный
+компьютерный язык программирования.  Вы можете использовать Emacs Lisp
+как вы бы использовали любой другой язык программирования.
 
-   Perhaps you want to understand programming; perhaps you want to
-extend Emacs; or perhaps you want to become a programmer.  This
-introduction to Emacs Lisp is designed to get you started: to guide you
-in learning the fundamentals of programming, and more importantly, to
-show you how you can teach yourself to go further.
+   Возможно, вы хотите понять программирование; Возможно, вы хотите
+расширить Emacs; Или, возможно, вы хотите стать программистом.  Это
+введение в Emacs Lisp предназначен для вас: чтобы помочь вам изучить
+основы программирования и, что более важно, показать вам, как вы можете
+научить себя идти дальше.
 
 
 File: eintr.info,  Node: On Reading this Text,  Next: Who You Are,  Prev: Why,  Up: Preface
@@ -612,39 +612,40 @@ File: eintr.info,  Node: On Reading this Text,  Next: Who You Are,  Prev: Why,  
 On Reading this Text
 ====================
 
-All through this document, you will see little sample programs you can
-run inside of Emacs.  If you read this document in Info inside of GNU
-Emacs, you can run the programs as they appear.  (This is easy to do and
-is explained when the examples are presented.)  Alternatively, you can
-read this introduction as a printed book while sitting beside a computer
-running Emacs.  (This is what I like to do; I like printed books.)  If
-you don’t have a running Emacs beside you, you can still read this book,
-but in this case, it is best to treat it as a novel or as a travel guide
-to a country not yet visited: interesting, but not the same as being
-there.
+Во всем этом документе вы увидите небольшие примеры программ, которые вы
+можете запустить внутри Emacs.  Если вы прочитали этот документ в Info
+внутри GNU Emacs, вы можете запускать программы по мере их появления.
+(Это легко сделать и объясняется, когда представлены примеры.)  В
+качестве альтернативы вы можете прочитайте это введение как печатную
+книгу, сидя рядом с компьютером где работает Emacs.  (Это то, что я
+люблю делать, мне нравятся печатные книги.)  Если у вас нет действующего
+Emacs рядом с вами, вы все равно можете прочитать эту книгу, но в этом
+случае лучше рассматривать его как роман или как путеводитель в страну,
+которую еще не посетили: интересно, но не то же самое, что быть там.
 
-   Much of this introduction is dedicated to walkthroughs or guided
-tours of code used in GNU Emacs.  These tours are designed for two
-purposes: first, to give you familiarity with real, working code (code
-you use every day); and, second, to give you familiarity with the way
-Emacs works.  It is interesting to see how a working environment is
-implemented.  Also, I hope that you will pick up the habit of browsing
-through source code.  You can learn from it and mine it for ideas.
-Having GNU Emacs is like having a dragon’s cave of treasures.
+   Большая часть этого введения посвящена прохождению или экскурсиям по
+коду, используемого в GNU Emacs.  Эти туры преследуют две цели:
+Во-первых, чтобы вы ознакомились с реальным рабочим кодом (код, который
+вы используете каждый день); И, во-вторых, чтобы вы ознакомились с тем,
+как Emacs работает.  Интересно посмотреть, как работает и реализованна
+рабочая среда.  Как и я Надеюсь, что вы поймете привычку просматривать
+исходный код.  Вы можете учиться у него и использовать его для идей.
+Наличие GNU Emacs похоже на обладание драконной пещеры сокровищ.
 
-   In addition to learning about Emacs as an editor and Emacs Lisp as a
-programming language, the examples and guided tours will give you an
-opportunity to get acquainted with Emacs as a Lisp programming
-environment.  GNU Emacs supports programming and provides tools that you
-will want to become comfortable using, such as ‘M-.’ (the key which
-invokes the ‘find-tag’ command).  You will also learn about buffers and
-other objects that are part of the environment.  Learning about these
-features of Emacs is like learning new routes around your home town.
+   В дополнение к изучению Emacs в качестве редактора и Emacs Lisp в
+качестве язык программирования, примеры и экскурсии помогут вам
+познакомиться с Emacs в качестве программирования Lisp окружающей среды.
+GNU Emacs поддерживает программирование и предоставляет инструменты,
+которые вы захотите сделать удобными, например, ‘M-.’ (ключ который
+вызывает ‘find-tag’ команду).  Вы также узнаете о буферах и других
+объектах, которые являются частью среды.  Изучение этих особенностей
+Emacs - это как изучение новых маршрутов вокруг вашего родного города.
 
-   Finally, I hope to convey some of the skills for using Emacs to learn
-aspects of programming that you don’t know.  You can often use Emacs to
-help you understand what puzzles you or to find out how to do something
-new.  This self-reliance is not only a pleasure, but an advantage.
+   Наконец, я надеюсь передать некоторые навыки использования Emacs для
+изучения аспектов программирования, которые вы не знаете.  Вы часто
+можете использовать Emacs, чтобы помочь вам понять, что вас озадачивает
+или выяснить, как это сделать по другому.  Эта уверенность в себе - это
+не только удовольствие, но и преимущество.
 
 
 File: eintr.info,  Node: Who You Are,  Next: Lisp History,  Prev: On Reading this Text,  Up: Preface
@@ -652,12 +653,12 @@ File: eintr.info,  Node: Who You Are,  Next: Lisp History,  Prev: On Reading thi
 For Whom This is Written
 ========================
 
-This text is written as an elementary introduction for people who are
-not programmers.  If you are a programmer, you may not be satisfied with
-this primer.  The reason is that you may have become expert at reading
-reference manuals and be put off by the way this text is organized.
+Этот текст написан как элементарное введение для людей, которые не
+программисты.  Если вы программист, вы не можете быть удовлетворены этим
+примером.  Причина в том, что вы, возможно, стали экспертом в чтении
+справочных руководств и не одобрить, как этот текст организован.
 
-   An expert programmer who reviewed this text said to me:
+   Эксперт-программист, который рассмотрел этот текст, сказал мне:
 
      I prefer to learn from reference manuals.  I “dive into” each
      paragraph, and “come up for air” between paragraphs.
@@ -669,11 +670,11 @@ reference manuals and be put off by the way this text is organized.
      will not have a lot of redundancy, and that it will have excellent
      pointers to the (one) place where the information I want is.
 
-   This introduction is not written for this person!
+   Это введение не написано для этого человека!
 
-   Firstly, I try to say everything at least three times: first, to
-introduce it; second, to show it in context; and third, to show it in a
-different context, or to review it.
+   Во-первых, я пытаюсь сказать все как минимум три раза: во-первых,
+ввести его; Во-вторых, показать его в контексте; И в-третьих, показать
+это в в другом контексте или для его обзора.
 
    Secondly, I hardly ever put all the information about a subject in
 one place, much less in one paragraph.  To my way of thinking, that
@@ -738,7 +739,7 @@ the keys which you press to invoke the command and then giving the name
 of the command in parentheses, like this: ‘M-C-\’ (‘indent-region’).
 What this means is that the ‘indent-region’ command is customarily
 invoked by typing ‘M-C-\’.  (You can, if you wish, change the keys that
-are typed to invoke the command; this is called “rebinding”.  *Note
+are typed to invoke the command; this is called "rebinding".  *Note
 Keymaps: Keymaps.)  The abbreviation ‘M-C-\’ means that you type your
 <META> key, <CTRL> key and <\> key all at the same time.  (On many
 modern keyboards the <META> key is labeled <ALT>.)  Sometimes a
@@ -751,7 +752,7 @@ means press the <CTRL> key along with the key that is labeled <ALT> and,
 at the same time, press the <\> key.
 
    In addition to typing a lone keychord, you can prefix what you type
-with ‘C-u’, which is called the “universal argument”.  The ‘C-u’
+with ‘C-u’, which is called the "universal argument".  The ‘C-u’
 keychord passes an argument to the subsequent command.  Thus, to indent
 a region of plain text by 6 spaces, mark the region, and then type
 ‘C-u 6 M-C-\’.  (If you do not specify a number, Emacs either passes the
@@ -794,7 +795,7 @@ unwarranted.  Lisp stands for LISt Processing, and the programming
 language handles _lists_ (and lists of lists) by putting them between
 parentheses.  The parentheses mark the boundaries of the list.
 Sometimes a list is preceded by an apostrophe ‘'’, called a
-“single-quote” in Lisp.(1)  Lists are the basis of Lisp.
+"single-quote" in Lisp.(1)  Lists are the basis of Lisp.
 
 * Menu:
 
@@ -873,31 +874,30 @@ File: eintr.info,  Node: Lisp Atoms,  Next: Whitespace in Lists,  Prev: Numbers 
 1.1.1 Lisp Atoms
 ----------------
 
-In Lisp, what we have been calling words are called “atoms”.  This term
-comes from the historical meaning of the word atom, which means
-“indivisible”.  As far as Lisp is concerned, the words we have been
-using in the lists cannot be divided into any smaller parts and still
-mean the same thing as part of a program; likewise with numbers and
-single character symbols like ‘+’.  On the other hand, unlike an ancient
-atom, a list can be split into parts.  (*Note ‘car’ ‘cdr’ & ‘cons’
+В Lisp то, что мы называем словами, называют "атомами".  Этот термин
+происходит от исторического значения слова атом, что означает
+“неделимый”.  Что касается Лиспа, то слова, которые мы использовали в
+списках нельзя разделить на меньшие части, то же самое можно сказать о
+числах и одиночных символах, таких как ‘+’.  С другой стороны, в отличие
+от атома, список можно разделить на части.  (*Note ‘car’ ‘cdr’ & ‘cons’
 Fundamental Functions: car cdr & cons.)
 
-   In a list, atoms are separated from each other by whitespace.  They
-can be right next to a parenthesis.
+   В списке атомы отделены друг от друга пробелами.  Они могут
+распологаться в плотную с круглой скобкой.
 
-   Technically speaking, a list in Lisp consists of parentheses
-surrounding atoms separated by whitespace or surrounding other lists or
-surrounding both atoms and other lists.  A list can have just one atom
-in it or have nothing in it at all.  A list with nothing in it looks
-like this: ‘()’, and is called the “empty list”.  Unlike anything else,
-an empty list is considered both an atom and a list at the same time.
+   Технически говоря, список в Lisp состоит из круглых скобок,
+окружающих атомы, другие списки, или и списки, и атомы, разделенные
+пробелами.  Список может содержать только один атом или вообще ничего не
+иметь.  Список, в котором ничего нет, выглядит следующим образом: ‘()’,
+и называется "пустым списком".  В отличие от всего остального, пустой
+список считается одновременно атомом и списком.
 
-   The printed representation of both atoms and lists are called
-“symbolic expressions” or, more concisely, “s-expressions”.  The word
-“expression” by itself can refer to either the printed representation,
-or to the atom or list as it is held internally in the computer.  Often,
-people use the term “expression” indiscriminately.  (Also, in many
-texts, the word “form” is used as a synonym for expression.)
+   Печатное представление и атомов и списков называется "символическим
+выражением" или, говоря точнее, "s-выражениями".  Слово "выражение"
+может ссылаться либо как на печатное представление или атома или списка,
+поскольку он удерживается внутри компьютер.  Часто люди используют
+термин "expression" indiscriminately.  (Also, in many texts, the word
+"form" is used as a synonym for expression.)
 
    Incidentally, the atoms that make up our universe were named such
 when they were thought to be indivisible; but it has been found that
@@ -915,7 +915,7 @@ the word for the South American sloth, the ‘ai’, is completely different
 from the two words, ‘a’, and ‘i’.
 
    There are many kinds of atom in nature but only a few in Lisp: for
-example, “numbers”, such as 37, 511, or 1729, and “symbols”, such as
+example, "numbers", such as 37, 511, or 1729, and "symbols", such as
 ‘+’, ‘foo’, or ‘forward-line’.  The words we have listed in the examples
 above are all symbols.  In everyday Lisp conversation, the word “atom”
 is not often used, because programmers usually try to be more specific
@@ -932,7 +932,7 @@ also an atom.  Here is an example:
      '(this list includes "text between quotation marks.")
 
 In Lisp, all of the quoted text including the punctuation mark and the
-blank spaces is a single atom.  This kind of atom is called a “string”
+blank spaces is a single atom.  This kind of atom is called a "string"
 (for “string of characters”) and is the sort of thing that is used for
 messages that a computer can print for a human to read.  Strings are a
 different kind of atom than numbers or symbols and are used differently.
@@ -999,14 +999,14 @@ File: eintr.info,  Node: Run a Program,  Next: Making Errors,  Prev: Lisp Lists,
 =================
 
 A list in Lisp—any list—is a program ready to run.  If you run it (for
-which the Lisp jargon is “evaluate”), the computer will do one of three
+which the Lisp jargon is "evaluate"), the computer will do one of three
 things: do nothing except return to you the list itself; send you an
 error message; or, treat the first symbol in the list as a command to do
 something.  (Usually, of course, it is the last of these three things
 that you really want!)
 
    The single apostrophe, ‘'’, that I put in front of some of the
-example lists in preceding sections is called a “quote”; when it
+example lists in preceding sections is called a "quote"; when it
 precedes a list, it tells Lisp to do nothing with the list, other than
 take it as it is written.  But if there is no quote preceding a list,
 the first item of the list is special: it is a command for the computer
@@ -1032,7 +1032,7 @@ type ‘C-x C-e’:
 You will see ‘(this is a quoted list)’ appear in the echo area.
 
    In both cases, what you are doing is giving a command to the program
-inside of GNU Emacs called the “Lisp interpreter”—giving the interpreter
+inside of GNU Emacs called the "Lisp interpreter"—giving the interpreter
 a command to evaluate the expression.  The name of the Lisp interpreter
 comes from the word for the task done by a human who comes up with the
 meaning of an expression—who interprets it.
@@ -1114,7 +1114,7 @@ word ‘this’.  It is this action that generated the error message
 
    The word ‘function’ was mentioned once before.  It is a very
 important word.  For our purposes, we can define it by saying that a
-“function” is a set of instructions to the computer that tell the
+"function" is a set of instructions to the computer that tell the
 computer to do something.
 
    Now we can begin to understand the error message: ‘void-function
@@ -1223,16 +1223,16 @@ Complications
 Now, for the first complication.  In addition to lists, the Lisp
 interpreter can evaluate a symbol that is not quoted and does not have
 parentheses around it.  The Lisp interpreter will attempt to determine
-the symbol’s value as a “variable”.  This situation is described in the
+the symbol’s value as a "variable".  This situation is described in the
 section on variables.  (*Note Variables::.)
 
    The second complication occurs because some functions are unusual and
-do not work in the usual manner.  Those that don’t are called “special
-forms”.  They are used for special jobs, like defining a function, and
+do not work in the usual manner.  Those that don’t are called "special
+forms".  They are used for special jobs, like defining a function, and
 there are not many of them.  In the next few chapters, you will be
 introduced to several of the more important special forms.
 
-   As well as special forms, there are also “macros”.  A macro is a
+   As well as special forms, there are also "macros".  A macro is a
 construct defined in Lisp, which differs from a function in that it
 translates a Lisp expression into another expression that is to be
 evaluated in place of the original expression.  (*Note Lisp macro::.)
@@ -1266,7 +1266,7 @@ File: eintr.info,  Node: Byte Compiling,  Prev: Complications,  Up: Lisp Interpr
 
 One other aspect of interpreting: the Lisp interpreter is able to
 interpret two kinds of entity: humanly readable code, on which we will
-focus exclusively, and specially processed code, called “byte compiled”
+focus exclusively, and specially processed code, called "byte compiled"
 code, which is not humanly readable.  Byte compiled code runs faster
 than humanly readable code.
 
@@ -1289,7 +1289,7 @@ File: eintr.info,  Node: Evaluation,  Next: Variables,  Prev: Lisp Interpreter, 
 ==============
 
 When the Lisp interpreter works on an expression, the term for the
-activity is called “evaluation”.  We say that the interpreter “evaluates
+activity is called "evaluation".  We say that the interpreter “evaluates
 the expression”.  I’ve used this term several times before.  The word
 comes from its use in everyday language, “to ascertain the value or
 amount of; to appraise”, according to ‘Webster’s New Collegiate
@@ -1307,7 +1307,7 @@ How the Lisp Interpreter Acts
 -----------------------------
 
 After evaluating an expression, the Lisp interpreter will most likely
-“return” the value that the computer produces by carrying out the
+"return" the value that the computer produces by carrying out the
 instructions it found in the function definition, or perhaps it will
 give up on that function and produce an error message.  (The interpreter
 may also find itself tossed, so to speak, to a different function or it
@@ -1317,7 +1317,7 @@ them.)  Most frequently, the interpreter returns a value.
 
    At the same time the interpreter returns a value, it may do something
 else as well, such as move a cursor or copy a file; this other kind of
-action is called a “side effect”.  Actions that we humans think are
+action is called a "side effect".  Actions that we humans think are
 important, such as printing results, are often side effects to the Lisp
 interpreter.  It is fairly easy to learn to use side effects.
 
@@ -1395,7 +1395,7 @@ A value, on the other hand, is something, such as number or a name, that
 can vary (which is why such a symbol is called a variable).  The value
 of a symbol can be any expression in Lisp, such as a symbol, number,
 list, or string.  A symbol that has a value is often called a
-“variable”.
+"variable".
 
    A symbol can have both a function definition and a value attached to
 it at the same time.  Or it can have just one or the other.  The two are
@@ -1441,7 +1441,7 @@ What kind of expression it came from ceases to matter once the value is
 known.
 
    A symbol can have any value attached to it or, to use the jargon, we
-can “bind” the variable to a value: to a number, such as 72; to a
+can "bind" the variable to a value: to a number, such as 72; to a
 string, ‘"such as this"’; to a list, such as ‘(spruce pine oak)’; we can
 even bind a variable to a function definition.
 
@@ -1540,8 +1540,8 @@ follows:
 echo area.  What the Lisp interpreter does is add the numbers that
 follow the ‘+’.
 
-   The numbers added by ‘+’ are called the “arguments” of the function
-‘+’.  These numbers are the information that is given to or “passed” to
+   The numbers added by ‘+’ are called the "arguments" of the function
+‘+’.  These numbers are the information that is given to or "passed" to
 the function.
 
    The word “argument” comes from the way it is used in mathematics and
@@ -1599,7 +1599,7 @@ string ‘abcdef’.  This can be seen by evaluating the following:
 The value produced by evaluating this expression is ‘"abcdef"’.
 
    A function such as ‘substring’ uses both a string and numbers as
-arguments.  The function returns a part of the string, a “substring” of
+arguments.  The function returns a part of the string, a "substring" of
 the first argument.  This function takes three arguments.  Its first
 argument is the string of characters, the second and third arguments are
 numbers that indicate the beginning (inclusive) and end (exclusive) of
@@ -1645,9 +1645,8 @@ The value will be a number two more than what you get by evaluating
    As we have just seen, an argument can be a symbol that returns a
 value when evaluated.  In addition, an argument can be a list that
 returns a value when it is evaluated.  For example, in the following
-expression, the arguments to the function ‘concat’ are the strings
-‘"The "’ and ‘" red foxes."’ and the list ‘(number-to-string (+ 2
-fill-column))’.
+expression, the arguments to the function ‘concat’ are the strings ‘"The "’
+and ‘" red foxes."’ and the list ‘(number-to-string (+ 2 fill-column))’.
 
      (concat "The " (number-to-string (+ 2 fill-column)) " red foxes.")
 
@@ -1864,7 +1863,7 @@ File: eintr.info,  Node: set & setq,  Next: Summary,  Prev: Arguments,  Up: List
 There are several ways by which a variable can be given a value.  One of
 the ways is to use either the function ‘set’ or the function ‘setq’.
 Another way is to use ‘let’ (*note let::).  (The jargon for this process
-is to “bind” a variable to a value.)
+is to "bind" a variable to a value.)
 
    The following sections not only describe how ‘set’ and ‘setq’ work
 but also illustrate how arguments are passed.
@@ -2120,8 +2119,8 @@ works.
 expression and that is how you get your results.  Even typing plain text
 involves evaluating an Emacs Lisp function, in this case, one that uses
 ‘self-insert-command’, which simply inserts the character you typed.
-The functions you evaluate by typing keystrokes are called “interactive”
-functions, or “commands”; how you make a function interactive will be
+The functions you evaluate by typing keystrokes are called "interactive"
+functions, or "commands"; how you make a function interactive will be
 illustrated in the chapter on how to write function definitions.  *Note
 Making a Function Interactive: Interactive.
 
@@ -2156,7 +2155,7 @@ information recorded permanently in the computer (unless you delete it).
 A buffer, on the other hand, is information inside of Emacs that will
 vanish at the end of the editing session (or when you kill the buffer).
 Usually, a buffer contains information that you have copied from a file;
-we say the buffer is “visiting” that file.  This copy is what you work
+we say the buffer is "visiting" that file.  This copy is what you work
 on and modify.  Changes to the buffer do not change the file, until you
 save the buffer.  When you save the buffer, the buffer is copied to the
 file and is thus saved permanently.
@@ -2365,7 +2364,7 @@ attention of the computer program to a different buffer.  The buffer on
 the screen remains unchanged (of course, normally nothing happens there
 until the command finishes running).
 
-   Also, we have just introduced another jargon term, the word “call”.
+   Also, we have just introduced another jargon term, the word "call".
 When you evaluate a list in which the first symbol is a function, you
 are calling that function.  The use of the term comes from the notion of
 the function as an entity that can do something for you if you call
@@ -2412,7 +2411,7 @@ buffer.
 You can evaluate this in the usual way, by positioning the cursor after
 the expression and typing ‘C-x C-e’.
 
-   In Emacs, the current position of the cursor is called “point”.  The
+   In Emacs, the current position of the cursor is called "point".  The
 expression ‘(point)’ returns a number that tells you where the cursor is
 located as a count of the number of characters from the beginning of the
 buffer up to point.
@@ -2437,7 +2436,7 @@ this since I first evaluated point.)
 
    The function ‘point-min’ is somewhat similar to ‘point’, but it
 returns the value of the minimum permissible value of point in the
-current buffer.  This is the number 1 unless “narrowing” is in effect.
+current buffer.  This is the number 1 unless "narrowing" is in effect.
 (Narrowing is a mechanism whereby you can restrict yourself, or a
 program, to operations on just a part of a buffer.  *Note Narrowing and
 Widening: Narrowing & Widening.)  Likewise, the function ‘point-max’
@@ -2490,7 +2489,7 @@ An Aside about Primitive Functions
 ==================================
 
 All functions are defined in terms of other functions, except for a few
-“primitive” functions that are written in the C programming language.
+"primitive" functions that are written in the C programming language.
 When you write functions’ definitions, you will write them in Emacs Lisp
 and use other functions as your building blocks.  Some of the functions
 you will use will themselves be written in Emacs Lisp (perhaps by you)
@@ -2514,7 +2513,7 @@ File: eintr.info,  Node: defun,  Next: Install,  Prev: Primitive Functions,  Up:
 
 In Lisp, a symbol such as ‘mark-whole-buffer’ has code attached to it
 that tells the computer what to do when the function is called.  This
-code is called the “function definition” and is created by evaluating a
+code is called the "function definition" and is created by evaluating a
 Lisp expression that starts with the symbol ‘defun’ (which is an
 abbreviation for _define function_).
 
@@ -2544,16 +2543,16 @@ mathematics.  The examples mostly involve text in one way or another.
      can use it by typing ‘M-x’ and then the name of the function; or by
      typing an appropriate key or keychord.
 
-  5. The code that instructs the computer what to do: the “body” of the
+  5. The code that instructs the computer what to do: the "body" of the
      function definition.
 
    It is helpful to think of the five parts of a function definition as
 being organized in a template, with slots for each part:
 
-     (defun FUNCTION-NAME (ARGUMENTS...)
-       "OPTIONAL-DOCUMENTATION..."
+     (defun FUNCTION-NAME (ARGUMENTS…)
+       "OPTIONAL-DOCUMENTATION…"
        (interactive ARGUMENT-PASSING-INFO)     ; optional
-       BODY...)
+       BODY…)
 
    As an example, here is the code for a function that multiplies its
 argument by 7.  (This example is not interactive.  *Note Making a
@@ -2568,7 +2567,7 @@ followed by the name of the function.
 
    The name of the function is followed by a list that contains the
 arguments that will be passed to the function.  This list is called the
-“argument list”.  In this example, the list has only one element, the
+"argument list".  In this example, the list has only one element, the
 symbol, ‘number’.  When the function is used, the symbol will be bound
 to the value that is used as the argument to the function.
 
@@ -2775,7 +2774,7 @@ You can install this code by placing your cursor after it and typing
 ‘C-x C-e’.  The name of the function will appear in your echo area.
 Then, you can use this code by typing ‘C-u’ and a number and then typing
 ‘M-x multiply-by-seven’ and pressing <RET>.  The phrase ‘The result is
-...’ followed by the product will appear in the echo area.
+…’ followed by the product will appear in the echo area.
 
    Speaking more generally, you invoke a function like this in either of
 two ways:
@@ -2794,7 +2793,7 @@ could not be used as an example of key binding.)
    (*Note Some Keybindings: Keybindings, to learn how to bind a command
 to a key.)
 
-   A “prefix argument” is passed to an interactive function by typing
+   A "prefix argument" is passed to an interactive function by typing
 the <META> key followed by a number, for example, ‘M-3 M-e’, or by
 typing ‘C-u’ and then a number, for example, ‘C-u 3 M-e’ (if you type
 ‘C-u’ without a number, it defaults to 4).
@@ -2901,9 +2900,9 @@ prefix argument (if there is one) and the character.
 argument and the specified character:
 
      (defun NAME-OF-FUNCTION (arg char)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (interactive "p\ncZap to char: ")
-       BODY-OF-FUNCTION...)
+       BODY-OF-FUNCTION…)
 
 (The space after the colon in the prompt makes it look better when you
 are prompted.  *Note The Definition of ‘copy-to-buffer’: copy-to-buffer,
@@ -3002,7 +3001,7 @@ File: eintr.info,  Node: Prevent confusion,  Next: Parts of let Expression,  Up:
 ------------------------
 
 The ‘let’ special form prevents confusion.  ‘let’ creates a name for a
-“local variable” that overshadows any use of the same name outside the
+"local variable" that overshadows any use of the same name outside the
 ‘let’ expression.  This is like understanding that whenever your host
 refers to “the house”, he means his house, not yours.  (Symbols used in
 argument lists work the same way.  *Note The ‘defun’ Macro: defun.)
@@ -3038,7 +3037,7 @@ File: eintr.info,  Node: Parts of let Expression,  Next: Sample let Expression, 
 -------------------------------------
 
 A ‘let’ expression is a list of three parts.  The first part is the
-symbol ‘let’.  The second part is a list, called a “varlist”, each
+symbol ‘let’.  The second part is a list, called a "varlist", each
 element of which is either a symbol by itself or a two-element list, the
 first element of which is a symbol.  The third part of the ‘let’
 expression is the body of the ‘let’.  The body usually consists of one
@@ -3046,7 +3045,7 @@ or more lists.
 
    A template for a ‘let’ expression looks like this:
 
-     (let VARLIST BODY...)
+     (let VARLIST BODY…)
 
 The symbols in the varlist are the variables that are given initial
 values by the ‘let’ special form.  Symbols by themselves are given the
@@ -3067,8 +3066,8 @@ case, the template for the ‘let’ expression looks like this:
 
      (let ((VARIABLE VALUE)
            (VARIABLE VALUE)
-           ...)
-       BODY...)
+           …)
+       BODY…)
 
 
 File: eintr.info,  Node: Sample let Expression,  Next: Uninitialized let Variables,  Prev: Parts of let Expression,  Up: let
@@ -3110,10 +3109,10 @@ the variable ‘tiger’ is printed at the location of the second ‘%s’.
 
    ---------- Footnotes ----------
 
-   (1) According to Jared Diamond in ‘Guns, Germs, and Steel’, “...
-zebras become impossibly dangerous as they grow older” but the claim
-here is that they do not become fierce like a tiger.  (1997, W. W.
-Norton and Co., ISBN 0-393-03894-2, page 171)
+   (1) According to Jared Diamond in ‘Guns, Germs, and Steel’, “… zebras
+become impossibly dangerous as they grow older” but the claim here is
+that they do not become fierce like a tiger.  (1997, W. W. Norton and
+Co., ISBN 0-393-03894-2, page 171)
 
 
 File: eintr.info,  Node: Uninitialized let Variables,  Prev: Sample let Expression,  Up: let
@@ -3186,8 +3185,8 @@ File: eintr.info,  Node: if in more detail,  Next: type-of-animal in detail,  Up
 An ‘if’ expression written in Lisp does not use the word “then”; the
 test and the action are the second and third elements of the list whose
 first element is ‘if’.  Nonetheless, the test part of an ‘if’ expression
-is often called the “if-part” and the second argument is often called
-the “then-part”.
+is often called the "if-part" and the second argument is often called
+the "then-part".
 
    Also, when an ‘if’ expression is written, the true-or-false-test is
 usually written on the same line as the symbol ‘if’, but the action to
@@ -3258,8 +3257,8 @@ and a second for an ‘if’ expression.
    The template for every function that is not interactive is:
 
      (defun NAME-OF-FUNCTION (ARGUMENT-LIST)
-       "DOCUMENTATION..."
-       BODY...)
+       "DOCUMENTATION…"
+       BODY…)
 
    The parts of the function that match this template look like this:
 
@@ -3314,7 +3313,7 @@ File: eintr.info,  Node: else,  Next: Truth & Falsehood,  Prev: if,  Up: Writing
 ============================
 
 An ‘if’ expression may have an optional third argument, called the
-“else-part”, for the case when the true-or-false-test returns false.
+"else-part", for the case when the true-or-false-test returns false.
 When this happens, the second argument or then-part of the overall ‘if’
 expression is _not_ evaluated, but the third or else-part _is_
 evaluated.  You might think of this as the cloudy day alternative for
@@ -3385,7 +3384,7 @@ So far, we have spoken of “true” and “false” as values of predicates as
 if they were new kinds of Emacs Lisp objects.  In fact, “false” is just
 our old friend ‘nil’.  Anything else—anything at all—is “true”.
 
-   The expression that tests for truth is interpreted as “true” if the
+   The expression that tests for truth is interpreted as "true" if the
 result of evaluating it is a value that is not ‘nil’.  In other words,
 the result of the test is considered true if the value returned is a
 number such as 47, a string such as ‘"hello"’, or a symbol (other than
@@ -3476,7 +3475,7 @@ Point and Mark
 --------------
 
 Before discussing ‘save-excursion’, however, it may be useful first to
-review what point and mark are in GNU Emacs.  “Point” is the current
+review what point and mark are in GNU Emacs.  "Point" is the current
 location of the cursor.  Wherever the cursor is, that is point.  More
 precisely, on terminals where the cursor appears to be on top of a
 character, point is immediately before the character.  In Emacs Lisp,
@@ -3485,7 +3484,7 @@ second is number two, and so on.  The function ‘point’ returns the
 current position of the cursor as a number.  Each buffer has its own
 value for point.
 
-   The “mark” is another position in the buffer; its value can be set
+   The "mark" is another position in the buffer; its value can be set
 with a command such as ‘C-<SPC>’ (‘set-mark-command’).  If a mark has
 been set, you can use the command ‘C-x C-x’ (‘exchange-point-and-mark’)
 to cause the cursor to jump to the mark and set the mark to be the
@@ -3494,7 +3493,7 @@ position of the previous mark is saved in the mark ring.  Many mark
 positions can be saved this way.  You can jump the cursor to a saved
 mark by typing ‘C-u C-<SPC>’ one or more times.
 
-   The part of the buffer between point and mark is called “the region”.
+   The part of the buffer between point and mark is called "the region".
 Numerous commands work on the region, including ‘center-region’,
 ‘count-lines-region’, ‘kill-region’, and ‘print-region’.
 
@@ -3535,7 +3534,7 @@ File: eintr.info,  Node: Template for save-excursion,  Prev: Point and mark,  Up
 The template for code using ‘save-excursion’ is simple:
 
      (save-excursion
-       BODY...)
+       BODY…)
 
 The body of the function is one or more expressions that will be
 evaluated in sequence by the Lisp interpreter.  If there is more than
@@ -3552,7 +3551,7 @@ like this:
        FIRST-EXPRESSION-IN-BODY
        SECOND-EXPRESSION-IN-BODY
        THIRD-EXPRESSION-IN-BODY
-        ...
+        …
        LAST-EXPRESSION-IN-BODY)
 
 An expression, of course, may be a symbol on its own or a list.
@@ -3562,7 +3561,7 @@ the body of a ‘let’ expression.  It looks like this:
 
      (let VARLIST
        (save-excursion
-         BODY...))
+         BODY…))
 
 
 File: eintr.info,  Node: Review,  Next: defun Exercises,  Prev: save-excursion,  Up: Writing Defuns
@@ -3656,7 +3655,7 @@ with a few similar functions that have not been mentioned yet.
      evaluate the second argument; else evaluate the third argument, if
      there is one.
 
-     The ‘if’ special form is called a “conditional”.  There are other
+     The ‘if’ special form is called a "conditional".  There are other
      conditionals in Emacs Lisp, but ‘if’ is perhaps the most commonly
      used.
 
@@ -3844,13 +3843,13 @@ to your current buffer, type ‘C-x b <RET>’.  (On some keyboards, the
 <META> key is labeled <ALT>.)
 
    Incidentally, the files that contain Lisp code are conventionally
-called “libraries”.  The metaphor is derived from that of a specialized
+called "libraries".  The metaphor is derived from that of a specialized
 library, such as a law library or an engineering library, rather than a
 general library.  Each library, or file, contains functions that relate
 to a particular topic or activity, such as ‘abbrev.el’ for handling
 abbreviations and other typing shortcuts, and ‘help.el’ for help.
 (Sometimes several libraries provide code for a single activity, as the
-various ‘rmail...’ files provide code for reading electronic mail.)  In
+various ‘rmail…’ files provide code for reading electronic mail.)  In
 ‘The GNU Emacs Manual’, you will see sentences such as “The ‘C-h p’
 command lets you search the standard Emacs Lisp libraries by topic
 keywords.”
@@ -3999,9 +3998,9 @@ In GNU Emacs 22, the code for the complete function looks like this:
 the template for a function definition.  The template looks like this:
 
      (defun NAME-OF-FUNCTION (ARGUMENT-LIST)
-       "DOCUMENTATION..."
-       (INTERACTIVE-EXPRESSION...)
-       BODY...)
+       "DOCUMENTATION…"
+       (INTERACTIVE-EXPRESSION…)
+       BODY…)
 
    Here is how the function works: the name of the function is
 ‘mark-whole-buffer’; it is followed by an empty argument list, ‘()’,
@@ -4142,9 +4141,9 @@ filled-in templates.
 function, it looks like this (with several slots filled in):
 
      (defun append-to-buffer (buffer start end)
-       "DOCUMENTATION..."
-       (interactive ...)
-       BODY...)
+       "DOCUMENTATION…"
+       (interactive …)
+       BODY…)
 
    The first line of the function includes its name and three arguments.
 The arguments are the ‘buffer’ to which the text will be copied, and the
@@ -4236,10 +4235,10 @@ by showing a template for ‘append-to-buffer’ with the ‘let’ expression
 in outline:
 
      (defun append-to-buffer (buffer start end)
-       "DOCUMENTATION..."
-       (interactive ...)
+       "DOCUMENTATION…"
+       (interactive …)
        (let ((VARIABLE VALUE))
-             BODY...)
+             BODY…)
 
    The ‘let’ expression has three elements:
 
@@ -4266,7 +4265,7 @@ varlist is surrounded by a circumscribing set of parentheses.  The line
 looks like this:
 
      (let ((oldbuf (current-buffer)))
-       ... )
+       … )
 
 The two parentheses before ‘oldbuf’ might surprise you if you did not
 realize that the first parenthesis before ‘oldbuf’ marks the boundary of
@@ -4294,12 +4293,12 @@ spread is indented more to the right than the first symbol.  In this
 function definition, the ‘let’ is indented more than the ‘defun’, and
 the ‘save-excursion’ is indented more than the ‘let’, like this:
 
-     (defun ...
-       ...
-       ...
-       (let...
+     (defun …
+       …
+       …
+       (let…
          (save-excursion
-           ...
+           …
 
 This formatting convention makes it easy to see that the lines in the
 body of the ‘save-excursion’ are enclosed by the parentheses associated
@@ -4308,10 +4307,10 @@ by the parentheses associated with the ‘let’:
 
      (let ((oldbuf (current-buffer)))
        (save-excursion
-         ...
-         (set-buffer ...)
+         …
+         (set-buffer …)
          (insert-buffer-substring oldbuf start end)
-         ...))
+         …))
 
    The use of the ‘save-excursion’ function can be viewed as a process
 of filling in the slots of a template:
@@ -4319,7 +4318,7 @@ of filling in the slots of a template:
      (save-excursion
        FIRST-EXPRESSION-IN-BODY
        SECOND-EXPRESSION-IN-BODY
-        ...
+        …
        LAST-EXPRESSION-IN-BODY)
 
 In this function, the body of the ‘save-excursion’ contains only one
@@ -4496,7 +4495,7 @@ text in the second buffer.
 
    The body of ‘copy-to-buffer’ looks like this,
 
-     ...
+     …
      (interactive "BCopy to buffer: \nr")
      (let ((oldbuf (current-buffer)))
        (with-current-buffer (get-buffer-create buffer)
@@ -4510,7 +4509,7 @@ than ‘append-to-buffer’.
 
    The definition then says
 
-     (with-current-buffer (get-buffer-create buffer) ...
+     (with-current-buffer (get-buffer-create buffer) …
 
    First, look at the earliest inner expression; that is evaluated
 first.  That expression starts with ‘get-buffer-create buffer’.  The
@@ -4566,7 +4565,7 @@ simplified in 2003 and is harder to understand.
 discussion of the new body.)
 
    In addition, this code illustrates the use of ‘interactive’ with a
-buffer that might be “read-only” and the important distinction between
+buffer that might be "read-only" and the important distinction between
 the name of an object and the object actually referred to.
 
 * Menu:
@@ -4607,9 +4606,9 @@ Here is the earlier code:
 outline of the function:
 
      (defun insert-buffer (buffer)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (interactive "*bInsert buffer: ")
-       BODY...)
+       BODY…)
 
 
 File: eintr.info,  Node: insert-buffer interactive,  Next: insert-buffer body,  Prev: insert-buffer code,  Up: insert-buffer
@@ -4677,12 +4676,12 @@ the code which copies the other buffer into the current buffer.
 like this:
 
      (defun insert-buffer (buffer)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (interactive "*bInsert buffer: ")
-       (or ...
-           ...
+       (or …
+           …
        (let (VARLIST)
-           BODY-OF-let... )
+           BODY-OF-let… )
 
    To understand how the ‘or’ expression ensures that the argument
 ‘buffer’ is bound to a buffer and not to the name of a buffer, it is
@@ -4964,7 +4963,7 @@ If that does not happen, you get an error and a message that says ‘Wrong
 number of arguments’.
 
    However, optional arguments are a feature of Lisp: a particular
-“keyword” is used to tell the Lisp interpreter that an argument is
+"keyword" is used to tell the Lisp interpreter that an argument is
 optional.  The keyword is ‘&optional’.  (The ‘&’ in front of ‘optional’
 is part of the keyword.)  In a function definition, if an argument
 follows the keyword ‘&optional’, no value need be passed to that
@@ -4978,7 +4977,7 @@ therefore looks like this:
    In outline, the whole function looks like this:
 
      (defun beginning-of-buffer (&optional arg)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (interactive "P")
        (or (IS-THE-ARGUMENT-A-CONS-CELL arg)
            (and ARE-BOTH-TRANSIENT-MARK-MODE-AND-MARK-ACTIVE-TRUE)
@@ -5112,7 +5111,7 @@ This expression is a multiplication, with two arguments to the function
 
    The first argument is ‘(prefix-numeric-value arg)’.  When ‘"P"’ is
 used as the argument for ‘interactive’, the value passed to the function
-as its argument is passed a “raw prefix argument”, and not a number.
+as its argument is passed a "raw prefix argument", and not a number.
 (It is a number in a list.)  To perform the arithmetic, a conversion is
 necessary, and ‘prefix-numeric-value’ does the job.
 
@@ -5234,7 +5233,7 @@ function.
 
 A ‘\\’ is used before the first square bracket of this expression.  This
 ‘\\’ tells the Lisp interpreter to substitute whatever key is currently
-bound to the ‘[...]’.  In the case of ‘universal-argument’, that is
+bound to the ‘[…]’.  In the case of ‘universal-argument’, that is
 usually ‘C-u’, but it might be different.  (*Note Tips for Documentation
 Strings: (elisp)Documentation Tips, for more information.)
 
@@ -5382,7 +5381,7 @@ before the completion of the function.
    The template for a ‘save-restriction’ expression is simple:
 
      (save-restriction
-       BODY... )
+       BODY… )
 
 The body of the ‘save-restriction’ is one or more expressions that will
 be evaluated in sequence by the Lisp interpreter.
@@ -5396,7 +5395,7 @@ and ‘save-restriction’ should be written like this:
 
      (save-excursion
        (save-restriction
-         BODY...))
+         BODY…))
 
    In other circumstances, when not written together, the
 ‘save-excursion’ and ‘save-restriction’ special forms must be written in
@@ -5407,7 +5406,7 @@ the order appropriate to the function.
        (save-restriction
          (widen)
          (save-excursion
-         BODY...))
+         BODY…))
 
 
 File: eintr.info,  Node: what-line,  Next: narrow Exercise,  Prev: save-restriction,  Up: Narrowing & Widening
@@ -5467,7 +5466,7 @@ function to move point.
 
    (Note that the ‘(widen)’ expression comes between the
 ‘save-restriction’ and ‘save-excursion’ special forms.  When you write
-the two ‘save- ...’ expressions in sequence, write ‘save-excursion’
+the two ‘save- …’ expressions in sequence, write ‘save-excursion’
 outermost.)
 
    The last two lines of the ‘what-line’ function are functions to count
@@ -5514,7 +5513,7 @@ functions, including ‘save-restriction’, ‘widen’, ‘goto-char’,
 
    (‘buffer-substring’ is a previously unmentioned function you will
 have to investigate yourself; or perhaps you will have to use
-‘buffer-substring-no-properties’ or ‘filter-buffer-substring’ ..., yet
+‘buffer-substring-no-properties’ or ‘filter-buffer-substring’ …, yet
 other functions.  Text properties are a feature otherwise not discussed
 here.  *Note Text Properties: (elisp)Text Properties.)
 
@@ -6030,9 +6029,9 @@ File: eintr.info,  Node: Cutting & Storing Text,  Next: List Implementation,  Pr
 8 Cutting and Storing Text
 **************************
 
-Whenever you cut or clip text out of a buffer with a “kill” command in
+Whenever you cut or clip text out of a buffer with a "kill" command in
 GNU Emacs, it is stored in a list and you can bring it back with a
-“yank” command.
+"yank" command.
 
    (The use of the word “kill” in Emacs for processes which specifically
 _do not_ destroy the values of the entities is an unfortunate historical
@@ -6078,7 +6077,7 @@ the echo area:
 
    With the ‘car’ and ‘nthcdr’ functions, you can retrieve whichever
 piece of text you want.  For example, in the following code, ‘nthcdr 1
-...’ returns the list with the first item removed; and the ‘car’ returns
+…’ returns the list with the first item removed; and the ‘car’ returns
 the first element of that remainder—the second element of the original
 list:
 
@@ -6094,7 +6093,7 @@ third, or whatever.  In addition, when you get to the end of the list,
 Emacs should give you the first element of the list, rather than nothing
 at all.
 
-   The list that holds the pieces of text is called the “kill ring”.
+   The list that holds the pieces of text is called the "kill ring".
 This chapter leads up to a description of the kill ring and how it is
 used by first tracing how the ‘zap-to-char’ function works.  This
 function calls a function that invokes a function that manipulates the
@@ -6170,7 +6169,7 @@ displays in which grave accent and apostrophe were often mirror images
 suitable for use as quotes.  On most modern displays this is no longer
 true, and when these two ASCII characters appear in documentation
 strings or diagnostic message formats, Emacs typically transliterates
-them to “curved quotes” (left and right single quotation marks), so that
+them to "curved quotes" (left and right single quotation marks), so that
 the abovequoted symbol appears as ‘case-fold-search’.  Source-code
 strings can also simply use curved quotes directly.
 
@@ -6187,8 +6186,8 @@ The interactive expression in the ‘zap-to-char’ command looks like this:
    The part within quotation marks, ‘"p\ncZap to char: "’, specifies two
 different things.  First, and most simply, is the ‘p’.  This part is
 separated from the next part by a newline, ‘\n’.  The ‘p’ means that the
-first argument to the function will be passed the value of a “processed
-prefix”.  The prefix argument is passed by typing ‘C-u’ and a number, or
+first argument to the function will be passed the value of a "processed
+prefix".  The prefix argument is passed by typing ‘C-u’ and a number, or
 ‘M-’ and a number.  If the function is called interactively without a
 prefix, 1 is passed to this argument.
 
@@ -6318,7 +6317,7 @@ perform.  The values produced by them are discarded.
    The template for a ‘progn’ expression is very simple:
 
      (progn
-       BODY...)
+       BODY…)
 
    In ‘zap-to-char’, the ‘progn’ expression has to do two things: put
 point in exactly the right position; and return the location of point so
@@ -6402,7 +6401,7 @@ look at the definition of ‘kill-region’, with comments added:
      (defun kill-region (beg end)
        "Kill (\"cut\") text between point and mark.
      This deletes the text from the buffer and saves it in the kill ring.
-     The command \\[yank] can retrieve it from there. ... "
+     The command \\[yank] can retrieve it from there. … "
 
        ;; • Since order matters, pass point first.
        (interactive (list (point) (mark)))
@@ -6460,7 +6459,7 @@ look at the definition of ‘kill-region’, with comments added:
          ;;    then the body is executed.
          ;;    The first part of the third argument is the following:
          ((buffer-read-only text-read-only) ;; the if-part
-          ;; ...  the then-part
+          ;; …  the then-part
           (copy-region-as-kill beg end)
           ;;    Next, also as part of the then-part, set this-command, so
           ;;    it will be set in an error
@@ -6498,7 +6497,7 @@ handle this circumstance.  This code, which makes up the body of the
      (condition-case
        VAR
        BODYFORM
-       ERROR-HANDLER...)
+       ERROR-HANDLER…)
 
    The second argument, BODYFORM, is straightforward.  The
 ‘condition-case’ special form causes the Lisp interpreter to evaluate
@@ -6638,9 +6637,9 @@ function:
    As usual, this function can be divided into its component parts:
 
      (defun copy-region-as-kill (ARGUMENT-LIST)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (interactive "r")
-       BODY...)
+       BODY…)
 
    The arguments are ‘beg’ and ‘end’ and the function is interactive
 with ‘"r"’, so the two arguments must refer to the beginning and end of
@@ -6760,7 +6759,7 @@ The ‘kill-append’ function looks like this:
      (defun kill-append (string before-p &optional yank-handler)
        "Append STRING to the end of the latest kill in the kill ring.
      If BEFORE-P is non-nil, prepend STRING to the kill.
-     ... "
+     … "
        (let* ((cur (car kill-ring)))
          (kill-new (if before-p (concat string cur) (concat cur string))
                    (or (= (length cur) 0)
@@ -6856,7 +6855,7 @@ In version 22 the ‘kill-new’ function looks like this:
      If `interprogram-cut-function' is non-nil, apply it to STRING.
      Optional second argument REPLACE non-nil means that STRING will replace
      the front of the kill ring, rather than being added to the list.
-     ..."
+     …"
        (if (> (length string) 0)
            (if yank-handler
                (put-text-property 0 (length string)
@@ -6991,7 +6990,7 @@ to last element is the last element of the kill ring, it will set the
 last element of the kill ring.
 
    The ‘nthcdr’ function works by repeatedly taking the CDR of a list—it
-takes the CDR of the CDR of the CDR ... It does this N times and returns
+takes the CDR of the CDR of the CDR … It does this N times and returns
 the results.  (*Note ‘nthcdr’: nthcdr.)
 
    Thus, if we had a four element list that was supposed to be three
@@ -7280,7 +7279,7 @@ you will see the documentation for ‘kill-ring’:
 
      (defvar kill-ring nil
        "List of killed text sequences.
-     ...")
+     …")
 
 In this variable definition, the variable is given an initial value of
 ‘nil’, which makes sense, since if you have saved nothing, you want
@@ -7311,8 +7310,8 @@ others by typing an asterisk, ‘*’, in the first column of its
 documentation string.  For example:
 
      (defvar shell-command-default-error-buffer nil
-       "*Buffer name for `shell-command' ... error output.
-     ... ")
+       "*Buffer name for `shell-command' … error output.
+     … ")
 
 You could (and still can) use the ‘set-variable’ command to change the
 value of ‘shell-command-default-error-buffer’ temporarily.  However,
@@ -7581,7 +7580,7 @@ symbol ‘flowers’ holds the address of the pair of address-boxes, the
 first of which holds the address of ‘violet’, and the second of which
 holds the address of ‘buttercup’.
 
-   A pair of address-boxes is called a “cons cell” or “dotted pair”.
+   A pair of address-boxes is called a "cons cell" or "dotted pair".
 *Note Cons Cell and List Types: (elisp)Cons Cell Type, and *note Dotted
 Pair Notation: (elisp)Dotted Pair Notation, for more information about
 cons cells and dotted pairs.
@@ -7648,7 +7647,7 @@ and in one of its drawers you found a map giving you directions to where
 the buried treasure lies.
 
    (In addition to its name, symbol definition, and variable value, a
-symbol has a drawer for a “property list” which can be used to record
+symbol has a drawer for a "property list" which can be used to record
 other information.  Property lists are not discussed here; see *note
 Property Lists: (elisp)Property Lists.)
 
@@ -7838,7 +7837,7 @@ File: eintr.info,  Node: Loops & Recursion,  Next: Regexp Search,  Prev: Yanking
 
 Emacs Lisp has two primary ways to cause an expression, or a series of
 expressions, to be evaluated repeatedly: one uses a ‘while’ loop, and
-the other uses “recursion”.
+the other uses "recursion".
 
    Repetition can be very valuable.  For example, to move forward four
 sentences, you need only write a program that will move forward one
@@ -7882,7 +7881,7 @@ is different.
 
    In a ‘while’ expression, if the value returned by evaluating the
 first argument is false, the Lisp interpreter skips the rest of the
-expression (the “body” of the expression) and does not evaluate it.
+expression (the "body" of the expression) and does not evaluate it.
 However, if the value is true, the Lisp interpreter evaluates the body
 of the expression and then again tests whether the first argument to
 ‘while’ is true or false.  If the value returned by evaluating the first
@@ -7892,7 +7891,7 @@ the expression.
    The template for a ‘while’ expression looks like this:
 
      (while TRUE-OR-FALSE-TEST
-       BODY...)
+       BODY…)
 
 * Menu:
 
@@ -7918,12 +7917,12 @@ not evaluate the rest of the ‘while’ expression and exits the loop.
 
    Clearly, if the value returned by evaluating the first argument to
 ‘while’ is always true, the body following will be evaluated again and
-again ... and again ... forever.  Conversely, if the value returned is
-never true, the expressions in the body will never be evaluated.  The
-craft of writing a ‘while’ loop consists of choosing a mechanism such
-that the true-or-false-test returns true just the number of times that
-you want the subsequent expressions to be evaluated, and then have the
-test return false.
+again … and again … forever.  Conversely, if the value returned is never
+true, the expressions in the body will never be evaluated.  The craft of
+writing a ‘while’ loop consists of choosing a mechanism such that the
+true-or-false-test returns true just the number of times that you want
+the subsequent expressions to be evaluated, and then have the test
+return false.
 
    The value returned by evaluating a ‘while’ is the value of the
 true-or-false-test.  An interesting consequence of this is that a
@@ -7978,7 +7977,7 @@ in the list ‘animals’, the first part of the loop will be written like
 this:
 
      (while animals
-            ...
+            …
 
 When the ‘while’ tests its first argument, the variable ‘animals’ is
 evaluated.  It returns a list.  So long as the list has elements, the
@@ -8010,7 +8009,7 @@ to cause the true-or-false-test eventually to test false looks like
 this:
 
      (while TEST-WHETHER-LIST-IS-EMPTY
-       BODY...
+       BODY…
        SET-LIST-TO-CDR-OF-LIST)
 
    This test and use of ‘cdr’ can be put together in a function that
@@ -8117,7 +8116,7 @@ looks like this:
 
      SET-COUNT-TO-INITIAL-VALUE
      (while (< count desired-number)         ; true-or-false-test
-       BODY...
+       BODY…
        (setq count (1+ count)))              ; incrementer
 
 Note that you need to set the initial value of ‘count’; usually it is
@@ -8217,7 +8216,7 @@ row.  This means that the ‘let’ statement will look like this:
 
        (let ((total 0)
              (row-number 1))
-         BODY...)
+         BODY…)
 
    After the internal variables are declared and bound to their initial
 values, we can begin the ‘while’ loop.  The expression that serves as
@@ -8296,11 +8295,11 @@ whole of the ‘while’ loop is a list within the body of the ‘let’.
    In outline, the function will look like this:
 
      (defun NAME-OF-FUNCTION (ARGUMENT-LIST)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (let (VARLIST)
          (while (TRUE-OR-FALSE-TEST)
-           BODY-OF-WHILE... )
-         ... ))                    ; Need final expression here.
+           BODY-OF-WHILE… )
+         … ))                    ; Need final expression here.
 
    The result of evaluating the ‘let’ is what is going to be returned by
 the ‘defun’ since the ‘let’ is not embedded within any containing list,
@@ -8317,7 +8316,7 @@ all on one line.  This format makes it evident that the VARLIST and
 ‘while’ expressions are the second and third elements of the list
 starting with ‘let’, and the ‘total’ is the last element:
 
-     (let (VARLIST) (while (TRUE-OR-FALSE-TEST) BODY-OF-WHILE... ) total)
+     (let (VARLIST) (while (TRUE-OR-FALSE-TEST) BODY-OF-WHILE… ) total)
 
    Putting everything together, the ‘triangle’ function definition looks
 like this:
@@ -8368,7 +8367,7 @@ function in Emacs Lisp that subtracts 1 from its argument.
    The template for a decrementing ‘while’ loop looks like this:
 
      (while (> counter 0)                    ; true-or-false-test
-       BODY...
+       BODY…
        (setq counter (1- counter)))          ; decrementer
 
 * Menu:
@@ -8429,7 +8428,7 @@ this:
 
      (let ((total 0)
            (number-of-pebbles-in-row number-of-rows))
-       BODY...)
+       BODY…)
 
    The total number of pebbles can be found by repeatedly adding the
 number of pebbles in a row to the total already found, that is, by
@@ -8732,18 +8731,18 @@ A recursive function typically contains a conditional expression which
 has three parts:
 
   1. A true-or-false-test that determines whether the function is called
-     again, here called the “do-again-test”.
+     again, here called the "do-again-test".
 
   2. The name of the function.  When this name is called, a new instance
      of the function—a new robot, as it were—is created and told what to
      do.
 
   3. An expression that returns a different value each time the function
-     is called, here called the “next-step-expression”.  Consequently,
+     is called, here called the "next-step-expression".  Consequently,
      the argument (or arguments) passed to the new instance of the
      function will be different from that passed to the previous
      instance.  This causes the conditional expression, the
-     “do-again-test”, to test false after the correct number of
+     "do-again-test", to test false after the correct number of
      repetitions.
 
    Recursive functions can be much simpler than any other kind of
@@ -8756,9 +8755,9 @@ which is hard at first but then seems simple.
 pattern looks like this:
 
      (defun NAME-OF-RECURSIVE-FUNCTION (ARGUMENT-LIST)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (if DO-AGAIN-TEST
-         BODY...
+         BODY…
          (NAME-OF-RECURSIVE-FUNCTION
               NEXT-STEP-EXPRESSION)))
 
@@ -8777,7 +8776,7 @@ of it) to determine whether to continue or stop.  The
 next-step-expression is designed so that the do-again-test returns false
 when the function should no longer be repeated.
 
-   The do-again-test is sometimes called the “stop condition”, since it
+   The do-again-test is sometimes called the "stop condition", since it
 stops the repetitions when it tests false.
 
 
@@ -9049,7 +9048,7 @@ Lisp sources as ‘if’, it is used often enough to justify explaining it.
    The template for a ‘cond’ expression looks like this:
 
      (cond
-      BODY...)
+      BODY…)
 
 where the BODY is a series of lists.
 
@@ -9059,7 +9058,7 @@ where the BODY is a series of lists.
       (FIRST-TRUE-OR-FALSE-TEST FIRST-CONSEQUENT)
       (SECOND-TRUE-OR-FALSE-TEST SECOND-CONSEQUENT)
       (THIRD-TRUE-OR-FALSE-TEST THIRD-CONSEQUENT)
-       ...)
+       …)
 
    When the Lisp interpreter evaluates the ‘cond’ expression, it
 evaluates the first element (the CAR or true-or-false-test) of the first
@@ -9439,7 +9438,7 @@ use many resources in a computer.
 
    ---------- Footnotes ----------
 
-   (1) The phrase “tail recursive” is used to describe such a process,
+   (1) The phrase "tail recursive" is used to describe such a process,
 one that uses constant space.
 
    (2) The jargon is mildly confusing: ‘triangle-recursive-helper’ uses
@@ -9724,7 +9723,7 @@ skeleton first, and then its muscle.  The way to see the skeleton is to
 look at the expressions that start in the left-most columns:
 
      (defun forward-sentence (&optional arg)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (interactive "p")
        (or arg (setq arg 1))
        (let ((opoint (point)) (sentence-end (sentence-end)))
@@ -9939,15 +9938,15 @@ daunting!
    In outline, the function looks like this:
 
      (defun forward-paragraph (&optional arg)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
        (interactive "p")
        (or arg (setq arg 1))
        (let*
            VARLIST
          (while (and (< arg 0) (not (bobp)))     ; backward-moving-code
-           ...
+           …
          (while (and (> arg 0) (not (eobp)))     ; forward-moving-code
-           ...
+           …
 
    The first parts of the function are routine: the function’s argument
 list consists of one optional argument.  Documentation follows.
@@ -10438,9 +10437,9 @@ then with recursion.  The command will, of course, be interactive.
    The template for an interactive function definition is, as always:
 
      (defun NAME-OF-FUNCTION (ARGUMENT-LIST)
-       "DOCUMENTATION..."
-       (INTERACTIVE-EXPRESSION...)
-       BODY...)
+       "DOCUMENTATION…"
+       (INTERACTIVE-EXPRESSION…)
+       BODY…)
 
    What we need to do is fill in the slots.
 
@@ -10708,8 +10707,8 @@ third argument of ‘t’, which causes the function to return ‘nil’ rather
 than signal an error if the search fails.
 
    However, if you make this change and try it, you will see the message
-“Counting words in region ...  ” and ... you will keep on seeing that
-message ..., until you type ‘C-g’ (‘keyboard-quit’).
+“Counting words in region ...  ” and … you will keep on seeing that
+message …, until you type ‘C-g’ (‘keyboard-quit’).
 
    Here is what happens: the search is limited to the region, as before,
 and it fails because there are no word-constituent characters in the
@@ -10720,8 +10719,8 @@ After the ‘re-search-forward’ expression returns ‘nil’, the next
 expression in the ‘while’ loop is evaluated.  This expression increments
 the count.  Then the loop repeats.  The true-or-false-test tests true
 because the value of point is still less than the value of end, since
-the ‘re-search-forward’ expression did not move point.  ... and the
-cycle repeats ...
+the ‘re-search-forward’ expression did not move point.  … and the cycle
+repeats …
 
    The ‘count-words-example’ definition requires yet another
 modification, to cause the true-or-false-test of the ‘while’ loop to
@@ -10813,12 +10812,12 @@ previous versions:
 
      ;; Recursive version; uses regular expression search
      (defun count-words-example (beginning end)
-       "DOCUMENTATION..."
-       (INTERACTIVE-EXPRESSION...)
+       "DOCUMENTATION…"
+       (INTERACTIVE-EXPRESSION…)
 
      ;;; 1. Set up appropriate conditions.
        (EXPLANATORY MESSAGE)
-       (SET-UP FUNCTIONS...
+       (SET-UP FUNCTIONS…
 
      ;;; 2. Count the words.
          RECURSIVE CALL
@@ -10897,7 +10896,7 @@ part that does the counting.  A vital part!
    But already, we have an outline of the recursive counting function:
 
      (defun recursive-count-words (region-end)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
         DO-AGAIN-TEST
         NEXT-STEP-EXPRESSION
         RECURSIVE CALL)
@@ -10987,7 +10986,7 @@ adds one to its argument.
    The whole ‘recursive-count-words’ function will then look like this:
 
      (defun recursive-count-words (region-end)
-       "DOCUMENTATION..."
+       "DOCUMENTATION…"
 
      ;;; 1. do-again-test
        (if (and (< (point) region-end)
@@ -11196,8 +11195,8 @@ File: eintr.info,  Node: Syntax,  Next: count-words-in-defun,  Prev: Words and S
 14.2 What Constitutes a Word or Symbol?
 =======================================
 
-Emacs treats different characters as belonging to different “syntax
-categories”.  For example, the regular expression, ‘\\w+’, is a pattern
+Emacs treats different characters as belonging to different "syntax
+categories".  For example, the regular expression, ‘\\w+’, is a pattern
 specifying one or more _word constituent_ characters.  Word constituent
 characters are members of one syntax category.  Other syntax categories
 include the class of punctuation characters, such as the period and the
@@ -11290,9 +11289,9 @@ us from needing to pass arguments to the function.
    These considerations lead us to prepare the following template:
 
      (defun count-words-in-defun ()
-       "DOCUMENTATION..."
-       (SET UP...
-          (WHILE LOOP...)
+       "DOCUMENTATION…"
+       (SET UP…
+          (WHILE LOOP…)
         RETURN COUNT)
 
 As usual, our job is to fill in the slots.
@@ -11579,7 +11578,7 @@ reason for the caution is that this function and those it calls work on
 the sources for Emacs and it is inconvenient if they are inadvertently
 modified.  It goes without saying that I did not realize a need for this
 line until an experiment went awry and started to modify my Emacs source
-files ...
+files …
 
    Next comes a call to widen the buffer if it is narrowed.  This
 function is usually not needed—Emacs creates a fresh buffer if none
@@ -11678,7 +11677,7 @@ is evaluated.
    The template looks like this:
 
      (while TEST-WHETHER-LIST-IS-EMPTY
-       BODY...
+       BODY…
        SET-LIST-TO-CDR-OF-LIST)
 
    Also, we remember that a ‘while’ loop returns ‘nil’ (the result of
@@ -11960,7 +11959,7 @@ like this (but with more elements):
    The ‘directory-files-and-attributes’ function returns a list of
 lists.  Each of the lists within the main list consists of 13 elements.
 The first element is a string that contains the name of the file—which,
-in GNU/Linux, may be a “directory file”, that is to say, a file with the
+in GNU/Linux, may be a "directory file", that is to say, a file with the
 special attributes of a directory.  The second element of the list is
 ‘t’ for a directory, a string for symbolic link (the string is the name
 linked to), or ‘nil’.
@@ -11991,7 +11990,7 @@ directory.  The beginning of its listing looks like this:
 
      ("mail"
      t
-     ...
+     …
      )
 
    (To learn about the different attributes, look at the documentation
@@ -12166,7 +12165,7 @@ next value from the ‘sorted-lengths’ list.
 values in turn.  This can be done with a loop like this:
 
      (while top-of-ranges
-       BODY-OF-LOOP...
+       BODY-OF-LOOP…
        (setq top-of-ranges (cdr top-of-ranges)))
 
    Put together, the two loops look like this:
@@ -12333,7 +12332,7 @@ from scratch, and in the process we will re-acquaint ourselves with some
 of what we learned before and learn more.
 
    In this chapter, we will first write a simple graph printing
-function.  This first definition will be a “prototype”, a rapidly
+function.  This first definition will be a "prototype", a rapidly
 written function that enables us to reconnoiter this unknown
 graph-making territory.  We will discover dragons, or find that they are
 myth.  After scouting the terrain, we will feel more confident and
@@ -12442,7 +12441,7 @@ the top, not the bottom, of the column.  Moreover, we remember that when
 we print a graph, we do not expect all the columns to be the same
 height.  This means that the top of each column may be at a different
 height from the previous one.  We cannot simply reposition point to the
-same line each time, but moved over to the right—or perhaps we can...
+same line each time, but moved over to the right—or perhaps we can…
 
    We are planning to make the columns of the bar graph out of
 asterisks.  The number of asterisks in the column is the number
@@ -12662,9 +12661,9 @@ argument, so we should determine and record that as a local variable.
 of this function:
 
      (defun graph-body-print (numbers-list)
-       "DOCUMENTATION..."
-       (let ((height  ...
-              ...))
+       "DOCUMENTATION…"
+       (let ((height  …
+              …))
 
          (while numbers-list
            INSERT-COLUMNS-AND-REPOSITION-POINT
@@ -12725,7 +12724,7 @@ expression.
 The one unexpected expression in this function is the ‘(sit-for 0)’
 expression in the ‘while’ loop.  This expression makes the graph
 printing operation more interesting to watch than it would be otherwise.
-The expression causes Emacs to “sit” or do nothing for a zero length of
+The expression causes Emacs to "sit" or do nothing for a zero length of
 time and then redraw the screen.  Placed here, it causes Emacs to redraw
 the screen column by column.  Without it, Emacs would not redraw the
 screen until the function exits.
@@ -13065,15 +13064,15 @@ the changes in what appears to me to be a reasonable manner and have not
 had any problems.  Others prefer to use the Customization command and
 let Emacs do the work for them.
 
-   Another ‘custom-set-...’ function is ‘custom-set-faces’.  This
-function sets the various font faces.  Over time, I have set a
-considerable number of faces.  Some of the time, I re-set them using
-‘customize’; other times, I simply edit the ‘custom-set-faces’
-expression in my ‘.emacs’ file itself.
+   Another ‘custom-set-…’ function is ‘custom-set-faces’.  This function
+sets the various font faces.  Over time, I have set a considerable
+number of faces.  Some of the time, I re-set them using ‘customize’;
+other times, I simply edit the ‘custom-set-faces’ expression in my
+‘.emacs’ file itself.
 
    The second way to customize your ‘text-mode-hook’ is to set it
 yourself in your ‘.emacs’ file using code that has nothing to do with
-the ‘custom-set-...’ functions.
+the ‘custom-set-…’ functions.
 
    When you do this, and later use ‘customize’, you will see a message
 that says
@@ -13084,7 +13083,7 @@ that says
 
      Save for Future Sessions
 
-Emacs will write a ‘custom-set-...’ expression near the end of your
+Emacs will write a ‘custom-set-…’ expression near the end of your
 ‘.emacs’ file that will be evaluated after your hand-written expression.
 It will, therefore, overrule your hand-written expression.  No harm will
 be done.  When you do this, however, be careful to remember which
@@ -13350,7 +13349,7 @@ at my existing ‘.emacs’ file, and adapt what is there.
    As for the keybinding itself: ‘C-c w’.  This combines the prefix key,
 ‘C-c’, with a single character, in this case, ‘w’.  This set of keys,
 ‘C-c’ followed by a single character, is strictly reserved for
-individuals’ own use.  (I call these “own” keys, since these are for my
+individuals’ own use.  (I call these "own" keys, since these are for my
 own use.)  You should always be able to create such a keybinding for
 your own use without stomping on someone else’s keybinding.  If you ever
 write an extension to Emacs, please avoid taking any of these keys for
@@ -13373,11 +13372,11 @@ occurrences.
      ;;; Unbind 'C-x f'
      (global-unset-key "\C-xf")
 
-   There is a reason for this unbinding: I found I inadvertently typed
-‘C-x f’ when I meant to type ‘C-x C-f’.  Rather than find a file, as I
-intended, I accidentally set the width for filled text, almost always to
-a width I did not want.  Since I hardly ever reset my default width, I
-simply unbound the key.
+   There is a reason for this unbinding: I found I inadvertently typed ‘C-x f’
+when I meant to type ‘C-x C-f’.  Rather than find a file, as I intended,
+I accidentally set the width for filled text, almost always to a width I
+did not want.  Since I hardly ever reset my default width, I simply
+unbound the key.
 
    The following rebinds an existing key:
 
@@ -13395,7 +13394,7 @@ File: eintr.info,  Node: Keymaps,  Next: Loading Files,  Prev: Keybindings,  Up:
 16.8 Keymaps
 ============
 
-Emacs uses “keymaps” to record which keys call which commands.  When you
+Emacs uses "keymaps" to record which keys call which commands.  When you
 use ‘global-set-key’ to set the keybinding for a single command in all
 parts of Emacs, you are specifying the keybinding in
 ‘current-global-map’.
@@ -13422,8 +13421,8 @@ Texinfo mode that inserts ‘@group’ into a Texinfo file.  I use this
 command all the time and prefer to type the three strokes ‘C-c C-c g’
 rather than the six strokes ‘@ g r o u p’.  (‘@group’ and its matching
 ‘@end group’ are commands that keep all enclosed text together on one
-page; many multi-line examples in this book are surrounded by ‘@group
-... @end group’.)
+page; many multi-line examples in this book are surrounded by ‘@group …
+@end group’.)
 
    Here is the ‘texinfo-insert-@group’ function definition:
 
@@ -13530,7 +13529,7 @@ File: eintr.info,  Node: Autoload,  Next: Simple Extension,  Prev: Loading Files
 Instead of installing a function by loading the file that contains it,
 or by evaluating the function definition, you can make the function
 available but not actually install it until it is first called.  This is
-called “autoloading”.
+called "autoloading".
 
    When you execute an autoloaded function, Emacs automatically
 evaluates the file that contains the definition, and then calls the
@@ -13626,10 +13625,10 @@ following conditional:
      (cond
       ((= 22 emacs-major-version)
        ;; evaluate version 22 code
-       ( ... ))
+       ( … ))
       ((= 23 emacs-major-version)
        ;; evaluate version 23 code
-       ( ... )))
+       ( … )))
 
    For example, recent versions blink their cursors by default.  I hate
 such blinking, as well as other features, so I placed the following in
@@ -13941,7 +13940,7 @@ of this new string format can be repeated.
 Line Format: (elisp)Mode Line Format, for more information.
 
    ‘mode-line-buffer-identification’ displays the current buffer name.
-It is a list beginning ‘(#("%12b" 0 4 ...’.  The ‘#(’ begins the list.
+It is a list beginning ‘(#("%12b" 0 4 …’.  The ‘#(’ begins the list.
 
    The ‘"%12b"’ displays the current buffer name, using the
 ‘buffer-name’ function with which we are familiar; the ‘12’ specifies
@@ -14163,7 +14162,7 @@ and the top two lines of the ‘*Backtrace*’ buffer will look like this:
      ---------- Buffer: *Backtrace* ----------
      Debugger entered--Lisp error: (void-function 1=)
      * (1= number)
-     ...
+     …
      ---------- Buffer: *Backtrace* ----------
 
    By typing ‘d’, you were able to step through the function.
@@ -14217,7 +14216,7 @@ of the code you are debugging, with an arrow at the left that shows
 which line you are currently executing.
 
    You can walk through the execution of a function, line by line, or
-run quickly until reaching a “breakpoint” where execution stops.
+run quickly until reaching a "breakpoint" where execution stops.
 
    Edebug is described in *note (elisp)Edebug::.
 
@@ -14242,7 +14241,7 @@ definition and typing ‘C-M-x’ (‘eval-defun’).  (By default, the
 Interaction mode.)
 
    However, to prepare this function definition for Edebug, you must
-first “instrument” the code using a different command.  You can do this
+first "instrument" the code using a different command.  You can do this
 by positioning your cursor within or just after the definition and
 typing
 
@@ -14495,9 +14494,10 @@ or more non-word-constituent characters.
 
 Again, not useful.
 
-   Here is the pattern that I use.  It is not perfect, but good enough.‘\\b’ matches the empty string, provided it is at the beginning or end
-of a word; ‘[^@ \n\t]+’ matches one or more occurrences of any
-characters that are _not_ an @-sign, space, newline, or tab.
+   Here is the pattern that I use.  It is not perfect, but good enough.  ‘\\b’
+matches the empty string, provided it is at the beginning or end of a
+word; ‘[^@ \n\t]+’ matches one or more occurrences of any characters
+that are _not_ an @-sign, space, newline, or tab.
 
      \\b\\([^@ \n\t]+\\)[ \n\t]+\\1\\b
 
@@ -14691,7 +14691,7 @@ skeletal form:
      (defun current-kill (n &optional do-not-move)
        "Rotate the yanking point by N places, and then return that kill."
        (let VARLIST
-         BODY...)
+         BODY…)
 
    This function takes two arguments, one of which is optional.  It has
 a documentation string.  It is _not_ interactive.
@@ -14810,15 +14810,15 @@ has something in it and the value of ‘do-not-move’ is ‘nil’.
 
    This needs some examination.  Unless it is not supposed to move the
 pointer, the ‘current-kill’ function changes where
-‘kill-ring-yank-pointer’ points.  That is what the
-‘(setq kill-ring-yank-pointer ARGth-kill-element))’ expression does.
-Also, clearly, ‘ARGth-kill-element’ is being set to be equal to some CDR
-of the kill ring, using the ‘nthcdr’ function that is described in an
-earlier section.  (*Note copy-region-as-kill::.)  How does it do this?
+‘kill-ring-yank-pointer’ points.  That is what the ‘(setq kill-ring-yank-pointer ARGth-kill-element))’
+expression does.  Also, clearly, ‘ARGth-kill-element’ is being set to be
+equal to some CDR of the kill ring, using the ‘nthcdr’ function that is
+described in an earlier section.  (*Note copy-region-as-kill::.)  How
+does it do this?
 
    As we have seen before (*note nthcdr::), the ‘nthcdr’ function works
 by repeatedly taking the CDR of a list—it takes the CDR of the CDR of
-the CDR ...
+the CDR …
 
    The two following expressions produce the same result:
 
@@ -14882,7 +14882,7 @@ following:
                "first some text"))
 
    Incidentally, both ‘kill-ring’ and ‘kill-ring-yank-pointer’ are
-“global variables”.  That means that any expression in Emacs Lisp can
+"global variables".  That means that any expression in Emacs Lisp can
 access them.  They are not like the local variables set by ‘let’ or like
 the symbols in an argument list.  Local variables can only be accessed
 within the ‘let’ that defines them or the function that specifies them
@@ -14970,7 +14970,7 @@ the ‘yank-pop’ function.  Leaving out the documentation to save space,
 it looks like this:
 
      (defun yank-pop (&optional arg)
-       "..."
+       "…"
        (interactive "*p")
        (if (not (eq last-command 'yank))
            (error "Previous command was not a yank"))
@@ -15103,12 +15103,12 @@ and to modify or replace it later.
 ‘print-graph’ function:
 
      (defun print-graph (numbers-list)
-       "DOCUMENTATION..."
-       (let ((height  ...
-             ...))
-         (print-Y-axis height ... )
+       "DOCUMENTATION…"
+       (let ((height  …
+             …))
+         (print-Y-axis height … )
          (graph-body-print numbers-list)
-         (print-X-axis ... )))
+         (print-X-axis … )))
 
    We can work on each part of the ‘print-graph’ function definition in
 turn.
@@ -15321,7 +15321,7 @@ higher multiple of the value of the ‘Y-axis-label-spacing’.
      (defvar Y-axis-label-spacing 5
        "Number of lines from one Y axis label to next.")
 
-     ...
+     …
      (let* ((height (apply 'max numbers-list))
             (height-of-top-line
              (if (zerop (% height Y-axis-label-spacing))
@@ -15330,7 +15330,7 @@ higher multiple of the value of the ‘Y-axis-label-spacing’.
                (* (1+ (/ height Y-axis-label-spacing))
                   Y-axis-label-spacing)))
             (symbol-width (length graph-blank))))
-     ...
+     …
 
 (Note use of the ‘let*’ function: the initial value of height is
 computed once by the ‘(apply 'max numbers-list)’ expression and then the
@@ -15416,8 +15416,8 @@ will be and the second is a symbol for the character to insert, in a
 special format.  The format is a question mark followed by a blank
 space, like this, ‘? ’.  *Note Character Type: (elisp)Character Type,
 for a description of the syntax for characters.  (Of course, you might
-want to replace the blank space by some other character ... You know
-what to do.)
+want to replace the blank space by some other character … You know what
+to do.)
 
    The ‘number-to-string’ function is used in the concatenation
 expression, to convert the number to a string that is concatenated with
@@ -15591,8 +15591,8 @@ the tic marks themselves and their spacing:
 ‘boundp’ predicate checks whether it has already been set; ‘boundp’
 returns ‘nil’ if it has not.  If ‘graph-blank’ were unbound and we did
 not use this conditional construction, in a recent GNU Emacs, we would
-enter the debugger and see an error message saying
-‘Debugger entered--Lisp error: (void-variable graph-blank)’.)
+enter the debugger and see an error message saying ‘Debugger entered--Lisp error:
+(void-variable graph-blank)’.)
 
    Here is the ‘defvar’ for ‘X-axis-tic-symbol’:
 
@@ -15613,7 +15613,7 @@ the width of the tic symbol and the ‘X-axis-label-spacing’.
    The code looks like this:
 
      ;;; X-axis-tic-element
-     ...
+     …
      (concat
       (make-string
        ;; Make a string of blanks.
@@ -15622,7 +15622,7 @@ the width of the tic symbol and the ‘X-axis-label-spacing’.
        ? )
       ;; Concatenate blanks with tic symbol.
       X-axis-tic-symbol)
-     ...
+     …
 
    Next, we determine how many blanks are needed to indent the first tic
 mark to the first column of the graph.  This uses the value of
@@ -15631,20 +15631,20 @@ mark to the first column of the graph.  This uses the value of
    The code to make ‘X-axis-leading-spaces’ looks like this:
 
      ;; X-axis-leading-spaces
-     ...
+     …
      (make-string full-Y-label-width ? )
-     ...
+     …
 
    We also need to determine the length of the horizontal axis, which is
 the length of the numbers list, and the number of ticks in the
 horizontal axis:
 
      ;; X-length
-     ...
+     …
      (length numbers-list)
 
      ;; tic-width
-     ...
+     …
      (* symbol-width X-axis-label-spacing)
 
      ;; number-of-X-ticks
@@ -15786,12 +15786,12 @@ Graph.), but with additions.
    Here is the outline:
 
      (defun print-graph (numbers-list)
-       "DOCUMENTATION..."
-       (let ((height  ...
-             ...))
-         (print-Y-axis height ... )
+       "DOCUMENTATION…"
+       (let ((height  …
+             …))
+         (print-Y-axis height … )
          (graph-body-print numbers-list)
-         (print-X-axis ... )))
+         (print-X-axis … )))
 
 * Menu:
 
@@ -15800,7 +15800,7 @@ Graph.), but with additions.
 * Graphing words in defuns::    Executing the final code.
 * lambda::                      How to write an anonymous function.
 * mapcar::                      Apply a function to elements of a list.
-* Another Bug::                 Yet another bug ... most insidious.
+* Another Bug::                 Yet another bug … most insidious.
 * Final printed graph::         The graph itself!
 
 
@@ -16031,7 +16031,7 @@ words or symbols in them, and so on.
 definitions contain ten to thirty words and symbols.
 
    Now for printing.  We do _not_ want to print a graph that is 1,030
-lines high ... Instead, we should print a graph that is fewer than
+lines high … Instead, we should print a graph that is fewer than
 twenty-five lines high.  A graph that height can be displayed on almost
 any monitor, and easily printed on a sheet of paper.
 
@@ -16166,11 +16166,11 @@ none had that many words or symbols.)
 
 File: eintr.info,  Node: Another Bug,  Next: Final printed graph,  Prev: mapcar,  Up: Print Whole Graph
 
-C.4.5 Another Bug ... Most Insidious
-------------------------------------
+C.4.5 Another Bug … Most Insidious
+----------------------------------
 
 I said “almost ready to print”!  Of course, there is a bug in the
-‘print-graph’ function ... It has a ‘vertical-step’ option, but not a
+‘print-graph’ function … It has a ‘vertical-step’ option, but not a
 ‘horizontal-step’ option.  The ‘top-of-range’ scale goes from 10 to 300
 by tens.  But the ‘print-graph’ function will print only by ones.
 
@@ -16472,7 +16472,7 @@ Appendix E GNU Free Documentation License
   0. PREAMBLE
 
      The purpose of this License is to make a manual, textbook, or other
-     functional and useful document “free” in the sense of freedom: to
+     functional and useful document "free" in the sense of freedom: to
      assure everyone the effective freedom to copy and redistribute it,
      with or without modifying it, either commercially or
      noncommercially.  Secondarily, this License preserves for the
@@ -16922,7 +16922,7 @@ notices just after the title page:
        Free Documentation License''.
 
    If you have Invariant Sections, Front-Cover Texts and Back-Cover
-Texts, replace the “with...Texts.” line with this:
+Texts, replace the “with…Texts.” line with this:
 
          with the Invariant Sections being LIST THEIR TITLES, with
          the Front-Cover Texts being LIST, and with the Back-Cover Texts
@@ -16947,15 +16947,15 @@ Index
 * Menu:
 
 * % (remainder function):                Compute a Remainder. (line   6)
-* ' for quoting:                         Run a Program.       (line  13)
-* (debug) in code:                       debug-on-quit.       (line  13)
+* ‘'’ for quoting:                       Run a Program.       (line  13)
+* ‘(debug)’ in code:                     debug-on-quit.       (line  13)
 * * (multiplication):                    defun.               (line 102)
 * * for read-only buffer:                Read-only buffer.    (line   6)
-* *scratch* buffer:                      print-elements-of-list.
+* ‘*scratch*’ buffer:                    print-elements-of-list.
                                                               (line   9)
-* .emacs file:                           Emacs Initialization.
+* ‘.emacs’ file:                         Emacs Initialization.
                                                               (line   6)
-* .emacs file, beginning of:             Beginning init File. (line   6)
+* ‘.emacs’ file, beginning of:           Beginning init File. (line   6)
 * / (division):                          Large buffer case.   (line  38)
 * <= (less than or equal):               Inc Example parts.   (line  47)
 * > (greater than):                      if in more detail.   (line  31)
@@ -16970,8 +16970,8 @@ Index
 * apropos:                               Columns of a graph.  (line  33)
 * Argument as local variable:            Dec Example altogether.
                                                               (line  27)
-* argument defined:                      Arguments.           (line  16)
-* argument list defined:                 defun.               (line  60)
+* ‘argument’ defined:                    Arguments.           (line  16)
+* ‘argument list’ defined:               defun.               (line  60)
 * Argument, wrong type of:               Wrong Type of Argument.
                                                               (line   6)
 * Arguments:                             Arguments.           (line   6)
@@ -16985,9 +16985,9 @@ Index
 * Axis, print horizontal:                print-X-axis.        (line   6)
 * Axis, print vertical:                  print-Y-axis.        (line   6)
 * beginning-of-buffer:                   beginning-of-buffer. (line   6)
-* bind defined:                          set & setq.          (line   6)
+* ‘bind’ defined:                        set & setq.          (line   6)
 * Bindings, key, fixing unpleasant:      Miscellaneous.       (line  88)
-* body defined:                          defun.               (line  38)
+* ‘body’ defined:                        defun.               (line  38)
 * Body of graph:                         Readying a Graph.    (line   6)
 * Buffer size:                           Buffer Size & Locations.
                                                               (line   6)
@@ -17000,7 +17000,7 @@ Index
 * Byte compiling:                        Byte Compiling.      (line   6)
 * C language primitives:                 Primitive Functions. (line   6)
 * C, a digression into:                  Digression into C.   (line   6)
-* call defined:                          Switching Buffers.   (line  55)
+* ‘call’ defined:                        Switching Buffers.   (line  55)
 * cancel-debug-on-entry:                 debug-on-entry.      (line  83)
 * car, introduced:                       car cdr & cons.      (line   6)
 * cdr, introduced:                       car cdr & cons.      (line   6)
@@ -17010,7 +17010,7 @@ Index
                                                               (line   6)
 * Code installation:                     Permanent Installation.
                                                               (line   6)
-* command defined:                       How to Evaluate.     (line  11)
+* ‘command’ defined:                     How to Evaluate.     (line  11)
 * Comments in Lisp code:                 Change a defun.      (line  22)
 * Common Lisp:                           Lisp History.        (line  11)
 * compare-windows:                       Keybindings.         (line  11)
@@ -17018,7 +17018,7 @@ Index
 * cond:                                  Recursion with cond. (line   6)
 * condition-case:                        condition-case.      (line   6)
 * Conditional ’twixt two versions of Emacs: Simple Extension. (line  37)
-* Conditional with if:                   if.                  (line   6)
+* Conditional with ‘if’:                 if.                  (line   6)
 * cons, introduced:                      cons.                (line   6)
 * copy-region-as-kill:                   copy-region-as-kill. (line   6)
 * copy-to-buffer:                        copy-to-buffer.      (line   6)
@@ -17028,8 +17028,8 @@ Index
 * count-words-in-defun:                  count-words-in-defun.
                                                               (line  98)
 * Counting:                              Counting.            (line   6)
-* Counting words in a defun:             Words in a defun.    (line   6)
-* Counting words in a defun <1>:         count-words-in-defun.
+* Counting words in a ‘defun’:           Words in a defun.    (line   6)
+* Counting words in a ‘defun’ <1>:       count-words-in-defun.
                                                               (line   6)
 * curly quotes:                          Complete zap-to-char.
                                                               (line  43)
@@ -17037,7 +17037,7 @@ Index
 * current-kill:                          current-kill.        (line   6)
 * curved quotes:                         Complete zap-to-char.
                                                               (line  43)
-* Customizing your .emacs file:          Emacs Initialization.
+* Customizing your ‘.emacs’ file:        Emacs Initialization.
                                                               (line   6)
 * Cutting and storing text:              Cutting & Storing Text.
                                                               (line   6)
@@ -17046,7 +17046,7 @@ Index
 * debug-on-entry:                        debug-on-entry.      (line   6)
 * debug-on-quit:                         debug-on-quit.       (line   9)
 * debugging:                             Debugging.           (line   6)
-* default.el init file:                  Site-wide Init.      (line   6)
+* ‘default.el’ init file:                Site-wide Init.      (line   6)
 * defconst:                              defcustom.           (line 127)
 * defcustom:                             defcustom.           (line   6)
 * Deferment in recursion:                No Deferment.        (line   6)
@@ -17075,8 +17075,8 @@ Index
 * edebug:                                edebug.              (line   6)
 * Else:                                  else.                (line   6)
 * Emacs version, choosing:               Simple Extension.    (line  37)
-* empty list defined:                    Lisp Atoms.          (line  18)
-* empty string defined:                  Review.              (line 138)
+* ‘empty list’ defined:                  Lisp Atoms.          (line  17)
+* ‘empty string’ defined:                Review.              (line 138)
 * eobp:                                  fwd-para while.      (line  59)
 * eq:                                    Review.              (line 124)
 * eq (example of use):                   last-command & this-command.
@@ -17089,15 +17089,15 @@ Index
 * Error for symbol without function:     Void Function.       (line   6)
 * Error for symbol without value:        Void Variable.       (line   6)
 * Error message generation:              Making Errors.       (line   6)
-* evaluate defined:                      Run a Program.       (line   6)
+* ‘evaluate’ defined:                    Run a Program.       (line   6)
 * Evaluating inner lists:                Evaluating Inner Lists.
                                                               (line   6)
 * Evaluation:                            Evaluation.          (line   6)
 * Evaluation practice:                   Practicing Evaluation.
                                                               (line   6)
 * Every, type of recursive pattern:      Every.               (line   6)
-* Example variable, fill-column:         fill-column Example. (line   6)
-* expression defined:                    Lisp Atoms.          (line  25)
+* Example variable, ‘fill-column’:       fill-column Example. (line   6)
+* ‘expression’ defined:                  Lisp Atoms.          (line  24)
 * Falsehood and truth in Emacs Lisp:     Truth & Falsehood.   (line   6)
 * FDL, GNU Free Documentation License:   GNU Free Documentation License.
                                                               (line   6)
@@ -17111,15 +17111,15 @@ Index
 * Flowers in a field:                    Lisp Lists.          (line  18)
 * Focusing attention (narrowing):        Narrowing & Widening.
                                                               (line   6)
-* form defined:                          Lisp Atoms.          (line  25)
+* ‘form’ defined:                        Lisp Atoms.          (line  24)
 * Formatting convention:                 append save-excursion.
                                                               (line  15)
 * Formatting help:                       Typing Lists.        (line   6)
 * forward-paragraph:                     forward-paragraph.   (line   6)
 * forward-sentence:                      forward-sentence.    (line   6)
-* function defined:                      Making Errors.       (line  46)
-* function defined <1>:                  Making Errors.       (line  69)
-* function definition defined:           defun.               (line   6)
+* ‘function’ defined:                    Making Errors.       (line  46)
+* ‘function’ defined <1>:                Making Errors.       (line  69)
+* ‘function definition’ defined:         defun.               (line   6)
 * Function definition installation:      Install.             (line   6)
 * Function definition writing:           Writing Defuns.      (line   6)
 * Function definition, how to change:    Change a defun.      (line   6)
@@ -17127,7 +17127,7 @@ Index
 * Generate an error message:             Making Errors.       (line   6)
 * Getting a buffer:                      Getting Buffers.     (line   6)
 * Global set key:                        Keybindings.         (line  18)
-* global variable defined:               Determining the Element.
+* ‘global variable’ defined:             Determining the Element.
                                                               (line  89)
 * global-set-key:                        Keybindings.         (line  18)
 * global-unset-key:                      Keybindings.         (line  59)
@@ -17139,7 +17139,7 @@ Index
 * Help typing lists:                     Typing Lists.        (line   6)
 * Horizontal axis printing:              print-X-axis.        (line   6)
 * if:                                    if.                  (line   6)
-* if-part defined:                       if in more detail.   (line   6)
+* ‘if-part’ defined:                     if in more detail.   (line   6)
 * indent-tabs-mode:                      Indent Tabs Mode.    (line   6)
 * Indentation for formatting:            append save-excursion.
                                                               (line  15)
@@ -17157,7 +17157,7 @@ Index
 * Install code permanently:              Permanent Installation.
                                                               (line   6)
 * interactive:                           Interactive.         (line   6)
-* interactive function defined:          How to Evaluate.     (line  11)
+* ‘interactive function’ defined:        How to Evaluate.     (line  11)
 * Interactive functions:                 Interactive.         (line   6)
 * Interactive options:                   Interactive Options. (line   6)
 * interactive, example use of:           insert-buffer interactive.
@@ -17184,11 +17184,11 @@ Index
 * lengths-list-many-files:               lengths-list-many-files.
                                                               (line  32)
 * let:                                   let.                 (line   6)
-* let expression sample:                 Sample let Expression.
+* ‘let’ expression sample:               Sample let Expression.
                                                               (line   6)
-* let expression, parts of:              Parts of let Expression.
+* ‘let’ expression, parts of:            Parts of let Expression.
                                                               (line   6)
-* let variables uninitialized:           Uninitialized let Variables.
+* ‘let’ variables uninitialized:         Uninitialized let Variables.
                                                               (line   6)
 * let*:                                  fwd-para let.        (line  10)
 * Library, as term for “file”:           Finding More.        (line  37)
@@ -17204,7 +17204,7 @@ Index
 * load-library:                          Loading Files.       (line  53)
 * load-path:                             Loading Files.       (line  37)
 * Loading files:                         Loading Files.       (line   6)
-* local variable defined:                Prevent confusion.   (line   6)
+* ‘local variable’ defined:              Prevent confusion.   (line   6)
 * Local variables list, per-buffer,:     Text and Auto-fill.  (line  22)
 * Location of point:                     Buffer Size & Locations.
                                                               (line   6)
@@ -17228,11 +17228,11 @@ Index
 * Motion by sentence and paragraph:      Regexp Search.       (line   6)
 * Narrowing:                             Narrowing & Widening.
                                                               (line   6)
-* narrowing defined:                     Buffer Size & Locations.
+* ‘narrowing’ defined:                   Buffer Size & Locations.
                                                               (line  42)
 * new version body for insert-buffer:    New insert-buffer.   (line   6)
 * nil:                                   Truth & Falsehood.   (line   6)
-* nil, history of word:                  Buffer Names.        (line  42)
+* ‘nil’, history of word:                Buffer Names.        (line  42)
 * No deferment solution:                 No deferment solution.
                                                               (line   6)
 * nreverse:                              Counting function definitions.
@@ -17245,13 +17245,13 @@ Index
 * occur:                                 Keybindings.         (line  54)
 * optional:                              Optional Arguments.  (line  11)
 * Optional arguments:                    Optional Arguments.  (line  11)
-* Options for interactive:               Interactive Options. (line   6)
+* Options for ‘interactive’:             Interactive Options. (line   6)
 * or:                                    Insert or.           (line  13)
 * other-buffer:                          Getting Buffers.     (line   6)
 * Paragraphs, movement by:               Regexp Search.       (line   6)
 * Parts of a Recursive Definition:       Recursive Definition Parts.
                                                               (line   6)
-* Parts of let expression:               Parts of let Expression.
+* Parts of ‘let’ expression:             Parts of let Expression.
                                                               (line   6)
 * Passing information to functions:      Arguments.           (line   6)
 * Pasting text:                          Yanking.             (line   6)
@@ -17261,7 +17261,7 @@ Index
                                                               (line   6)
 * point:                                 save-excursion.      (line   6)
 * Point and buffer preservation:         save-excursion.      (line   6)
-* point defined:                         Buffer Size & Locations.
+* ‘point’ defined:                       Buffer Size & Locations.
                                                               (line  19)
 * Point location:                        Buffer Size & Locations.
                                                               (line   6)
@@ -17276,7 +17276,7 @@ Index
                                                               (line   6)
 * print-elements-recursively:            Recursion with list. (line  23)
 * print-graph Final version.:            The final version.   (line  75)
-* print-graph varlist:                   print-graph Varlist. (line   6)
+* ‘print-graph’ varlist:                 print-graph Varlist. (line   6)
 * print-X-axis:                          X Axis Tic Marks.    (line 147)
 * print-X-axis-numbered-line:            X Axis Tic Marks.    (line 117)
 * print-X-axis-tic-line:                 X Axis Tic Marks.    (line  83)
@@ -17286,7 +17286,7 @@ Index
 * progn:                                 progn.               (line   6)
 * Program, running one:                  Run a Program.       (line   6)
 * Properties, in mode line example:      Mode Line.           (line  64)
-* Properties, mention of buffer-substring-no-properties: narrow Exercise.
+* Properties, mention of ‘buffer-substring-no-properties’: narrow Exercise.
                                                               (line  13)
 * Prototype graph:                       Readying a Graph.    (line   6)
 * push, example:                         kill-new function.   (line 118)
@@ -17317,19 +17317,19 @@ Index
 * Region, what it is:                    save-excursion.      (line   6)
 * Regular expression searches:           Regexp Search.       (line   6)
 * Regular expressions for word counting: Counting Words.      (line   6)
-* Remainder function, %:                 Compute a Remainder. (line   6)
+* Remainder function, ‘%’:               Compute a Remainder. (line   6)
 * Repetition (loops):                    Loops & Recursion.   (line   6)
 * Repetition for word counting:          Counting Words.      (line   6)
 * Retrieving text:                       Yanking.             (line   6)
-* returned value explained:              How the Interpreter Acts.
+* ‘returned value’ explained:            How the Interpreter Acts.
                                                               (line   6)
 * reverse:                               Counting function definitions.
                                                               (line 115)
 * Ring, making a list like a:            Kill Ring.           (line   6)
-* ring.el file:                          ring file.           (line   6)
+* ‘ring.el’ file:                        ring file.           (line   6)
 * Robots, building:                      Building Robots.     (line   6)
 * Run a program:                         Run a Program.       (line   6)
-* Sample let expression:                 Sample let Expression.
+* Sample ‘let’ expression:               Sample let Expression.
                                                               (line   6)
 * save-excursion:                        save-excursion.      (line   6)
 * save-restriction:                      save-restriction.    (line   6)
@@ -17346,13 +17346,13 @@ Index
 * setq:                                  Using setq.          (line   6)
 * Setting a key globally:                Keybindings.         (line  18)
 * Setting value of variable:             set & setq.          (line   6)
-* side effect defined:                   How the Interpreter Acts.
+* ‘side effect’ defined:                 How the Interpreter Acts.
                                                               (line  15)
-* Simple extension in .emacs file:       Simple Extension.    (line   6)
+* Simple extension in ‘.emacs’ file:     Simple Extension.    (line   6)
 * simplified-beginning-of-buffer:        simplified-beginning-of-buffer.
                                                               (line   6)
-* site-init.el init file:                Site-wide Init.      (line   6)
-* site-load.el init file:                Site-wide Init.      (line   6)
+* ‘site-init.el’ init file:              Site-wide Init.      (line   6)
+* ‘site-load.el’ init file:              Site-wide Init.      (line   6)
 * Size of buffer:                        Buffer Size & Locations.
                                                               (line   6)
 * Solution without deferment:            No deferment solution.
@@ -17362,22 +17362,22 @@ Index
 * Special form:                          Complications.       (line  12)
 * Storing and cutting text:              Cutting & Storing Text.
                                                               (line   6)
-* string defined:                        Lisp Atoms.          (line  64)
+* ‘string’ defined:                      Lisp Atoms.          (line  63)
 * substring:                             Data types.          (line  20)
 * switch-to-buffer:                      Switching Buffers.   (line   6)
 * Switching to a buffer:                 Switching Buffers.   (line   6)
 * Symbol names:                          Names & Definitions. (line   6)
 * Symbol without function error:         Void Function.       (line   6)
 * Symbol without value error:            Void Variable.       (line   6)
-* Symbolic expressions, introduced:      Lisp Atoms.          (line  25)
+* Symbolic expressions, introduced:      Lisp Atoms.          (line  24)
 * Symbols as a Chest of Drawers:         Symbols as Chest.    (line   6)
 * Syntax categories and tables:          Syntax.              (line   6)
 * Tabs, preventing:                      Indent Tabs Mode.    (line   6)
-* Text between double quotation marks:   Lisp Atoms.          (line  60)
+* Text between double quotation marks:   Lisp Atoms.          (line  59)
 * Text Mode turned on:                   Text and Auto-fill.  (line  39)
 * Text retrieval:                        Yanking.             (line   6)
 * the-the:                               the-the.             (line   6)
-* then-part defined:                     if in more detail.   (line   6)
+* ‘then-part’ defined:                   if in more detail.   (line   6)
 * top-of-ranges:                         Counting function definitions.
                                                               (line  20)
 * triangle-bugged:                       debug.               (line  14)
@@ -17386,18 +17386,18 @@ Index
 * Truth and falsehood in Emacs Lisp:     Truth & Falsehood.   (line   6)
 * Types of data:                         Data types.          (line   6)
 * Unbinding key:                         Keybindings.         (line  59)
-* Uninitialized let variables:           Uninitialized let Variables.
+* Uninitialized ‘let’ variables:         Uninitialized let Variables.
                                                               (line   6)
 * Variable initialization:               defvar.              (line   6)
 * Variable number of arguments:          Variable Number of Arguments.
                                                               (line   6)
-* Variable, example of, fill-column:     fill-column Example. (line   6)
-* variable, global, defined:             Determining the Element.
+* Variable, example of, ‘fill-column’:   fill-column Example. (line   6)
+* ‘variable, global’, defined:           Determining the Element.
                                                               (line  89)
-* variable, local, defined:              Prevent confusion.   (line   6)
+* ‘variable, local’, defined:            Prevent confusion.   (line   6)
 * Variable, setting value:               set & setq.          (line   6)
 * Variables:                             Variables.           (line   6)
-* varlist defined:                       Parts of let Expression.
+* ‘varlist’ defined:                     Parts of let Expression.
                                                               (line   6)
 * Version of Emacs, choosing:            Simple Extension.    (line  37)
 * Vertical axis printing:                print-Y-axis.        (line   6)
@@ -17408,7 +17408,7 @@ Index
 * Widening:                              Narrowing & Widening.
                                                               (line   6)
 * Widening, example of:                  what-line.           (line   6)
-* Word counting in a defun:              Words in a defun.    (line   6)
+* Word counting in a ‘defun’:            Words in a defun.    (line   6)
 * Words and symbols in defun:            Words and Symbols.   (line   6)
 * Words, counted recursively:            recursive-count-words.
                                                               (line   6)
@@ -17449,312 +17449,312 @@ About the Author
 
 Tag Table:
 Node: Top1364
-Node: Preface21831
-Node: Why23130
-Node: On Reading this Text23763
-Node: Who You Are25954
-Node: Lisp History28683
-Node: Note for Novices29446
-Node: Thank You31988
-Node: List Processing32546
-Ref: List Processing-Footnote-133926
-Node: Lisp Lists34070
-Node: Numbers Lists34948
-Node: Lisp Atoms36565
-Node: Whitespace in Lists40342
-Node: Typing Lists41619
-Node: Run a Program42715
-Node: Making Errors45167
-Node: Names & Definitions50110
-Node: Lisp Interpreter52006
-Node: Complications53171
-Node: Byte Compiling55373
-Node: Evaluation56451
-Node: How the Interpreter Acts57086
-Node: Evaluating Inner Lists58324
-Node: Variables60873
-Node: fill-column Example62406
-Node: Void Function63908
-Node: Void Variable65022
-Node: Arguments66828
-Ref: Arguments-Footnote-168502
-Node: Data types69341
-Node: Args as Variable or List71451
-Node: Variable Number of Arguments73043
-Node: Wrong Type of Argument73893
-Ref: Wrong Type of Argument-Footnote-177387
-Node: message77465
-Ref: message-Footnote-181446
-Node: set & setq81632
-Node: Using set82364
-Node: Using setq84693
-Node: Counting86925
-Node: Summary88954
-Node: Error Message Exercises90758
-Node: Practicing Evaluation91268
-Node: How to Evaluate92439
-Node: Buffer Names93938
-Node: Getting Buffers99767
-Ref: Getting Buffers-Footnote-1102335
-Node: Switching Buffers102560
-Ref: Switching Buffers-Footnote-1105913
-Ref: Switching Buffers-Footnote-2106199
-Node: Buffer Size & Locations106896
-Node: Evaluation Exercise109058
-Node: Writing Defuns109334
-Node: Primitive Functions110670
-Node: defun111831
-Node: Install118321
-Node: Effect of installation119672
-Node: Change a defun120486
-Node: Interactive122191
-Node: Interactive multiply-by-seven123261
-Node: multiply-by-seven in detail125132
-Node: Interactive Options127867
-Node: Permanent Installation131065
-Node: let133187
-Node: Prevent confusion134499
-Node: Parts of let Expression136458
-Node: Sample let Expression138062
-Ref: Sample let Expression-Footnote-1139884
-Node: Uninitialized let Variables140143
-Node: if141768
-Node: if in more detail142641
-Node: type-of-animal in detail145456
-Node: else148041
-Node: Truth & Falsehood150941
-Node: nil explained151885
-Node: save-excursion153969
-Node: Point and mark154687
-Node: Template for save-excursion157709
-Node: Review158970
-Node: defun Exercises166785
-Node: Buffer Walk Through167213
-Node: Finding More168319
-Node: simplified-beginning-of-buffer170918
-Node: mark-whole-buffer175413
-Node: mark-whole-buffer overview176227
-Node: Body of mark-whole-buffer177598
-Node: append-to-buffer180716
-Node: append-to-buffer overview181405
-Node: append interactive184131
-Node: append-to-buffer body186604
-Node: append save-excursion188756
-Node: Buffer Related Review193782
-Node: Buffer Exercises195782
-Node: More Complex196246
-Node: copy-to-buffer197178
-Node: insert-buffer199852
-Node: insert-buffer code201149
-Node: insert-buffer interactive202138
-Node: Read-only buffer202660
-Node: b for interactive203248
-Node: insert-buffer body204403
-Node: if & or205605
-Node: Insert or208645
-Node: Insert let210982
-Node: New insert-buffer214805
-Node: beginning-of-buffer216005
-Node: Optional Arguments217580
-Node: beginning-of-buffer opt arg220952
-Node: Disentangle beginning-of-buffer221848
-Node: Large buffer case223094
-Node: Small buffer case225616
-Node: beginning-of-buffer complete227249
-Node: Second Buffer Related Review230268
-Node: optional Exercise231967
-Node: Narrowing & Widening232439
-Node: Narrowing advantages233048
-Node: save-restriction234913
-Node: what-line236889
-Node: narrow Exercise241070
-Node: car cdr & cons242084
-Node: Strange Names243130
-Node: car & cdr244145
-Node: cons248519
-Node: Build a list249490
-Ref: Build a list-Footnote-1251034
-Node: length251218
-Node: nthcdr252742
-Node: nth255639
-Node: setcar257015
-Node: setcdr259328
-Node: cons Exercise260854
-Node: Cutting & Storing Text261227
-Node: Storing Text262531
-Node: zap-to-char264551
-Node: Complete zap-to-char265150
-Node: zap-to-char interactive267840
-Node: zap-to-char body269343
-Node: search-forward270905
-Node: progn273956
-Node: Summing up zap-to-char275690
-Node: kill-region276843
-Node: Complete kill-region277814
-Node: condition-case282036
-Node: Lisp macro284607
-Node: copy-region-as-kill287007
-Node: Complete copy-region-as-kill287912
-Node: copy-region-as-kill body290717
-Node: last-command & this-command291716
-Node: kill-append function294013
-Node: kill-new function298177
-Node: Digression into C308765
-Ref: Digression into C-Footnote-1313890
-Node: defvar314069
-Node: See variable current value315615
-Node: defvar and asterisk317523
-Node: cons & search-fwd Review319365
-Node: search Exercises322393
-Node: List Implementation323140
-Node: Lists diagrammed324225
-Node: Symbols as Chest330331
-Node: List Exercise332335
-Node: Yanking332688
-Node: Kill Ring Overview333998
-Node: kill-ring-yank-pointer335694
-Node: yank nthcdr Exercises338117
-Node: Loops & Recursion338861
-Ref: Loops & Recursion-Footnote-1339959
-Node: while340473
-Node: Looping with while341840
-Node: Loop Example343636
-Node: print-elements-of-list347076
-Node: Incrementing Loop349640
-Node: Incrementing Loop Details350203
-Node: Incrementing Example351589
-Node: Inc Example parts353958
-Node: Inc Example altogether357951
-Node: Decrementing Loop361510
-Node: Decrementing Example362970
-Node: Dec Example parts364438
-Node: Dec Example altogether366469
-Node: dolist dotimes368698
-Node: dolist369469
-Node: dotimes372645
-Node: Recursion374218
-Node: Building Robots375315
-Node: Recursive Definition Parts377015
-Node: Recursion with list379441
-Node: Recursive triangle function383022
-Node: Recursive Example arg of 1 or 2384308
-Node: Recursive Example arg of 3 or 4386572
-Node: Recursion with cond389604
-Node: Recursive Patterns391980
-Node: Every392382
-Node: Accumulate394825
-Node: Keep396094
-Node: No Deferment397982
-Node: No deferment solution400680
-Ref: No deferment solution-Footnote-1404641
-Ref: No deferment solution-Footnote-2404747
-Node: Looping exercise405262
-Node: Regexp Search406486
-Node: sentence-end408397
-Node: re-search-forward412300
-Node: forward-sentence414832
-Node: Complete forward-sentence415552
-Node: fwd-sentence while loops419092
-Node: fwd-sentence re-search422727
-Node: forward-paragraph424883
-Node: forward-paragraph in brief426632
-Node: fwd-para let428087
-Node: fwd-para while433637
-Node: Regexp Review442044
-Node: re-search Exercises444449
-Node: Counting Words445221
-Node: Why Count Words445859
-Node: count-words-example446887
-Node: Design count-words-example448133
-Node: Whitespace Bug454753
-Node: recursive-count-words464335
-Node: Counting Exercise476414
-Node: Words in a defun476783
-Node: Divide and Conquer478369
-Node: Words and Symbols479586
-Node: Syntax481635
-Node: count-words-in-defun485251
-Node: Several defuns491430
-Node: Find a File493803
-Node: lengths-list-file496398
-Node: Several files501658
-Node: lengths-list-many-files502367
-Node: append505153
-Node: Several files recursively505775
-Node: Prepare the data508593
-Node: Data for Display in Detail509639
-Node: Sorting510553
-Node: Files List512211
-Node: Counting function definitions519698
-Node: Readying a Graph529017
-Node: Columns of a graph530186
-Node: graph-body-print543820
-Node: recursive-graph-body-print548601
-Node: Printed Axes551267
-Node: Line Graph Exercise551991
-Node: Emacs Initialization552173
-Node: Default Configuration553558
-Ref: Default Configuration-Footnote-1555534
-Node: Site-wide Init555850
-Node: defcustom557896
-Node: Beginning init File563771
-Node: Text and Auto-fill566138
-Node: Mail Aliases570045
-Node: Indent Tabs Mode570960
-Node: Keybindings571908
-Node: Keymaps575461
-Node: Loading Files577733
-Node: Autoload581054
-Node: Simple Extension583922
-Ref: Simple Extension-Footnote-1586555
-Node: X11 Colors586820
-Ref: X11 Colors-Footnote-1588672
-Node: Miscellaneous588826
-Node: Mode Line593049
-Node: Debugging598591
-Node: debug599408
-Node: debug-on-entry602474
-Node: debug-on-quit605644
-Node: edebug606667
-Node: Debugging Exercises610777
-Node: Conclusion612528
-Node: the-the617829
-Node: Kill Ring620622
-Node: What the Kill Ring Does621334
-Node: current-kill622848
-Node: Code for current-kill623493
-Node: Understanding current-kill626314
-Node: Body of current-kill627054
-Node: Digression concerning error630188
-Node: Determining the Element631379
-Node: yank634983
-Node: yank-pop638188
-Node: ring file640707
-Node: Full Graph641065
-Node: Labeled Example641837
-Node: print-graph Varlist643810
-Node: print-Y-axis645509
-Node: print-Y-axis in Detail646334
-Node: Height of label647129
-Node: Compute a Remainder649133
-Node: Y Axis Element652986
-Node: Y-axis-column656739
-Node: print-Y-axis Penultimate658340
-Node: print-X-axis660309
-Node: Similarities differences661556
-Node: X Axis Tic Marks662375
-Node: Print Whole Graph669393
-Node: The final version670420
-Node: Test print-graph674654
-Node: Graphing words in defuns676303
-Node: lambda678891
-Node: mapcar680539
-Node: Another Bug682575
-Node: Final printed graph688075
-Node: Free Software and Free Manuals688995
-Node: GNU Free Documentation License695270
-Node: Index720637
-Node: About the Author755522
+Node: Preface26020
+Node: Why28172
+Node: On Reading this Text29162
+Node: Who You Are33074
+Node: Lisp History36261
+Node: Note for Novices37024
+Node: Thank You39558
+Node: List Processing40116
+Ref: List Processing-Footnote-141492
+Node: Lisp Lists41636
+Node: Numbers Lists42514
+Node: Lisp Atoms44131
+Node: Whitespace in Lists48690
+Node: Typing Lists49967
+Node: Run a Program51063
+Node: Making Errors53503
+Node: Names & Definitions58442
+Node: Lisp Interpreter60338
+Node: Complications61503
+Node: Byte Compiling63693
+Node: Evaluation64767
+Node: How the Interpreter Acts65398
+Node: Evaluating Inner Lists66628
+Node: Variables69177
+Node: fill-column Example70706
+Node: Void Function72204
+Node: Void Variable73318
+Node: Arguments75124
+Ref: Arguments-Footnote-176790
+Node: Data types77629
+Node: Args as Variable or List79735
+Node: Variable Number of Arguments81327
+Node: Wrong Type of Argument82177
+Ref: Wrong Type of Argument-Footnote-185671
+Node: message85749
+Ref: message-Footnote-189730
+Node: set & setq89916
+Node: Using set90644
+Node: Using setq92973
+Node: Counting95205
+Node: Summary97234
+Node: Error Message Exercises99038
+Node: Practicing Evaluation99548
+Node: How to Evaluate100719
+Node: Buffer Names102210
+Node: Getting Buffers108035
+Ref: Getting Buffers-Footnote-1110603
+Node: Switching Buffers110828
+Ref: Switching Buffers-Footnote-1114177
+Ref: Switching Buffers-Footnote-2114463
+Node: Buffer Size & Locations115160
+Node: Evaluation Exercise117314
+Node: Writing Defuns117590
+Node: Primitive Functions118926
+Node: defun120083
+Node: Install126561
+Node: Effect of installation127912
+Node: Change a defun128726
+Node: Interactive130431
+Node: Interactive multiply-by-seven131501
+Node: multiply-by-seven in detail133368
+Node: Interactive Options136103
+Node: Permanent Installation139301
+Node: let141423
+Node: Prevent confusion142735
+Node: Parts of let Expression144690
+Node: Sample let Expression146290
+Ref: Sample let Expression-Footnote-1148112
+Node: Uninitialized let Variables148371
+Node: if149996
+Node: if in more detail150869
+Node: type-of-animal in detail153676
+Node: else156261
+Node: Truth & Falsehood159157
+Node: nil explained160097
+Node: save-excursion162181
+Node: Point and mark162899
+Node: Template for save-excursion165909
+Node: Review167170
+Node: defun Exercises174981
+Node: Buffer Walk Through175409
+Node: Finding More176515
+Node: simplified-beginning-of-buffer179110
+Node: mark-whole-buffer183605
+Node: mark-whole-buffer overview184419
+Node: Body of mark-whole-buffer185790
+Node: append-to-buffer188908
+Node: append-to-buffer overview189597
+Node: append interactive192323
+Node: append-to-buffer body194796
+Node: append save-excursion196948
+Node: Buffer Related Review201974
+Node: Buffer Exercises203974
+Node: More Complex204438
+Node: copy-to-buffer205370
+Node: insert-buffer208044
+Node: insert-buffer code209337
+Node: insert-buffer interactive210326
+Node: Read-only buffer210848
+Node: b for interactive211436
+Node: insert-buffer body212591
+Node: if & or213793
+Node: Insert or216833
+Node: Insert let219170
+Node: New insert-buffer222993
+Node: beginning-of-buffer224193
+Node: Optional Arguments225768
+Node: beginning-of-buffer opt arg229136
+Node: Disentangle beginning-of-buffer230032
+Node: Large buffer case231278
+Node: Small buffer case233796
+Node: beginning-of-buffer complete235429
+Node: Second Buffer Related Review238448
+Node: optional Exercise240147
+Node: Narrowing & Widening240619
+Node: Narrowing advantages241228
+Node: save-restriction243093
+Node: what-line245069
+Node: narrow Exercise249250
+Node: car cdr & cons250264
+Node: Strange Names251310
+Node: car & cdr252325
+Node: cons256699
+Node: Build a list257670
+Ref: Build a list-Footnote-1259214
+Node: length259398
+Node: nthcdr260922
+Node: nth263819
+Node: setcar265195
+Node: setcdr267508
+Node: cons Exercise269034
+Node: Cutting & Storing Text269407
+Node: Storing Text270703
+Node: zap-to-char272719
+Node: Complete zap-to-char273318
+Node: zap-to-char interactive276004
+Node: zap-to-char body277503
+Node: search-forward279065
+Node: progn282116
+Node: Summing up zap-to-char283850
+Node: kill-region285003
+Node: Complete kill-region285974
+Node: condition-case290196
+Node: Lisp macro292767
+Node: copy-region-as-kill295167
+Node: Complete copy-region-as-kill296072
+Node: copy-region-as-kill body298877
+Node: last-command & this-command299876
+Node: kill-append function302173
+Node: kill-new function306337
+Node: Digression into C316925
+Ref: Digression into C-Footnote-1322050
+Node: defvar322229
+Node: See variable current value323775
+Node: defvar and asterisk325683
+Node: cons & search-fwd Review327525
+Node: search Exercises330553
+Node: List Implementation331300
+Node: Lists diagrammed332385
+Node: Symbols as Chest338483
+Node: List Exercise340483
+Node: Yanking340836
+Node: Kill Ring Overview342146
+Node: kill-ring-yank-pointer343842
+Node: yank nthcdr Exercises346265
+Node: Loops & Recursion347009
+Ref: Loops & Recursion-Footnote-1348103
+Node: while348617
+Node: Looping with while349980
+Node: Loop Example351776
+Node: print-elements-of-list355216
+Node: Incrementing Loop357780
+Node: Incrementing Loop Details358343
+Node: Incrementing Example359729
+Node: Inc Example parts362098
+Node: Inc Example altogether366091
+Node: Decrementing Loop369650
+Node: Decrementing Example371110
+Node: Dec Example parts372578
+Node: Dec Example altogether374609
+Node: dolist dotimes376838
+Node: dolist377609
+Node: dotimes380785
+Node: Recursion382358
+Node: Building Robots383455
+Node: Recursive Definition Parts385155
+Node: Recursion with list387565
+Node: Recursive triangle function391146
+Node: Recursive Example arg of 1 or 2392432
+Node: Recursive Example arg of 3 or 4394696
+Node: Recursion with cond397728
+Node: Recursive Patterns400104
+Node: Every400506
+Node: Accumulate402949
+Node: Keep404218
+Node: No Deferment406106
+Node: No deferment solution408804
+Ref: No deferment solution-Footnote-1412765
+Ref: No deferment solution-Footnote-2412867
+Node: Looping exercise413382
+Node: Regexp Search414606
+Node: sentence-end416517
+Node: re-search-forward420420
+Node: forward-sentence422952
+Node: Complete forward-sentence423672
+Node: fwd-sentence while loops427212
+Node: fwd-sentence re-search430847
+Node: forward-paragraph433003
+Node: forward-paragraph in brief434752
+Node: fwd-para let436207
+Node: fwd-para while441757
+Node: Regexp Review450164
+Node: re-search Exercises452569
+Node: Counting Words453341
+Node: Why Count Words453979
+Node: count-words-example455007
+Node: Design count-words-example456253
+Node: Whitespace Bug462873
+Node: recursive-count-words472455
+Node: Counting Exercise484534
+Node: Words in a defun484903
+Node: Divide and Conquer486489
+Node: Words and Symbols487706
+Node: Syntax489755
+Node: count-words-in-defun493367
+Node: Several defuns499546
+Node: Find a File501919
+Node: lengths-list-file504514
+Node: Several files509774
+Node: lengths-list-many-files510483
+Node: append513269
+Node: Several files recursively513891
+Node: Prepare the data516709
+Node: Data for Display in Detail517755
+Node: Sorting518669
+Node: Files List520327
+Node: Counting function definitions527810
+Node: Readying a Graph537129
+Node: Columns of a graph538294
+Node: graph-body-print551928
+Node: recursive-graph-body-print556705
+Node: Printed Axes559371
+Node: Line Graph Exercise560095
+Node: Emacs Initialization560277
+Node: Default Configuration561662
+Ref: Default Configuration-Footnote-1563638
+Node: Site-wide Init563954
+Node: defcustom566000
+Node: Beginning init File571875
+Node: Text and Auto-fill574242
+Node: Mail Aliases578149
+Node: Indent Tabs Mode579064
+Node: Keybindings580012
+Node: Keymaps583561
+Node: Loading Files585829
+Node: Autoload589150
+Node: Simple Extension592014
+Ref: Simple Extension-Footnote-1594647
+Node: X11 Colors594912
+Ref: X11 Colors-Footnote-1596764
+Node: Miscellaneous596918
+Node: Mode Line601141
+Node: Debugging606683
+Node: debug607500
+Node: debug-on-entry610566
+Node: debug-on-quit613736
+Node: edebug614759
+Node: Debugging Exercises618861
+Node: Conclusion620612
+Node: the-the625913
+Node: Kill Ring628708
+Node: What the Kill Ring Does629420
+Node: current-kill630934
+Node: Code for current-kill631579
+Node: Understanding current-kill634400
+Node: Body of current-kill635140
+Node: Digression concerning error638274
+Node: Determining the Element639465
+Node: yank643066
+Node: yank-pop646271
+Node: ring file648790
+Node: Full Graph649148
+Node: Labeled Example649920
+Node: print-graph Varlist651893
+Node: print-Y-axis653592
+Node: print-Y-axis in Detail654417
+Node: Height of label655212
+Node: Compute a Remainder657216
+Node: Y Axis Element661069
+Node: Y-axis-column664822
+Node: print-Y-axis Penultimate666423
+Node: print-X-axis668392
+Node: Similarities differences669639
+Node: X Axis Tic Marks670458
+Node: Print Whole Graph677476
+Node: The final version678503
+Node: Test print-graph682737
+Node: Graphing words in defuns684386
+Node: lambda686974
+Node: mapcar688622
+Node: Another Bug690658
+Node: Final printed graph696156
+Node: Free Software and Free Manuals697076
+Node: GNU Free Documentation License703351
+Node: Index728714
+Node: About the Author763821
 
 End Tag Table
 
