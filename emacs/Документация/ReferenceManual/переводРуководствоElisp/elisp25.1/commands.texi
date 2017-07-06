@@ -149,24 +149,24 @@ code.
 @cindex arguments, interactive entry
 @cindex interactive spec, using
 
-  This section describes how to write the @code{interactive} form that
-makes a Lisp function an interactively-callable command, and how to
-examine a command's @code{interactive} form.
+  В этом разделе описывается, как написать @code{interactive} форму, которая
+делает функцию Lisp интерактивной, вызываемой командой и как
+изучить команду @code{interactive} форму.
 
 @defspec interactive arg-descriptor
-This special form declares that a function is a command, and that it
-may therefore be called interactively (via @kbd{M-x} or by entering a
-key sequence bound to it).  The argument @var{arg-descriptor} declares
-how to compute the arguments to the command when the command is called
-interactively.
+Эта специальная форма заявляет, что функция является командой, и что она
+может вызвана интерактивно (via @kbd{M-x} и путем ввода
+связанной с ней последовательностью ключей).  Аргумент @var{arg-descriptor} объявляет
+как вычислить аргументы команды при вызове команды
+в интерактивном режиме.
 
-A command may be called from Lisp programs like any other function, but
-then the caller supplies the arguments and @var{arg-descriptor} has no
-effect.
+Команда может вызываться из программ Lisp, как любая другая функция принимает
+аргументы и @var{arg-descriptor} не имеет
+эффекта.
 
 @cindex @code{interactive-form}, symbol property
-The @code{interactive} form must be located at top-level in the
-function body, or in the function symbol's @code{interactive-form}
+@code{interactive} форма должна быть расположена на верхнем уровне 
+тела функции или  символа функции @code{interactive-form}
 property (@pxref{Symbol Properties}).  It has its effect because the
 command loop looks for it before calling the function
 (@pxref{Interactive Call}).  Once the function is called, all its body

@@ -1,7 +1,7 @@
 \input texinfo                       @c -*- mode: texinfo; coding: utf-8 -*-
 @comment %**start of header
-@setfilename ../../info/eintr.info
-@c setfilename emacs-lisp-intro.info
+@c@setfilename ../../info/eintr.info
+@setfilename emacs-lisp-intro.info
 @c sethtmlfilename emacs-lisp-intro.html
 @settitle Programming in Emacs Lisp
 @include docstyle.texi
@@ -97,11 +97,11 @@
 
 @c ----------------------------------------------------
 
-@dircategory Emacs lisp
+@ignore @dircategory Emacs lisp
 @direntry
 * Emacs Lisp Intro: (eintr).    Простое введение в программирование Emacs Lisp.
 @end direntry
-
+@end ignore
 @copying
 This is an @cite{Introduction to Programming in Emacs Lisp}, for
 people who are not programmers.
