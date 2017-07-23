@@ -1,0 +1,2 @@
+char-after &optional position вернет символ сразу после позиции
+string= string1 string2 сравнивает две подстроки

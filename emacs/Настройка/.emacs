@@ -34,4 +34,4 @@
                             'po-find-file-coding-system)
 (autoload 'po-find-file-coding-system "po-mode")
 ;это прилипил для си кода в справке, здесь в каталоге код emacs из гита
-(setq find-function-C-source-directory "~/shkola/moiashkola/emacs/source/emacs-24.5/src/")
+(setq find-function-C-source-directory "~/shkola/emacs/source/emacs-24.5/src/")

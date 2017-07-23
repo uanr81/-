@@ -6,82 +6,82 @@
 @chapter Text
 @cindex text
 
-  This chapter describes the functions that deal with the text in a
-buffer.  Most examine, insert, or delete text in the current buffer,
-often operating at point or on text adjacent to point.  Many are
-interactive.  All the functions that change the text provide for undoing
-the changes (@pxref{Undo}).
+  В этой главе описываются функции, которые касаются текста в
+буфере. Большинство из них проверяет, вставляет или удаляет текст в текущем буфере,
+Обычно работающих в точке или на тексте, смежном с точкой. Многие из них
+интерактивные. Все функции, которые изменяют текст, предусматривают отмену
+изменений (@pxref{Undo}).
 
-  Many text-related functions operate on a region of text defined by two
-buffer positions passed in arguments named @var{start} and @var{end}.
-These arguments should be either markers (@pxref{Markers}) or numeric
-character positions (@pxref{Positions}).  The order of these arguments
-does not matter; it is all right for @var{start} to be the end of the
-region and @var{end} the beginning.  For example, @code{(delete-region 1
-10)} and @code{(delete-region 10 1)} are equivalent.  An
-@code{args-out-of-range} error is signaled if either @var{start} or
-@var{end} is outside the accessible portion of the buffer.  In an
-interactive call, point and the mark are used for these arguments.
+  Многие текстовые функции работают в области текста, определенной двумя
+позициями буфера, переданные в аргументах @var{start} и @var{end}.
+Эти аргументы должны быть либо маркерами (@pxref{Markers}) либо числовой
+позицией символа (@pxref{Positions}).  Порядок этих аргументов
+неважен. Это нормально для @var{start} быть окончанием
+региона и @var{end} началом.  Для примера, @code{(delete-region 1
+10)} и @code{(delete-region 10 1)} эквивалентны. В 
+@code{args-out-of-range} сигнализируется ошибка, если @var{start} или
+@var{end} находится за пределами доступной части буфера. 
+Для этих аргументов используются интерактивный вызов, точка и метка.
 
 @cindex buffer contents
-  Throughout this chapter, ``text'' refers to the characters in the
-buffer, together with their properties (when relevant).  Keep in mind
-that point is always between two characters, and the cursor appears on
-the character after point.
+  В этой главе "text" относится к символам в
+буфере вместе со своими свойствами (когда это необходимо). Имей ввиду
+что точка всегда находится между двумя символами, и курсор появляется на
+символе после точки.
 
 @menu
-* Near Point::       Examining text in the vicinity of point.
-* Buffer Contents::  Examining text in a general fashion.
-* Comparing Text::   Comparing substrings of buffers.
-* Insertion::        Adding new text to a buffer.
-* Commands for Insertion::  User-level commands to insert text.
-* Deletion::         Removing text from a buffer.
-* User-Level Deletion::     User-level commands to delete text.
-* The Kill Ring::    Where removed text sometimes is saved for later use.
-* Undo::             Undoing changes to the text of a buffer.
-* Maintaining Undo:: How to enable and disable undo information.
-                        How to control how much information is kept.
-* Filling::          Functions for explicit filling.
-* Margins::          How to specify margins for filling commands.
-* Adaptive Fill::    Adaptive Fill mode chooses a fill prefix from context.
-* Auto Filling::     How auto-fill mode is implemented to break lines.
-* Sorting::          Functions for sorting parts of the buffer.
-* Columns::          Computing horizontal positions, and using them.
-* Indentation::      Functions to insert or adjust indentation.
-* Case Changes::     Case conversion of parts of the buffer.
-* Text Properties::  Assigning Lisp property lists to text characters.
-* Substitution::     Replacing a given character wherever it appears.
-* Registers::        How registers are implemented.  Accessing the text or
-                       position stored in a register.
-* Transposition::    Swapping two portions of a buffer.
-* Decompression::    Dealing with compressed data.
-* Base 64::          Conversion to or from base 64 encoding.
-* Checksum/Hash::    Computing cryptographic hashes.
-* Parsing HTML/XML:: Parsing HTML and XML.
-* Atomic Changes::   Installing several buffer changes atomically.
-* Change Hooks::     Supplying functions to be run when text is changed.
+* Near Point::       Изучение текста в окрестности точки.
+* Buffer Contents::  Рассмотрение текста в общем виде.
+* Comparing Text::   Сравнение подстрок буферов.
+* Insertion::        Добавление нового текста в буфер.
+* Commands for Insertion::  Команды уровня пользователя для вставки текста.
+* Deletion::         Удаление текста из буфера.
+* User-Level Deletion::     Команды пользовательского уровня для удаления текста.
+* The Kill Ring::    Если удаленный текст иногда сохраняется для последующего использования.
+* Undo::             Отмена изменений в тексте буфера.
+* Maintaining Undo:: Как включить и отключить отмену информации.
+                        Как контролировать, сколько информации хранится.
+* Filling::          Функции для явного заполнения.
+* Margins::          Как указать поля для заполнения команд.
+* Adaptive Fill::    Режим Adaptive Fill выбирает префикс заполнения из контекста.
+* Auto Filling::     Как реализован режим автозаполнения для разрыва строк.
+* Sorting::          Функции для сортировки частей буфера.
+* Columns::          Вычисление горизонтальных позиций и их использование.
+* Indentation::      Функции для вставки или регулировки отступа.
+* Case Changes::     Преобразование случая части буфера.
+* Text Properties::  Присвоение списков свойств Lisp текстовым символам.
+* Substitution::     Замена заданного символа везде, где он появляется.
+* Registers::        Как регистрируются регистры. Доступ к тексту или
+                       позиции, хранящейся в регистре.
+* Transposition::    Перестановка двух частей буфера.
+* Decompression::    Работа со сжатыми данными.
+* Base 64::          Преобразование в кодировку или из базы 64.
+* Checksum/Hash::    Вычисление криптографических хэшей.
+* Parsing HTML/XML:: Анализ HTML и XML.
+* Atomic Changes::   Устанавливать несколько изменений в буфере атомарно.
+* Change Hooks::     Предоставление функций, которые будут выполняться при изменении текста.
 @end menu
 
 @node Near Point
 @section Examining Text Near Point
 @cindex text near point
 
-  Many functions are provided to look at the characters around point.
-Several simple functions are described here.  See also @code{looking-at}
-in @ref{Regexp Search}.
+  Для просмотра персонажей вокруг точки предусмотрено множество функций.
+Здесь описаны несколько простых функций. Смотри также @code{looking-at}
+в @ref{Regexp Search}.
 
-In the following four functions, ``beginning'' or ``end'' of buffer
-refers to the beginning or end of the accessible portion.
+В следующих четырех функциях, ``beginning'' или ``end'' буфера
+относится к началу или концу доступной части.
 
 @defun char-after &optional position
-This function returns the character in the current buffer at (i.e.,
-immediately after) position @var{position}.  If @var{position} is out of
-range for this purpose, either before the beginning of the buffer, or at
-or beyond the end, then the value is @code{nil}.  The default for
-@var{position} is point.
+Эта функция возвращает символ в текущем буфере (т. е.
+сразу после) позиции @var{position}.  Если выбранная @var{position} 
+либо до начала буфера, либо за его пределами, тогда 
+значение @code{nil}.  Значение по умолчанию для
+@var{position} является точкой.
 
-In the following example, assume that the first character in the
-buffer is @samp{@@}:
+В следующем примере предположим, что первый символ в
+буфере @samp{@@}:
 
 @example
 @group
@@ -92,24 +92,24 @@ buffer is @samp{@@}:
 @end defun
 
 @defun char-before &optional position
-This function returns the character in the current buffer immediately
-before position @var{position}.  If @var{position} is out of range for
-this purpose, either at or before the beginning of the buffer, or beyond
-the end, then the value is @code{nil}.  The default for
-@var{position} is point.
+Эта функция немедленно возвращает символ в текущем буфере
+перед положением @var{position} точки.  Если @var{position} символ вне пределов
+этого, либо в начале буфера, либо перед ним, или за его пределами,
+то значение равно @code{nil}.  Значение по умолчанию для
+@var{position} это точка.
 @end defun
 
 @defun following-char
-This function returns the character following point in the current
-buffer.  This is similar to @code{(char-after (point))}.  However, if
-point is at the end of the buffer, then @code{following-char} returns 0.
+Эта функция возвращает символ следующий после точки в текущем
+буфере. Это похоже на @code{(char-after (point))}.  Однако, если
+точка находится в конце буфера, в отличии от @code{following-char} возвращает 0.
 
-Remember that point is always between characters, and the cursor
-normally appears over the character following point.  Therefore, the
-character returned by @code{following-char} is the character the
-cursor is over.
+Помните, что точка всегда между символами, а курсор
+обычно появляется над символом следующим за точкой. Следовательно
+символ, возвращаемый  @code{following-char} является символом
+где мигает курсор.
 
-In this example, point is between the @samp{a} and the @samp{c}.
+В этом примере точка находится между @samp{a} и @samp{c}.
 
 @example
 @group
@@ -129,52 +129,51 @@ but there is no peace.
 @end defun
 
 @defun preceding-char
-This function returns the character preceding point in the current
-buffer.  See above, under @code{following-char}, for an example.  If
-point is at the beginning of the buffer, @code{preceding-char} returns
+Эта функция возвращает символ, предшествующий точке текущего
+буфера.  См. Выше,  @code{following-char}, для примера. Если
+точка находится в начале буфера, @code{preceding-char} вернет
 0.
 @end defun
 
 @defun bobp
-This function returns @code{t} if point is at the beginning of the
-buffer.  If narrowing is in effect, this means the beginning of the
-accessible portion of the text.  See also @code{point-min} in
+Эта функция возвращает @code{t} Если точка находится в начале
+буфера. Если сужение действует, это означает начало
+доступной части текста. Смотрите также @code{point-min} в
 @ref{Point}.
 @end defun
 
 @defun eobp
-This function returns @code{t} if point is at the end of the buffer.
-If narrowing is in effect, this means the end of accessible portion of
-the text.  See also @code{point-max} in @xref{Point}.
+Эта функция возвращает @code{t} Если точка находится в конце буфера.
+Если сужение действует, это означает, что конец доступной части
+текста. Смотрите также @code{point-max} в @xref{Point}.
 @end defun
 
 @defun bolp
-This function returns @code{t} if point is at the beginning of a line.
-@xref{Text Lines}.  The beginning of the buffer (or of its accessible
-portion) always counts as the beginning of a line.
+Эта функция возвращает @code{t} если точка находится в начале строки.
+@xref{Text Lines}.  Начало буфера (или это доступно) всегда считается началом строки.
 @end defun
 
 @defun eolp
-This function returns @code{t} if point is at the end of a line.  The
-end of the buffer (or of its accessible portion) is always considered
-the end of a line.
+Эта функция возвращает @code{t} Если точка находится в конце строки.
+Конец буфера (или его доступная часть) всегда считается
+концом строки.
 @end defun
 
 @node Buffer Contents
 @section Examining Buffer Contents
 @cindex buffer portion as string
 
-  This section describes functions that allow a Lisp program to
-convert any portion of the text in the buffer into a string.
+  В этом разделе описываются функции, которые позволяют программе Lisp
+конвертировать любую часть текста буфера в строку.
 
 @defun buffer-substring start end
-This function returns a string containing a copy of the text of the
-region defined by positions @var{start} and @var{end} in the current
-buffer.  If the arguments are not positions in the accessible portion
-of the buffer, @code{buffer-substring} signals an
-@code{args-out-of-range} error.
+Эта функция возвращает строку, содержащую копию текста
+области, определяемую положением @var{start} и @var{end} в текущем
+буфере. Если аргументы не являются позициями в доступной части
+буфера, @code{buffer-substring} сигнализирует в 
+@code{args-out-of-range} ошибку.
 
-Here's an example which assumes Font-Lock mode is not enabled:
+Вот пример, который предполагает, что режим Font-Lock не включен:
 
 @example
 @group
@@ -194,13 +193,13 @@ This is the contents of buffer foo
 @end group
 @end example
 
-If the text being copied has any text properties, these are copied into
-the string along with the characters they belong to.  @xref{Text
-Properties}.  However, overlays (@pxref{Overlays}) in the buffer and
-their properties are ignored, not copied.
+Если копируемый текст имеет любые текстовые свойства, они копируются в
+cтроку вместе с символами, к которым они принадлежат.  @xref{Text
+Properties}.  Однако оверлеи (@pxref{Overlays}) в буфере и
+их свойства игнорируются, и не копируются.
 
-For example, if Font-Lock mode is enabled, you might get results like
-these:
+Например, если режим Font-Lock включен, вы можете получить такие результаты, как
+эти:
 
 @example
 @group
@@ -211,108 +210,108 @@ these:
 @end defun
 
 @defun buffer-substring-no-properties start end
-This is like @code{buffer-substring}, except that it does not copy text
-properties, just the characters themselves.  @xref{Text Properties}.
+Это похоже на @code{buffer-substring}, за исключением того, что он не копирует 
+свойства текста, только сами символы.  @xref{Text Properties}.
 @end defun
 
 @defun buffer-string
-This function returns the contents of the entire accessible portion of
-the current buffer, as a string.
+Эта функция возвращает содержимое всей доступной части
+текущего буфера, как строку.
 @end defun
 
-  If you need to make sure the resulting string, when copied to a
-different location, will not change its visual appearance due to
-reordering of bidirectional text, use the
-@code{buffer-substring-with-bidi-context} function
+  Если вам нужно убедиться, что полученная строка при копировании на
+в другое место, не изменит его внешний вид из-за
+переупорядочевания двунаправленного текста, используйте
+@code{buffer-substring-with-bidi-context} функцию
 (@pxref{Bidirectional Display, buffer-substring-with-bidi-context}).
 
 @defun filter-buffer-substring start end &optional delete
-This function filters the buffer text between @var{start} and @var{end}
-using a function specified by the variable
-@code{filter-buffer-substring-function}, and returns the result.
+Эта функция фильтрует буферный текст между @var{start} и @var{end}
+используя функцию, указанную переменной
+@code{filter-buffer-substring-function}, и возвращает результат.
 
-The default filter function consults the obsolete wrapper hook
-@code{filter-buffer-substring-functions}, and the obsolete variable
-@code{buffer-substring-filters}.  If both of these are @code{nil}, it
-returns the unaltered text from the buffer, i.e., what
-@code{buffer-substring} would return.
+Функция фильтра по умолчанию обращается к устаревшему оберточному крючку
+@code{filter-buffer-substring-functions}, и устаревшей переменной
+@code{buffer-substring-filters}.  Если они оба @code{nil}, это
+возвращает неизменный текст из буфера, т. е. как
+@code{buffer-substring} возвращает.
 
-If @var{delete} is non-@code{nil}, the function deletes the text
-between @var{start} and @var{end} after copying it, like
+Если @var{delete} не-@code{nil}, функция удаляет текст
+между @var{start} и @var{end} после его копирования, например
 @code{delete-and-extract-region}.
 
-Lisp code should use this function instead of @code{buffer-substring},
+Код Lisp должен использовать эту функцию вместо @code{buffer-substring},
 @code{buffer-substring-no-properties},
-or @code{delete-and-extract-region} when copying into user-accessible
-data structures such as the kill-ring, X clipboard, and registers.
-Major and minor modes can modify @code{filter-buffer-substring-function}
-to alter such text as it is copied out of the buffer.
+или @code{delete-and-extract-region} при копировании в пользовательской
+структуре данных, такие как kill-ring, X буфер обмена и регистры.
+Основные и второстепенные режимы могут изменять @code{filter-buffer-substring-function}
+изменяя такой текст, поскольку он скопирован из буфера.
 @end defun
 
 @defvar filter-buffer-substring-function
-The value of this variable is a function that @code{filter-buffer-substring}
-will call to do the actual work.  The function receives three
-arguments, the same as those of @code{filter-buffer-substring},
-which it should treat as per the documentation of that function.  It
-should return the filtered text (and optionally delete the source text).
+Значение этой переменной - это функция, которая @code{filter-buffer-substring}
+будет вызвана, чтобы выполнить фактическую работу. Функция получает три
+аргумента, аналогичные аргументам @code{filter-buffer-substring},
+которые рассматриваются в соответствии с документацией этой функции. Она
+Должна вернуть отфильтрованный текст (и, возможно, удалить исходный текст).
 @end defvar
 
-@noindent The following two variables are obsoleted by
-@code{filter-buffer-substring-function}, but are still supported for
-backward compatibility.
+@noindent Следующие две переменные устаревают
+@code{filter-buffer-substring-function}, но по-прежнему
+есть обратная совместимость.
 
 @defvar filter-buffer-substring-functions
-This obsolete variable is a wrapper hook, whose members should be functions
-that accept four arguments: @var{fun}, @var{start}, @var{end}, and
-@var{delete}.  @var{fun} is a function that takes three arguments
-(@var{start}, @var{end}, and @var{delete}), and returns a string.  In
-both cases, the @var{start}, @var{end}, and @var{delete} arguments are
-the same as those of @code{filter-buffer-substring}.
+Эта устаревшая переменная - это оберточный крючок, членами которого должны быть функции
+которые принимают четыре аргумента: @var{fun}, @var{start}, @var{end}, и
+@var{delete}.  @var{fun} является функцией, которая принимает три аргумента
+(@var{start}, @var{end}, и @var{delete}), и возвращает строку. В
+обоих случаях, @var{start}, @var{end}, и @var{delete} аргументы
+такие же, как у @code{filter-buffer-substring}.
 
-The first hook function is passed a @var{fun} that is equivalent to
-the default operation of @code{filter-buffer-substring}, i.e., it
-returns the buffer-substring between @var{start} and @var{end}
-(processed by any @code{buffer-substring-filters}) and optionally
-deletes the original text from the buffer.  In most cases, the hook
-function will call @var{fun} once, and then do its own processing of
-the result.  The next hook function receives a @var{fun} equivalent to
-this, and so on.  The actual return value is the result of all the
-hook functions acting in sequence.
+Первая функция перехвата передается @var{fun} что эквивалентно
+операции по умолчанию @code{filter-buffer-substring}, т. д.., это
+возвращает буферную подстроку между @var{start} и @var{end}
+(обрабатывается любым @code{buffer-substring-filters}) и необязательно
+удаляет исходный текст из буфера. В большинстве случаев крючок
+функция вызовет @var{fun} один раз, а затем выполнить собственную обработку
+результата. Следующая функция hook получает @var{fun} эквивалентно
+и так далее. Фактическое возвращаемое значение является результатом всех
+функций крюка, действующие последовательно.
 @end defvar
 
 @defvar buffer-substring-filters
-The value of this obsolete variable should be a list of functions
-that accept a single string argument and return another string.
-The default @code{filter-buffer-substring} function passes the buffer
-substring to the first function in this list, and the return value of
-each function is passed to the next function.  The return value of the
-last function is passed to @code{filter-buffer-substring-functions}.
+Значение этой устаревшей переменной должно быть списком функций
+которые принимают один строковый аргумент и возвращают другую строку.
+По умолчанию @code{filter-buffer-substring} функция передает подстроку
+буфера к первой функции в этом списке, а возвращаемое значение
+каждая функция передает следующей функции. Возвращаемое значение
+последней функции передается @code{filter-buffer-substring-functions}.
 @end defvar
 
 @defun current-word &optional strict really-word
-This function returns the symbol (or word) at or near point, as a
-string.  The return value includes no text properties.
+Эта функция возвращает символ (или слово) в точке или рядом с ней, как
+строку. Возвращаемое значение не содержит текстовых свойств.
 
-If the optional argument @var{really-word} is non-@code{nil}, it finds a
-word; otherwise, it finds a symbol (which includes both word
-characters and symbol constituent characters).
+Если необязательный аргумент @var{really-word} не-@code{nil}, он находит
+слово; В противном случае он находит символ (который включает в себя как слово,
+символы и символьные составляющие).
 
-If the optional argument @var{strict} is non-@code{nil}, then point
-must be in or next to the symbol or word---if no symbol or word is
-there, the function returns @code{nil}.  Otherwise, a nearby symbol or
-word on the same line is acceptable.
+Если не обязательный аргумент @var{strict} не-@code{nil}, указывает что
+должен находиться в символе или слове или рядом с ним, если ни символ ни слово не
+там функция возвращает @code{nil}.  В противном случае соседний символ или
+слово на одной строке допустимо.
 @end defun
 
 @defun thing-at-point thing &optional no-properties
-Return the @var{thing} around or next to point, as a string.
+Возвращает @var{thing} вокруг или рядом с точкой, в виде строки.
 
-The argument @var{thing} is a symbol which specifies a kind of syntactic
-entity.  Possibilities include @code{symbol}, @code{list}, @code{sexp},
+Аргумент @var{thing} является символом, который указывает вид синтаксической
+организации. Возможности включают @code{symbol}, @code{list}, @code{sexp},
 @code{defun}, @code{filename}, @code{url}, @code{word}, @code{sentence},
-@code{whitespace}, @code{line}, @code{page}, and others.
+@code{whitespace}, @code{line}, @code{page}, и другие.
 
-When the optional argument @var{no-properties} is non-@code{nil}, this
-function strips text properties from the return value.
+Когда необязательный аргумент @var{no-properties} не-@code{nil}, 
+функция передает свойства текста из возвращаемого значения.
 
 @example
 ---------- Buffer: foo ----------
@@ -333,30 +332,30 @@ but there is no peace.
 @section Comparing Text
 @cindex comparing buffer text
 
-  This function lets you compare portions of the text in a buffer, without
-copying them into strings first.
+  Эта функция позволяет сравнивать части текста в буфере без
+Сначала скопировав их в строки.
 
 @defun compare-buffer-substrings buffer1 start1 end1 buffer2 start2 end2
-This function lets you compare two substrings of the same buffer or two
-different buffers.  The first three arguments specify one substring,
-giving a buffer (or a buffer name) and two positions within the
-buffer.  The last three arguments specify the other substring in the
-same way.  You can use @code{nil} for @var{buffer1}, @var{buffer2}, or
-both to stand for the current buffer.
+Эта функция позволяет сравнить две подстроки одного и того же буфера или двух
+разных буферов. Первые три аргумента указывают одну подстроку,
+указывая буфер (или имя буфера) и две позиции в пределах
+буфера. Последние три аргумента указывают другую подстроку 
+так же. Вы можете использовать @code{nil} для @var{buffer1}, @var{buffer2}, 
+для текущего буфера.
 
-The value is negative if the first substring is less, positive if the
-first is greater, and zero if they are equal.  The absolute value of
-the result is one plus the index of the first differing characters
-within the substrings.
+Значение отрицательное, если первая подстрока меньше, положительное, если
+больше, и ноль, если они равны. Абсолютное значение
+результата является один плюс индекс первых отличающихся символов
+в подстроках.
 
-This function ignores case when comparing characters
-if @code{case-fold-search} is non-@code{nil}.  It always ignores
-text properties.
+Эта функция игнорирует случай при сравнении символов
+если @code{case-fold-search} не-@code{nil}.  Он всегда игнорирует
+Текстовые свойства.
 
-Suppose you have the text @w{@samp{foobarbar haha!rara!}} in the
-current buffer; then in this example the two substrings are @samp{rbar
-} and @samp{rara!}.  The value is 2 because the first substring is
-greater at the second character.
+Предположим, у вас есть текст @w{@samp{foobarbar haha!rara!}} в
+текущем буфере; То в этом примере две подстроки @samp{rbar
+} и @samp{rara!}.  Значение равно 2, потому что первая подстрока
+больше со второго символа.
 
 @example
 (compare-buffer-substrings nil 6 11 nil 16 21)
@@ -371,85 +370,85 @@ greater at the second character.
 
 @cindex insertion before point
 @cindex before point, insertion
-  @dfn{Insertion} means adding new text to a buffer.  The inserted text
-goes at point---between the character before point and the character
-after point.  Some insertion functions leave point before the inserted
-text, while other functions leave it after.  We call the former
-insertion @dfn{after point} and the latter insertion @dfn{before point}.
+  @dfn{Insertion} означает добавление нового текста в буфер. Вставной текст
+вставляется в точке --- между символом перед точкой и символом
+после точки. Некоторые функции вставки оставляют точку перед вставленным
+текстом, в то время как другие функции оставляют ее после. Мы называем первое
+вставка @dfn{after point} и последняя вставка @dfn{before point}.
 
-  Insertion moves markers located at positions after the insertion
-point, so that they stay with the surrounding text (@pxref{Markers}).
-When a marker points at the place of insertion, insertion may or may
-not relocate the marker, depending on the marker's insertion type
-(@pxref{Marker Insertion Types}).  Certain special functions such as
-@code{insert-before-markers} relocate all such markers to point after
-the inserted text, regardless of the markers' insertion type.
+  Вставка перемещает маркеры, расположенные в позициях точки после вставки,
+чтобы они оставались с окружающим текстом (@pxref{Markers}).
+Когда маркер указывает на место вставки, вставка может или не может
+перемещать маркер, в зависимости от типа вставки маркера
+(@pxref{Marker Insertion Types}).  Некоторые специальные функции, такие как
+@code{insert-before-markers} переносят все такие маркеры на точку после
+вставленного текста, независимо от типа вставки маркеров.
 
-  Insertion functions signal an error if the current buffer is
-read-only (@pxref{Read Only Buffers}) or if they insert within
-read-only text (@pxref{Special Properties}).
+  Функции вставки сигнализируют об ошибке, если текущий буфер
+только для чтения (@pxref{Read Only Buffers}) или если они вставляются внутри
+текста только для чтения (@pxref{Special Properties}).
 
-  These functions copy text characters from strings and buffers along
-with their properties.  The inserted characters have exactly the same
-properties as the characters they were copied from.  By contrast,
-characters specified as separate arguments, not part of a string or
-buffer, inherit their text properties from the neighboring text.
+  Эти функции копируют текстовые символы из строк буферов 
+с их свойствами. Введенные символы имеют одинаковые
+свойства как символы, из которых они были скопированы. Напротив,
+символы, определенные как отдельные аргументы, а не часть строки или
+буфера, наследует их свойства текста из соседнего текста.
 
-  The insertion functions convert text from unibyte to multibyte in
-order to insert in a multibyte buffer, and vice versa---if the text
-comes from a string or from a buffer.  However, they do not convert
-unibyte character codes 128 through 255 to multibyte characters, not
-even if the current buffer is a multibyte buffer.  @xref{Converting
+  Функции вставки преобразуют текст из однобайтового в многобайтовый 
+при вставки в многобайтовый буфер, и наоборот --- если текст
+происходит из строки или из буфера. Однако они не конвертируют
+однобайтовые коды символов от 128 до 255 до многобайтовых символов, 
+даже если текущий буфер является многобайтовым буфером.  @xref{Converting
 Representations}.
 
 @defun insert &rest args
-This function inserts the strings and/or characters @var{args} into the
-current buffer, at point, moving point forward.  In other words, it
-inserts the text before point.  An error is signaled unless all
-@var{args} are either strings or characters.  The value is @code{nil}.
+Эта функция вставляет строки и/или символы @var{args} в
+текущий буфер, в точке, точка перемещения вперед. Другими словами, это
+вставляет текст перед точкой. Ошибка сигнализируется, если все
+@var {args} являются либо строками, либо символами. Значение @code{nil}.
 @end defun
 
 @defun insert-before-markers &rest args
-This function inserts the strings and/or characters @var{args} into the
-current buffer, at point, moving point forward.  An error is signaled
-unless all @var{args} are either strings or characters.  The value is
+Эта функция вставляет строки и / или символы @var{args} в текущий буфер,
+ в точке, точка перемещения вперед. Выдается сообщение об ошибке
+если все @var{args} являются либо строками, либо символами. Значение
 @code{nil}.
 
-This function is unlike the other insertion functions in that it
-relocates markers initially pointing at the insertion point, to point
-after the inserted text.  If an overlay begins at the insertion point,
-the inserted text falls outside the overlay; if a nonempty overlay
-ends at the insertion point, the inserted text falls inside that
-overlay.
+Эта функция отличается от других функций вставки тем, что она
+перемещает маркеры, первоначально указывающие на точку вставки, чтобы указать
+после вставленного текста. Если оверлей начинается с точки вставки,
+вставленный текст выходит за пределы наложения; Если непустое наложение
+заканчивается в точке вставки, вставленный текст попадает внутрь
+наложения.
 @end defun
 
 @deffn Command insert-char character &optional count inherit
-This command inserts @var{count} instances of @var{character} into the
-current buffer before point.  The argument @var{count} must be an
-integer, and @var{character} must be a character.
+Эта команда вставляет @var{count} примеры @var{character} в
+текущий буфер до точки. Аргумент @var{count} должен быть
+целое и @var{character} должен быть символом.
 
-If called interactively, this command prompts for @var{character}
-using its Unicode name or its code point.  @xref{Inserting Text,,,
+При вызове в интерактивном режиме эта команда запрашивает @var{character}
+используя его имя Unicode или его кодовую точку.  @xref{Inserting Text,,,
 emacs, The GNU Emacs Manual}.
 
-This function does not convert unibyte character codes 128 through 255
-to multibyte characters, not even if the current buffer is a multibyte
-buffer.  @xref{Converting Representations}.
+Эта функция не конвертирует однобайтовые коды символов от 128 до 255
+в многобайтовые символы, даже если текущий буфер является многобайтным
+буфером.  @xref{Converting Representations}.
 
-If @var{inherit} is non-@code{nil}, the inserted characters inherit
-sticky text properties from the two characters before and after the
-insertion point.  @xref{Sticky Properties}.
+Если @var{inherit} не-@code{nil}, вставляемые символы наследуют
+свойства текста из двух символов до и после
+точки вставки.  @xref{Sticky Properties}.
 @end deffn
 
 @defun insert-buffer-substring from-buffer-or-name &optional start end
-This function inserts a portion of buffer @var{from-buffer-or-name}
-into the current buffer before point.  The text inserted is the region
-between @var{start} (inclusive) and @var{end} (exclusive).  (These
-arguments default to the beginning and end of the accessible portion
-of that buffer.)  This function returns @code{nil}.
+Эта функция вставляет часть буфера @var{from-buffer-or-name}
+в текущий буфер до точки. Введенный текст - это регион
+между @var{start} (включительно) и @var{end} (исключительно).  (Эти
+аргументы по умолчанию для начала и конца доступной части
+текущего буфера.)  Функция возвращает @code{nil}.
 
-In this example, the form is executed with buffer @samp{bar} as the
-current buffer.  We assume that buffer @samp{bar} is initially empty.
+В этом примере форма выполняется с буфером @samp{bar} как
+с текущим буфером. Будем считать, что буфер @samp{bar} Изначально пуст.
 
 @example
 @group
@@ -470,39 +469,39 @@ We hold these truth@point{}
 @end defun
 
 @defun insert-buffer-substring-no-properties from-buffer-or-name &optional start end
-This is like @code{insert-buffer-substring} except that it does not
-copy any text properties.
+Это похоже на @code{insert-buffer-substring} за исключением того, что она не
+копирует любые текстовые свойства.
 @end defun
 
-  @xref{Sticky Properties}, for other insertion functions that inherit
-text properties from the nearby text in addition to inserting it.
-Whitespace inserted by indentation functions also inherits text
-properties.
+  @xref{Sticky Properties}, для других функций вставки, которые наследуют
+текстовые свойства из соседнего текста в дополнение к его вставке.
+Пробел, вставленный функциями отступов, также наследует текстовые
+свойства.
 
 @node Commands for Insertion
 @section User-Level Insertion Commands
 
-  This section describes higher-level commands for inserting text,
-commands intended primarily for the user but useful also in Lisp
-programs.
+  В этом разделе описываются команды более высокого уровня для вставки текста,
+Команды, предназначенные в первую очередь для пользователя, но полезные также в Lisp
+программы.
 
 @deffn Command insert-buffer from-buffer-or-name
-This command inserts the entire accessible contents of
-@var{from-buffer-or-name} (which must exist) into the current buffer
-after point.  It leaves the mark after the inserted text.  The value
-is @code{nil}.
+Эта команда вставляет все доступное содержимое
+@var{from-buffer-or-name} (которые должно существовать) в текущий буфер
+после точки. Она оставляет отметку после вставленного текста. Возвращает
+значение @code{nil}.
 @end deffn
 
 @deffn Command self-insert-command count
 @cindex character insertion
 @cindex self-insertion
-This command inserts the last character typed; it does so @var{count}
-times, before point, and returns @code{nil}.  Most printing characters
-are bound to this command.  In routine use, @code{self-insert-command}
-is the most frequently called function in Emacs, but programs rarely use
-it except to install it on a keymap.
+Эта команда вставляет последний введенный символ; Она делает это @var{count}
+раз, до точки и возвращает @code{nil}.  Большинство печатных символов
+привязаны к этой команде. При рутинном использовании, @code{self-insert-command}
+является наиболее часто вызываемой функцией в Emacs, но программы редко используют
+её, кроме как установить его на раскладку.
 
-In an interactive call, @var{count} is the numeric prefix argument.
+В интерактивном вызове, @var{count} - числовой префиксный аргумент.
 
 @c FIXME: This variable is obsolete since 23.1.
 Self-insertion translates the input character through

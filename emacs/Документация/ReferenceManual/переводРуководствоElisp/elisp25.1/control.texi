@@ -8,39 +8,40 @@
 @cindex special forms for control structures
 @cindex control structures
 
-  A Lisp program consists of a set of @dfn{expressions}, or
-@dfn{forms} (@pxref{Forms}).  We control the order of execution of
-these forms by enclosing them in @dfn{control structures}.  Control
-structures are special forms which control when, whether, or how many
-times to execute the forms they contain.
+  Программа Lisp состоит из набора @dfn{expressions}, или
+@dfn{forms} (@pxref{Forms}).  Мы контролируем порядок выполнения
+этих форм, заключая их в @dfn{control structures}.  контрольные
+структуры являются особыми формами, которые контролируют, когда, 
+независимо от того или сколько
+чтобы выполнить формы, которые они содержат.
 
 @cindex textual order
-  The simplest order of execution is sequential execution: first form
-@var{a}, then form @var{b}, and so on.  This is what happens when you
-write several forms in succession in the body of a function, or at top
-level in a file of Lisp code---the forms are executed in the order
-written.  We call this @dfn{textual order}.  For example, if a function
-body consists of two forms @var{a} and @var{b}, evaluation of the
-function evaluates first @var{a} and then @var{b}.  The result of
-evaluating @var{b} becomes the value of the function.
+  Простейший порядок выполнения - последовательное выполнение: первая форма
+@var{a}, затем форма @var{b}, и так далее. Это то, что происходит, когда вы
+пишете несколько форм подряд в теле функции или наверхнем
+уровне в файле кода Lisp --- формы выполняются в порядке
+написания. Мы называем это @dfn{textual order}.  Например, если тело функции
+состоит из двух форм @var{a} и @var{b}, Функция 
+сначала оценивает @var{a} и затем @var{b}.  Результат
+оценки @var{b} становится значением функции.
 
-  Explicit control structures make possible an order of execution other
-than sequential.
+  Явные структуры управления делают возможным выполнение другой
+последовательности вычисления.
 
-  Emacs Lisp provides several kinds of control structure, including
-other varieties of sequencing, conditionals, iteration, and (controlled)
-jumps---all discussed below.  The built-in control structures are
-special forms since their subforms are not necessarily evaluated or not
-evaluated sequentially.  You can use macros to define your own control
-structure constructs (@pxref{Macros}).
+  Emacs Lisp предоставляет несколько видов структур управления, включая
+разновидности секвенирования, условные обозначения, итерации и (контролируемые)
+переходы --- все обсуждается ниже. Встроенные структуры управления - это
+специальные формы, поскольку их подформы не обязательно оцениваются или не
+оценивается последовательно. Вы можете использовать макросы для определения 
+собственной контрольной структуры управления (@pxref{Macros}).
 
 @menu
-* Sequencing::             Evaluation in textual order.
+* Sequencing::             Оценка в текстовом порядке.
 * Conditionals::           @code{if}, @code{cond}, @code{when}, @code{unless}.
 * Combining Conditions::   @code{and}, @code{or}, @code{not}.
-* Iteration::              @code{while} loops.
-* Generators::             Generic sequences and coroutines.
-* Nonlocal Exits::         Jumping out of a sequence.
+* Iteration::              @code{while} цикл.
+* Generators::             Общие последовательности и сопрограммы.
+* Nonlocal Exits::         Выпрыгивание из последовательности.
 @end menu
 
 @node Sequencing
@@ -48,13 +49,13 @@ structure constructs (@pxref{Macros}).
 @cindex sequencing
 @cindex sequential execution
 
-  Evaluating forms in the order they appear is the most common way
-control passes from one form to another.  In some contexts, such as in a
-function body, this happens automatically.  Elsewhere you must use a
-control structure construct to do this: @code{progn}, the simplest
-control construct of Lisp.
+  Оценка форм в том порядке, в котором они появляются, является наиболее 
+распространенным способом когда управление переходит из одной формы в другую. 
+В некоторых контекстах, например, в функции body, это происходит автоматически. В 
+другом месте вы должны для этого использовать контрольную структуру 
+управления: @code{progn}, простейшая контрольная конструкция Lisp.
 
-  A @code{progn} special form looks like this:
+  Специальная форма @code{progn} выглядит следующим образом:
 
 @example
 @group
@@ -63,26 +64,26 @@ control construct of Lisp.
 @end example
 
 @noindent
-and it says to execute the forms @var{a}, @var{b}, @var{c}, and so on, in
-that order.  These forms are called the @dfn{body} of the @code{progn} form.
-The value of the last form in the body becomes the value of the entire
-@code{progn}.  @code{(progn)} returns @code{nil}.
+и она говорит, чтобы выполнить формы @var{a}, @var{b}, @var{c}, и так далее, в
+таком порядке. Эти формы вызываются @dfn{body} из @code{progn} формы.
+Значение последней формы в теле становится значением всего выражения
+@code{progn}.  @code{(progn)} возвращает @code{nil}.
 
 @cindex implicit @code{progn}
-  In the early days of Lisp, @code{progn} was the only way to execute
-two or more forms in succession and use the value of the last of them.
-But programmers found they often needed to use a @code{progn} in the
-body of a function, where (at that time) only one form was allowed.  So
-the body of a function was made into an implicit @code{progn}:
-several forms are allowed just as in the body of an actual @code{progn}.
-Many other control structures likewise contain an implicit @code{progn}.
-As a result, @code{progn} is not used as much as it was many years ago.
-It is needed now most often inside an @code{unwind-protect}, @code{and},
-@code{or}, or in the @var{then}-part of an @code{if}.
+  В первые дни Лиспа, @code{progn} была единственным способом выполнить
+две или несколько форм подряд и использовать значение последнего из них.
+Но программисты обнаружили, что им часто нужно было использовать @code{progn} в
+теле функции, где (в это время) допускалась только одна форма. Так
+тело функции было превращено в неявное @code{progn}:
+Несколько форм допускаются так же, как и в теле фактического @code{progn}.
+Многие другие структуры управления также содержат неявные @code{progn}.
+В результате, @code{progn} не используется столько, сколько было много лет назад.
+Это необходимо сейчас чаще всего внутри @code{unwind-protect}, @code{and},
+@code{or}, или в @var{then}-части @code{if}.
 
 @defspec progn forms@dots{}
-This special form evaluates all of the @var{forms}, in textual
-order, returning the result of the final form.
+Эта специальная форма оценивает все @var{forms}, в текстовом
+порядке, возвращает результат последней формы.
 
 @example
 @group
@@ -97,12 +98,12 @@ order, returning the result of the final form.
 @end example
 @end defspec
 
-  Two other constructs likewise evaluate a series of forms but return
-different values:
+  Две другие конструкции также оценивают ряд форм, но возвращают
+разные значения:
 
 @defspec prog1 form1 forms@dots{}
-This special form evaluates @var{form1} and all of the @var{forms}, in
-textual order, returning the result of @var{form1}.
+Эта специальная форма оценивает @var{form1} и все @var{forms}, в
+текстовом порядке, возвращая результат @var{form1}.
 
 @example
 @group
@@ -116,8 +117,8 @@ textual order, returning the result of @var{form1}.
 @end group
 @end example
 
-Here is a way to remove the first element from a list in the variable
-@code{x}, then return the value of that former element:
+Вот способ удаления первого элемента из списка в переменной
+@code{x}, затем возврат значения этого удаленного элемента:
 
 @example
 (prog1 (car x) (setq x (cdr x)))
@@ -125,8 +126,8 @@ Here is a way to remove the first element from a list in the variable
 @end defspec
 
 @defspec prog2 form1 form2 forms@dots{}
-This special form evaluates @var{form1}, @var{form2}, and all of the
-following @var{forms}, in textual order, returning the result of
+Эта специальная форма оценивает @var{form1}, @var{form2}, и все
+следующие @var{forms}, в текстовом порядке, возвращая результат
 @var{form2}.
 
 @example
@@ -146,25 +147,25 @@ following @var{forms}, in textual order, returning the result of
 @section Conditionals
 @cindex conditional evaluation
 
-  Conditional control structures choose among alternatives.  Emacs Lisp
-has four conditional forms: @code{if}, which is much the same as in
-other languages; @code{when} and @code{unless}, which are variants of
-@code{if}; and @code{cond}, which is a generalized case statement.
+  Условные структуры управления выбирают среди альтернатив. Emacs Lisp
+имеет четыре условные формы: @code{if}, что почти такая же, как в
+других языках; @code{when} и @code{unless}, которая является вариантами
+@code{if}; и @code{cond}, которая является обобщенным случаем.
 
 @defspec if condition then-form else-forms@dots{}
-@code{if} chooses between the @var{then-form} and the @var{else-forms}
-based on the value of @var{condition}.  If the evaluated @var{condition} is
-non-@code{nil}, @var{then-form} is evaluated and the result returned.
-Otherwise, the @var{else-forms} are evaluated in textual order, and the
-value of the last one is returned.  (The @var{else} part of @code{if} is
-an example of an implicit @code{progn}.  @xref{Sequencing}.)
+@code{if} выбирает между @var{then-form} и @var{else-forms}
+на основании значения @var{condition}.  Если оценивается @var{condition} 
+не-@code{nil}, @var{then-form} оценивается и возвращается результат.
+В противном случае @var{else-forms} оценивается в текстовом порядке, и
+возвращается значение последнего выражения.  (@var{else} часть для @code{if} является
+примером неявного @code{progn}.  @xref{Sequencing}.)
 
-If @var{condition} has the value @code{nil}, and no @var{else-forms} are
-given, @code{if} returns @code{nil}.
+Если @var{condition} имеет значение @code{nil}, и нет соответствующей @var{else-forms} ,
+@code{if} возвращается @code{nil}.
 
-@code{if} is a special form because the branch that is not selected is
-never evaluated---it is ignored.  Thus, in this example,
-@code{true} is not printed because @code{print} is never called:
+@code{if} является специальной формой, потому что ветвь, которая не выбрана, 
+никогда не оценивается --- она игнорируется. Таким образом, в этом примере,
+@code{true} не печатается, потому что @code{print} никогда не вычислится:
 
 @example
 @group
@@ -177,15 +178,15 @@ never evaluated---it is ignored.  Thus, in this example,
 @end defspec
 
 @defmac when condition then-forms@dots{}
-This is a variant of @code{if} where there are no @var{else-forms},
-and possibly several @var{then-forms}.  In particular,
+Это вариант @code{if} где нет @var{else-forms},
+и, возможно, несколько @var{then-forms}.  В частности,
 
 @example
 (when @var{condition} @var{a} @var{b} @var{c})
 @end example
 
 @noindent
-is entirely equivalent to
+Полностью эквивалентна
 
 @example
 (if @var{condition} (progn @var{a} @var{b} @var{c}) nil)
@@ -193,14 +194,14 @@ is entirely equivalent to
 @end defmac
 
 @defmac unless condition forms@dots{}
-This is a variant of @code{if} where there is no @var{then-form}:
+Это вариант @code{if} где нет @var{then-form}:
 
 @example
 (unless @var{condition} @var{a} @var{b} @var{c})
 @end example
 
 @noindent
-is entirely equivalent to
+Полностью эквивалентна
 
 @example
 (if @var{condition} nil
@@ -209,40 +210,40 @@ is entirely equivalent to
 @end defmac
 
 @defspec cond clause@dots{}
-@code{cond} chooses among an arbitrary number of alternatives.  Each
-@var{clause} in the @code{cond} must be a list.  The @sc{car} of this
-list is the @var{condition}; the remaining elements, if any, the
-@var{body-forms}.  Thus, a clause looks like this:
+@code{cond} выбирает среди произвольного количества альтернатив. каждый
+@var{clause} в @code{cond} должен быть списком. @sc{car} этого
+списка @var{condition}; остальные элементы, если таковые имеются,
+@var{body-forms}.  Таким образом, предложение выглядит так::
 
 @example
 (@var{condition} @var{body-forms}@dots{})
 @end example
 
-@code{cond} tries the clauses in textual order, by evaluating the
-@var{condition} of each clause.  If the value of @var{condition} is
-non-@code{nil}, the clause succeeds; then @code{cond} evaluates its
-@var{body-forms}, and returns the value of the last of @var{body-forms}.
-Any remaining clauses are ignored.
+@code{cond} ставит клаузулы в текстовом порядке, оценивая
+@var{condition} каждого предложения. Если значение @var{condition} 
+не-@code{nil}, предложение преуспевает; тогда @code{cond} оценивает его
+@var{body-forms}, и возвращает значение последнего из @var{body-forms}.
+Любые оставшиеся пункты игнорируются.
 
-If the value of @var{condition} is @code{nil}, the clause fails, so
-the @code{cond} moves on to the following clause, trying its @var{condition}.
+Если значение @var{condition} @code{nil}, предложение терпит неудачу, поэтому
+ @code{cond} переходит к следующему пункту, пытаясь его @var{condition}.
 
-A clause may also look like this:
+Предложение может также выглядеть так::
 
 @example
 (@var{condition})
 @end example
 
 @noindent
-Then, if @var{condition} is non-@code{nil} when tested, the @code{cond}
-form returns the value of @var{condition}.
+Тогда, если @var{condition} не-@code{nil} при тестировании @code{cond}
+форма возвращает значение @var{condition}.
 
-If every @var{condition} evaluates to @code{nil}, so that every clause
-fails, @code{cond} returns @code{nil}.
+Если каждая @var{condition} оценивает @code{nil}, и каждая статья
+терпит неудачу, @code{cond} вернет @code{nil}.
 
-The following example has four clauses, which test for the cases where
-the value of @code{x} is a number, string, buffer and symbol,
-respectively:
+Следующий пример содержит четыре предложения, которые проверяют случаи, когда
+значение @code{x} это число, строка, буфер и символ,
+соответственно:
 
 @example
 @group
@@ -255,12 +256,12 @@ respectively:
 @end group
 @end example
 
-Often we want to execute the last clause whenever none of the previous
-clauses was successful.  To do this, we use @code{t} as the
-@var{condition} of the last clause, like this: @code{(t
-@var{body-forms})}.  The form @code{t} evaluates to @code{t}, which is
-never @code{nil}, so this clause never fails, provided the @code{cond}
-gets to it at all.  For example:
+Часто мы хотим выполнить последнее предложение, когда ни одна из предыдущих
+статей не были успешными. Для этого мы используем @code{t} как
+@var{condition} последней статьи, как это: @code{(t
+@var{body-forms})}.  Эта форма @code{t} оценивается как @code{t}, которая
+всегда не @code{nil}, поэтому этот пункт никогда не потерпит неудачу, если @code{cond}
+дойдет до него вообще. Например:
 
 @example
 @group
@@ -272,13 +273,13 @@ gets to it at all.  For example:
 @end example
 
 @noindent
-This @code{cond} expression returns @code{foo} if the value of @code{a}
-is @code{hack}, and returns the string @code{"default"} otherwise.
+Выражение @code{cond} возврашает @code{foo} если значение @code{a}
+@code{hack}, И возвращает строку @code{"default"} в противном случае.
 @end defspec
 
-Any conditional construct can be expressed with @code{cond} or with
-@code{if}.  Therefore, the choice between them is a matter of style.
-For example:
+Любая условная конструкция может быть выражена с помощью @code{cond} или с
+помощью @code{if}.  Поэтому выбор между ними - это вопрос стиля.
+Например:
 
 @example
 @group
@@ -297,106 +298,106 @@ For example:
 @cindex pcase
 @cindex pattern matching
 
-The @code{cond} form lets you choose between alternatives using
-predicate conditions that compare values of expressions against
-specific values known and written in advance.  However, sometimes it
-is useful to select alternatives based on more general conditions that
-distinguish between broad classes of values.  The @code{pcase} macro
-allows you to choose between alternatives based on matching the value
-of an expression against a series of patterns.  A pattern can be a
-literal value (for comparisons to literal values you'd use
-@code{cond}), or it can be a more general description of the expected
-structure of the expression's value.
+Форма @code{cond} позволяет выбирать между альтернативами, используя
+предикатные условия, которые сравнивают значения выражений с
+конкретными значениями, известные и написанные заранее. Однако иногда 
+полезно выбирать альтернативы на основе более общих условий, которые
+различать широкие классы ценностей.  Макрос @code{pcase}
+позволяет выбирать между альтернативами на основе соответствия значения
+выражения против серии шаблонов. Шаблон может быть
+буквальное значение (для сравнения с буквальными значениями, которые вы используете
+@code{cond}), или это может быть более общим описанием ожидаемой
+структуры значения выражения.
 
 @defmac pcase expression &rest clauses
-Evaluate @var{expression} and choose among an arbitrary number of
-alternatives based on the value of @var{expression}.  The possible
-alternatives are specified by @var{clauses}, each of which must be a
-list of the form @code{(@var{pattern} @var{body-forms}@dots{})}.
-@code{pcase} tries to match the value of @var{expression} to the
-@var{pattern} of each clause, in textual order.  If the value matches,
-the clause succeeds; @code{pcase} then evaluates its @var{body-forms},
-and returns the value of the last of @var{body-forms}.  Any remaining
-@var{clauses} are ignored.
+Оценка @var{expression} и выбор между произвольным числом
+альтернатив, основанные на значении @var{expression}.  Возможные
+альтернативы определяются @var{clauses}, каждая из которых должна быть
+список форм @code{(@var{pattern} @var{body-forms}@dots{})}.
+@code{pcase} пытается сопоставить значение для @var{expression} к
+@var{pattern} каждому предложению в текстовом порядке. Если значение соответствует,
+предложение преуспевает; @code{pcase} затем оценивает его @var{body-forms},
+и возвращает значение последнего из @var{body-forms}.  Остальные
+@var{clauses} игнорируются.
 
-The @var{pattern} part of a clause can be of one of two types:
-@dfn{QPattern}, a pattern quoted with a backquote; or a
-@dfn{UPattern}, which is not quoted.  UPatterns are simpler, so we
-describe them first.
+Часть @var{pattern} предложения может быть одного из двух типов:
+@dfn{QPattern}, шаблон, цитируемый с помощью backquote; Или
+@dfn{UPattern}, который не цитируется. Усовершенствования проще, поэтому мы
+сначала опишем их.
 
-Note: In the description of the patterns below, we use ``the value
-being matched'' to refer to the value of the @var{expression} that is
-the first argument of @code{pcase}.
+Примечание. В описании шаблонов ниже мы используем значение 
+`сопоставляются '', чтобы ссылаться на значение @var{expression} то есть
+первый аргумент @code{pcase}.
 
-A UPattern can have the following forms:
+UPattern может иметь следующие формы:
 
 @table @code
 
 @item '@var{val}
-Matches if the value being matched is @code{equal} to @var{val}.
+Соответствует, если совпадающее значение @code{equal} в @var{val}.
 @item @var{atom}
-Matches any @var{atom}, which can be a keyword, a number, or a string.
-(These are self-quoting, so this kind of UPattern is actually a
-shorthand for @code{'@var{atom}}.)  Note that a string or a float
-matches any string or float with the same contents/value.
+Соответствует любому @var{atom}, который может быть ключевым словом, числом или строкой.
+(Это самовыпуски, поэтому этот вид UPattern на самом деле является
+сокращение для @code{'@var{atom}}.)  Обратите внимание, что строка или плавающая точка
+соответствует любой строке или float с тем же содержимым / значением.
 @item _
-Matches any value.  This is known as @dfn{don't care} or @dfn{wildcard}.
+Соответствует любому значению. Это называется @dfn{don't care} или @dfn{wildcard}.
 @item @var{symbol}
-Matches any value, and additionally let-binds @var{symbol} to the
-value it matched, so that you can later refer to it, either in the
-@var{body-forms} or also later in the pattern.
+Соответствует любому значению и дополнительно связывает @var{symbol} к
+значению, которому оно соответствует, чтобы вы могли позже ссылаться на него, либо в
+@var{body-forms} или также позже в шаблоне.
 @item (pred @var{predfun})
-Matches if the predicate function @var{predfun} returns non-@code{nil}
-when called with the value being matched as its argument.
-@var{predfun} can be one of the possible forms described below.
+Соответствует, если функция предиката @var{predfun} возвращает не-@code{nil}
+Когда вызывается со значением, которое соответствует его аргументу,
+@var{predfun} может быть одной из возможных форм, описанных ниже.
 @item (guard @var{boolean-expression})
-Matches if @var{boolean-expression} evaluates to non-@code{nil}.  This
-allows you to include in a UPattern boolean conditions that refer to
-symbols bound to values (including the value being matched) by
-previous UPatterns.  Typically used inside an @code{and} UPattern, see
-below.  For example, @w{@code{(and x (guard (< x 10)))}} is a pattern
-which matches any number smaller than 10 and let-binds the variable
-@code{x} to that number.
+Соответствует, если @var{boolean-expression} оценивается не-@code{nil}.  Это
+позволяет включать в буффанные условия UPattern, которые относятся к
+символам, привязанных к значениям (включая совпадающее значение) с помощью
+предыдущей UPatterns. Обычно используется внутри @code{and} UPattern, смотри
+ниже. Например, @w{@code{(and x (guard (< x 10)))}} это шаблон
+который соответствует любому числу меньше 10 и связывает переменную
+@code{x} к этому числу.
 @item (let @var{upattern} @var{expression})
-Matches if the specified @var{expression} matches the specified
-@var{upattern}.  This allows matching a pattern against the value of
-an @emph{arbitrary} expression, not just the expression that is the
-first argument to @code{pcase}.  (It is called @code{let} because
-@var{upattern} can bind symbols to values using the @var{symbol}
-UPattern.  For example:
+Соответствует, если указанный @var{expression} соответствует указанному
+@var{upattern}.  Это позволяет сопоставить шаблон со значением
+@emph{arbitrary} выражения, а не только выражением, являющегося
+первым аргументом @code{pcase}.  (Это называется @code{let} потому как
+@var{upattern} может привязывать символы к значениям, используя @var{symbol}
+UPattern.  Например:
 @w{@code{((or `(key . ,val) (let val 5)) val)}}.)
 @item (app @var{function} @var{upattern})
-Matches if @var{function} applied to the value being matched returns a
-value that matches @var{upattern}.  This is like the @code{pred}
-UPattern, except that it tests the result against @var{UPattern},
-rather than against a boolean truth value.  The @var{function} call can
-use one of the forms described below.
+Соответствует, если @var{function} применяется к сопоставимому значению, возвращает
+значение, которое соответствует @var{upattern}.  Это похоже на @code{pred}
+UPattern, за исключением того, что проверяет результат против @var{UPattern},
+а не против логического значения истины.  Этот вызов @var{function} может
+использовать одну из форм, описанных ниже.
 @item (or @var{upattern1} @var{upattern2}@dots{})
-Matches if one the argument UPatterns matches.  As soon as the first
-matching UPattern is found, the rest are not tested.  For this reason,
-if any of the UPatterns let-bind symbols to the matched value, they
-should all bind the same symbols.
+Соответствует совпадению аргумента UPatterns. Как только найдется первое
+соответствие UPattern, остальные не тестируются. По этой причине,
+если какой-либо из UPatterns let-bind символов соответствует совпадающему значению, они
+должны все связывать одни и те же символы.
 @item (and @var{upattern1} @var{upattern2}@dots{})
-Matches if all the argument UPatterns match.
+Соответствует, если все аргументы UPatterns соответствуют.
 @end table
 
-The function calls used in the @code{pred} and @code{app} UPatterns
-can have one of the following forms:
+Вызовы функции, используемые в @code{pred} и @code{app} UPatterns
+может иметь одну из следующих форм:
 
 @table @asis
 @item function symbol, like @code{integerp}
-In this case, the named function is applied to the value being
-matched.
+В этом случае именованная функция применяется к соответствующему 
+значению.
 @item lambda-function @code{(lambda (@var{arg}) @var{body})}
-In this case, the lambda-function is called with one argument, the
-value being matched.
+В этом случае лямбда-функция вызывается с одним 
+соответствующим значением аргумента.
 @item @code{(@var{func} @var{args}@dots{})}
-This is a function call with @var{n} specified arguments; the function
-is called with these @var{n} arguments and an additional @var{n}+1-th
-argument that is the value being matched.
+Это вызов функции с @var{n} указанными аргументами; функция
+вызывается с этими @var{n} аргументами и дополнительными @var{n}+1-th
+соответствующими значениями аргументов.
 @end table
 
-Here's an illustrative example of using UPatterns:
+Вот иллюстративный пример использования UPatterns:
 
 @c FIXME: This example should use every one of the UPatterns described
 @c above at least once.
@@ -409,16 +410,16 @@ Here's an illustrative example of using UPatterns:
   (code           (message "Unknown return code %S" code)))
 @end example
 
-In addition, you can use backquoted patterns that are more powerful.
-They allow matching the value of the @var{expression} that is the
-first argument of @code{pcase} against specifications of its
-@emph{structure}.  For example, you can specify that the value must be
-a list of 2 elements whose first element is a specific string and the
-second element is any value with a backquoted pattern like
+Кроме того, вы можете использовать обратные кадры, которые являются более мощными.
+они позволяют сопоставлять значение @var{expression} это
+первый аргумент @code{pcase} и его характеристик 
+@emph{structure}.  Например, вы можете указать, что значение должно быть
+списком из 2 элементов, где первый элемент - это определенная строка, а
+вторым элементом является любое значение с обратным кадром, например
 @code{`("first" ,second-elem)}.
 
-Backquoted patterns have the form @code{`@var{qpattern}} where
-@var{qpattern} can have the following forms:
+Обратные структуры имеют форму @code{`@var{qpattern}} где
+@var{qpattern} могут иметь следующие формы:
 
 @table @code
 @item (@var{qpattern1} . @var{qpattern2})
@@ -499,38 +500,38 @@ in an environment where @var{args} are bound to @var{actual-args}.
 @section Constructs for Combining Conditions
 @cindex combining conditions
 
-  This section describes three constructs that are often used together
-with @code{if} and @code{cond} to express complicated conditions.  The
-constructs @code{and} and @code{or} can also be used individually as
-kinds of multiple conditional constructs.
+  В этом разделе описываются три конструкции, которые часто используются вместе
+с @code{if} и @code{cond} для выражения сложных условий.
+Конструкции @code{and} и @code{or} также могут использоваться индивидуально как
+виды множественных условных конструкций.
 
 @defun not condition
-This function tests for the falsehood of @var{condition}.  It returns
-@code{t} if @var{condition} is @code{nil}, and @code{nil} otherwise.
-The function @code{not} is identical to @code{null}, and we recommend
-using the name @code{null} if you are testing for an empty list.
+Эта функция проверяет ложность @var{condition}.  Она возвращает
+@code{t} если @var{condition} есть @code{nil}, и @code{nil} в противном случае.
+Функция @code{not} идентична @code{null}, и мы рекомендуем
+использовать имя @code{null} если вы тестируете пустой список.
 @end defun
 
 @defspec and conditions@dots{}
-The @code{and} special form tests whether all the @var{conditions} are
-true.  It works by evaluating the @var{conditions} one by one in the
-order written.
+Специальная форма @code{and} проверяет, все ли @var{conditions} указывают
+на истину. Она работает, оценивая @var{conditions} один за другим в
+текстовом порядке.
 
-If any of the @var{conditions} evaluates to @code{nil}, then the result
-of the @code{and} must be @code{nil} regardless of the remaining
-@var{conditions}; so @code{and} returns @code{nil} right away, ignoring
-the remaining @var{conditions}.
+Если какой-либо из @var{conditions} оценивается в @code{nil}, то результат
+всего @code{and} будет @code{nil} независимо от остальных
+@var{conditions}; так @code{and} возвращает @code{nil} сразу, игнорируя
+оставшиеся @var{conditions}.
 
-If all the @var{conditions} turn out non-@code{nil}, then the value of
-the last of them becomes the value of the @code{and} form.  Just
-@code{(and)}, with no @var{conditions}, returns @code{t}, appropriate
-because all the @var{conditions} turned out non-@code{nil}.  (Think
-about it; which one did not?)
+Если все @var{conditions} оказываются не-@code{nil}, То значение
+последнее из них становится значением @code{and} формы.  Просто
+@code{(and)}, без @var{conditions}, возвращает @code{t}, подходящее
+потому что все @var{conditions} не-@code{nil}.  (Думать
+об этом; Чего нет?)
 
-Here is an example.  The first condition returns the integer 1, which is
-not @code{nil}.  Similarly, the second condition returns the integer 2,
-which is not @code{nil}.  The third condition is @code{nil}, so the
-remaining condition is never evaluated.
+Вот пример. Первое условие возвращает целое число 1, которое
+не @code{nil}.  Аналогично, второе условие возвращает целое число 2,
+который не @code{nil}.  Третье условие @code{nil}, итак
+оставшееся условие никогда не оценивается.
 
 @example
 @group
@@ -541,7 +542,7 @@ remaining condition is never evaluated.
 @end group
 @end example
 
-Here is a more realistic example of using @code{and}:
+Вот более реалистичный пример использования @code{and}:
 
 @example
 @group
@@ -551,11 +552,11 @@ Here is a more realistic example of using @code{and}:
 @end example
 
 @noindent
-Note that @code{(car foo)} is not executed if @code{(consp foo)} returns
-@code{nil}, thus avoiding an error.
+Обратите внимание, что @code{(car foo)} не выполняется, если @code{(consp foo)} возвращает
+@code{nil}, таким образом избегая ошибки.
 
-@code{and} expressions can also be written using either @code{if} or
-@code{cond}.  Here's how:
+@code{and} выражения также могут быть записаны с использованием @code{if} или
+@code{cond}.  Вот как:
 
 @example
 @group
@@ -569,30 +570,30 @@ Note that @code{(car foo)} is not executed if @code{(consp foo)} returns
 @end defspec
 
 @defspec or conditions@dots{}
-The @code{or} special form tests whether at least one of the
-@var{conditions} is true.  It works by evaluating all the
-@var{conditions} one by one in the order written.
+Специальная форма @code{or} проверяет, по крайней мере, один из
+@var{conditions} на истину.  Она работает, оценивая все
+@var{conditions} один за другим в указанном порядке.
 
-If any of the @var{conditions} evaluates to a non-@code{nil} value, then
-the result of the @code{or} must be non-@code{nil}; so @code{or} returns
-right away, ignoring the remaining @var{conditions}.  The value it
-returns is the non-@code{nil} value of the condition just evaluated.
+Если какой-либо из @var{conditions} оценивается не-@code{nil} значением, тогда
+результат @code{or} будет не-@code{nil}; это @code{or} возвращает
+сразу, игнорируя оставшиеся @var{conditions}.  Значение
+возвращается не-@code{nil} значение только что оцененного условия.
 
-If all the @var{conditions} turn out @code{nil}, then the @code{or}
-expression returns @code{nil}.  Just @code{(or)}, with no
-@var{conditions}, returns @code{nil}, appropriate because all the
-@var{conditions} turned out @code{nil}.  (Think about it; which one
-did not?)
+Если все @var{conditions} оцениваются @code{nil}, тогда @code{or}
+выражение возвращает @code{nil}.  Просто @code{(or)}, без
+@var{conditions}, возвращает @code{nil}, потому что все
+@var{conditions} оцениваются в @code{nil}.  (Думаю об этом; который из
+не?)
 
-For example, this expression tests whether @code{x} is either
-@code{nil} or the integer zero:
+Например, это выражение проверяет, @code{x} соответствие
+@code{nil} или целочисленному нулю:
 
 @example
 (or (eq x nil) (eq x 0))
 @end example
 
-Like the @code{and} construct, @code{or} can be written in terms of
-@code{cond}.  For example:
+Как @code{and} так и @code{or} могут быть записаны в терминах
+@code{cond}.  Например:
 
 @example
 @group
@@ -604,7 +605,7 @@ Like the @code{and} construct, @code{or} can be written in terms of
 @end group
 @end example
 
-You could almost write @code{or} in terms of @code{if}, but not quite:
+Вы могли бы почти описать @code{or} в терминах @code{if}, но не совсем:
 
 @example
 @group
@@ -615,9 +616,9 @@ You could almost write @code{or} in terms of @code{if}, but not quite:
 @end example
 
 @noindent
-This is not completely equivalent because it can evaluate @var{arg1} or
-@var{arg2} twice.  By contrast, @code{(or @var{arg1} @var{arg2}
-@var{arg3})} never evaluates any argument more than once.
+Это не совсем эквивалентно, потому что оно использует @var{arg1} или
+@var{arg2} дважды. В отличие от этого, @code{(or @var{arg1} @var{arg2}
+@var{arg3})} никогда не оценивает аргументы более одного раза.
 @end defspec
 
 @node Iteration
@@ -625,17 +626,17 @@ This is not completely equivalent because it can evaluate @var{arg1} or
 @cindex iteration
 @cindex recursion
 
-  Iteration means executing part of a program repetitively.  For
-example, you might want to repeat some computation once for each element
-of a list, or once for each integer from 0 to @var{n}.  You can do this
-in Emacs Lisp with the special form @code{while}:
+  Итерация означает повторное выполнение части программы. Для
+примера, вам может потребоваться повторить несколько вычислений один раз для 
+каждого элемента списка или один раз для каждого целого числа от 0 до @var{n}.  
+Вы можете сделать это в Emacs Lisp со специальной формой @code{while}:
 
 @defspec while condition forms@dots{}
-@code{while} first evaluates @var{condition}.  If the result is
-non-@code{nil}, it evaluates @var{forms} in textual order.  Then it
-reevaluates @var{condition}, and if the result is non-@code{nil}, it
-evaluates @var{forms} again.  This process repeats until @var{condition}
-evaluates to @code{nil}.
+@code{while} сначала оценивает @var{condition}.  Если результат
+не-@code{nil}, оценивает @var{forms} в текстовом порядке. Затем
+переоценивает @var{condition}, и если результат не-@code{nil}, 
+оценивается @var{forms} еще раз. Этот процесс повторяется до тех пор, пока @var{condition}
+оценится в @code{nil}.
 
 There is no limit on the number of iterations that may occur.  The loop
 will continue until either @var{condition} evaluates to @code{nil} or

@@ -166,37 +166,37 @@ code.
 
 @cindex @code{interactive-form}, symbol property
 @code{interactive} форма должна быть расположена на верхнем уровне 
-тела функции или  символа функции @code{interactive-form}
-property (@pxref{Symbol Properties}).  It has its effect because the
-command loop looks for it before calling the function
-(@pxref{Interactive Call}).  Once the function is called, all its body
-forms are executed; at this time, if the @code{interactive} form
-occurs within the body, the form simply returns @code{nil} without
-even evaluating its argument.
+тела функции или  свойсвом символа функции @code{interactive-form}
+(@pxref{Symbol Properties}).  Это имеет силу, потому что
+командный цикл ищет его перед вызовом функции
+(@pxref{Interactive Call}).  Как только функция вызывается, все ее тело
+формы выполняются; в это время, если @code{interactive} форма
+вычисляется внутри тела, форма просто возвращает @code{nil} 
+даже без оценки своего аргумента.
 
 By convention, you should put the @code{interactive} form in the
 function body, as the first top-level form.  If there is an
-@code{interactive} form in both the @code{interactive-form} symbol
-property and the function body, the former takes precedence.  The
-@code{interactive-form} symbol property can be used to add an
-interactive form to an existing function, or change how its arguments
-are processed interactively, without redefining the function.
+@code{interactive} form in both the @code{interactive-form} свойство символа
+и тело функции, первый имеет преимущество.  
+@code{interactive-form} свойство символа можно использовать для добавления
+интерактивной формы для существующей функции или изменить обработку ее 
+аргументов в интерактивном режиме, без переопределения функции.
 @end defspec
 
-There are three possibilities for the argument @var{arg-descriptor}:
+Существует три возможности аргументации @var{arg-descriptor}:
 
 @itemize @bullet
 @item
-It may be omitted or @code{nil}; then the command is called with no
-arguments.  This leads quickly to an error if the command requires one
-or more arguments.
+Он может быть опущен или @code{nil}; то команда вызывается без
+аргументов. Это быстро приводит к ошибке, если команда требует одного
+или более аргументов.
 
 @item
-It may be a string; its contents are a sequence of elements separated
-by newlines, one for each argument@footnote{Some elements actually
-supply two arguments.}.  Each element consists of a code character
-(@pxref{Interactive Codes}) optionally followed by a prompt (which
-some code characters use and some ignore).  Here is an example:
+Это может быть строка представляющая собой последовательность разделенных 
+символом новой строки, по одному для каждого аргумента@footnote{Some elements actually
+supply two arguments.}.  Каждый элемент состоит из символа кода
+(@pxref{Interactive Codes}) после чего следует приглашение (которое
+некоторые символы кода используют, а некоторые игнорируют). Вот пример:
 
 @smallexample
 (interactive "P\nbFrobnicate buffer: ")

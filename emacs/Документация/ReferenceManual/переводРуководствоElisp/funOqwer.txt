@@ -1,0 +1,2 @@
+char-before &optional position => возвращает символ перед положением позиции точки
+char-after &optional position => возвращает символ после положения точки

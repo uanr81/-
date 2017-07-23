@@ -3430,14 +3430,14 @@ quotes.)
 @cindex Options for @code{interactive}
 @cindex Interactive options
 
-In the example, @code{multiply-by-seven} used @code{"p"} as the
-argument to @code{interactive}.  This argument told Emacs to interpret
-your typing either @kbd{C-u} followed by a number or @key{META}
-followed by a number as a command to pass that number to the function
-as its argument.  Emacs has more than twenty characters predefined for
-use with @code{interactive}.  In almost every case, one of these
-options will enable you to pass the right information interactively to
-a function.  (@xref{Interactive Codes, , Code Characters for
+В примере, @code{multiply-by-seven} использовался @code{"p"} как
+аргумент в @code{interactive}.  Этот аргумент передаёт интерпретатору  Emacs 
+ваш ввод @kbd{C-u} за которым следует число или @key{META}
+за которым следует число в качестве команды, чтобы передать это число функции
+как его аргумент. Emacs имеет более двадцати символов, предопределенных для
+использования с @code{interactive}. Почти в каждом случае один из этих
+параметров позволят вам передавать нужную информацию в интерактивном режиме
+функции.  (@xref{Interactive Codes, , Code Characters for
 @code{interactive}, elisp, The GNU Emacs Lisp Reference Manual}.)
 
 @need 1250
