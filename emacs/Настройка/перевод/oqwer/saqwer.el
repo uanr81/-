@@ -17,4 +17,7 @@ eobp; окончание буффера
 ;;(save-excursion (kill-new (google-translate-json-translation (google-translate-request s tt ishodstroka)) 't)
 ;;		  )(delete-region nashalus konetus)(yank)
 
-
+(defun марк-команд ()
+"Выделяет непереводимый текст "
+(setq нач-фрагм (point)))
+(while ()())

@@ -8,59 +8,59 @@
 @cindex lists
 @cindex element (of list)
 
-  A @dfn{list} represents a sequence of zero or more elements (which may
-be any Lisp objects).  The important difference between lists and
-vectors is that two or more lists can share part of their structure; in
-addition, you can insert or delete elements in a list without copying
-the whole list.
+  @dfn{list} представляет собой последовательность из нуля или более элементов (которая может
+быть любыми объектами Лиспа). Важное различие между списками и
+векторами заключаются в том, что два или более списков могут совместно использовать часть 
+их структуры. Кроме того, вы можете вставлять или удалять элементы в списке без копирования
+всего списка.
 
 @menu
-* Cons Cells::          How lists are made out of cons cells.
-* List-related Predicates::        Is this object a list?  Comparing two lists.
-* List Elements::       Extracting the pieces of a list.
-* Building Lists::      Creating list structure.
-* List Variables::      Modifying lists stored in variables.
-* Modifying Lists::     Storing new pieces into an existing list.
-* Sets And Lists::      A list can represent a finite mathematical set.
-* Association Lists::   A list can represent a finite relation or mapping.
-* Property Lists::      A list of paired elements.
+* Cons Cells::          Как списки сделаны из клеток cons.
+* List-related Predicates::        Является ли этот объект списком??  Сравнение двух списков.
+* List Elements::       Извлечение фрагментов списка.
+* Building Lists::      Создание структуры списка.
+* List Variables::      Изменение списков, хранящихся в переменных.
+* Modifying Lists::     Сохранение новых фрагментов в существующий список.
+* Sets And Lists::      Список может представлять собой конечный математический набор.
+* Association Lists::   Список может представлять собой конечное отношение или отображение.
+* Property Lists::      Список парных элементов.
 @end menu
 
 @node Cons Cells
 @section Lists and Cons Cells
 @cindex lists and cons cells
 
-  Lists in Lisp are not a primitive data type; they are built up from
-@dfn{cons cells} (@pxref{Cons Cell Type}).  A cons cell is a data
-object that represents an ordered pair.  That is, it has two slots,
-and each slot @dfn{holds}, or @dfn{refers to}, some Lisp object.  One
-slot is known as the @sc{car}, and the other is known as the @sc{cdr}.
-(These names are traditional; see @ref{Cons Cell Type}.)  @sc{cdr} is
-pronounced ``could-er''.
+  Списки в Lisp не являются примитивными типами данных; Они построены из
+@dfn{cons cells} (@pxref{Cons Cell Type}).  Ячейка cons - это данный
+объект, представляющий упорядоченную пару. То есть он имеет два слота,
+и каждый слот @dfn{holds}, или @dfn{refers to}, некоторый объект Lisp. Один
+слот известен как @sc{car}, а другой известен как @sc{cdr}.
+(Эти имена являются традиционными; смотри @ref{Cons Cell Type}.)  @sc{cdr} является
+выраженный ``could-er''.
 
-  We say that ``the @sc{car} of this cons cell is'' whatever object
-its @sc{car} slot currently holds, and likewise for the @sc{cdr}.
+  Мы говорим, что ``the @sc{car} of this cons cell is'' любой объект
+его @sc{car} слот в настоящее время удерживается, а также для @sc{cdr}.
 
-  A list is a series of cons cells chained together, so that each
-cell refers to the next one.  There is one cons cell for each element
-of the list.  By convention, the @sc{car}s of the cons cells hold the
-elements of the list, and the @sc{cdr}s are used to chain the list
-(this asymmetry between @sc{car} and @sc{cdr} is entirely a matter of
-convention; at the level of cons cells, the @sc{car} and @sc{cdr}
-slots have similar properties).  Hence, the @sc{cdr} slot of each cons
-cell in a list refers to the following cons cell.
+  Список представляет собой серию cons cons-клеток, соединенных вместе, так что каждая
+ячейка ссылается на следующую. Для каждого элемента есть одна ячейка cons
+списка.  По соглашению, @sc{car}s из клеток cons сохраняет
+элементы списка и @sc{cdr}s используются для объединения списка
+(Эта асимметрия между @sc{car} и @sc{cdr} является полностью вопросом
+конвенции; На уровне cons-клеток, @sc{car} и @sc{cdr}
+слоты имеют схожие свойства).  Следовательно @sc{cdr} слот каждой минусы
+ячейка в списке относится к следующей ячейке cons.
 
 @cindex true list
-  Also by convention, the @sc{cdr} of the last cons cell in a list is
-@code{nil}.  We call such a @code{nil}-terminated structure a
-@dfn{true list}.  In Emacs Lisp, the symbol @code{nil} is both a
-symbol and a list with no elements.  For convenience, the symbol
-@code{nil} is considered to have @code{nil} as its @sc{cdr} (and also
-as its @sc{car}).
+  Кроме того, согласно @sc{cdr} последняя ячейка cons в списке
+@code{nil}.  Мы называем такое @code{nil}-завершенная структура 
+@dfn{true list}.  В Emacs Lisp символ @code{nil} является одновременно
+символом и пустым списком. Для удобства символ
+@code{nil} считается @code{nil} как его @sc{cdr} (а также
+как его @sc{car}).
 
-  Hence, the @sc{cdr} of a true list is always a true list.  The
-@sc{cdr} of a nonempty true list is a true list containing all the
-elements except the first.
+  Следовательно, @sc{cdr} истинного списка всегда является истинным списком.  
+@sc{cdr} непустого истинного списка - это истинный список, содержащий все
+элементы, кроме первого.
 
 @cindex dotted list
 @cindex circular list
@@ -87,22 +87,22 @@ structure made out of cons cells as a @dfn{list structure}.
 @cindex predicates for lists
 @cindex list predicates
 
-  The following predicates test whether a Lisp object is an atom,
-whether it is a cons cell or is a list, or whether it is the
-distinguished object @code{nil}.  (Many of these predicates can be
-defined in terms of the others, but they are used so often that it is
-worth having them.)
+  Следующие предикаты проверяют, является ли объект Lisp атомом,
+является ли это ячейкой cons или является списком, или является ли это
+объект @code{nil}.  (Многие из этих предикатов могут быть
+Определенные в других терминах, но они используются так часто, что это
+стоит их иметь ввиду.)
 
 @defun consp object
-This function returns @code{t} if @var{object} is a cons cell, @code{nil}
-otherwise.  @code{nil} is not a cons cell, although it @emph{is} a list.
+Эта функция возвращает @code{t} если @var{object} является ячейкой cons, @code{nil}
+в противном случае.  @code{nil} не является ячейкой cons, хотя она @emph{is} список.
 @end defun
 
 @defun atom object
-This function returns @code{t} if @var{object} is an atom, @code{nil}
-otherwise.  All objects except cons cells are atoms.  The symbol
-@code{nil} is an atom and is also a list; it is the only Lisp object
-that is both.
+Эта функция возвращает @code{t} если @var{object} представляет собой атом, @code{nil}
+в противном случае. Все объекты, кроме cons-ячеек, являются атомами. Символ
+@code{nil} является атомом и также является списком; Это единственный объект Lisp
+который и то и другое.
 
 @example
 (atom @var{object}) @equiv{} (not (consp @var{object}))
@@ -110,8 +110,8 @@ that is both.
 @end defun
 
 @defun listp object
-This function returns @code{t} if @var{object} is a cons cell or
-@code{nil}.  Otherwise, it returns @code{nil}.
+Эта функция возвращает @code{t} если @var{object} является ячейкой cons или
+@code{nil}.  В противном случае возвращает  @code{nil}.
 
 @example
 @group
@@ -126,8 +126,8 @@ This function returns @code{t} if @var{object} is a cons cell or
 @end defun
 
 @defun nlistp object
-This function is the opposite of @code{listp}: it returns @code{t} if
-@var{object} is not a list.  Otherwise, it returns @code{nil}.
+Эта функция противоположна @code{listp}: она возвращает @code{t} если
+@var{object} не является списком. В противном случае возвращается @code{nil}.
 
 @example
 (listp @var{object}) @equiv{} (not (nlistp @var{object}))
@@ -135,10 +135,11 @@ This function is the opposite of @code{listp}: it returns @code{t} if
 @end defun
 
 @defun null object
-This function returns @code{t} if @var{object} is @code{nil}, and
-returns @code{nil} otherwise.  This function is identical to @code{not},
-but as a matter of clarity we use @code{null} when @var{object} is
-considered a list and @code{not} when it is considered a truth value
+Эта функция возвращает @code{t} если @var{object} это @code{nil}, а также
+возвращает @code{nil} в противном случае.  Эта функция идентична @code{not},
+но в качестве ясности мы используем @code{null} когда @var{object} 
+рассматривается как список и используем @code{not} когда это рассматривается 
+со стороны значения истины
 (see @code{not} in @ref{Combining Conditions}).
 
 @example
@@ -159,13 +160,13 @@ considered a list and @code{not} when it is considered a truth value
 @cindex list elements
 
 @defun car cons-cell
-This function returns the value referred to by the first slot of the
-cons cell @var{cons-cell}.  In other words, it returns the @sc{car} of
+Эта функция возвращает значение, на которое ссылается первый элемент
+ячейки cons @var{cons-cell}.  Другими словами, он возвращает @sc{car} для
 @var{cons-cell}.
 
-As a special case, if @var{cons-cell} is @code{nil}, this function
-returns @code{nil}.  Therefore, any list is a valid argument.  An
-error is signaled if the argument is not a cons cell or @code{nil}.
+В качестве особого случая, если @var{cons-cell} это @code{nil}, Эта функция
+возвращает @code{nil}.  Поэтому любой список является допустимым аргументом.
+Ошибка сигнализируется, если аргумент не является ячейкой cons или @code{nil}.
 
 @example
 @group
@@ -180,13 +181,13 @@ error is signaled if the argument is not a cons cell or @code{nil}.
 @end defun
 
 @defun cdr cons-cell
-This function returns the value referred to by the second slot of the
-cons cell @var{cons-cell}.  In other words, it returns the @sc{cdr} of
+Эта функция возвращает значение, на которое ссылается второй элемент
+ячейки cons @var{cons-cell}.  Другими словами, он возвращает @sc{cdr} для
 @var{cons-cell}.
 
-As a special case, if @var{cons-cell} is @code{nil}, this function
-returns @code{nil}; therefore, any list is a valid argument.  An error
-is signaled if the argument is not a cons cell or @code{nil}.
+В качестве особого случая, если @var{cons-cell} это @code{nil}, эта функция
+возвращает @code{nil}; поэтому любой список является допустимым аргументом. Ошибка
+сигнализируется, если аргумент не является ячейкой cons или @code{nil}.
 
 @example
 @group
@@ -201,10 +202,10 @@ is signaled if the argument is not a cons cell or @code{nil}.
 @end defun
 
 @defun car-safe object
-This function lets you take the @sc{car} of a cons cell while avoiding
-errors for other data types.  It returns the @sc{car} of @var{object} if
-@var{object} is a cons cell, @code{nil} otherwise.  This is in contrast
-to @code{car}, which signals an error if @var{object} is not a list.
+Эта функция позволяет вам использовать @sc {car} ячейки cons, избегая
+ошибки для других типов данных. Она возвращает @sc{car} для @var{object} если
+@var{object} это ячейка cons, @code{nil} в противном случае. Это в отличии от
+@code{car}, который сигнализирует об ошибке, если @var{object} не список.
 
 @example
 @group
@@ -219,11 +220,11 @@ to @code{car}, which signals an error if @var{object} is not a list.
 @end defun
 
 @defun cdr-safe object
-This function lets you take the @sc{cdr} of a cons cell while
-avoiding errors for other data types.  It returns the @sc{cdr} of
-@var{object} if @var{object} is a cons cell, @code{nil} otherwise.
-This is in contrast to @code{cdr}, which signals an error if
-@var{object} is not a list.
+Эта функция позволяет @sc{cdr} принимать ячейки cons 
+избегая ошибок для других типов данных. Она возвращает @sc{cdr} для
+@var{object} если @var{object} является ячейкой cons, @code{nil} в противном случае.
+Это в отличие от @code{cdr}, который сигнализирует об ошибке, если
+@var{object} не список.
 
 @example
 @group
@@ -238,14 +239,14 @@ This is in contrast to @code{cdr}, which signals an error if
 @end defun
 
 @defmac pop listname
-This macro provides a convenient way to examine the @sc{car} of a
-list, and take it off the list, all at once.  It operates on the list
-stored in @var{listname}.  It removes the first element from the list,
-saves the @sc{cdr} into @var{listname}, then returns the removed
-element.
+Этот макрос предоставляет удобный способ @sc{car} для
+списка и сразу удалить его из списка. Он работает со списком
+который хранится в @var{listname}.  Он удаляет первый элемент из списка,
+сохраняет @sc{cdr} в @var{listname} и затем возвращает удаленный
+элемент.
 
-In the simplest case, @var{listname} is an unquoted symbol naming a
-list; in that case, this macro is equivalent to @w{@code{(prog1
+В простейшем случае, @var{listname} является некотируемым символом, обозначающим
+список; В этом случае этот макрос эквивалентен @w{@code{(prog1
 (car listname) (setq listname (cdr listname)))}}.
 
 @example
@@ -257,8 +258,8 @@ x
      @result{} (b c)
 @end example
 
-More generally, @var{listname} can be a generalized variable.  In that
-case, this macro saves into @var{listname} using @code{setf}.
+В более общем смысле, @var{listname} может быть обобщенной переменной. В этом
+случае, этот макрос сохраняет в @var{listname} с помощью @code{setf}.
 @xref{Generalized Variables}.
 
 For the @code{push} macro, which adds an element to a list,

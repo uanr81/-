@@ -236,25 +236,24 @@ This variable is used by passing it as an argument to the function
 @cindex regular expression
 @cindex regexp
 
-  A @dfn{regular expression}, or @dfn{regexp} for short, is a pattern that
-denotes a (possibly infinite) set of strings.  Searching for matches for
-a regexp is a very powerful operation.  This section explains how to write
-regexps; the following section says how to search for them.
+  @dfn{regular expression}, или @dfn{regexp} для краткости - это шаблон, который
+обозначает (возможно, бесконечное) множество строк. Поиск совпадений для
+Regexp - очень мощная операция. В этом разделе объясняется, как писать
+regexp. В следующем разделе говорится, как их искать.
 
 @findex re-builder
 @cindex regular expressions, developing
-  For interactive development of regular expressions, you
-can use the @kbd{M-x re-builder} command.  It provides a convenient
-interface for creating regular expressions, by giving immediate visual
-feedback in a separate buffer.  As you edit the regexp, all its
-matches in the target buffer are highlighted.  Each parenthesized
-sub-expression of the regexp is shown in a distinct face, which makes
-it easier to verify even very complex regexps.
+  Для интерактивной разработки регулярных выражений вы
+может использовать @kbd{M-x re-builder} команду.  Это обеспечивает удобный
+интерфейс для создания регулярных выражений, с обратной связью в отдельном буфере. 
+Когда вы редактируете регулярное выражение, все его совпадения в целевом буфере выделены. 
+Каждое подвыражение регулярного выражения показано на отдельном лице, что делает
+проще проверить даже очень сложные регулярные выражения.
 
 @menu
-* Syntax of Regexps::       Rules for writing regular expressions.
-* Regexp Example::          Illustrates regular expression syntax.
-* Regexp Functions::        Functions for operating on regular expressions.
+* Syntax of Regexps::       Правила написания регулярных выражений.
+* Regexp Example::          Иллюстрация синтаксиса регулярных выражений.
+* Regexp Functions::        Функции для работы с регулярными выражениями.
 @end menu
 
 @node Syntax of Regexps
@@ -262,160 +261,162 @@ it easier to verify even very complex regexps.
 @cindex regexp syntax
 @cindex syntax of regular expressions
 
-  Regular expressions have a syntax in which a few characters are
-special constructs and the rest are @dfn{ordinary}.  An ordinary
-character is a simple regular expression that matches that character
-and nothing else.  The special characters are @samp{.}, @samp{*},
-@samp{+}, @samp{?}, @samp{[}, @samp{^}, @samp{$}, and @samp{\}; no new
-special characters will be defined in the future.  The character
-@samp{]} is special if it ends a character alternative (see later).
-The character @samp{-} is special inside a character alternative.  A
-@samp{[:} and balancing @samp{:]} enclose a character class inside a
-character alternative.  Any other character appearing in a regular
-expression is ordinary, unless a @samp{\} precedes it.
+  Регулярные выражения имеют синтаксис, в котором несколько символов
+являются специальными конструкциями, а остальные - @dfn{ordinary}.  Обычный
+символ - это простое регулярное выражение, которое соответствует этому символу
+и ничего больше. Специальные символы @samp{.}, @samp{*},
+@samp{+}, @samp{?}, @samp{[}, @samp{^}, @samp{$}, и @samp{\}; никакие новые
+специальные символы не будут определены в будущем. Персонаж
+@samp{]} является специальным, если он заканчивает альтернативу символа (см. Ниже).
+Персонаж @samp{-} является особенным внутри альтернатив персонажа.  
+@samp{[:} и сбалансированый @samp{:]} заключит класс символов внутри
+символа альтернативы. Любой другой персонаж, появляющийся в обычном
+выражении является обычным, если только ему не предшествует @samp{\}.
 
-  For example, @samp{f} is not a special character, so it is ordinary, and
-therefore @samp{f} is a regular expression that matches the string
-@samp{f} and no other string.  (It does @emph{not} match the string
-@samp{fg}, but it does match a @emph{part} of that string.)  Likewise,
-@samp{o} is a regular expression that matches only @samp{o}.
+  Например, @samp{f} не является особым символом, поэтому он является обычным, и
+следовательно @samp{f} является регулярным выражением, которое соответствует строке
+@samp{f} и никакой другой строке.  (Оно делает @emph{not} соответствие строке
+@samp{fg}, но он соответствует @emph{part} этой строки.) Аналогично,
+@samp{o} является регулярным выражением, которое соответствует только @samp{o}.
 
-  Any two regular expressions @var{a} and @var{b} can be concatenated.  The
-result is a regular expression that matches a string if @var{a} matches
-some amount of the beginning of that string and @var{b} matches the rest of
-the string.
+  Любые два регулярных выражения @var{a} и @var{b} могут быть объединены.
+Результат является регулярное выражение, которое соответствует строке, если @var{a} соответствует
+некоторому количеству начала этой строки и @var{b} соответствует остальной части
+строки.
 
-  As a simple example, we can concatenate the regular expressions @samp{f}
-and @samp{o} to get the regular expression @samp{fo}, which matches only
-the string @samp{fo}.  Still trivial.  To do something more powerful, you
-need to use one of the special regular expression constructs.
+  В качестве простого примера мы можем конкатенировать регулярные выражения @samp{f}
+и @samp{o} для получения регулярного выражения @samp {fo}, которое соответствует только
+строке @samp{fo}.  Все еще тривиально. Чтобы сделать что-то более мощное, 
+необходимо использовать одну из специальных конструкций регулярных выражений.
 
 @menu
-* Regexp Special::      Special characters in regular expressions.
-* Char Classes::        Character classes used in regular expressions.
-* Regexp Backslash::    Backslash-sequences in regular expressions.
+* Regexp Special::      Специальные символы в регулярных выражениях.
+* Char Classes::        Классы символов, используемые в регулярных выражениях.
+* Regexp Backslash::    Обратные последовательности в регулярных выражениях.
 @end menu
 
 @node Regexp Special
 @subsubsection Special Characters in Regular Expressions
 @cindex regexp, special characters in
 
-  Here is a list of the characters that are special in a regular
-expression.
+  Вот список символов, которые являются особыми в регулярном
+выражение.
 
 @need 800
 @table @asis
 @item @samp{.}@: @r{(Period)}
 @cindex @samp{.} in regexp
-is a special character that matches any single character except a newline.
-Using concatenation, we can make regular expressions like @samp{a.b}, which
-matches any three-character string that begins with @samp{a} and ends with
+Это специальный символ, который соответствует любому одиночному символу, кроме новой строки.
+Используя конкатенацию, мы можем сделать регулярное выражение типа @samp{a.b}, которому
+соответствует любая трехсимвольная строка, которая начинается с @samp{a} и заканчивается
 @samp{b}.
 
 @item @samp{*}
 @cindex @samp{*} in regexp
-is not a construct by itself; it is a postfix operator that means to
-match the preceding regular expression repetitively as many times as
-possible.  Thus, @samp{o*} matches any number of @samp{o}s (including no
+Не конструкция сама по себе; Это постфиксный оператор, что означает
+повторение регулярного выражения столько раз, сколько
+возможно.  Таким образом, @samp{o*} соответствует любому числу @samp{o}s (в том числе нулю
 @samp{o}s).
 
-@samp{*} always applies to the @emph{smallest} possible preceding
-expression.  Thus, @samp{fo*} has a repeating @samp{o}, not a repeating
-@samp{fo}.  It matches @samp{f}, @samp{fo}, @samp{foo}, and so on.
+@samp{*} всегда относится к @emph{наименьшему} возможному предшествующему
+выражению.  Таким образом, @samp{fo*} имеет повторяющийся @samp{o}, не повторяющийся
+@samp{fo}.  Это соответствует @samp{f}, @samp{fo}, @samp{foo}, и так далее.
 
 @cindex backtracking and regular expressions
-The matcher processes a @samp{*} construct by matching, immediately, as
-many repetitions as can be found.  Then it continues with the rest of
-the pattern.  If that fails, backtracking occurs, discarding some of the
-matches of the @samp{*}-modified construct in the hope that that will
-make it possible to match the rest of the pattern.  For example, in
-matching @samp{ca*ar} against the string @samp{caaar}, the @samp{a*}
-first tries to match all three @samp{a}s; but the rest of the pattern is
-@samp{ar} and there is only @samp{r} left to match, so this try fails.
-The next alternative is for @samp{a*} to match only two @samp{a}s.  With
-this choice, the rest of the regexp matches successfully.
+Соединитель обрабатывает @samp{*} путем сопоставления, сразу, 
+стольких повторений сколько можно найти. Затем он продолжает с остальной частью
+шаблона. Если это не удается, происходит обратное отслеживание, отбрасывая некоторые из
+совпадений @samp{*}-модифицированной конструкции в надежде, что это 
+позволит сопоставить остальную часть рисунка.  Для примера, в
+согласовании @samp{ca*ar} против строки @samp{caaar}, @samp{a*}
+сначала пытается сопоставить все три @samp{a}s; но остальная часть рисунка
+@samp{ar} и есть только @samp{r} слева, чтобы совместить, поэтому эта попытка не удалась.
+Следующая альтернатива для @samp{a*} Чтобы соответствовать только двум @samp{a}s.  С
+этим выбором, остальные регулярные выражения успешно совпадают.
 
-@strong{Warning:} Nested repetition operators can run for an
-indefinitely long time, if they lead to ambiguous matching.  For
-example, trying to match the regular expression @samp{\(x+y*\)*a}
-against the string @samp{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz} could
-take hours before it ultimately fails.  Emacs must try each way of
-grouping the @samp{x}s before concluding that none of them can work.
-Even worse, @samp{\(x*\)*} can match the null string in infinitely
-many ways, so it causes an infinite loop.  To avoid these problems,
-check nested repetitions carefully, to make sure that they do not
-cause combinatorial explosions in backtracking.
+@strong{Внимание:} Операторы вложенных повторений могут запускаться
+бесконечно долгое время, если они приводят к неоднозначному согласованию. Для
+примера, пытаясь сопоставить регулярное выражение @samp{\(x+y*\)*a}
+строке @samp{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz} может потребовать
+несколько часов, прежде чем это в конечном итоге потерпит неудачу. Emacs должен 
+попробовать каждый способ руппируя @samp {x} s, прежде чем заключить, что никто из них 
+не сможет сработать.
+Еще хуже, @samp{\(x*\)*} может бесконечно совпадать с нулевой строкой
+множеством способов, поэтому это вызывает бесконечный цикл. Чтобы избежать этих проблем,
+тщательно проверяйте вложенные повторения, чтобы убедиться, что они не
+вызовут комбинаторные взрывы при отклонении
+.
 
 @item @samp{+}
 @cindex @samp{+} in regexp
-is a postfix operator, similar to @samp{*} except that it must match
-the preceding expression at least once.  So, for example, @samp{ca+r}
-matches the strings @samp{car} and @samp{caaaar} but not the string
-@samp{cr}, whereas @samp{ca*r} matches all three strings.
+Является постфиксным оператором, аналогичным @samp{*} за исключением того, что он 
+должен соответствовать предыдущему выражению хотя бы один раз. Так, например,, @samp{ca+r}
+соответствует строкам @samp{car} и @samp{caaaar} но не строке
+@samp{cr}, в то время как @samp{ca*r} соответствует всем трем строкам.
 
 @item @samp{?}
 @cindex @samp{?} in regexp
-is a postfix operator, similar to @samp{*} except that it must match the
-preceding expression either once or not at all.  For example,
-@samp{ca?r} matches @samp{car} or @samp{cr}; nothing else.
+Является постфиксным оператором, аналогичным @samp{*} за исключением того, что он 
+должен соответствовать предшествующему выражению либо один раз, либо вообще 
+нет. Например, @samp{ca?r} соответствует @samp{car} или @samp{cr}; и ничему более.
 
 @item @samp{*?}, @samp{+?}, @samp{??}
 @cindex non-greedy repetition characters in regexp
-These are @dfn{non-greedy} variants of the operators @samp{*}, @samp{+}
-and @samp{?}.  Where those operators match the largest possible
-substring (consistent with matching the entire containing expression),
-the non-greedy variants match the smallest possible substring
-(consistent with matching the entire containing expression).
+Эти @dfn{non-greedy} варианты операторов @samp{*}, @samp{+}
+и @samp{?}.  Где эти операторы соответствуют максимально возможной
+подстроке (согласующаяся с совпадением всего содержащего выражения),
+Нежелательные варианты соответствуют наименьшей возможной подстроке
+(В соответствии с совпадением всего содержащего выражения).
 
-For example, the regular expression @samp{c[ad]*a} when applied to the
-string @samp{cdaaada} matches the whole string; but the regular
-expression @samp{c[ad]*?a}, applied to that same string, matches just
-@samp{cda}.  (The smallest possible match here for @samp{[ad]*?} that
-permits the whole expression to match is @samp{d}.)
+Например, регулярное выражение @samp{c[ad]*a} когда применяется к
+строке @samp{cdaaada} соответствует всей строке; Но регулярные
+выражение @samp{c[ad]*?a}, применяемое к той же строке, соответствует только
+@samp{cda}.  (Наименьшее возможное совпадение здесь для @samp{[ad]*?} что
+позволяет совместить все выражение @samp{d}.)
 
 @item @samp{[ @dots{} ]}
 @cindex character alternative (in regexp)
 @cindex @samp{[} in regexp
 @cindex @samp{]} in regexp
-is a @dfn{character alternative}, which begins with @samp{[} and is
-terminated by @samp{]}.  In the simplest case, the characters between
-the two brackets are what this character alternative can match.
+в @dfn{character alternative}, которое начинается с @samp{[} и 
+оканчивается @samp{]}.  В простейшем случае символы между
+двух скобок - это то, что может соответствовать этой альтернативе.
 
-Thus, @samp{[ad]} matches either one @samp{a} or one @samp{d}, and
-@samp{[ad]*} matches any string composed of just @samp{a}s and @samp{d}s
-(including the empty string).  It follows that @samp{c[ad]*r}
-matches @samp{cr}, @samp{car}, @samp{cdr}, @samp{caddaar}, etc.
+Таким образом, @samp{[ad]} соответствует одному @samp{a} или одному @samp{d}, или
+@samp{[ad]*} соответствует любой строке, состоящей только из @samp{a}s и @samp{d}s
+(включая пустую строку).  Следовательно, что @samp{c[ad]*r}
+соответствует @samp{cr}, @samp{car}, @samp{cdr}, @samp{caddaar}, и т.д.
 
-You can also include character ranges in a character alternative, by
-writing the starting and ending characters with a @samp{-} between them.
-Thus, @samp{[a-z]} matches any lower-case @acronym{ASCII} letter.
-Ranges may be intermixed freely with individual characters, as in
-@samp{[a-z$%.]}, which matches any lower case @acronym{ASCII} letter
-or @samp{$}, @samp{%} or period.
+Вы также можете включить диапазоны символов в альтернативу символов,
+Запись начального и конечного символов с помощью @samp{-} между ними.
+Таким образом, @samp{[a-z]} соответствует любому нижнему регистру @acronym{ASCII} письма.
+Диапазоны могут смешиваться свободно с отдельными символами, как в
+@samp{[a-z$%.]}, который соответствует любому нижнему регистру @acronym{ASCII} письма
+или @samp{$}, @samp{%} или пробелу.
 
-If @code{case-fold-search} is non-@code{nil}, @samp{[a-z]} also
-matches upper-case letters.  Note that a range like @samp{[a-z]} is
-not affected by the locale's collation sequence, it always represents
-a sequence in @acronym{ASCII} order.
-@c This wasn't obvious to me, since, e.g., the grep manual "Character
-@c Classes and Bracket Expressions" specifically notes the opposite
-@c behavior.  But by experiment Emacs seems unaffected by LC_COLLATE
-@c in this regard.
+Если @code{case-fold-search} не-@code{nil}, @samp{[a-z]} также
+соответствует строчным буквам. Обратите внимание, что диапазон, подобный 
+@samp{[a-z]} не зависит от последовательности сортировки локали, она всегда представляет
+последовательность в @acronym{ASCII} стандарте.
+@c Это не было очевидно для меня, так как, например, руководство grep «Характер
+@c Классы и выражения скобок "в частности отмечает обратное
+@c поведение. Но эксперимент Emacs кажется незатронутым LC_COLLATE
+@c в этой связи.
 
-Note also that the usual regexp special characters are not special inside a
-character alternative.  A completely different set of characters is
-special inside character alternatives: @samp{]}, @samp{-} and @samp{^}.
+Также обратите внимание, что обычные специальные регулярные выражения не 
+являются особыми внутри символов альтернативы. Совершенно другой набор 
+специальных символов внутри символов альтернативы: @samp{]}, @samp{-} and @samp{^}.
 
-To include a @samp{]} in a character alternative, you must make it the
-first character.  For example, @samp{[]a]} matches @samp{]} or @samp{a}.
-To include a @samp{-}, write @samp{-} as the first or last character of
-the character alternative, or put it after a range.  Thus, @samp{[]-]}
-matches both @samp{]} and @samp{-}.  (As explained below, you cannot
-use @samp{\]} to include a @samp{]} inside a character alternative,
-since @samp{\} is not special there.)
+Включить @samp{]} персонаж в альтернативе, вы должны сделать его
+первым символ. Например, @samp{[]a]} соответствует @samp{]} или @samp{a}.
+Для включения @samp{-}, записывайте @samp{-} как первый или последний 
+символ альтернативы, или поместить его после пробела. таким образом, @samp{[]-]}
+соответствует @samp{]} и @samp{-}.  (как объяснено ниже, вы не можете
+использовать @samp{\]} включая @samp{]} внутри альтернативы персонажа,
+поскольку @samp{\} там не спец символ.)
 
-To include @samp{^} in a character alternative, put it anywhere but at
-the beginning.
+Для включения @samp{^} в альтернативе персонажей, поместите его куда угодно, но
+не в начало.
 
 @c What if it starts with a multibyte and ends with a unibyte?
 @c That doesn't seem to match anything...?

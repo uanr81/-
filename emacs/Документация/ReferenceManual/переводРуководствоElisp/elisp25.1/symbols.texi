@@ -7,104 +7,104 @@
 @chapter Symbols
 @cindex symbol
 
-  A @dfn{symbol} is an object with a unique name.  This chapter
-describes symbols, their components, their property lists, and how they
-are created and interned.  Separate chapters describe the use of symbols
-as variables and as function names; see @ref{Variables}, and
-@ref{Functions}.  For the precise read syntax for symbols, see
+  @dfn{symbol} это объект с уникальным именем. Эта глава
+описывает символы, их компоненты, их списки свойств и как они
+создаются и интернированы. В отдельных главах описывается использование символов
+как переменных и ка имена функций; смотри @ref{Variables}, и
+@ref{Functions}.  Для точного синтаксиса чтения символов см.
 @ref{Symbol Type}.
 
-  You can test whether an arbitrary Lisp object is a symbol with
-@code{symbolp}:
+  Вы можете проверить, является ли произвольный объект Lisp символом с
+помощью @code{symbolp}:
 
 @defun symbolp object
-This function returns @code{t} if @var{object} is a symbol, @code{nil}
-otherwise.
+Эта функция возвращает @code{t} если @var{object} это символ, @code{nil}
+в противном случае.
 @end defun
 
 @menu
-* Symbol Components::        Symbols have names, values, function definitions
-                               and property lists.
-* Definitions::              A definition says how a symbol will be used.
-* Creating Symbols::         How symbols are kept unique.
-* Symbol Properties::        Each symbol has a property list
-                               for recording miscellaneous information.
+* Symbol Components::        Символы имеют имена, значения, определения функций
+                               и списки свойств.
+* Definitions::              В определении говорится, как будет использоваться символ.
+* Creating Symbols::         Как символы сохраняются уникальными.
+* Symbol Properties::        Каждый символ имеет список свойств
+                               для записи различной информации.
 @end menu
 
 @node Symbol Components
 @section Symbol Components
 @cindex symbol components
 
-  Each symbol has four components (or ``cells''), each of which
-references another object:
+  Каждый символ имеет четыре компонента (или ``ячейки''), каждая, из которых
+ссылается на другой объект:
 
 @table @asis
 @item Print name
-@cindex print name cell
-The symbol's name.
+@cindex Ячейка печатное имя
+Имя символа.
 
 @item Value
-@cindex value cell
-The symbol's current value as a variable.
+@cindex Ячейка значение
+Текущее значение символа как переменной.
 
 @item Function
-@cindex function cell
-The symbol's function definition.  It can also hold a symbol, a
-keymap, or a keyboard macro.
+@cindex Ячейка функция
+Определение функции символа. Он также может содержать символ,
+раскладку или клавиатурный макрос.
 
 @item Property list
-@cindex property list cell
-The symbol's property list.
+@cindex Ячейка список свойств
+Список свойств символа.
 @end table
 
 @noindent
-The print name cell always holds a string, and cannot be changed.
-Each of the other three cells can be set to any Lisp object.
+Ячейка имени печати всегда содержит строку и не может быть изменено.
+Каждая из трех осталтных ячеек может быть установлена ​​на любой объект Lisp.
 
-  The print name cell holds the string that is the name of a symbol.
-Since symbols are represented textually by their names, it is
-important not to have two symbols with the same name.  The Lisp reader
-ensures this: every time it reads a symbol, it looks for an existing
-symbol with the specified name before it creates a new one.  To get a
-symbol's name, use the function @code{symbol-name} (@pxref{Creating
+  Ячейка имени печати содержит строку, которая является именем символа.
+Поскольку символы представлены текстовыми именами, не возможно
+иметь два символа с одинаковым именем. Интерпретатор Лиспа
+обеспечивает это: каждый раз, когда он читает символ, он ищет существующий
+символ с указанным именем перед созданием нового. Чтобы получить
+имя символа, используйте функцию @code{symbol-name} (@pxref{Creating
 Symbols}).
 
-  The value cell holds a symbol's value as a variable, which is what
-you get if the symbol itself is evaluated as a Lisp expression.
-@xref{Variables}, for details about how values are set and retrieved,
-including complications such as @dfn{local bindings} and @dfn{scoping
-rules}.  Most symbols can have any Lisp object as a value, but certain
-special symbols have values that cannot be changed; these include
-@code{nil} and @code{t}, and any symbol whose name starts with
-@samp{:} (those are called @dfn{keywords}).  @xref{Constant
+  Ячейка значения содержит значение символа в качестве переменной, которое
+вы получаете, если символ оценивается как выражение Lisp.
+@xref{Variables}, для получения подробной информации о том, как значения устанавливаются 
+и извлекаются, включая такие осложнения, как @dfn{local bindings} и @dfn{scoping
+rules}.  Большинство символов могут иметь любой объект Lisp в качестве значения, но 
+определенные специальные символы имеют значения, которые нельзя изменить; к ним 
+относятся @code{nil} и @code{t}, и любой символ, имя которого начинается с
+@samp{:} (они называются @dfn{keywords}).  @xref{Constant
 Variables}.
 
-  The function cell holds a symbol's function definition.  Often, we
-refer to ``the function @code{foo}'' when we really mean the function
-stored in the function cell of @code{foo}; we make the distinction
-explicit only when necessary.  Typically, the function cell is used to
-hold a function (@pxref{Functions}) or a macro (@pxref{Macros}).
-However, it can also be used to hold a symbol (@pxref{Function
-Indirection}), keyboard macro (@pxref{Keyboard Macros}), keymap
-(@pxref{Keymaps}), or autoload object (@pxref{Autoloading}).  To get
-the contents of a symbol's function cell, use the function
+  Функциональная ячейка содержит определение функции символа. Часто мы
+ссылаемся на ``функцию @code{foo}'' когда мы действительно имеем в виду функцию
+хранящуюся в функциональной ячейке @code{foo}; мы делаем различие
+только в случае необходимости. Как правило, функциональная ячейка используется для
+удерживания функции (@pxref{Functions}) или макроса (@pxref{Macros}).
+Однако она также может использоваться для хранения символа (@pxref{Function
+Indirection}), клавиатурного макроса (@pxref{Keyboard Macros}), раскладки
+(@pxref{Keymaps}), или объекта автозагрузки (@pxref{Autoloading}).  Для получения
+содержимого ячейки функции символа, используйте функцию
 @code{symbol-function} (@pxref{Function Cells}).
 
-  The property list cell normally should hold a correctly formatted
-property list.  To get a symbol's property list, use the function
+  Обычно ячейка списка свойств должна содержать правильно отформатированный
+список свойств. Чтобы получить список свойств символа, используйте функцию
 @code{symbol-plist}.  @xref{Symbol Properties}.
 
-  The function cell or the value cell may be @dfn{void}, which means
-that the cell does not reference any object.  (This is not the same
-thing as holding the symbol @code{void}, nor the same as holding the
-symbol @code{nil}.)  Examining a function or value cell that is void
-results in an error, such as @samp{Symbol's value as variable is void}.
+  Функциональная ячейка или ячейка значения могут быть @dfn {void}, что означает
+что ячейка не ссылается ни на какой объект. (Это не то же самое
+как символ @code{void}, ни то же самое, что удерживать
+символ @code{nil}.)  Изучение ячейки функции или значения, которая является 
+недействительной приводит к ошибке, например @samp{Symbol's value as variable is void}.
 
-  Because each symbol has separate value and function cells, variables
-names and function names do not conflict.  For example, the symbol
-@code{buffer-file-name} has a value (the name of the file being
-visited in the current buffer) as well as a function definition (a
-primitive function that returns the name of the file):
+  Поскольку каждый символ имеет отдельные ячейки значений и функций, переменные
+имена и имена функций не конфликтуют. Например, символ
+@code{buffer-file-name} имеет значение (имя файла, являющегося
+посещенным в текущем буфере), а также определение функции 
+(примитивная функция, которая возвращает имя файла):
 
 @example
 buffer-file-name
@@ -117,134 +117,135 @@ buffer-file-name
 @section Defining Symbols
 @cindex definitions of symbols
 
-  A @dfn{definition} is a special kind of Lisp expression that
-announces your intention to use a symbol in a particular way.  It
-typically specifies a value or meaning for the symbol for one kind of
-use, plus documentation for its meaning when used in this way.  Thus,
-when you define a symbol as a variable, you can supply an initial
-value for the variable, plus documentation for the variable.
+  @dfn{definition} Это особый вид выражения Лиспа, который
+объявляет о намерении использовать символ определенным образом. Это
+обычно указывает значение или значение для символа для одного вида
+использования, а также документацию по его значению при использовании таким образом. 
+Таким образом, когда вы определяете символ как переменную, вы можете указать 
+начальное значение для переменной, плюс документацию для переменной.
 
-  @code{defvar} and @code{defconst} are special forms that define a
-symbol as a @dfn{global variable}---a variable that can be accessed at
-any point in a Lisp program.  @xref{Variables}, for details about
-variables.  To define a customizable variable, use the
-@code{defcustom} macro, which also calls @code{defvar} as a subroutine
+  @code{defvar} и @code{defconst} являются особыми формами, которые определяют
+символ как @dfn{global variable}---переменную, к которой можно получить доступ
+любая точка в программе Lisp.  @xref{Variables}, для получения дополнительной информации
+о переменных. Чтобы определить настраиваемую переменную, используйте
+@code{defcustom} макрос, который также вызывает @code{defvar} как подпрограмма
 (@pxref{Customization}).
 
-  In principle, you can assign a variable value to any symbol with
-@code{setq}, whether not it has first been defined as a variable.
-However, you ought to write a variable definition for each global
-variable that you want to use; otherwise, your Lisp program may not
-act correctly if it is evaluated with lexical scoping enabled
+  В принципе, вы можете присвоить значение переменной любому символу с помощью
+@code{setq}, если она не была сначала определена как переменная.
+Тем не менее, вы должны написать определение переменной для каждой глобальной
+переменной, которую вы хотите использовать; В противном случае ваша программа Lisp может не
+действовать правильно, если оценивается с включенной лексической видимостью
 (@pxref{Variable Scoping}).
 
-  @code{defun} defines a symbol as a function, creating a lambda
-expression and storing it in the function cell of the symbol.  This
-lambda expression thus becomes the function definition of the symbol.
-(The term ``function definition'', meaning the contents of the function
-cell, is derived from the idea that @code{defun} gives the symbol its
-definition as a function.)  @code{defsubst} and @code{defalias} are two
-other ways of defining a function.  @xref{Functions}.
+  @code{defun} определяет символ как функцию, создавая лямбда
+выражение и сохранения его в ячейке функции символа. 
+Таким образом, лямбда-выражение становится определением функции символа.
+(Термин ``определение функции '', означает содержание ячейки функции,
+и вытекает из идеи, что @code{defun} дает символ
+определения как функцию.)  @code{defsubst} и @code{defalias} два
+других способа определения функции.  @xref{Functions}.
 
-  @code{defmacro} defines a symbol as a macro.  It creates a macro
-object and stores it in the function cell of the symbol.  Note that a
-given symbol can be a macro or a function, but not both at once, because
-both macro and function definitions are kept in the function cell, and
-that cell can hold only one Lisp object at any given time.
+  @code{defmacro} определяет символ как макрос. Он создает 
+объект макроса и сохраняет его в ячейке функции символа. Заметим, что
+данный символ может быть макросом или функцией, но не обоими сразу, потому что
+оба и макрос и определения функций хранятся в функциональной ячейке, и
+эта ячейка может удерживать только один объект Lisp в любой момент времени.
 @xref{Macros}.
 
-  As previously noted, Emacs Lisp allows the same symbol to be defined
-both as a variable (e.g., with @code{defvar}) and as a function or
-macro (e.g., with @code{defun}).  Such definitions do not conflict.
+  Как отмечалось ранее, Emacs Lisp позволяет определить один и тот же символ
+как переменная (e.g., with @code{defvar}) и как функцию или
+макрос (e.g., with @code{defun}).  Такие определения не конфликтуют.
 
-  These definition also act as guides for programming tools.  For
-example, the @kbd{C-h f} and @kbd{C-h v} commands create help buffers
-containing links to the relevant variable, function, or macro
-definitions.  @xref{Name Help,,, emacs, The GNU Emacs Manual}.
+  Это определение также выступает в качестве руководства для инструментов программирования. 
+Например, @kbd{C-h f} и @kbd{C-h v} команды создают вспомогательные буферы
+содержащие ссылки на соответствующую переменную, определение функции или макроса.
+ @xref{Name Help,,, emacs, The GNU Emacs Manual}.
 
 @node Creating Symbols
 @section Creating and Interning Symbols
 @cindex reading symbols
 
-  To understand how symbols are created in GNU Emacs Lisp, you must know
-how Lisp reads them.  Lisp must ensure that it finds the same symbol
-every time it reads the same set of characters.  Failure to do so would
-cause complete confusion.
+  Чтобы понять, как создаются символы в GNU Emacs Lisp, вы должны знать
+как Лисп читает их. Lisp должен убедиться, что он находит тот же символ
+каждый раз, когда он читает один и тот же набор символов. Несоблюдение этого 
+приводило бы к полному замешательству.
 
 @cindex symbol name hashing
 @cindex hashing
 @cindex obarray
 @cindex bucket (in obarray)
-  When the Lisp reader encounters a symbol, it reads all the characters
-of the name.  Then it hashes those characters to find an index in a
-table called an @dfn{obarray}.  Hashing is an efficient method of
-looking something up.  For example, instead of searching a telephone
-book cover to cover when looking up Jan Jones, you start with the J's
-and go from there.  That is a simple version of hashing.  Each element
-of the obarray is a @dfn{bucket} which holds all the symbols with a
-given hash code; to look for a given name, it is sufficient to look
-through all the symbols in the bucket for that name's hash code.  (The
-same idea is used for general Emacs hash tables, but they are a
-different data type; see @ref{Hash Tables}.)
+  Когда интерпретатор Lisp встречает символ, он считывает все символы
+имени. Затем он хэширует эти символы, чтобы найти в индекс 
+таблице @dfn{obarray}.  Хеширование - эффективный метод
+осмотра поверхностно. Например, вместо поиска телефона Обинякина Алексея
+по всей телефонной книги, вы начинаете искать где находится ``О" и 
+идете оттуда. Это простая версия хэширования. Каждый элемент
+obarray является @dfn{bucket} который содержит все символы с заданным
+хэш-код; Искать какое-то имя, достаточно посмотреть
+все символы в obarray для хэш-кода этого имени. 
+(Эта же идея используется для общих хэш-таблиц Emacs, но они являются
+другим типом данных; смотри @ref{Hash Tables}.)
 
 @cindex interning
-  If a symbol with the desired name is found, the reader uses that
-symbol.  If the obarray does not contain a symbol with that name, the
-reader makes a new symbol and adds it to the obarray.  Finding or adding
-a symbol with a certain name is called @dfn{interning} it, and the
-symbol is then called an @dfn{interned symbol}.
+  Если найден символ с нужным именем, интерпретатор использует этот
+символ. Если obarray не содержит символ с таким именем,
+интерпретатор создает новый символ и добавляет его к obarray. J,yfhe;tybt или добавление
+символ с определенным именем называется @dfn{interning} его и
+символ затем называется @dfn{interned symbol}.
 
-  Interning ensures that each obarray has just one symbol with any
-particular name.  Other like-named symbols may exist, but not in the
-same obarray.  Thus, the reader gets the same symbols for the same
-names, as long as you keep reading with the same obarray.
+  Interning гарантирует, что каждый obarray имеет только один символ с любым
+конкретным именем. Другие похожие символы могут существовать, но не в
+той же obarray. Таким образом, интерпретатор получает одинаковые символы для одного и того же
+имени, пока вы продолжаете читать с того же obarray.
 
-  Interning usually happens automatically in the reader, but sometimes
-other programs need to do it.  For example, after the @kbd{M-x} command
-obtains the command name as a string using the minibuffer, it then
-interns the string, to get the interned symbol with that name.
+  Интернинг обычно происходит автоматически в интерпретаторе, но иногда
+другие программы должны это сделать. Например, после @kbd{M-x} команды
+интерпретатор получает имя команды в виде строки, используя минибуфер, потом
+получает строку, чтобы получить интернированный символ с этим именем.
 
 @cindex symbol equality
 @cindex uninterned symbol
-  No obarray contains all symbols; in fact, some symbols are not in any
-obarray.  They are called @dfn{uninterned symbols}.  An uninterned
-symbol has the same four cells as other symbols; however, the only way
-to gain access to it is by finding it in some other object or as the
-value of a variable.
+  Не все символы содержит obarray; На самом деле, некоторые символы не в
+obarray. Они называются @dfn{uninterned symbols}.  Неинтернированный 
+символ имеет те же четыре ячейки, что и другие символы; Однако, единственный способ
+получить доступ к нему - найти его в каком-то другом объекте или в качестве
+значения переменной.
 
-  Creating an uninterned symbol is useful in generating Lisp code,
-because an uninterned symbol used as a variable in the code you generate
-cannot clash with any variables used in other Lisp programs.
+Создание неинтерминированного символа полезно при генерации кода Lisp,
+потому что неинтерминированный символ, используемый в качестве переменной в коде, 
+который вы генерируете не может столкнуться с любыми переменными, используемыми 
+в других программах Lisp.
 
-  In Emacs Lisp, an obarray is actually a vector.  Each element of the
-vector is a bucket; its value is either an interned symbol whose name
-hashes to that bucket, or 0 if the bucket is empty.  Each interned
-symbol has an internal link (invisible to the user) to the next symbol
-in the bucket.  Because these links are invisible, there is no way to
-find all the symbols in an obarray except using @code{mapatoms} (below).
-The order of symbols in a bucket is not significant.
+  В Emacs Lisp, obarray - фактически вектор. Каждый элемент
+вектора  - @dfn{bucket}. Его значение является либо интернированным символом, чье имя
+хэш для этого obarray, или 0, если obarray пуст. Каждый интернированный
+cимвол имеет внутреннюю ссылку (невидимую для пользователя) на следующий символ
+в bucket. Поскольку эти ссылки невидимы, нет никакого способа
+yайти все символы в obarray, за исключением использования @code{mapatoms} (ниже).
+Порядок символов в bucket не имеет значения.
 
-  In an empty obarray, every element is 0, so you can create an obarray
-with @code{(make-vector @var{length} 0)}.  @strong{This is the only
-valid way to create an obarray.}  Prime numbers as lengths tend
-to result in good hashing; lengths one less than a power of two are also
-good.
+  В пустом obarray каждый элемент равен 0, поэтому вы можете создать obarray
+с @code{(make-vector @var{length} 0)}.  @strong{это единственный
+действительный способ создания obarray.}  Простые числа как длины
+приводят к хорошему хэшированию; Длины, меньшие, чем степень двойки, также
+хорошо.
 
-  @strong{Do not try to put symbols in an obarray yourself.}  This does
-not work---only @code{intern} can enter a symbol in an obarray properly.
+  @strong{Не пытайтесь помещать символы в obarray самостоятельно.}  Это 
+не сработает --- только @code{intern} может ввести символ в obarray правильно.
 
 @cindex CL note---symbol in obarrays
 @quotation
-@b{Common Lisp note:} Unlike Common Lisp, Emacs Lisp does not provide
-for interning a single symbol in several obarrays.
+@b{Common Lisp note:} В отличие от Common Lisp, Emacs Lisp не предоставляет
+интернирование одного символа в нескольких obarrays.
 @end quotation
 
-  Most of the functions below take a name and sometimes an obarray as
-arguments.  A @code{wrong-type-argument} error is signaled if the name
-is not a string, or if the obarray is not a vector.
+  Большинство функций ниже используют имя, а иногда и
+аргументы.  В @code{wrong-type-argument} ошибка сигнализируется, если имя
+не является строкой, или если obarray не является вектором.
 
 @defun symbol-name symbol
-This function returns the string that is @var{symbol}'s name.  For example:
+Эта функция возвращает строку, которая @var{symbol}'s имя символа.  Например:
 
 @example
 @group
@@ -253,9 +254,9 @@ This function returns the string that is @var{symbol}'s name.  For example:
 @end group
 @end example
 
-@strong{Warning:} Changing the string by substituting characters does
-change the name of the symbol, but fails to update the obarray, so don't
-do it!
+@strong{Внимание:} изменение строки путем подстановки символов
+изменит имя символа, но не обновит obarray, так что не
+делай это!
 @end defun
 
 @defun make-symbol name

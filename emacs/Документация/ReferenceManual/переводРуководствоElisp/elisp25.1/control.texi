@@ -513,11 +513,11 @@ in an environment where @var{args} are bound to @var{actual-args}.
 @end defun
 
 @defspec and conditions@dots{}
-Специальная форма @code{and} проверяет, все ли @var{conditions} указывают
-на истину. Она работает, оценивая @var{conditions} один за другим в
+Специальная форма @code{and} проверяет, все ли @var{conditions} истины.
+Она работает, оценивая @var{conditions} один за другим в
 текстовом порядке.
 
-Если какой-либо из @var{conditions} оценивается в @code{nil}, то результат
+Если какое-либо @var{conditions} оценивается в @code{nil}, то результат
 всего @code{and} будет @code{nil} независимо от остальных
 @var{conditions}; так @code{and} возвращает @code{nil} сразу, игнорируя
 оставшиеся @var{conditions}.
@@ -526,7 +526,7 @@ in an environment where @var{args} are bound to @var{actual-args}.
 последнее из них становится значением @code{and} формы.  Просто
 @code{(and)}, без @var{conditions}, возвращает @code{t}, подходящее
 потому что все @var{conditions} не-@code{nil}.  (Думать
-об этом; Чего нет?)
+о том чего нет?)
 
 Вот пример. Первое условие возвращает целое число 1, которое
 не @code{nil}.  Аналогично, второе условие возвращает целое число 2,
@@ -638,11 +638,11 @@ in an environment where @var{args} are bound to @var{actual-args}.
 оценивается @var{forms} еще раз. Этот процесс повторяется до тех пор, пока @var{condition}
 оценится в @code{nil}.
 
-There is no limit on the number of iterations that may occur.  The loop
-will continue until either @var{condition} evaluates to @code{nil} or
-until an error or @code{throw} jumps out of it (@pxref{Nonlocal Exits}).
+Количество итераций, которые могут произойти, не ограничено. Цикл
+будет продолжаться до тех пор, пока @var{condition} оценится в @code{nil} или
+пока ошибка или @code{throw} выпрыгнит из него (@pxref{Nonlocal Exits}).
 
-The value of a @code{while} form is always @code{nil}.
+Значение @code{while} формы всегда @code{nil}.
 
 @example
 @group
@@ -661,34 +661,34 @@ The value of a @code{while} form is always @code{nil}.
 @end group
 @end example
 
-To write a repeat-until loop, which will execute something on each
-iteration and then do the end-test, put the body followed by the
-end-test in a @code{progn} as the first argument of @code{while}, as
-shown here:
+Чтобы написать цикл repeat-until, который будет выполнять что-то на каждой
+итерации, а затем выполнит окончательный тест, поместить тело, за которым следует
+конечный тест в @code{progn} как первый аргумент @code{while}, как
+показано здесь:
 
 @example
 @group
 (while (progn
          (forward-line 1)
-         (not (looking-at "^$"))))
+         (not (1looking-at "^$"))))
 @end group
 @end example
 
 @noindent
-This moves forward one line and continues moving by lines until it
-reaches an empty line.  It is peculiar in that the @code{while} has no
-body, just the end test (which also does the real work of moving point).
+Это перемещает вперед по одной линии и продолжает движение по линиям, пока
+достигает пустой строки. Характерно, что @code{while} не имеет
+тела, только конечный тест (который также выполняет реальную работу движение точки).
 @end defspec
 
-  The @code{dolist} and @code{dotimes} macros provide convenient ways to
-write two common kinds of loops.
+  Макросы @code{dolist} и @code{dotimes} обеспечивают удобные способы
+написания двух общих типа циклов.
 
 @defmac dolist (var list [result]) body@dots{}
-This construct executes @var{body} once for each element of
-@var{list}, binding the variable @var{var} locally to hold the current
-element.  Then it returns the value of evaluating @var{result}, or
-@code{nil} if @var{result} is omitted.  For example, here is how you
-could use @code{dolist} to define the @code{reverse} function:
+Эта конструкция выполняет @var{body} один раз для каждого элемента
+@var{list}, привязка переменной @var{var} локальна, чтобы удерживать текущий
+элемент. Затем она возвращает значение оценки @var{result}, или
+@code{nil} если @var{result} опускается. Например, вот как вы
+можете использовать @code{dolist} для определения @code{reverse} функции:
 
 @example
 (defun reverse (list)
@@ -699,11 +699,11 @@ could use @code{dolist} to define the @code{reverse} function:
 @end defmac
 
 @defmac dotimes (var count [result]) body@dots{}
-This construct executes @var{body} once for each integer from 0
-(inclusive) to @var{count} (exclusive), binding the variable @var{var}
-to the integer for the current iteration.  Then it returns the value
-of evaluating @var{result}, or @code{nil} if @var{result} is omitted.
-Here is an example of using @code{dotimes} to do something 100 times:
+Эта конструкция выполняется @var{body} один раз для каждого целого числа от 0
+(Включительно) до @var{count} (исключая), Привязка переменной @var{var}
+к целому числу для текущей итерации. Затем он возвращает значение
+оценки @var{result}, или @code{nil} если @var{result} опускается.
+Вот пример использования @code{dotimes} сделать что-то 100 раз:
 
 @example
 (dotimes (i 100)
@@ -715,23 +715,24 @@ Here is an example of using @code{dotimes} to do something 100 times:
 @section Generators
 @cindex generators
 
-  A @dfn{generator} is a function that produces a potentially-infinite
-stream of values.  Each time the function produces a value, it
-suspends itself and waits for a caller to request the next value.
+  A @dfn{generator} - функция, создающая потенциально бесконечный
+поток значений.  Каждый раз, когда функция генерирует значение, она
+приостанавливается и ждет, пока вызывающий абонент запросит 
+следующее значение.
 
 @defmac iter-defun name args [doc] [declare] [interactive] body@dots{}
-@code{iter-defun} defines a generator function.  A generator function
-has the same signature as a normal function, but works differently.
-Instead of executing @var{body} when called, a generator function
-returns an iterator object.  That iterator runs @var{body} to generate
-values, emitting a value and pausing where @code{iter-yield} or
-@code{iter-yield-from} appears.  When @var{body} returns normally,
-@code{iter-next} signals @code{iter-end-of-sequence} with @var{body}'s
-result as its condition data.
+@code{iter-defun} определяет функцию генератор. Функция генератор
+имеет ту же подпись, что и обычная функция, но работает по-другому.
+Вместо выполнения @var{body} при вызове функция генератора
+возвращает объект итератора.  Этот итератор запускает @var{body} генерирует
+испускающие и приостанавливающие значения @code{iter-yield} или
+появляется @code{iter-yield-from}.  Когда @var{body} возвращается нормально,
+@code{iter-next} сигналы @code{iter-end-of-sequence} с @var{body}'s
+Результат в качестве данных условия.
 
-Any kind of Lisp code is valid inside @var{body}, but
-@code{iter-yield} and @code{iter-yield-from} cannot appear inside
-@code{unwind-protect} forms.
+Любой тип кода Лиспа действителен внутри @var{body}, но
+@code{iter-yield} и @code{iter-yield-from} не может появляться внутри
+@code{unwind-protect} форм.
 
 @end defmac
 
