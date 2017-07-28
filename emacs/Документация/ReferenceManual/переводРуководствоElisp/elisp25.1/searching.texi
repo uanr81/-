@@ -721,137 +721,136 @@ groups}.
 например, если за ним следуют @samp{*}), только последнее
 записывается совпадение.
 
-If a particular grouping construct in the regular expression was never
-matched---for instance, if it appears inside of an alternative that
-wasn't used, or inside of a repetition that repeated zero times---then
-the corresponding @samp{\@var{digit}} construct never matches
-anything.  To use an artificial example, @samp{\(foo\(b*\)\|lose\)\2}
-cannot match @samp{lose}: the second alternative inside the larger
-group matches it, but then @samp{\2} is undefined and can't match
-anything.  But it can match @samp{foobb}, because the first
-alternative matches @samp{foob} and @samp{\2} matches @samp{b}.
+Если конкретная структура группировки в регулярном выражении не была
+в соответствии, например, если оно появляется внутри альтернативы, которая
+не используется внутри повторения, которое повторялось ноль раз - тогда
+соответствующая @samp{\@var{digit}} конструкция ничему не соответствует.
+Используя искусственный пример, @samp{\(foo\(b*\)\|lose\)\2}
+не может совпасть с @samp{lose}: второй альтернативы внутри большей
+группы при сопоставлении его не определенной @samp{\2} и не может совпадать с
+чем-нибудь. Но может совпадать @samp{foobb}, потому что первая
+альтернатива соответствует @samp{foob} и @samp{\2} соответствует @samp{b}.
 
 @item \w
 @cindex @samp{\w} in regexp
-matches any word-constituent character.  The editor syntax table
-determines which characters these are.  @xref{Syntax Tables}.
+Соответствует любому текстовому составу. Таблица синтаксиса редактора
+определяет, какие это символы.  @xref{Syntax Tables}.
 
 @item \W
 @cindex @samp{\W} in regexp
-matches any character that is not a word constituent.
+Соответствует любому символу, который не является составной частью слова.
 
 @item \s@var{code}
 @cindex @samp{\s} in regexp
-matches any character whose syntax is @var{code}.  Here @var{code} is a
-character that represents a syntax code: thus, @samp{w} for word
-constituent, @samp{-} for whitespace, @samp{(} for open parenthesis,
-etc.  To represent whitespace syntax, use either @samp{-} or a space
-character.  @xref{Syntax Class Table}, for a list of syntax codes and
-the characters that stand for them.
+Соответствует любому символу, синтаксис которого это @var{code}.  Вот @var{code} это
+символ, который представляет собой синтаксический код: таким образом, @samp{w} За слово
+учредительный, @samp{-} для пробелов, @samp{(} для открытых круглых скобок,
+и т.д. Чтобы представить простой синтаксис, используйте либо @samp{-} Или пробельный
+символ.  @xref{Syntax Class Table}, для списка кодов синтаксиса и
+символов, которые стоят за них.
 
 @item \S@var{code}
 @cindex @samp{\S} in regexp
-matches any character whose syntax is not @var{code}.
+Соответствует любому символу, синтаксис которого не является @var{code}.
 
 @cindex category, regexp search for
 @item \c@var{c}
-matches any character whose category is @var{c}.  Here @var{c} is a
-character that represents a category: thus, @samp{c} for Chinese
-characters or @samp{g} for Greek characters in the standard category
-table.  You can see the list of all the currently defined categories
-with @kbd{M-x describe-categories @key{RET}}.  You can also define
-your own categories in addition to the standard ones using the
-@code{define-category} function (@pxref{Categories}).
+Соответствует любому символу, чья категория @var{c}.  Вот @var{c} это
+символ, который представляет категорию: таким образом, @samp{c} для китайских
+символов или @samp{g} для греческих символов в стандартной таблицет категорий. 
+Вы можете просмотреть список всех существующих в настоящее время категорий
+введя @kbd{M-x describe-categories @key{RET}}.  Вы также можете определить
+ваши собственные категории в дополнение к стандартным, используя
+@code{define-category} функцию (@pxref{Categories}).
 
 @item \C@var{c}
-matches any character whose category is not @var{c}.
+Соответствует любому символу, чья категория не является @var{c}.
 @end table
 
-  The following regular expression constructs match the empty string---that is,
-they don't use up any characters---but whether they match depends on the
-context.  For all, the beginning and end of the accessible portion of
-the buffer are treated as if they were the actual beginning and end of
-the buffer.
+  Следующие конструкции регулярных выражений соответствуют пустой строке --- то есть,
+они не используют никаких символов --- но соответствуют зависимости от
+контекста. Начало и конец доступной части буфера обрабатывается так, как если бы они были 
+фактическим началом и концом буфера.
 
 @table @samp
 @item \`
 @cindex @samp{\`} in regexp
-matches the empty string, but only at the beginning
-of the buffer or string being matched against.
+Соответствует пустой строке, но только в начале
+буфера или строки.
 
 @item \'
 @cindex @samp{\'} in regexp
-matches the empty string, but only at the end of
-the buffer or string being matched against.
+Соответствует пустой строке, но только в конце
+буфера или строки.
 
 @item \=
 @cindex @samp{\=} in regexp
-matches the empty string, but only at point.
-(This construct is not defined when matching against a string.)
+Соответствует пустой строке, но только в точке.
+(Эта конструкция не определяется при сопоставлении с строкой.)
 
 @item \b
 @cindex @samp{\b} in regexp
-matches the empty string, but only at the beginning or
-end of a word.  Thus, @samp{\bfoo\b} matches any occurrence of
-@samp{foo} as a separate word.  @samp{\bballs?\b} matches
-@samp{ball} or @samp{balls} as a separate word.
+Соответствует пустой строке, но только в начале или
+конце слова. таким образом, @samp{\bfoo\b} Соответствует любому вхождению
+@samp{foo} как отдельного слова.  @samp{\bballs?\b} соответствует
+@samp{ball} или @samp{balls} как отдельное слово.
 
-@samp{\b} matches at the beginning or end of the buffer (or string)
-regardless of what text appears next to it.
+@samp{\b} совпадает в начале или конце буфера (или строки)
+независимо от того, какой текст появляется рядом с ним.
 
 @item \B
 @cindex @samp{\B} in regexp
-matches the empty string, but @emph{not} at the beginning or
-end of a word, nor at the beginning or end of the buffer (or string).
+Соответствует пустой строке, но @emph{not} в начале или в начале
+конца слова, ни в начале, ни в конце буфера (или строки).
 
 @item \<
 @cindex @samp{\<} in regexp
-matches the empty string, but only at the beginning of a word.
-@samp{\<} matches at the beginning of the buffer (or string) only if a
-word-constituent character follows.
+Соответствует пустой строке, но только в начале слова.
+@samp{\<} совпадение в начале буфера (или строки), только если
+следует словосочетание.
 
 @item \>
 @cindex @samp{\>} in regexp
-matches the empty string, but only at the end of a word.  @samp{\>}
-matches at the end of the buffer (or string) only if the contents end
-with a word-constituent character.
+Соответствует пустой строке, но только в конце слова.  @samp{\>}
+совпадение в конце буфера (или строки), только если конец содержит
+словосочетание.
 
 @item \_<
 @cindex @samp{\_<} in regexp
-matches the empty string, but only at the beginning of a symbol.  A
-symbol is a sequence of one or more word or symbol constituent
-characters.  @samp{\_<} matches at the beginning of the buffer (or
-string) only if a symbol-constituent character follows.
+Соответствует пустой строке, но только в начале символа.
+Символ представляет собой последовательность одного или нескольких составляющих
+слова или символа.  @samp{\_<} совпадение в начале буфера (или
+строка), только если есть символ-составляющий.
 
 @item \_>
 @cindex @samp{\_>} in regexp
-matches the empty string, but only at the end of a symbol.  @samp{\_>}
-matches at the end of the buffer (or string) only if the contents end
-with a symbol-constituent character.
+Соответствует пустой строке, но только в конце символа.  @samp{\_>}
+совпадений в конце буфера (или строки), только если конец содержимого
+с символьно-составляющим символом.
 @end table
 
 @kindex invalid-regexp
-  Not every string is a valid regular expression.  For example, a string
-that ends inside a character alternative without a terminating @samp{]}
-is invalid, and so is a string that ends with a single @samp{\}.  If
-an invalid regular expression is passed to any of the search functions,
-an @code{invalid-regexp} error is signaled.
+  Не каждая строка является допустимым регулярным выражением. Например, строка
+которая заканчивается внутри альтернативы символа без прерывания @samp{]}
+является недопустимым, и поэтому строка, которая заканчивается одним @samp{\}.  Если
+недопустимое регулярное выражение передается любой из функций поиска,
+@code{invalid-regexp} сигнализирует ошибку.
 
 @node Regexp Example
 @subsection Complex Regexp Example
 
-  Here is a complicated regexp which was formerly used by Emacs to
-recognize the end of a sentence together with any whitespace that
-follows.  (Nowadays Emacs uses a similar but more complex default
-regexp constructed by the function @code{sentence-end}.
+  Вот сложное регулярное выражение, которое ранее использовалось Emacs для
+нахождения конца предложения вместе с любыми пробелами. (В настоящее время Emacs 
+использует аналогичные, но более сложные значения по умолчанию
+Regexp, построенное функцией @code{sentence-end}.
 @xref{Standard Regexps}.)
 
-  Below, we show first the regexp as a string in Lisp syntax (to
-distinguish spaces from tab characters), and then the result of
-evaluating it.  The string constant begins and ends with a
-double-quote.  @samp{\"} stands for a double-quote as part of the
-string, @samp{\\} for a backslash as part of the string, @samp{\t} for a
-tab and @samp{\n} for a newline.
+  Ниже мы сначала показываем regexp как строку в синтаксисе Lisp (
+отличая пробелы от символов табуляции), а затем 
+оцениваем результат. Строковая константа начинается и заканчивается
+двойными кавычками.  @samp{\"} означает двойную кавычку как часть
+строки, @samp{\\} для обратной косой черты как части строки, @samp{\t} для
+табуляции и @samp{\n} для новой строки.
 
 @example
 @group
@@ -862,56 +861,55 @@ tab and @samp{\n} for a newline.
 @end example
 
 @noindent
-In the output, tab and newline appear as themselves.
+В выходных данных табуляция и новая строка отображаются сами за себя.
 
-  This regular expression contains four parts in succession and can be
-deciphered as follows:
+  Это регулярное выражение состоит из четырех частей подряд и может быть
+расшифровывается следующим образом:
 
 @table @code
 @item [.?!]
-The first part of the pattern is a character alternative that matches
-any one of three characters: period, question mark, and exclamation
-mark.  The match must begin with one of these three characters.  (This
-is one point where the new default regexp used by Emacs differs from
-the old.  The new value also allows some non-@acronym{ASCII}
-characters that end a sentence without any following whitespace.)
+Первая часть шаблона - символьный класс, которая соответствует
+любому из трех символов: точка, знак вопроса и восклицательный знак.
+Соответствие должно начинаться с одного из этих трех символов. (Эта
+является одним вариантом, где новое стандартное регулярное выражение, 
+используемое Emacs, отличается от старого. Новое значение также позволяет не-@acronym{ASCII}
+символы, заканчивть предложение без каких-либо пробелов.)
 
 @item []\"')@}]*
-The second part of the pattern matches any closing braces and quotation
-marks, zero or more of them, that may follow the period, question mark
-or exclamation mark.  The @code{\"} is Lisp syntax for a double-quote in
-a string.  The @samp{*} at the end indicates that the immediately
-preceding regular expression (a character alternative, in this case) may be
-repeated zero or more times.
+Вторая часть шаблона соответствует любым закрывающим скобкам и знакам, ноль или более
+которых могут следовать за точкой, вопросительным или восклицательным знаком.  @code{\"} 
+является синтаксисом Lisp для двойной кавычки в строке.  @samp{*} в конце указывает, что 
+предшествующая конструкция регулярного выражения (символьный класс в этом случае) может 
+повторяется ноль или более раз.
 
 @item \\($\\|@ $\\|\t\\|@ @ \\)
-The third part of the pattern matches the whitespace that follows the
-end of a sentence: the end of a line (optionally with a space), or a
-tab, or two spaces.  The double backslashes mark the parentheses and
-vertical bars as regular expression syntax; the parentheses delimit a
-group and the vertical bars separate alternatives.  The dollar sign is
-used to match the end of a line.
+Третья часть шаблона соответствует пробелу, который следует за
+концом предложения: конец строки (необязательно с пробелом) или
+табуляция или два пробела. Двойные обратные косые черты обозначают круглые скобки и
+вертикальные столбцы как синтаксис регулярных выражений; Круглые скобки ограничивают
+группу а вертикальные полосы - отдельные альтернативы. Знак доллара используется для 
+соответствия конца строки.
 
 @item [ \t\n]*
-Finally, the last part of the pattern matches any additional whitespace
-beyond the minimum needed to end a sentence.
+Наконец, последняя часть шаблона соответствует любому дополнительному пробелу
+длинее минимального, необходимого для завершения предложения.
 @end table
 
 @node Regexp Functions
 @subsection Regular Expression Functions
 
-  These functions operate on regular expressions.
+  Эти функции работают на регулярных выражениях.
 
 @cindex quote special characters in regexp
 @defun regexp-quote string
-This function returns a regular expression whose only exact match is
-@var{string}.  Using this regular expression in @code{looking-at} will
-succeed only if the next characters in the buffer are @var{string};
-using it in a search function will succeed if the text being searched
-contains @var{string}.  @xref{Regexp Search}.
+Эта функция возвращает регулярное выражение, единственное точное совпадение которому
+@var{string}.  Используя это регулярное выражение в @code{looking-at} будет
+выполняется только в том случае, если следующие символы в буфере @var{string};
+использование его в функции поиска будет успешным, если поиск текста
+содержит @var{string}.  @xref{Regexp Search}.
 
-This allows you to request an exact string match or search when calling
-a function that wants a regular expression.
+Это позволяет запрашивать точное совпадение строк или поиск при вызове
+функции, которая требует регулярное выражение.
 
 @example
 @group
@@ -920,10 +918,9 @@ a function that wants a regular expression.
 @end group
 @end example
 
-One use of @code{regexp-quote} is to combine an exact string match with
-context described as a regular expression.  For example, this searches
-for the string that is the value of @var{string}, surrounded by
-whitespace:
+Одно использование @code{regexp-quote} состоит в том, чтобы совместить точное совпадение
+строк с контекстом, описываемым как регулярное выражение. Например, этот поиск
+строки, которая является значением @var{string}, окруженную пробелами:
 
 @example
 @group
@@ -935,40 +932,39 @@ whitespace:
 
 @cindex optimize regexp
 @defun regexp-opt strings &optional paren
-This function returns an efficient regular expression that will match
-any of the strings in the list @var{strings}.  This is useful when you
-need to make matching or searching as fast as possible---for example,
-for Font Lock mode@footnote{Note that @code{regexp-opt} does not
-guarantee that its result is absolutely the most efficient form
-possible.  A hand-tuned regular expression can sometimes be slightly
-more efficient, but is almost never worth the effort.}.
+Эта функция возвращает эффективное регулярное выражение, которое будет соответствовать
+любой из строк в списке @var{strings}. Это полезно, когда вам
+необходимо выполнить согласование или поиск как можно быстрее - например,
+для Font Lock mode@footnote{Note that @code{regexp-opt} не
+гарантируют, что его результат является абсолютно эффективной возможной формой.
+Регулярное выражение с ручной настройкой иногда может быть немного
+более эффективен, но почти никогда не стоит усилий.
 @c E.g., see http://debbugs.gnu.org/2816
 
-The optional argument @var{paren} can be any of the following:
+Необязательный аргументt @var{paren} может быть любым из следующих:
 
-a string
-    the resulting regexp is preceded by @var{paren} and followed by
-    @samp{\)}, e.g. use @samp{"\\(?1:"} to produce an explicitly
-    numbered group.
+строка
+    Результирующему регулярному выражению предшествует @var{paren} и затем
+    @samp{\)}, e.g. использование @samp{"\\(?1:"} производит явно пронумерованную группу.
 
 @code{words}
-    the resulting regexp is surrounded by @samp{\<\(} and @samp{\)\>}.
+   Полученное регулярное выражение окружено @samp{\<\(} и @samp{\)\>}.
 
 @code{symbols}
-    the resulting regexp is surrounded by @samp{\_<\(} and @samp{\)\_>}
-    (this is often appropriate when maching programming-language
-    keywords and the like).
+    Полученное регулярное выражение окружено @samp{\_<\(} и @samp{\)\_>}
+    (Это часто бывает целесообразным при обработке ключевых слов
+    языка программирования и тому подобное).
 
-non-@code{nil}
-    the resulting regexp is surrounded by @samp{\(} and @samp{\)}.
+не-@code{nil}
+    Полученное регулярное выражение окружено @samp{\(} и @samp{\)}.
 
 @code{nil}
-    the resulting regexp is surrounded by @samp{\(?:} and @samp{\)},
-    if it is necessary to ensure that a postfix operator appended to
-    it will apply to the whole expression.
+    Полученное регулярное выражение окружено @samp{\(?:} и @samp{\)},
+    Если необходимо убедиться, что оператор постфикса добавлен 
+    он будет применяться ко всему выражению.
 
-The resulting regexp of @code{regexp-opt} is equivalent to but usually
-more efficient than that of a simplified version:
+Полученное регулярное выражение @code{regexp-opt} эквивалентно, но обычно
+более эффективно, чем упрощенная версия:
 
 @example
 (defun simplified-regexp-opt (strings &optional paren)
@@ -984,15 +980,15 @@ more efficient than that of a simplified version:
 @end defun
 
 @defun regexp-opt-depth regexp
-This function returns the total number of grouping constructs
-(parenthesized expressions) in @var{regexp}.  This does not include
-shy groups (@pxref{Regexp Backslash}).
+Эта функция возвращает общее количество конструкций группировки
+(Заключенные в скобки выражения) в @var{regexp}.  Это не включает
+ненумерованные группы (@pxref{Regexp Backslash}).
 @end defun
 
 @c Supposedly an internal regexp-opt function, but table.el uses it at least.
 @defun regexp-opt-charset chars
-This function returns a regular expression matching a character in the
-list of characters @var{chars}.
+Эта функция возвращает регулярное выражение, соответствующее символу в
+списке символов @var{chars}.
 
 @example
 (regexp-opt-charset '(?a ?b ?c ?d ?e))
@@ -1008,59 +1004,59 @@ list of characters @var{chars}.
 @cindex regexp searching
 @cindex searching for regexp
 
-  In GNU Emacs, you can search for the next match for a regular
-expression (@pxref{Syntax of Regexps}) either incrementally or not.
-For incremental search commands, see @ref{Regexp Search, , Regular
-Expression Search, emacs, The GNU Emacs Manual}.  Here we describe
-only the search functions useful in programs.  The principal one is
+  В GNU Emacs вы можете найти следующие совпадения для регулярного
+выражения (@pxref{Syntax of Regexps}) либо поэтапно, либо нет.
+Для инкрементных команд поиска см. @ref{Regexp Search, , Regular
+Expression Search, emacs, The GNU Emacs Manual}.  Здесь мы описываем
+только функции поиска полезных в программах. Основной является
 @code{re-search-forward}.
 
-  These search functions convert the regular expression to multibyte if
-the buffer is multibyte; they convert the regular expression to unibyte
-if the buffer is unibyte.  @xref{Text Representations}.
+  Эти функции поиска преобразуют регулярное выражение в многобайтовое, если
+буфер многобайтовый; Они преобразуют регулярное выражение в унибайт
+если буфер однобайтовый.  @xref{Text Representations}.
 
 @deffn Command re-search-forward regexp &optional limit noerror count
-This function searches forward in the current buffer for a string of
-text that is matched by the regular expression @var{regexp}.  The
-function skips over any amount of text that is not matched by
-@var{regexp}, and leaves point at the end of the first match found.
-It returns the new value of point.
+Эта функция выполняет поиск вперед в текущем буфере для строки
+текст, которая соответствует регулярному выражению @var{regexp}.  
+Функция пропускает любое количество текста, которое не соответствует
+@var{regexp}, и оставляет точку в конце первого найденного совпадения.
+Она возвращает новое значение точки.
 
-If @var{limit} is non-@code{nil}, it must be a position in the current
-buffer.  It specifies the upper bound to the search.  No match
-extending after that position is accepted.  If @var{limit} is omitted
-or @code{nil}, it defaults to the end of the accessible portion of the
-buffer.
+Если @var{limit} не-@code{nil}, это должно быть положением в текущем
+буфере и определять верхнюю границу поиска. Не совпадает
+после этой позициии.  Если @var{limit} опущено
+или @code{nil}, по умолчанию используется конец доступной части
+буфера.
 
-What @code{re-search-forward} does when the search fails depends on
-the value of @var{noerror}:
+Как поведет себя @code{re-search-forward} при сбое поиска зависит от
+значения @var{noerror}:
 
 @table @asis
 @item @code{nil}
-Signal a @code{search-failed} error.
+Сигнализирует @code{search-failed} ошибку.
 @item @code{t}
-Do nothing and return @code{nil}.
+Не делает ничего и возвращает @code{nil}.
 @item anything else
-Move point to @var{limit} (or the end of the accessible portion of the
-buffer) and return @code{nil}.
+Переместит точку на @var{limit} (или конец доступной части
+буфера) и вернет @code{nil}.
 @end table
 
-The argument @var{noerror} only affects valid searches which fail to
-find a match.  Invalid arguments cause errors regardless of
+Аргумент @var{noerror} влияет только на действующие поисковые запросы,
+нахождения соответствия. Недопустимые аргументы вызывают ошибки независимо от
 @var{noerror}.
 
-If @var{count} is a positive number @var{n}, the search is done
-@var{n} times; each successive search starts at the end of the
-previous match.  If all these successive searches succeed, the
-function call succeeds, moving point and returning its new value.
-Otherwise the function call fails, with results depending on the value
-of @var{noerror}, as described above.  If @var{count} is a negative
-number -@var{n}, the search is done @var{n} times in the opposite
-(backward) direction.
+Если @var{count} - положительное число @var{n}, поиск выполняется
+@var{n} раз; каждый последующий поиск начинается в конце
+предыдущего совпадения. Если все эти последующие поисковые запросы будут успешными,
+вызов функции преуспевает, перемещает точку и возвращает новое значение.
+В противном случае вызов функции завершается неудачно, результаты зависят от значения
+в @var{noerror}, как описано выше. Если @var{count} является отрицательным
+числом -@var{n}, поиск выполняется @var{n} раз в обратном направлении
+(Назад).
 
-In the following example, point is initially before the @samp{T}.
-Evaluating the search call moves point to the end of that line (between
-the @samp{t} of @samp{hat} and the newline).
+В следующем примере точка находится перед @samp{T}.
+Оценка вызова поиска перемещает точку до конца этой строки (между
+ @samp{t} в @samp{hat} и новой строкой).
 
 @example
 @group
