@@ -1711,135 +1711,134 @@ corresponds to @code{(match-end @var{n})}.
 этого передаютсч необязательные аргументы @var{fixedcase}, @var{literal} и
 @var{subexp} вместе с @code{replace-match}.
 
-Instead of a string, @var{rep} can be a function.  In that case,
-@code{replace-regexp-in-string} calls @var{rep} for each match,
-passing the text of the match as its sole argument.  It collects the
-value @var{rep} returns and passes that to @code{replace-match} as the
-replacement string.  The match data at this point are the result
-of matching @var{regexp} against a substring of @var{string}.
+Вместо строки, @var{rep} может быть функция. В таком случае,
+@code{replace-regexp-in-string} вызовет @var{rep} для каждого совпадения,
+передавая текст соответствия в качестве единственного аргумента. Он собирает
+значения @var{rep} возвращает и передает это @code{replace-match} как
+строку замены. Результатом сопоставления данных в этот момент является результат
+соответствия @var{regexp} и подстроки @var{string}.
 @end defun
 
-  If you want to write a command along the lines of @code{query-replace},
-you can use @code{perform-replace} to do the work.
+  Если вы хотите написать команду по строкам @code{query-replace},
+вы можете использовать @code{perform-replace} для выполнения работы.
 
 @defun perform-replace from-string replacements query-flag regexp-flag delimited-flag &optional repeat-count map start end
-This function is the guts of @code{query-replace} and related
-commands.  It searches for occurrences of @var{from-string} in the
-text between positions @var{start} and @var{end} and replaces some or
-all of them.  If @var{start} is @code{nil} (or omitted), point is used
-instead, and the end of the buffer's accessible portion is used for
+Эта функция представляет собой @code{query-replace} и связанные
+команды. Она ищет вхождения @var{from-string} в
+тексте между позициями @var{start} и @var{end} и заменяет некоторые или
+все. Если @var{start} это @code{nil} (или опущено), точка используется
+вместо этого, и конец доступной части буфера используется для
 @var{end}.
 
-If @var{query-flag} is @code{nil}, it replaces all
-occurrences; otherwise, it asks the user what to do about each one.
+Если @var{query-flag} это @code{nil}, она заменяет все
+вхождения; В противном случае он спрашивает пользователя, что делать с каждым из них.
 
-If @var{regexp-flag} is non-@code{nil}, then @var{from-string} is
-considered a regular expression; otherwise, it must match literally.  If
-@var{delimited-flag} is non-@code{nil}, then only replacements
-surrounded by word boundaries are considered.
+Если @var{regexp-flag} не-@code{nil}, тогда @var{from-string} 
+считается регулярным выражением; В противном случае она должна соответствовать 
+буквально.  Есди @var{delimited-flag} не-@code{nil}, то только замены
+окруженные границами слов.
 
-The argument @var{replacements} specifies what to replace occurrences
-with.  If it is a string, that string is used.  It can also be a list of
-strings, to be used in cyclic order.
+Аргумент @var{replacements} указывает, что заменить регистр. 
+Если это строка, эта строка используется. Это также может быть список
+строк, которые будут использоваться в циклическом порядке.
 
-If @var{replacements} is a cons cell, @w{@code{(@var{function}
-. @var{data})}}, this means to call @var{function} after each match to
-get the replacement text.  This function is called with two arguments:
-@var{data}, and the number of replacements already made.
+Если @var{replacements} является ячейкой cons, @w{@code{(@var{function}
+. @var{data})}}, это означает вызвать @var{function} после каждого соответствия для
+получения заменяющего текста. Эта функция вызывается с двумя аргументами:
+@var{data}, и количество уже произведенных замен.
 
-If @var{repeat-count} is non-@code{nil}, it should be an integer.  Then
-it specifies how many times to use each of the strings in the
-@var{replacements} list before advancing cyclically to the next one.
+Если @var{repeat-count} не-@code{nil}, оно должно быть целым числом. затем
+оно указывает, сколько раз использовать каждую из строк в
+@var{replacements} перед тем, как циклично перейти к следующей.
 
-If @var{from-string} contains upper-case letters, then
-@code{perform-replace} binds @code{case-fold-search} to @code{nil}, and
-it uses the @var{replacements} without altering their case.
+Если @var{from-string} содержит прописные буквы, 
+@code{perform-replace} связывает @code{case-fold-search} с @code{nil}, а также
+она использует @var{replacements} без изменения их регистра.
 
-Normally, the keymap @code{query-replace-map} defines the possible
-user responses for queries.  The argument @var{map}, if
-non-@code{nil}, specifies a keymap to use instead of
+Обычно ключевая карта @code{query-replace-map} определяет возможные
+ответы пользователей на запросы. Аргумент @var{map}, если
+не-@code{nil}, указывает клавиатурное сочетание для использования вместо
 @code{query-replace-map}.
 
-This function uses one of two functions to search for the next
-occurrence of @var{from-string}.  These functions are specified by the
-values of two variables: @code{replace-re-search-function} and
-@code{replace-search-function}.  The former is called when the
-argument @var{regexp-flag} is non-@code{nil}, the latter when it is
+Эта функция использует одну из двух функций для поиска следующего
+появления @var{from-string}.  Эти функции определяются
+значениями двух переменных: @code{replace-re-search-function} и
+@code{replace-search-function}.  Первая вызывается, когда
+аргумент @var{regexp-flag} не-@code{nil}, последний, когда он
 @code{nil}.
 @end defun
 
 @defvar query-replace-map
-This variable holds a special keymap that defines the valid user
-responses for @code{perform-replace} and the commands that use it, as
-well as @code{y-or-n-p} and @code{map-y-or-n-p}.  This map is unusual
-in two ways:
+Эта переменная содержит специальную комбинацию клавиш, которая определяет 
+действия ответов пользователя для @code{perform-replace} и команды, которые его используют, так
+хорошо как @code{y-or-n-p} и @code{map-y-or-n-p}.  Эта комбинация необычна
+двумя способами:
 
 @itemize @bullet
 @item
-The key bindings are not commands, just symbols that are meaningful
-to the functions that use this map.
+Ключи привязки - это не команды, а просто символы, которые имеют смысл
+в функциях, использующим эту комбинацию.
 
 @item
-Prefix keys are not supported; each key binding must be for a
-single-event key sequence.  This is because the functions don't use
-@code{read-key-sequence} to get the input; instead, they read a single
-event and look it up ``by hand''.
+Префиксные ключи не поддерживаются; Каждое связывание ключей должно быть 
+однократная последовательность клавиш. Это связано с тем, что функции не используют
+@code{read-key-sequence} получая вход; Вместо этого они читают один и обрабатывают
+его `` вручную ''.
 @end itemize
 @end defvar
 
-Here are the meaningful bindings for @code{query-replace-map}.
-Several of them are meaningful only for @code{query-replace} and
-friends.
+Вот значимые привязки для @code{query-replace-map}.
+Некоторые из них имеют смысл только для @code{query-replace} а также
+подобных.
 
 @table @code
 @item act
-Do take the action being considered---in other words, ``yes''.
+Возьмите рассматриваемое действие - другими словами, ``yes''.
 
 @item skip
-Do not take action for this question---in other words, ``no''.
+Не принимайте меры по этому вопросу - другими словами, ``no''.
 
 @item exit
-Answer this question ``no'', and give up on the entire series of
-questions, assuming that the answers will be ``no''.
+Ответьте на этот вопрос ``no'' и откажитесь от всей серии
+вопросов, предполагая, что ответы будут ``no''.
 
 @item exit-prefix
-Like @code{exit}, but add the key that was pressed to
+Подобно @code{exit}, но добавляется ключ, который был нажат
 @code{unread-command-events} (@pxref{Event Input Misc}).
 
 @item act-and-exit
-Answer this question ``yes'', and give up on the entire series of
-questions, assuming that subsequent answers will be ``no''.
+Ответьте на этот вопрос ``yes'', и отказжитесь от всей серии
+вопросов, предполагая, что последующие ответы будут ``no''.
 
 @item act-and-show
-Answer this question ``yes'', but show the results---don't advance yet
-to the next question.
+Ответьте на этот вопрос ``yes'', но показать результат --- еще не переходя
+к следующему вопросу.
 
 @item automatic
-Answer this question and all subsequent questions in the series with
-``yes'', without further user interaction.
+Ответьте на этот вопрос и на все последующие вопросы в серии с
+``yes'', без дополнительного взаимодействия с пользователем.
 
 @item backup
-Move back to the previous place that a question was asked about.
+Вернитесь к предыдущему месту, о котором задавали вопрос.
 
 @item edit
-Enter a recursive edit to deal with this question---instead of any
-other action that would normally be taken.
+Введите рекурсивное редактирование для решения этого вопроса --- вместо любого
+другого действия, которые обычно принимаются.
 
 @item edit-replacement
-Edit the replacement for this question in the minibuffer.
+Отредактируйте замену этого вопроса в минибуфере.
 
 @item delete-and-edit
-Delete the text being considered, then enter a recursive edit to replace
-it.
+Удалите рассматриваемый текст, затем введите рекурсивное редактирование для замены
+этого.
 
 @item recenter
 @itemx scroll-up
 @itemx scroll-down
 @itemx scroll-other-window
 @itemx scroll-other-window-down
-Perform the specified window scroll operation, then ask the same
-question again.  Only @code{y-or-n-p} and related functions use this
-answer.
+Выполните указанную операцию прокрутки окна, затем спросите об этом
+вопросом снова.  Только @code{y-or-n-p} и связанные с этим ответом функции.
 
 @item quit
 Perform a quit right away.  Only @code{y-or-n-p} and related functions

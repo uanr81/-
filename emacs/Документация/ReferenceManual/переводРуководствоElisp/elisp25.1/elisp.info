@@ -54374,125 +54374,127 @@ File: elisp.info,  Node: Search and Replace,  Next: Standard Regexps,  Prev: Mat
      замену, для этого передаютсч необязательные аргументы FIXEDCASE,
      LITERAL и SUBEXP вместе с ‘replace-match’.
 
-     Instead of a string, REP can be a function.  In that case,
-     ‘replace-regexp-in-string’ calls REP for each match, passing the
-     text of the match as its sole argument.  It collects the value REP
-     returns and passes that to ‘replace-match’ as the replacement
-     string.  The match data at this point are the result of matching
-     REGEXP against a substring of STRING.
+     Вместо строки, REP может быть функция.  В таком случае,
+     ‘replace-regexp-in-string’ вызовет REP для каждого совпадения,
+     передавая текст соответствия в качестве единственного аргумента.
+     Он собирает значения REP возвращает и передает это ‘replace-match’
+     как строку замены.  Результатом сопоставления данных в этот момент
+     является результат соответствия REGEXP и подстроки STRING.
 
-   If you want to write a command along the lines of ‘query-replace’,
-you can use ‘perform-replace’ to do the work.
+   Если вы хотите написать команду по строкам ‘query-replace’, вы можете
+использовать ‘perform-replace’ для выполнения работы.
 
  -- Function: perform-replace from-string replacements query-flag
           regexp-flag delimited-flag &optional repeat-count map start
           end
-     This function is the guts of ‘query-replace’ and related commands.
-     It searches for occurrences of FROM-STRING in the text between
-     positions START and END and replaces some or all of them.  If START
-     is ‘nil’ (or omitted), point is used instead, and the end of the
-     buffer’s accessible portion is used for END.
+     Эта функция представляет собой ‘query-replace’ и связанные команды.
+     Она ищет вхождения FROM-STRING в тексте между позициями START и END
+     и заменяет некоторые или все.  Если START это ‘nil’ (или опущено),
+     точка используется вместо этого, и конец доступной части буфера
+     используется для END.
 
-     If QUERY-FLAG is ‘nil’, it replaces all occurrences; otherwise, it
-     asks the user what to do about each one.
+     Если QUERY-FLAG это ‘nil’, она заменяет все вхождения; В противном
+     случае он спрашивает пользователя, что делать с каждым из них.
 
-     If REGEXP-FLAG is non-‘nil’, then FROM-STRING is considered a
-     regular expression; otherwise, it must match literally.  If
-     DELIMITED-FLAG is non-‘nil’, then only replacements surrounded by
-     word boundaries are considered.
+     Если REGEXP-FLAG не-‘nil’, тогда FROM-STRING считается регулярным
+     выражением; В противном случае она должна соответствовать
+     буквально.  Есди DELIMITED-FLAG не-‘nil’, то только замены
+     окруженные границами слов.
 
-     The argument REPLACEMENTS specifies what to replace occurrences
-     with.  If it is a string, that string is used.  It can also be a
-     list of strings, to be used in cyclic order.
+     Аргумент REPLACEMENTS указывает, что заменить регистр.  Если это
+     строка, эта строка используется.  Это также может быть список
+     строк, которые будут использоваться в циклическом порядке.
 
-     If REPLACEMENTS is a cons cell, ‘(FUNCTION . DATA)’, this means to
-     call FUNCTION after each match to get the replacement text.  This
-     function is called with two arguments: DATA, and the number of
-     replacements already made.
+     Если REPLACEMENTS является ячейкой cons, ‘(FUNCTION . DATA)’, это
+     означает вызвать FUNCTION после каждого соответствия для получения
+     заменяющего текста.  Эта функция вызывается с двумя аргументами:
+     DATA, и количество уже произведенных замен.
 
-     If REPEAT-COUNT is non-‘nil’, it should be an integer.  Then it
-     specifies how many times to use each of the strings in the
-     REPLACEMENTS list before advancing cyclically to the next one.
+     Если REPEAT-COUNT не-‘nil’, оно должно быть целым числом.  затем
+     оно указывает, сколько раз использовать каждую из строк в
+     REPLACEMENTS перед тем, как циклично перейти к следующей.
 
-     If FROM-STRING contains upper-case letters, then ‘perform-replace’
-     binds ‘case-fold-search’ to ‘nil’, and it uses the REPLACEMENTS
-     without altering their case.
+     Если FROM-STRING содержит прописные буквы, ‘perform-replace’
+     связывает ‘case-fold-search’ с ‘nil’, а также она использует
+     REPLACEMENTS без изменения их регистра.
 
-     Normally, the keymap ‘query-replace-map’ defines the possible user
-     responses for queries.  The argument MAP, if non-‘nil’, specifies a
-     keymap to use instead of ‘query-replace-map’.
+     Обычно ключевая карта ‘query-replace-map’ определяет возможные
+     ответы пользователей на запросы.  Аргумент MAP, если не-‘nil’,
+     указывает клавиатурное сочетание для использования вместо
+     ‘query-replace-map’.
 
-     This function uses one of two functions to search for the next
-     occurrence of FROM-STRING.  These functions are specified by the
-     values of two variables: ‘replace-re-search-function’ and
-     ‘replace-search-function’.  The former is called when the argument
-     REGEXP-FLAG is non-‘nil’, the latter when it is ‘nil’.
+     Эта функция использует одну из двух функций для поиска следующего
+     появления FROM-STRING.  Эти функции определяются значениями двух
+     переменных: ‘replace-re-search-function’ и
+     ‘replace-search-function’.  Первая вызывается, когда аргумент
+     REGEXP-FLAG не-‘nil’, последний, когда он ‘nil’.
 
  -- Variable: query-replace-map
-     This variable holds a special keymap that defines the valid user
-     responses for ‘perform-replace’ and the commands that use it, as
-     well as ‘y-or-n-p’ and ‘map-y-or-n-p’.  This map is unusual in two
-     ways:
+     Эта переменная содержит специальную комбинацию клавиш, которая
+     определяет действия ответов пользователя для ‘perform-replace’ и
+     команды, которые его используют, так хорошо как ‘y-or-n-p’ и
+     ‘map-y-or-n-p’.  Эта комбинация необычна двумя способами:
 
-        • The key bindings are not commands, just symbols that are
-          meaningful to the functions that use this map.
+        • Ключи привязки - это не команды, а просто символы, которые
+          имеют смысл в функциях, использующим эту комбинацию.
 
-        • Prefix keys are not supported; each key binding must be for a
-          single-event key sequence.  This is because the functions
-          don’t use ‘read-key-sequence’ to get the input; instead, they
-          read a single event and look it up “by hand”.
+        • Префиксные ключи не поддерживаются; Каждое связывание ключей
+          должно быть однократная последовательность клавиш.  Это
+          связано с тем, что функции не используют ‘read-key-sequence’
+          получая вход; Вместо этого они читают один и обрабатывают его
+          “ вручную ”.
 
-   Here are the meaningful bindings for ‘query-replace-map’.  Several of
-them are meaningful only for ‘query-replace’ and friends.
+   Вот значимые привязки для ‘query-replace-map’.  Некоторые из них
+имеют смысл только для ‘query-replace’ а также подобных.
 
 ‘act’
-     Do take the action being considered—in other words, “yes”.
+     Возьмите рассматриваемое действие - другими словами, “yes”.
 
 ‘skip’
-     Do not take action for this question—in other words, “no”.
+     Не принимайте меры по этому вопросу - другими словами, “no”.
 
 ‘exit’
-     Answer this question “no”, and give up on the entire series of
-     questions, assuming that the answers will be “no”.
+     Ответьте на этот вопрос “no” и откажитесь от всей серии вопросов,
+     предполагая, что ответы будут “no”.
 
 ‘exit-prefix’
-     Like ‘exit’, but add the key that was pressed to
+     Подобно ‘exit’, но добавляется ключ, который был нажат
      ‘unread-command-events’ (*note Event Input Misc::).
 
 ‘act-and-exit’
-     Answer this question “yes”, and give up on the entire series of
-     questions, assuming that subsequent answers will be “no”.
+     Ответьте на этот вопрос “yes”, и отказжитесь от всей серии
+     вопросов, предполагая, что последующие ответы будут “no”.
 
 ‘act-and-show’
-     Answer this question “yes”, but show the results—don’t advance yet
-     to the next question.
+     Ответьте на этот вопрос “yes”, но показать результат — еще не
+     переходя к следующему вопросу.
 
 ‘automatic’
-     Answer this question and all subsequent questions in the series
-     with “yes”, without further user interaction.
+     Ответьте на этот вопрос и на все последующие вопросы в серии с
+     “yes”, без дополнительного взаимодействия с пользователем.
 
 ‘backup’
-     Move back to the previous place that a question was asked about.
+     Вернитесь к предыдущему месту, о котором задавали вопрос.
 
 ‘edit’
-     Enter a recursive edit to deal with this question—instead of any
-     other action that would normally be taken.
+     Введите рекурсивное редактирование для решения этого вопроса —
+     вместо любого другого действия, которые обычно принимаются.
 
 ‘edit-replacement’
-     Edit the replacement for this question in the minibuffer.
+     Отредактируйте замену этого вопроса в минибуфере.
 
 ‘delete-and-edit’
-     Delete the text being considered, then enter a recursive edit to
-     replace it.
+     Удалите рассматриваемый текст, затем введите рекурсивное
+     редактирование для замены этого.
 
 ‘recenter’
 ‘scroll-up’
 ‘scroll-down’
 ‘scroll-other-window’
 ‘scroll-other-window-down’
-     Perform the specified window scroll operation, then ask the same
-     question again.  Only ‘y-or-n-p’ and related functions use this
-     answer.
+     Выполните указанную операцию прокрутки окна, затем спросите об этом
+     вопросом снова.  Только ‘y-or-n-p’ и связанные с этим ответом
+     функции.
 
 ‘quit’
      Perform a quit right away.  Only ‘y-or-n-p’ and related functions
@@ -76826,7 +76828,7 @@ Index
 * multi-file package:                    Multi-file Packages. (line   6)
 * multi-frame images:                    Multi-Frame Images.  (line   6)
 * multi-monitor:                         Multiple Terminals.  (line 147)
-* multi-query-replace-map:               Search and Replace.  (line 158)
+* multi-query-replace-map:               Search and Replace.  (line 160)
 * multi-tty:                             Multiple Terminals.  (line   6)
 * multibyte characters:                  Non-ASCII Characters.
                                                               (line   6)
@@ -77416,7 +77418,7 @@ Index
 * puthash:                               Hash Access.         (line  15)
 * query-font:                            Low-Level Font.      (line 229)
 * query-replace-history:                 Minibuffer History.  (line  93)
-* query-replace-map:                     Search and Replace.  (line  85)
+* query-replace-map:                     Search and Replace.  (line  86)
 * querying the user:                     Yes-or-No Queries.   (line   6)
 * question mark in character constant:   Basic Char Syntax.   (line   6)
 * quietly-read-abbrev-file:              Abbrev Files.        (line  22)
@@ -77626,9 +77628,9 @@ Index
 * replace part of list:                  Setcdr.              (line   6)
 * replace-buffer-in-windows:             Buffers and Windows. (line  88)
 * replace-match:                         Replacing Match.     (line   9)
-* replace-re-search-function:            Search and Replace.  (line 180)
+* replace-re-search-function:            Search and Replace.  (line 182)
 * replace-regexp-in-string:              Search and Replace.  (line  20)
-* replace-search-function:               Search and Replace.  (line 173)
+* replace-search-function:               Search and Replace.  (line 175)
 * replacement after search:              Search and Replace.  (line   6)
 * replacing display specs:               Replacing Specs.     (line   6)
 * require:                               Named Features.      (line 106)
@@ -79939,220 +79941,220 @@ Node: Simple Match Data2534591
 Node: Entire Match Data2542741
 Node: Saving Match Data2547339
 Node: Search and Replace2549472
-Node: Standard Regexps2557904
-Node: Syntax Tables2560565
-Node: Syntax Basics2561646
-Node: Syntax Descriptors2564373
-Node: Syntax Class Table2566856
-Node: Syntax Flags2573493
-Node: Syntax Table Functions2577351
-Node: Syntax Properties2582043
-Node: Motion and Syntax2585039
-Node: Parsing Expressions2586645
-Node: Motion via Parsing2588640
-Node: Position Parse2591738
-Node: Parser State2593786
-Node: Low-Level Parsing2596752
-Node: Control Parsing2598584
-Node: Syntax Table Internals2599867
-Node: Categories2603159
-Node: Abbrevs2609687
-Node: Abbrev Tables2612310
-Node: Defining Abbrevs2615020
-Node: Abbrev Files2617700
-Node: Abbrev Expansion2620064
-Node: Standard Abbrev Tables2626342
-Node: Abbrev Properties2627939
-Node: Abbrev Table Properties2629350
-Node: Processes2631142
-Node: Subprocess Creation2634495
-Node: Shell Arguments2639490
-Node: Synchronous Processes2643522
-Ref: Synchronous Processes-Footnote-12656096
-Node: Asynchronous Processes2656200
-Node: Deleting Processes2668927
-Node: Process Information2671261
-Ref: Coding systems for a subprocess2678700
-Node: Input to Processes2679802
-Node: Signals to Processes2683136
-Node: Output from Processes2688582
-Node: Process Buffers2691650
-Node: Filter Functions2697831
-Ref: Process Filter Example2700272
-Node: Decoding Output2703137
-Node: Accepting Output2705090
-Node: Sentinels2707207
-Node: Query Before Exit2712699
-Node: System Processes2713799
-Node: Transaction Queues2721073
-Node: Network2722987
-Node: Network Servers2730743
-Node: Datagrams2732812
-Node: Low-Level Network2734092
-Node: Network Processes2734712
-Node: Network Options2741370
-Node: Network Feature Testing2744929
-Node: Misc Network2746246
-Node: Serial Ports2748070
-Node: Byte Packing2755594
-Node: Bindat Spec2756542
-Node: Bindat Functions2762419
-Node: Bindat Examples2765272
-Node: Display2771279
-Node: Refresh Screen2773213
-Node: Forcing Redisplay2774642
-Node: Truncation2776842
-Node: The Echo Area2780610
-Node: Displaying Messages2781530
-Ref: message-box2785388
-Node: Progress2786878
-Node: Logging Messages2792251
-Node: Echo Area Customization2794719
-Node: Warnings2796585
-Node: Warning Basics2797142
-Node: Warning Variables2800042
-Node: Warning Options2803438
-Node: Delayed Warnings2804821
-Node: Invisible Text2806476
-Node: Selective Display2813649
-Node: Temporary Displays2817838
-Node: Overlays2826994
-Node: Managing Overlays2828447
-Node: Overlay Properties2834658
-Node: Finding Overlays2845097
-Node: Size of Displayed Text2847751
-Node: Line Height2853028
-Node: Faces2857625
-Ref: Faces-Footnote-12860039
-Node: Face Attributes2860181
-Node: Defining Faces2869877
-Node: Attribute Functions2877862
-Node: Displaying Faces2886043
-Node: Face Remapping2888372
-Node: Face Functions2893048
-Node: Auto Faces2894748
-Node: Basic Faces2896393
-Node: Font Selection2898584
-Ref: Font Selection-Footnote-12902929
-Node: Font Lookup2903029
-Node: Fontsets2905514
-Node: Low-Level Font2911782
-Node: Fringes2924922
-Node: Fringe Size/Pos2925657
-Node: Fringe Indicators2928016
-Node: Fringe Cursors2932300
-Node: Fringe Bitmaps2934074
-Node: Customizing Bitmaps2937002
-Node: Overlay Arrow2939109
-Node: Scroll Bars2941594
-Node: Window Dividers2948013
-Node: Display Property2950893
-Node: Replacing Specs2952201
-Node: Specified Space2954369
-Node: Pixel Specification2957255
-Node: Other Display Specs2960092
-Node: Display Margins2964746
-Node: Images2967572
-Node: Image Formats2968998
-Node: Image Descriptors2971173
-Node: XBM Images2978544
-Node: XPM Images2980798
-Node: PostScript Images2981382
-Node: ImageMagick Images2982258
-Node: Other Image Types2985835
-Node: Defining Images2987078
-Node: Showing Images2992577
-Node: Multi-Frame Images2997442
-Node: Image Cache2999903
-Node: Xwidgets3002959
-Node: Buttons3006807
-Node: Button Properties3008204
-Node: Button Types3010284
-Node: Making Buttons3011669
-Node: Manipulating Buttons3014175
-Node: Button Buffer Commands3016361
-Node: Abstract Display3019414
-Node: Abstract Display Functions3022294
-Node: Abstract Display Example3027373
-Node: Blinking3032095
-Node: Character Display3034087
-Node: Usual Display3035305
-Node: Display Tables3039251
-Node: Active Display Table3043209
-Node: Glyphs3045158
-Node: Glyphless Chars3047233
-Node: Beeping3051173
-Node: Window Systems3052519
-Node: Tooltips3054710
-Node: Bidirectional Display3058142
-Node: System Interface3072476
-Node: Starting Up3074538
-Node: Startup Summary3075121
-Node: Init File3084870
-Node: Terminal-Specific3088806
-Node: Command-Line Arguments3092329
-Node: Getting Out3096074
-Node: Killing Emacs3096690
-Node: Suspending Emacs3099355
-Node: System Environment3104718
-Node: User Identification3113171
-Node: Time of Day3117072
-Node: Time Zone Rules3120461
-Node: Time Conversion3122976
-Node: Time Parsing3127084
-Node: Processor Run Time3134594
-Node: Time Calculations3136302
-Node: Timers3137423
-Node: Idle Timers3144090
-Node: Terminal Input3148434
-Node: Input Modes3148868
-Node: Recording Input3151364
-Node: Terminal Output3152755
-Node: Sound Output3155891
-Node: X11 Keysyms3158085
-Node: Batch Mode3159629
-Node: Session Management3161323
-Node: Desktop Notifications3163451
-Node: File Notifications3176038
-Node: Dynamic Libraries3182960
-Node: Security Considerations3185185
-Node: Packaging3191734
-Node: Packaging Basics3192609
-Node: Simple Packages3196920
-Node: Multi-file Packages3199517
-Node: Package Archives3202853
-Node: Antinews3207809
-Node: GNU Free Documentation License3212633
-Node: GPL3237972
-Node: Tips3275746
-Node: Coding Conventions3277204
-Ref: Coding Conventions-Footnote-13286369
-Node: Key Binding Conventions3286470
-Node: Programming Tips3289557
-Node: Compilation Tips3293876
-Node: Warning Tips3295849
-Node: Documentation Tips3297479
-Ref: Docstring hyperlinks3302095
-Node: Comment Tips3309196
-Node: Library Headers3312020
-Node: GNU Emacs Internals3318999
-Node: Building Emacs3319986
-Node: Pure Storage3325681
-Node: Garbage Collection3328649
-Node: Stack-allocated Objects3341706
-Node: Memory Usage3343235
-Node: C Dialect3344873
-Node: Writing Emacs Primitives3345484
-Ref: Defining Lisp variables in C3352870
-Node: Object Internals3356376
-Node: Buffer Internals3360046
-Node: Window Internals3369265
-Node: Process Internals3376376
-Node: C Integer Types3379190
-Node: Standard Errors3383793
-Node: Standard Keymaps3390655
-Node: Standard Hooks3395919
-Node: Index3402316
+Node: Standard Regexps2560953
+Node: Syntax Tables2563614
+Node: Syntax Basics2564695
+Node: Syntax Descriptors2567422
+Node: Syntax Class Table2569905
+Node: Syntax Flags2576542
+Node: Syntax Table Functions2580400
+Node: Syntax Properties2585092
+Node: Motion and Syntax2588088
+Node: Parsing Expressions2589694
+Node: Motion via Parsing2591689
+Node: Position Parse2594787
+Node: Parser State2596835
+Node: Low-Level Parsing2599801
+Node: Control Parsing2601633
+Node: Syntax Table Internals2602916
+Node: Categories2606208
+Node: Abbrevs2612736
+Node: Abbrev Tables2615359
+Node: Defining Abbrevs2618069
+Node: Abbrev Files2620749
+Node: Abbrev Expansion2623113
+Node: Standard Abbrev Tables2629391
+Node: Abbrev Properties2630988
+Node: Abbrev Table Properties2632399
+Node: Processes2634191
+Node: Subprocess Creation2637544
+Node: Shell Arguments2642539
+Node: Synchronous Processes2646571
+Ref: Synchronous Processes-Footnote-12659145
+Node: Asynchronous Processes2659249
+Node: Deleting Processes2671976
+Node: Process Information2674310
+Ref: Coding systems for a subprocess2681749
+Node: Input to Processes2682851
+Node: Signals to Processes2686185
+Node: Output from Processes2691631
+Node: Process Buffers2694699
+Node: Filter Functions2700880
+Ref: Process Filter Example2703321
+Node: Decoding Output2706186
+Node: Accepting Output2708139
+Node: Sentinels2710256
+Node: Query Before Exit2715748
+Node: System Processes2716848
+Node: Transaction Queues2724122
+Node: Network2726036
+Node: Network Servers2733792
+Node: Datagrams2735861
+Node: Low-Level Network2737141
+Node: Network Processes2737761
+Node: Network Options2744419
+Node: Network Feature Testing2747978
+Node: Misc Network2749295
+Node: Serial Ports2751119
+Node: Byte Packing2758643
+Node: Bindat Spec2759591
+Node: Bindat Functions2765468
+Node: Bindat Examples2768321
+Node: Display2774328
+Node: Refresh Screen2776262
+Node: Forcing Redisplay2777691
+Node: Truncation2779891
+Node: The Echo Area2783659
+Node: Displaying Messages2784579
+Ref: message-box2788437
+Node: Progress2789927
+Node: Logging Messages2795300
+Node: Echo Area Customization2797768
+Node: Warnings2799634
+Node: Warning Basics2800191
+Node: Warning Variables2803091
+Node: Warning Options2806487
+Node: Delayed Warnings2807870
+Node: Invisible Text2809525
+Node: Selective Display2816698
+Node: Temporary Displays2820887
+Node: Overlays2830043
+Node: Managing Overlays2831496
+Node: Overlay Properties2837707
+Node: Finding Overlays2848146
+Node: Size of Displayed Text2850800
+Node: Line Height2856077
+Node: Faces2860674
+Ref: Faces-Footnote-12863088
+Node: Face Attributes2863230
+Node: Defining Faces2872926
+Node: Attribute Functions2880911
+Node: Displaying Faces2889092
+Node: Face Remapping2891421
+Node: Face Functions2896097
+Node: Auto Faces2897797
+Node: Basic Faces2899442
+Node: Font Selection2901633
+Ref: Font Selection-Footnote-12905978
+Node: Font Lookup2906078
+Node: Fontsets2908563
+Node: Low-Level Font2914831
+Node: Fringes2927971
+Node: Fringe Size/Pos2928706
+Node: Fringe Indicators2931065
+Node: Fringe Cursors2935349
+Node: Fringe Bitmaps2937123
+Node: Customizing Bitmaps2940051
+Node: Overlay Arrow2942158
+Node: Scroll Bars2944643
+Node: Window Dividers2951062
+Node: Display Property2953942
+Node: Replacing Specs2955250
+Node: Specified Space2957418
+Node: Pixel Specification2960304
+Node: Other Display Specs2963141
+Node: Display Margins2967795
+Node: Images2970621
+Node: Image Formats2972047
+Node: Image Descriptors2974222
+Node: XBM Images2981593
+Node: XPM Images2983847
+Node: PostScript Images2984431
+Node: ImageMagick Images2985307
+Node: Other Image Types2988884
+Node: Defining Images2990127
+Node: Showing Images2995626
+Node: Multi-Frame Images3000491
+Node: Image Cache3002952
+Node: Xwidgets3006008
+Node: Buttons3009856
+Node: Button Properties3011253
+Node: Button Types3013333
+Node: Making Buttons3014718
+Node: Manipulating Buttons3017224
+Node: Button Buffer Commands3019410
+Node: Abstract Display3022463
+Node: Abstract Display Functions3025343
+Node: Abstract Display Example3030422
+Node: Blinking3035144
+Node: Character Display3037136
+Node: Usual Display3038354
+Node: Display Tables3042300
+Node: Active Display Table3046258
+Node: Glyphs3048207
+Node: Glyphless Chars3050282
+Node: Beeping3054222
+Node: Window Systems3055568
+Node: Tooltips3057759
+Node: Bidirectional Display3061191
+Node: System Interface3075525
+Node: Starting Up3077587
+Node: Startup Summary3078170
+Node: Init File3087919
+Node: Terminal-Specific3091855
+Node: Command-Line Arguments3095378
+Node: Getting Out3099123
+Node: Killing Emacs3099739
+Node: Suspending Emacs3102404
+Node: System Environment3107767
+Node: User Identification3116220
+Node: Time of Day3120121
+Node: Time Zone Rules3123510
+Node: Time Conversion3126025
+Node: Time Parsing3130133
+Node: Processor Run Time3137643
+Node: Time Calculations3139351
+Node: Timers3140472
+Node: Idle Timers3147139
+Node: Terminal Input3151483
+Node: Input Modes3151917
+Node: Recording Input3154413
+Node: Terminal Output3155804
+Node: Sound Output3158940
+Node: X11 Keysyms3161134
+Node: Batch Mode3162678
+Node: Session Management3164372
+Node: Desktop Notifications3166500
+Node: File Notifications3179087
+Node: Dynamic Libraries3186009
+Node: Security Considerations3188234
+Node: Packaging3194783
+Node: Packaging Basics3195658
+Node: Simple Packages3199969
+Node: Multi-file Packages3202566
+Node: Package Archives3205902
+Node: Antinews3210858
+Node: GNU Free Documentation License3215682
+Node: GPL3241021
+Node: Tips3278795
+Node: Coding Conventions3280253
+Ref: Coding Conventions-Footnote-13289418
+Node: Key Binding Conventions3289519
+Node: Programming Tips3292606
+Node: Compilation Tips3296925
+Node: Warning Tips3298898
+Node: Documentation Tips3300528
+Ref: Docstring hyperlinks3305144
+Node: Comment Tips3312245
+Node: Library Headers3315069
+Node: GNU Emacs Internals3322048
+Node: Building Emacs3323035
+Node: Pure Storage3328730
+Node: Garbage Collection3331698
+Node: Stack-allocated Objects3344755
+Node: Memory Usage3346284
+Node: C Dialect3347922
+Node: Writing Emacs Primitives3348533
+Ref: Defining Lisp variables in C3355919
+Node: Object Internals3359425
+Node: Buffer Internals3363095
+Node: Window Internals3372314
+Node: Process Internals3379425
+Node: C Integer Types3382239
+Node: Standard Errors3386842
+Node: Standard Keymaps3393704
+Node: Standard Hooks3398968
+Node: Index3405365
 
 End Tag Table
 
