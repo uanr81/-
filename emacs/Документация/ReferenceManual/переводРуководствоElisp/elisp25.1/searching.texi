@@ -1079,32 +1079,32 @@ comes back" twice.
 @end deffn
 
 @deffn Command re-search-backward regexp &optional limit noerror count
-This function searches backward in the current buffer for a string of
-text that is matched by the regular expression @var{regexp}, leaving
-point at the beginning of the first text found.
+Эта функция выполняет поиск назад в текущем буфере для строки
+текста, который соответствует регулярному выражению @var{regexp}, оставляет
+точку в начале первого найденного текста.
 
-This function is analogous to @code{re-search-forward}, but they are not
-simple mirror images.  @code{re-search-forward} finds the match whose
-beginning is as close as possible to the starting point.  If
-@code{re-search-backward} were a perfect mirror image, it would find the
-match whose end is as close as possible.  However, in fact it finds the
-match whose beginning is as close as possible (and yet ends before the
-starting point).  The reason for this is that matching a regular
-expression at a given spot always works from beginning to end, and
-starts at a specified beginning position.
+Эта функция аналогична @code{re-search-forward}, но они не
+простые зеркальные отображения.  @code{re-search-forward} находит соответствие, чье
+начало как можно ближе к начальной точке. Если
+@code{re-search-backward} была идеальным зеркальным изображением, она нашла бы то
+что заканчивается как можно ближе. Однако на самом деле она находит
+соответствие, начало которого как можно ближе (и все же заканчивается до
+отправной точке). Причина этого в том, что сопоставление регулярных
+выражение в данном месте всегда работает от начала до конца, и
+начинается в указанной начальной позиции.
 
-A true mirror-image of @code{re-search-forward} would require a special
-feature for matching regular expressions from end to beginning.  It's
-not worth the trouble of implementing that.
+Истинное зеркальное изображение @code{re-search-forward} потребует
+функцию для сопоставления регулярному выражению от конца до начала. Это
+того не стоит.
 @end deffn
 
 @defun string-match regexp string &optional start
-This function returns the index of the start of the first match for
-the regular expression @var{regexp} in @var{string}, or @code{nil} if
-there is no match.  If @var{start} is non-@code{nil}, the search starts
-at that index in @var{string}.
+Эта функция возвращает индекс начала первого совпадения для
+регулярного выражения @var{regexp} в @var{string}, или @code{nil} если
+нет совпадения.  Если @var{start} не-@code{nil}, поиск начинается
+с этого индекса в @var{string}.
 
-For example,
+Например,
 
 @example
 @group
@@ -1120,11 +1120,11 @@ For example,
 @end example
 
 @noindent
-The index of the first character of the
-string is 0, the index of the second character is 1, and so on.
+Индекс первого символа
+cтроки равен 0, индекс второго символа равен 1 и т. Д.
 
-If this function finds a match, the index of the first character beyond
-the match is available as @code{(match-end 0)}.  @xref{Match Data}.
+Если эта функция находит совпадение, индекс первого символа за пределами
+соответствия доступен как @code{(match-end 0)}.  @xref{Match Data}.
 
 @example
 @group
@@ -1141,23 +1141,23 @@ the match is available as @code{(match-end 0)}.  @xref{Match Data}.
 @end defun
 
 @defun string-match-p regexp string &optional start
-This predicate function does what @code{string-match} does, but it
-avoids modifying the match data.
+Эта предикатная функция делает то, что @code{string-match} , но 
+избегает изменения данных соответствия.
 @end defun
 
 @defun looking-at regexp
-This function determines whether the text in the current buffer directly
-following point matches the regular expression @var{regexp}.  ``Directly
-following'' means precisely that: the search is ``anchored'' and it can
-succeed only starting with the first character following point.  The
-result is @code{t} if so, @code{nil} otherwise.
+Эта функция определяет, непосредственно ли текст в текущем буфере
+следующий за точкой соответствует регулярному выражению @var{regexp}.  ``Directly
+following'' означает именно это: поиск ``anchored'' и он может
+быть успешным только начиная с первого символа следующей точки.
+Результатом является @code{t} если так, @code{nil} в противном случае.
 
-This function does not move point, but it does update the match data.
-@xref{Match Data}.  If you need to test for a match without modifying
-the match data, use @code{looking-at-p}, described below.
+Эта функция не перемещает точку, но обновляет данные соответствия.
+@xref{Match Data}.  Если вам нужно проверить соответствие, не изменяя
+данные соответствия, используйте @code{looking-at-p}, описано ниже.
 
-In this example, point is located directly before the @samp{T}.  If it
-were anywhere else, the result would be @code{nil}.
+В этом примере точка расположена непосредственно перед @samp{T}.  Если она
+была бы где-то еще, результатом был бы @code{nil}.
 
 @example
 @group
@@ -1173,16 +1173,16 @@ comes back" twice.
 @end defun
 
 @defun looking-back regexp limit &optional greedy
-This function returns @code{t} if @var{regexp} matches the text
-immediately before point (i.e., ending at point), and @code{nil} otherwise.
+Эта функция возвращает @code{t} если @var{regexp} соответствует тексту
+непосредственно перед точкой (т. е. заканчивающегося в точке), и @code{nil} в противном случае.
 
-Because regular expression matching works only going forward, this is
-implemented by searching backwards from point for a match that ends at
-point.  That can be quite slow if it has to search a long distance.
-You can bound the time required by specifying a non-@code{nil} value
-for @var{limit}, which says not to search before @var{limit}.  In this
-case, the match that is found must begin at or after @var{limit}.
-Here's an example:
+Поскольку регулярное соответствие выражений работает только в будущем, это
+реализуется путем поиска назад от точки для соответствия, которая заканчивается на
+точке. Это может быть довольно медленным, если нужно искать на большие расстояния.
+Вы можете связать время, требуемое, указав не-@code{nil} значение
+для @var{limit}, в котором указывается @var{limit}.  В этом
+случае, найденное совпадение должно начинаться с или после @var{limit}.
+Вот пример:
 
 @example
 @group
@@ -1198,276 +1198,271 @@ comes back" twice.
 @end group
 @end example
 
-If @var{greedy} is non-@code{nil}, this function extends the match
-backwards as far as possible, stopping when a single additional
-previous character cannot be part of a match for @var{regexp}.  When
-the match is extended, its starting position is allowed to occur
-before @var{limit}.
+Если @var{greedy} не-@code{nil}, Эта функция расширяет соответствие
+назад, насколько это возможно, останавливаясь, когда один дополнительный
+предыдущий символ не может быть частью соответствия для @var{regexp}.  Когда
+совпадение продолжается, его исходное положение разрешено
+до @var{limit}.
 
 @c http://debbugs.gnu.org/5689
-As a general recommendation, try to avoid using @code{looking-back}
-wherever possible, since it is slow.  For this reason, there are no
-plans to add a @code{looking-back-p} function.
+В качестве общей рекомендации старайтесь избегать использования @code{looking-back}
+где это возможно, поскольку она медленная. По этой причине не
+планируется добавить @code{looking-back-p} функцию.
 @end defun
 
 @defun looking-at-p regexp
-This predicate function works like @code{looking-at}, but without
-updating the match data.
+Эта функция предикат работает как @code{looking-at}, но без
+обновления данных соответствия.
 @end defun
 
 @defvar search-spaces-regexp
-If this variable is non-@code{nil}, it should be a regular expression
-that says how to search for whitespace.  In that case, any group of
-spaces in a regular expression being searched for stands for use of
-this regular expression.  However, spaces inside of constructs such as
-@samp{[@dots{}]} and @samp{*}, @samp{+}, @samp{?} are not affected by
+Если эта переменная не-@code{nil}, это должно быть регулярное выражение
+в котором говорится, как искать пробелы. В этом случае для любая группы
+пробелов в обычном выражении, которое искали  используется
+это регулярное выражение. Однако пропуски внутри конструкций, таких как
+@samp{[@dots{}]} и @samp{*}, @samp{+}, @samp{?} не затрагиваются
 @code{search-spaces-regexp}.
 
-Since this variable affects all regular expression search and match
-constructs, you should bind it temporarily for as small as possible
-a part of the code.
+Поскольку эта переменная влияет на поиск и поиск конструкций регулярных 
+выражений, вы должны временно привязать его как можно к меньшей
+части кода.
 @end defvar
 
 @node POSIX Regexps
 @section POSIX Regular Expression Searching
 
 @cindex backtracking and POSIX regular expressions
-  The usual regular expression functions do backtracking when necessary
-to handle the @samp{\|} and repetition constructs, but they continue
-this only until they find @emph{some} match.  Then they succeed and
-report the first match found.
+  Обычно обычные функции регулярных выражений возвращаются назад
+для обработки @samp{\|} и конструкции повторения, но они продолжают
+это только пока они не находят @emph{some} совпадение. Затем они преуспевают и
+сообщают о найденном первом совпадении.
 
-  This section describes alternative search functions which perform the
-full backtracking specified by the POSIX standard for regular expression
-matching.  They continue backtracking until they have tried all
-possibilities and found all matches, so they can report the longest
-match, as required by POSIX@.  This is much slower, so use these
-functions only when you really need the longest match.
+  В этом разделе описываются альтернативные функции поиска, которые выполняют
+полный откат, указанный стандартом POSIX для регулярного выражения
+соответствия. Они продолжают отступать, пока они не попробовали все
+возможности и нашли все совпадения, чтобы они могли сообщать о самых длинных
+соответствиях, как требуется POSIX @. Это намного медленнее, поэтому используйте эту
+функциональность только тогда, когда вам действительно нужно самое длинное совпадение.
 
-  The POSIX search and match functions do not properly support the
-non-greedy repetition operators (@pxref{Regexp Special, non-greedy}).
-This is because POSIX backtracking conflicts with the semantics of
-non-greedy repetition.
+  Функции поиска и сопоставления POSIX не поддерживают
+неживые операторы повторения (@pxref{Regexp Special, non-greedy}).
+Это связано с тем, что обратное отслеживание POSIX противоречит семантике
+не-жадного повторения.
 
 @deffn Command posix-search-forward regexp &optional limit noerror count
-This is like @code{re-search-forward} except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
+Это похоже на @code{re-search-forward} за исключением того, что она выполняет полный
+Backtracking, указанный стандартом POSIX для соответствия  регулярному выражению.
 @end deffn
 
 @deffn Command posix-search-backward regexp &optional limit noerror count
-This is like @code{re-search-backward} except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
+Это похоже на @code{re-search-backward} за исключением того, что она выполняет полный
+Backtracking, указанный стандартом POSIX для соответствия  регулярному выражению.
 @end deffn
 
 @defun posix-looking-at regexp
-This is like @code{looking-at} except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
+Это похоже на @code{looking-at} за исключением того, что она выполняет полный
+Backtracking, указанный стандартом POSIX для соответствия  регулярному выражению.
 @end defun
 
 @defun posix-string-match regexp string &optional start
-This is like @code{string-match} except that it performs the full
-backtracking specified by the POSIX standard for regular expression
-matching.
+Это похоже на @code{string-match} за исключением того, что она выполняет полный
+Backtracking, указанный стандартом POSIX для соответствия регулярному выражению.
 @end defun
 
 @node Match Data
 @section The Match Data
 @cindex match data
 
-  Emacs keeps track of the start and end positions of the segments of
-text found during a search; this is called the @dfn{match data}.
-Thanks to the match data, you can search for a complex pattern, such
-as a date in a mail message, and then extract parts of the match under
-control of the pattern.
+  Emacs отслеживает начальную и конечную позиции сегментов
+текста, найденного во время поиска; Это называется @dfn{match data}.
+Благодаря данным соответствия вы можете искать сложный шаблон, такой как
+дата в почтовом сообщении, а затем извлечь части
+управления шаблона.
 
-  Because the match data normally describe the most recent search only,
-you must be careful not to do another search inadvertently between the
-search you wish to refer back to and the use of the match data.  If you
-can't avoid another intervening search, you must save and restore the
-match data around it, to prevent it from being overwritten.
+  Поскольку данные соответствия обычно описывают только самый последний поиск,
+вы должны быть осторожны, чтобы не делать другого поиска в случайном порядке между
+поиском, на который вы хотите вернуться, и использование данных соответствия. если 
+нельзя избежать другого промежуточного поиска, вы должны сохранить и восстановить
+сопоставленные данные вокруг него, чтобы предотвратить его перезапись.
 
-  Notice that all functions are allowed to overwrite the match data
-unless they're explicitly documented not to do so.  A consequence is
-that functions that are run implicitly in the background
-(@pxref{Timers}, and @ref{Idle Timers}) should likely save and restore
-the match data explicitly.
+  Обратите внимание, что всем функциям разрешено перезаписывать данные соответствия
+если они явно не документированы, чтобы этого не делать. Следствием является
+функции, которые выполняются неявно, скорее всего,  в фоновом режиме
+(@pxref{Timers}, и @ref{Idle Timers}) , сохраниющие и восстанавливающие
+данные соответствия явно.
 
 @menu
-* Replacing Match::       Replacing a substring that was matched.
-* Simple Match Data::     Accessing single items of match data,
-                            such as where a particular subexpression started.
-* Entire Match Data::     Accessing the entire match data at once, as a list.
-* Saving Match Data::     Saving and restoring the match data.
+* Replacing Match::       Замена подстроки, которая была сопоставлена.
+* Simple Match Data::     Доступ к отдельным элементам данных соответствия,
+                            yапример, когда начинается конкретное подвыражение.
+* Entire Match Data::     Доступ ко всем данным соответствия сразу, как списку.
+* Saving Match Data::     Сохранение и восстановление данных соответствия.
 @end menu
 
 @node Replacing Match
 @subsection Replacing the Text that Matched
 @cindex replace matched text
 
-  This function replaces all or part of the text matched by the last
-search.  It works by means of the match data.
+  Эта функция заменяет все или часть текста, сопоставляемого последним
+поиск. Она работает с помощью данных сопоставления.
 
 @cindex case in replacements
 @defun replace-match replacement &optional fixedcase literal string subexp
-This function performs a replacement operation on a buffer or string.
+Эта функция выполняет операцию замены в буфере или строке.
 
-If you did the last search in a buffer, you should omit the
-@var{string} argument or specify @code{nil} for it, and make sure that
-the current buffer is the one in which you performed the last search.
-Then this function edits the buffer, replacing the matched text with
-@var{replacement}.  It leaves point at the end of the replacement
-text.
+Если вы выполнили последний поиск в буфере, вы должны опустить
+@var{string} аргумент или указать @code{nil} для этого, и убедится, что
+текущий буфер - тот, в котором вы выполнили последний поиск.
+Затем эта функция редактирует буфер, заменяя согласованный текст на
+@var{replacement}.  Он оставляет точку в конце замененного
+текста.
 
-If you performed the last search on a string, pass the same string as
-@var{string}.  Then this function returns a new string, in which the
-matched text is replaced by @var{replacement}.
+Если вы выполнили последний поиск в строке, передайте ту же строку, что и
+@var{string}.  Затем эта функция возвращает новую строку, в которой
+согласованный текст заменяется на @var{replacement}.
 
-If @var{fixedcase} is non-@code{nil}, then @code{replace-match} uses
-the replacement text without case conversion; otherwise, it converts
-the replacement text depending upon the capitalization of the text to
-be replaced.  If the original text is all upper case, this converts
-the replacement text to upper case.  If all words of the original text
-are capitalized, this capitalizes all the words of the replacement
-text.  If all the words are one-letter and they are all upper case,
-they are treated as capitalized words rather than all-upper-case
-words.
+Если @var{fixedcase} не-@code{nil}, тогда @code{replace-match} использует
+заменяющий текст без преобразования кода; В противном случае он преобразует
+заменяющий текст в зависимости от регистра текста который
+был заменен. Если исходный текст является верхним регистром, это преобразует
+заменяющий текст на верхний регистр. Если все слова исходного текста
+заглавные, это делает заглавными все слова замены
+текст. Если все слова однобуквенные и все они имеют верхний регистр,
+они рассматриваются как заглавные слова, а не все слова в верхнем регистре.
 
-If @var{literal} is non-@code{nil}, then @var{replacement} is inserted
-exactly as it is, the only alterations being case changes as needed.
-If it is @code{nil} (the default), then the character @samp{\} is treated
-specially.  If a @samp{\} appears in @var{replacement}, then it must be
-part of one of the following sequences:
+Если @var{literal} не-@code{nil}, тогда @var{replacement} вставляется
+без изменений, которые изменяются по мере необходимости.
+Если это @code{nil} (по умолчанию), то персонаж @samp{\} понимается
+специально. Если @samp{\} появляется в @var{replacement}, то это должно быть
+часть одной из следующих последовательностей:
 
 @table @asis
 @item @samp{\&}
 @cindex @samp{&} in replacement
-This stands for the entire text being replaced.
+Это означает, что весь текст будет заменен.
 
 @item @samp{\@var{n}}, where @var{n} is a digit
 @cindex @samp{\@var{n}} in replacement
-This stands for the text that matched the @var{n}th subexpression in
-the original regexp.  Subexpressions are those expressions grouped
-inside @samp{\(@dots{}\)}.  If the @var{n}th subexpression never
-matched, an empty string is substituted.
+Это означает, что текст соответствует @var{n}th подвыражению в
+исходном регулярном выражении. Подвыражения - это выражения, сгруппированные
+внутри @samp{\(@dots{}\)}.  Если @var{n}th подвыражение никогда не
+сопоставлено, заменяется пустой строкой.
 
 @item @samp{\\}
 @cindex @samp{\} in replacement
-This stands for a single @samp{\} in the replacement text.
+Это означает, что @samp{\} в заменяющем тексте.
 
 @item @samp{\?}
-This stands for itself (for compatibility with @code{replace-regexp}
-and related commands; @pxref{Regexp Replace,,, emacs, The GNU
+Это само по себе (для совместимости с @code{replace-regexp}
+и соответствию командам; @pxref{Regexp Replace,,, emacs, The GNU
 Emacs Manual}).
 @end table
 
 @noindent
-Any other character following @samp{\} signals an error.
+Любой другой символ, следующий @samp{\} сигнализирует о ошибке.
 
-The substitutions performed by @samp{\&} and @samp{\@var{n}} occur
-after case conversion, if any.  Therefore, the strings they substitute
-are never case-converted.
+Замены, выполняемые @samp{\&} и @samp{\@var{n}} происходят
+после конвертации конвертация, если есть. Поэтому строки, которые они заменяют
+никогда не конвертируются в регистр.
 
-If @var{subexp} is non-@code{nil}, that says to replace just
-subexpression number @var{subexp} of the regexp that was matched, not
-the entire match.  For example, after matching @samp{foo \(ba*r\)},
-calling @code{replace-match} with 1 as @var{subexp} means to replace
-just the text that matched @samp{\(ba*r\)}.
+Если @var{subexp} не-@code{nil}, который говорит, чтобы заменить просто
+номер подвыражения @var{subexp} регулярного выражения, которое было сопоставлено, а не
+всё соответствие. Например, после сопоставления @samp{foo \(ba*r\)},
+вызвав @code{replace-match} с 1 как @var{subexp} Означает заменить
+просто текст, который соответствует @samp{\(ba*r\)}.
 @end defun
 
 @defun match-substitute-replacement replacement &optional fixedcase literal string subexp
-This function returns the text that would be inserted into the buffer
-by @code{replace-match}, but without modifying the buffer.  It is
-useful if you want to present the user with actual replacement result,
-with constructs like @samp{\@var{n}} or @samp{\&} substituted with
-matched groups.  Arguments @var{replacement} and optional
-@var{fixedcase}, @var{literal}, @var{string} and @var{subexp} have the
-same meaning as for @code{replace-match}.
+Эта функция возвращает текст, который будет вставлен в буфер
+от @code{replace-match}, но без изменения буфера. Это
+полезно, если вы хотите представить пользователю фактический результат замены,
+С конструкциями типа @samp{\@var{n}} или @samp{\&} замещения
+согласованным группам. Аргументы @var{replacement} и необязательные
+@var{fixedcase}, @var{literal}, @var{string} и @var{subexp}, имеют
+то же значение, что и для @code{replace-match}.
 @end defun
 
 @node Simple Match Data
 @subsection Simple Match Data Access
 
-  This section explains how to use the match data to find out what was
-matched by the last search or match operation, if it succeeded.
+  В этом разделе объясняется, как использовать данные соответствия, чтобы узнать, что 
+соответствовало последней успешной операции поиска или совпадению.
 
-  You can ask about the entire matching text, or about a particular
-parenthetical subexpression of a regular expression.  The @var{count}
-argument in the functions below specifies which.  If @var{count} is
-zero, you are asking about the entire match.  If @var{count} is
-positive, it specifies which subexpression you want.
+  Вы можете узнать обо всем соответствующем тексте или о конкретном
+вложенном подвыражение регулярного выражения.  @var{count}
+аргумент в нижеприведенных функциях указывает, в каких именно.  Если @var{count} является
+ноль, вы спрашиваете о целом соответствии.  Если @var{count} является
+положительный, он определяет, какое подвыражение вы хотите.
 
-  Recall that the subexpressions of a regular expression are those
-expressions grouped with escaped parentheses, @samp{\(@dots{}\)}.  The
-@var{count}th subexpression is found by counting occurrences of
-@samp{\(} from the beginning of the whole regular expression.  The first
-subexpression is numbered 1, the second 2, and so on.  Only regular
-expressions can have subexpressions---after a simple string search, the
-only information available is about the entire match.
+  Напомним, что подвыражениями регулярного выражения являются
+выражения, сгруппированные круглыми скобками, @samp{\(@dots{}\)}.  Это
+@var{count}ое подвыражение определяется путем подсчета вхождений
+@samp{\(} от начала всего регулярного выражения. Первое
+подвыражение пронумеровано 1, второе 2 и т. д. Только регулярные
+выражения могут иметь подвыражения - при простом поиске строк
+доступна только информация о целом совпадении.
 
-  Every successful search sets the match data.  Therefore, you should
-query the match data immediately after searching, before calling any
-other function that might perform another search.  Alternatively, you
-may save and restore the match data (@pxref{Saving Match Data}) around
-the call to functions that could perform another search.  Or use the
-functions that explicitly do not modify the match data;
-e.g., @code{string-match-p}.
+  Каждый успешный поиск устанавливает данные соответствия. Поэтому вы должны
+запрашивать данные соответствия сразу после поиска, перед вызовом любой
+другая функция, которая может выполнять другой поиск. Кроме того, вы
+можете сохранять и восстанавливать данные соответствия (@pxref{Saving Match Data}) при
+вызове функций, которые могут выполнять другой поиск. Или используйте
+функции, которые явно не изменяют данные соответствия;
+так как , @code{string-match-p}.
 
-@c This is an old comment and presumably there is no prospect of this
-@c changing now.  But still the advice stands.
-  A search which fails may or may not alter the match data.  In the
-current implementation, it does not, but we may change it in the
-future.  Don't try to rely on the value of the match data after a
-failing search.
+@c Это старый комментарий, и, по-видимому,
+@c теперь все меняется. Но все же советы стоят.
+  Поиск, который не удался, может или не может изменить данные соответствия. в
+текущей реализации, это не так, но мы можем изменить это в
+будущем. Не пытайтесь полагаться на значение данных соответствия после
+неудачного поиска.
 
 @defun match-string count &optional in-string
-This function returns, as a string, the text matched in the last search
-or match operation.  It returns the entire text if @var{count} is zero,
-or just the portion corresponding to the @var{count}th parenthetical
-subexpression, if @var{count} is positive.
+Эта функция возвращает в качестве строки текст, сопоставленный в последнем поиске
+или операции сопряжения. Он возвращает весь текст, если @var{count} это ноль,
+или только часть, соответствующую @var{count} указывающему на
+подвыражение, если @var{count} является положительным.
 
-If the last such operation was done against a string with
-@code{string-match}, then you should pass the same string as the
-argument @var{in-string}.  After a buffer search or match,
-you should omit @var{in-string} or pass @code{nil} for it; but you
-should make sure that the current buffer when you call
-@code{match-string} is the one in which you did the searching or
-matching.  Failure to follow this advice will lead to incorrect results.
+Если последняя такая операция была выполнена против строки с
+@code{string-match}, то вы должны передать ту же строку, что и
+аргумент @var{in-string}.  После поиска или совпадения буфера,
+вы должны опустить @var{in-string} или укаывать на @code{nil} для этого; но ты
+должен убедиться, что текущий буфер при вызове
+@code{match-string} это тот, в котором вы выполняли поиск или
+соответствия. Несоблюдение этого совета приведет к неправильным результатам.
 
-The value is @code{nil} if @var{count} is out of range, or for a
-subexpression inside a @samp{\|} alternative that wasn't used or a
-repetition that repeated zero times.
+Значение @code{nil} если @var{count} находится за пределами допустимого диапазона или
+подвыражение внутри альтернативы @samp{\|}, которое не использовалась, или ни разу
+не повторялось.
 @end defun
 
 @defun match-string-no-properties count &optional in-string
-This function is like @code{match-string} except that the result
-has no text properties.
+Эта функция подобна @code{match-string} за исключением того, что результат
+не имеет текстовых свойств.
 @end defun
 
 @defun match-beginning count
-If the last regular expression search found a match, this function
-returns the position of the start of the matching text or of a
-subexpression of it.
+Если последний поиск регулярного выражения нашел совпадение, эта функция
+возвращает позицию начала соответствующего текста или
+подвыражения.
 
-If @var{count} is zero, then the value is the position of the start of
-the entire match.  Otherwise, @var{count} specifies a subexpression in
-the regular expression, and the value of the function is the starting
-position of the match for that subexpression.
+Если @var{count} это ноль, то значение представляет собой позицию начала
+всего совпадения. В противном случае, @var{count} указывает подвыражение в
+регулярном выражении, а значение функции - это начало
+положения совпадения для этого подвыражения.
 
-The value is @code{nil} for a subexpression inside a @samp{\|}
-alternative that wasn't used or a repetition that repeated zero times.
+Значение @code{nil} для подвыражения внутри @samp{\|}
+альтернативы, которая не использовалась, или повторялось ноль раз.
 @end defun
 
 @defun match-end count
-This function is like @code{match-beginning} except that it returns the
-position of the end of the match, rather than the position of the
-beginning.
+Эта функция подобна @code{match-beginning} за исключением того, что он возвращает
+положение конца соответствия, а не положение
+начала.
 @end defun
 
-  Here is an example of using the match data, with a comment showing the
-positions within the text:
+  Ниже приведен пример использования данных сопоставления с комментарием, показывающим
+позиции в тексте:
 
 @example
 @group
@@ -1505,11 +1500,11 @@ positions within the text:
 @end group
 @end example
 
-  Here is another example.  Point is initially located at the beginning
-of the line.  Searching moves point to between the space and the word
-@samp{in}.  The beginning of the entire match is at the 9th character of
-the buffer (@samp{T}), and the beginning of the match for the first
-subexpression is at the 13th character (@samp{c}).
+  Вот еще один пример. Точка первоначально расположена в начале
+строки. Поиск перемещает точку между пропуском и словом
+@samp{in}.  Начало всего соответствия - 9-й символ
+буфера (@samp{T}), и начало совпадения для первого
+подвыражения на 13-м символе (@samp{c}).
 
 @example
 @group
@@ -1530,23 +1525,23 @@ I read "The cat @point{}in the hat comes back" twice.
 @end example
 
 @noindent
-(In this case, the index returned is a buffer position; the first
-character of the buffer counts as 1.)
+(В этом случае возвращаемый индекс является буферной позицией; первый
+символ буфера считается равным 1.)
 
 @node Entire Match Data
 @subsection Accessing the Entire Match Data
 
-  The functions @code{match-data} and @code{set-match-data} read or
-write the entire match data, all at once.
+  Функции @code{match-data} и @code{set-match-data} читают или
+записывают все данные совпадения, все сразу.
 
 @defun match-data &optional integers reuse reseat
-This function returns a list of positions (markers or integers) that
-record all the information on the text that the last search matched.
-Element zero is the position of the beginning of the match for the
-whole expression; element one is the position of the end of the match
-for the expression.  The next two elements are the positions of the
-beginning and end of the match for the first subexpression, and so on.
-In general, element
+Эта функция возвращает список позиций (маркеров или целых чисел), в который
+записана вся информация о тексте, который соответствует последнему поиску.
+Элемент 0 - это позиция начала совпадения для
+целого выражения; Element one - это позиция конца соответствия
+для выражения. Следующие два элемента - это позиции
+начала и конца совпадения для первого подвыражения и т. д.
+В общем, элемент
 @ifnottex
 number 2@var{n}
 @end ifnottex
@@ -1563,29 +1558,29 @@ number {\mathsurround=0pt $2n+1$}
 @end tex
 corresponds to @code{(match-end @var{n})}.
 
-Normally all the elements are markers or @code{nil}, but if
-@var{integers} is non-@code{nil}, that means to use integers instead
-of markers.  (In that case, the buffer itself is appended as an
-additional element at the end of the list, to facilitate complete
-restoration of the match data.)  If the last match was done on a
-string with @code{string-match}, then integers are always used,
-since markers can't point into a string.
+Обычно все элементы являются маркерами или @code{nil}, но если
+@var{integers} не-@code{nil}, Это означает вместо этого использовать целые числа
+маркеров. (В этом случае сам буфер добавляется как
+дополнительный элемент в конце списка, чтобы облегчить
+восстановления данных соответствия.) Если последнее совпадение было выполнено на
+строке с @code{string-match}, то целые числа всегда используются,
+поскольку маркеры не могут указывать на строку.
 
-If @var{reuse} is non-@code{nil}, it should be a list.  In that case,
-@code{match-data} stores the match data in @var{reuse}.  That is,
-@var{reuse} is destructively modified.  @var{reuse} does not need to
-have the right length.  If it is not long enough to contain the match
-data, it is extended.  If it is too long, the length of @var{reuse}
-stays the same, but the elements that were not used are set to
-@code{nil}.  The purpose of this feature is to reduce the need for
-garbage collection.
+Если @var{reuse} не-@code{nil}, это должен быть список. В таком случае,
+@code{match-data} сохраняет данные соответствия в @var{reuse}.  То есть,
+@var{reuse} деструктивно изменено.  @var{reuse} может не
+имеют правильную длину. Если этого не достаточно длинно, чтобы содержать совпадение
+данных, это расширяется. Если он слишком длинный, длина @var{reuse}
+остается неизменной, но элементы, которые не были использованы,
+@code{nil}.  Цель этой функции - уменьшить необходимость
+вывоза мусора.
 
-If @var{reseat} is non-@code{nil}, all markers on the @var{reuse} list
-are reseated to point to nowhere.
+Если @var{reseat} не-@code{nil}, все маркеры в @var{reuse} списке
+переустановливаются, чтобы указать в никуда.
 
-As always, there must be no possibility of intervening searches between
-the call to a search function and the call to @code{match-data} that is
-intended to access the match data for that search.
+Как всегда, не должно быть возможности промежуточных поисков между
+вызовом функции поиска и вызовом @code{match-data} то есть
+предназначенных для доступа к данным соответствия для этого поиска.
 
 @example
 @group
@@ -1599,16 +1594,16 @@ intended to access the match data for that search.
 @end defun
 
 @defun set-match-data match-list &optional reseat
-This function sets the match data from the elements of @var{match-list},
-which should be a list that was the value of a previous call to
-@code{match-data}.  (More precisely, anything that has the same format
-will work.)
+Эта функция устанавливает данные соответствия из элементов @var{match-list},
+который должен быть списком, который был значением предыдущего вызова
+@code{match-data}.  (Точнее, все, что имеет тот же формат
+будет работать.)
 
-If @var{match-list} refers to a buffer that doesn't exist, you don't get
-an error; that sets the match data in a meaningless but harmless way.
+Если @var{match-list} ссылается на буфер, который не существует, вы не получаете
+ошибки; устанавливание данные сопоставления бессмысленным, но безвредным способом.
 
-If @var{reseat} is non-@code{nil}, all markers on the @var{match-list} list
-are reseated to point to nowhere.
+Если @var{reseat} не-@code{nil}, все маркеры на @var{match-list} списке
+переустанавливаются, чтобы указать в никуда.
 
 @c TODO Make it properly obsolete.
 @findex store-match-data
@@ -1618,10 +1613,10 @@ are reseated to point to nowhere.
 @node Saving Match Data
 @subsection Saving and Restoring the Match Data
 
-  When you call a function that may search, you may need to save
-and restore the match data around that call, if you want to preserve the
-match data from an earlier search for later use.  Here is an example
-that shows the problem that arises if you fail to save the match data:
+  Когда вы вызываете функцию, которая может выполнять поиск, вам может потребоваться сэкономить
+и восстановить совпадающие данные вокруг этого вызова, если вы хотите сохранить
+сопоставленные данные из более раннего поиска для последующего использования. Вот пример
+который показывает проблему, возникающую, если вы не можете сохранить данные соответствия:
 
 @example
 @group
@@ -1633,17 +1628,17 @@ that shows the problem that arises if you fail to save the match data:
 @end group
 @end example
 
-  You can save and restore the match data with @code{save-match-data}:
+  Вы можете сохранять и восстанавливать данные соответствия с помощью @code{save-match-data}:
 
 @defmac save-match-data body@dots{}
-This macro executes @var{body}, saving and restoring the match
-data around it.  The return value is the value of the last form in
+Этот макрос выполняет @var{body}, сохраняет и восстанавливает сопоставленные
+данные вокруг него. Возвращаемое значение - это значение последней формы в
 @var{body}.
 @end defmac
 
-  You could use @code{set-match-data} together with @code{match-data} to
-imitate the effect of the special form @code{save-match-data}.  Here is
-how:
+  Вы можете использовать @code{set-match-data} вместе с @code{match-data} в
+подражании эффекту особой формы @code{save-match-data}.  Здесь
+как:
 
 @example
 @group
@@ -1654,13 +1649,13 @@ how:
 @end group
 @end example
 
-  Emacs automatically saves and restores the match data when it runs
-process filter functions (@pxref{Filter Functions}) and process
-sentinels (@pxref{Sentinels}).
+  Emacs автоматически сохраняет и восстанавливает данные соответствия при запуске
+функций фильтра процесса (@pxref{Filter Functions}) и временных
+(@pxref{Sentinels}).
 
 @ignore
-  Here is a function which restores the match data provided the buffer
-associated with it still exists.
+  Вот функция, которая восстанавливает данные соответствия при условии, что буфер
+связанный с ним все еще существует.
 
 @smallexample
 @group
@@ -1688,9 +1683,9 @@ associated with it still exists.
 @cindex replacement after search
 @cindex searching and replacing
 
-  If you want to find all matches for a regexp in part of the buffer,
-and replace them, the best way is to write an explicit loop using
-@code{re-search-forward} and @code{replace-match}, like this:
+  Если вы хотите найти все совпадения для регулярного выражения в части буфера,
+и заменитю их, лучший способ - написать явный цикл, используя
+@code{re-search-forward} и @code{replace-match}, как это:
 
 @example
 (while (re-search-forward "foo[ \t]+bar" nil t)
@@ -1698,23 +1693,23 @@ and replace them, the best way is to write an explicit loop using
 @end example
 
 @noindent
-@xref{Replacing Match,, Replacing the Text that Matched}, for a
-description of @code{replace-match}.
+@xref{Replacing Match,, Replacing the Text that Matched}, для
+описание @code{replace-match}.
 
-  However, replacing matches in a string is more complex, especially
-if you want to do it efficiently.  So Emacs provides a function to do
-this.
+  Однако замена совпадений в строке более сложна, особенно
+если вы хотите сделать это эффективно. Таким образом, Emacs предоставляет функцию для 
+выполнения этого.
 
 @defun replace-regexp-in-string regexp rep string &optional fixedcase literal subexp start
-This function copies @var{string} and searches it for matches for
-@var{regexp}, and replaces them with @var{rep}.  It returns the
-modified copy.  If @var{start} is non-@code{nil}, the search for
-matches starts at that index in @var{string}, so matches starting
-before that index are not changed.
+Эта функция копирует @var{string} и ищет для нее совпадения
+@var{regexp}, и заменяет их @var{rep}.  Она возвращает
+измененную копию.  Если @var{start} не-@code{nil}, поиск
+совпадений начинаются с этого индекса в @var{string}, Поэтому совпадения до
+этого индекса не изменятся.
 
-This function uses @code{replace-match} to do the replacement, and it
-passes the optional arguments @var{fixedcase}, @var{literal} and
-@var{subexp} along to @code{replace-match}.
+Эта функция использует @code{replace-match} для того чтобы сделать замену, для
+этого передаютсч необязательные аргументы @var{fixedcase}, @var{literal} и
+@var{subexp} вместе с @code{replace-match}.
 
 Instead of a string, @var{rep} can be a function.  In that case,
 @code{replace-regexp-in-string} calls @var{rep} for each match,
