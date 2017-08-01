@@ -216,7 +216,7 @@ To view this manual in other formats, click
 
 * Text::                    Examining and changing text in buffers.
 * Non-ASCII Characters::    Non-ASCII text in buffers and strings.
-* Searching and Matching::  Searching buffers for strings or regexps.
+* Searching and Matching::  Поиск для буферов строк или регулярных выражений.
 * Syntax Tables::           The syntax table controls word and list parsing.
 * Abbrevs::                 How Abbrev mode works, and its data structures.
 
@@ -1243,35 +1243,35 @@ Coding Systems
 
 Searching and Matching
 
-* String Search::           Search for an exact match.
-* Searching and Case::      Case-independent or case-significant searching.
-* Regular Expressions::     Describing classes of strings.
-* Regexp Search::           Searching for a match for a regexp.
-* POSIX Regexps::           Searching POSIX-style for the longest match.
-* Match Data::              Finding out which part of the text matched,
-                              after a string or regexp search.
-* Search and Replace::      Commands that loop, searching and replacing.
-* Standard Regexps::        Useful regexps for finding sentences, pages,...
+* String Search::           Поиск точного соответствия.
+* Searching and Case::      Независимый от регистра или зависимый поиск.
+* Regular Expressions::     Описание классов строк.
+* Regexp Search::           Поиск соответствия регулярному выражению.
+* POSIX Regexps::           Поиск POSIX-стиля для самого длинного совпадения.
+* Match Data::              Выяснение, какая часть текста соответствует,
+                              после поиска строки или регулярного выражения.
+* Search and Replace::      Команды, выполняющие цикл, поиск и замену.
+* Standard Regexps::        Полезные регулярные выражения для поиска предложений, страниц,...
 
 Regular Expressions
 
-* Syntax of Regexps::       Rules for writing regular expressions.
-* Regexp Example::          Illustrates regular expression syntax.
-* Regexp Functions::        Functions for operating on regular expressions.
+* Syntax of Regexps::       Правила написания регулярных выражений.
+* Regexp Example::          Иллюстрирует синтаксис регулярных выражений.
+* Regexp Functions::        Функции для работы с регулярными выражениями.
 
 Syntax of Regular Expressions
 
-* Regexp Special::          Special characters in regular expressions.
-* Char Classes::            Character classes used in regular expressions.
-* Regexp Backslash::        Backslash-sequences in regular expressions.
+* Regexp Special::          Специальные символы в регулярных выражениях.
+* Char Classes::            Классы символов, используемые в регулярных выражениях.
+* Regexp Backslash::        Обратные последовательности в регулярных выражениях.
 
 The Match Data
 
-* Replacing Match::         Replacing a substring that was matched.
-* Simple Match Data::       Accessing single items of match data,
-                              such as where a particular subexpression started.
-* Entire Match Data::       Accessing the entire match data at once, as a list.
-* Saving Match Data::       Saving and restoring the match data.
+* Replacing Match::         Замена подстроки, которая была сопоставлена.
+* Simple Match Data::       Доступ к отдельным элементам данных соответствия,
+                              например, когда начинается конкретное подвыражение.
+* Entire Match Data::       Доступ ко всем данным соответствия сразу, как списку.
+* Saving Match Data::       Сохранение и восстановление данных соответствия.
 
 Syntax Tables
 

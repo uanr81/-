@@ -1838,46 +1838,46 @@ corresponds to @code{(match-end @var{n})}.
 @itemx scroll-other-window
 @itemx scroll-other-window-down
 Выполните указанную операцию прокрутки окна, затем спросите об этом
-вопросом снова.  Только @code{y-or-n-p} и связанные с этим ответом функции.
+вопросе снова.  Только @code{y-or-n-p} и связанные с этим ответом функции.
 
 @item quit
-Perform a quit right away.  Only @code{y-or-n-p} and related functions
-use this answer.
+Выйдите сразу же. Только для @code{y-or-n-p} и связанных с ними функциями
+используйте этот ответ.
 
 @item help
-Display some help, then ask again.
+Отобразите некоторую справку, затем спросите еще раз.
 @end table
 
 @defvar multi-query-replace-map
-This variable holds a keymap that extends @code{query-replace-map} by
-providing additional keybindings that are useful in multi-buffer
-replacements.  The additional bindings are:
+Эта переменная содержит комбинацию клавишь, которая расширяется @code{query-replace-map} для
+обеспечения дополнительных привязок клавишь, которые полезны в мультибуфере
+замены. Дополнительные привязки:
 
 @table @code
 @item automatic-all
-Answer this question and all subsequent questions in the series with
-``yes'', without further user interaction, for all remaining buffers.
+Ответьте на этот вопрос и на все последующие вопросы в серии с
+``yes'', без дополнительного взаимодействия с пользователем, для всех остальных буферов.
 
 @item exit-current
-Answer this question ``no'', and give up on the entire series of
-questions for the current buffer.  Continue to the next buffer in the
-sequence.
+Ответить на этот вопрос``no'', и отказаться от всей серии
+вопросов для текущего буфера. Перейдите к следующему буферу 
+последовательно.
 @end table
 @end defvar
 
 @defvar replace-search-function
-This variable specifies a function that @code{perform-replace} calls
-to search for the next string to replace.  Its default value is
-@code{search-forward}.  Any other value should name a function of 3
-arguments: the first 3 arguments of @code{search-forward}
+Эта переменная задает функцию, которая @code{perform-replace} вызывается
+для поиска следующей строки для замены. Его значение по умолчанию
+@code{search-forward}.  Любое другое значение должно передать функции  3
+аргумента: первые 3 аргумента @code{search-forward}
 (@pxref{String Search}).
 @end defvar
 
 @defvar replace-re-search-function
-This variable specifies a function that @code{perform-replace} calls
-to search for the next regexp to replace.  Its default value is
-@code{re-search-forward}.  Any other value should name a function of 3
-arguments: the first 3 arguments of @code{re-search-forward}
+Эта переменная задает функцию, которая @code{perform-replace} вызывается
+для поиска следующего regexp для замены. Его значение по умолчанию
+@code{re-search-forward}.  Любое другое значение должно передать функции 3
+Аргументы: первые 3 аргумента @code{re-search-forward}
 (@pxref{Regexp Search}).
 @end defvar
 
@@ -1886,56 +1886,56 @@ arguments: the first 3 arguments of @code{re-search-forward}
 @cindex regexps used standardly in editing
 @cindex standard regexps used in editing
 
-  This section describes some variables that hold regular expressions
-used for certain purposes in editing:
+  В этом разделе описываются некоторые переменные, которые содержат регулярные выражения
+используемые для определенных целей при редактировании:
 
 @defopt page-delimiter
-This is the regular expression describing line-beginnings that separate
-pages.  The default value is @code{"^\014"} (i.e., @code{"^^L"} or
-@code{"^\C-l"}); this matches a line that starts with a formfeed
-character.
+Это регулярное выражение, описывающее строки-начала, которые разделяют
+страницы. Значение по умолчанию @code{"^\014"} (i.e., @code{"^^L"} или
+@code{"^\C-l"}); это соответствует строке, которая начинается с formfeed
+символа.
 @end defopt
 
-  The following two regular expressions should @emph{not} assume the
-match always starts at the beginning of a line; they should not use
-@samp{^} to anchor the match.  Most often, the paragraph commands do
-check for a match only at the beginning of a line, which means that
-@samp{^} would be superfluous.  When there is a nonzero left margin,
-they accept matches that start after the left margin.  In that case, a
-@samp{^} would be incorrect.  However, a @samp{^} is harmless in modes
-where a left margin is never used.
+  Следующие два регулярных выражения должны @emph{not} предпологать, что
+совпадение всегда начинается в начале строки; Они не должны использовать
+@samp{^} для привязки совпадения. Чаще всего команды абзаца
+проверяют соответствие только в начале строки, что означает, что
+@samp{^} будет излишним. Когда есть ненулевое левое поле,
+они принимают совпадения, начинающиеся после левого поля. В этом случае
+@samp{^} было бы неверным. Однако, @samp{^} безвреден в режимах
+где левое поле никогда не используется.
 
 @defopt paragraph-separate
-This is the regular expression for recognizing the beginning of a line
-that separates paragraphs.  (If you change this, you may have to
-change @code{paragraph-start} also.)  The default value is
-@w{@code{"[@ \t\f]*$"}}, which matches a line that consists entirely of
-spaces, tabs, and form feeds (after its left margin).
+Это регулярное выражение для распознавания начала строки
+которая разделяет абзацы. (Если вы измените это, возможно, вам придется
+изменить @code{paragraph-start} также.)  Значение по умолчанию
+@w{@code{"[@ \t\f]*$"}}, которое соответствует строке, которая полностью состоит из
+пробелов, табуляции и формы (после его левого поля).
 @end defopt
 
 @defopt paragraph-start
-This is the regular expression for recognizing the beginning of a line
-that starts @emph{or} separates paragraphs.  The default value is
-@w{@code{"\f\\|[ \t]*$"}}, which matches a line containing only
-whitespace or starting with a form feed (after its left margin).
+Это регулярное выражение для распознавания начала строки
+который начинает @emph{или} разделяет абзацы.  Значение по умолчанию
+@w{@code{"\f\\|[ \t]*$"}}, которое соответствует строке, содержащей только
+пробелы или начало с подачей формы (после его левого поля).
 @end defopt
 
 @defopt sentence-end
-If non-@code{nil}, the value should be a regular expression describing
-the end of a sentence, including the whitespace following the
-sentence.  (All paragraph boundaries also end sentences, regardless.)
+Если не-@code{nil}, значение должно быть регулярным выражением, описывающим
+конец предложения, включая пробелы, следующие за предложение. (Все границы абзацев 
+также независимо заканчиваются предложениями.)
 
-If the value is @code{nil}, as it is by default, then the function
-@code{sentence-end} constructs the regexp.  That is why you
-should always call the function @code{sentence-end} to obtain the
-regexp to be used to recognize the end of a sentence.
+Если значение равно @code{nil}, как это по умолчанию, тогда функция
+@code{sentence-end} создает регулярное выражение.  Вот почему вы
+должны всегда вызывать функцию @code{sentence-end} для получения
+regexp, которая будет использоваться для распознавания конца предложения.
 @end defopt
 
 @defun sentence-end
-This function returns the value of the variable @code{sentence-end},
-if non-@code{nil}.  Otherwise it returns a default value based on the
-values of the variables @code{sentence-end-double-space}
+Эта функция возвращает значение переменной @code{sentence-end},
+если не-@code{nil}.  В противном случае она возвращает значение по умолчанию, 
+основанное на значениях переменных @code{sentence-end-double-space}
 (@pxref{Definition of sentence-end-double-space}),
-@code{sentence-end-without-period}, and
+@code{sentence-end-without-period}, и
 @code{sentence-end-without-space}.
 @end defun
