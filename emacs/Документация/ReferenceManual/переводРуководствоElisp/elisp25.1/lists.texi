@@ -382,17 +382,17 @@ making a copy of the list.
 @cindex cons cells
 @cindex building lists
 
-  Many functions build lists, as lists reside at the very heart of Lisp.
-@code{cons} is the fundamental list-building function; however, it is
-interesting to note that @code{list} is used more times in the source
-code for Emacs than @code{cons}.
+  Многие функции строят списки, поскольку списки находятся в самом сердце Лиспа.
+@code{cons} zвляется основной функцией построения списка; Однако, 
+интересно отметить, что @code{list} используется чаще в источнике
+кода для Emacs, чем @code{cons}.
 
 @defun cons object1 object2
-This function is the most basic function for building new list
-structure.  It creates a new cons cell, making @var{object1} the
-@sc{car}, and @var{object2} the @sc{cdr}.  It then returns the new
-cons cell.  The arguments @var{object1} and @var{object2} may be any
-Lisp objects, but most often @var{object2} is a list.
+Эта функция является самой основной функцией для создания нового состава
+списка. Она создает новую ячейку cons, @var{object1} 
+@sc{car}, и @var{object2}  @sc{cdr}.  Затем она возвращает новую
+точечную пару. Аргументы @var{object1} и @var{object2} могут быть любыми
+объектами Lisp, но чаще всего @var{object2} это списки.
 
 @example
 @group
@@ -410,31 +410,31 @@ Lisp objects, but most often @var{object2} is a list.
 @end example
 
 @cindex consing
-@code{cons} is often used to add a single element to the front of a
-list.  This is called @dfn{consing the element onto the list}.
-@footnote{There is no strictly equivalent way to add an element to
-the end of a list.  You can use @code{(append @var{listname} (list
-@var{newelt}))}, which creates a whole new list by copying @var{listname}
-and adding @var{newelt} to its end.  Or you can use @code{(nconc
-@var{listname} (list @var{newelt}))}, which modifies @var{listname}
-by following all the @sc{cdr}s and then replacing the terminating
-@code{nil}.  Compare this to adding an element to the beginning of a
-list with @code{cons}, which neither copies nor modifies the list.}
-For example:
+@code{cons} часто используется для добавления одного элемента в начало
+списка. Это называется @dfn{включение элемента в список}.
+@footnote{не существует строго эквивалентного способа добавления элемента в
+конец списка. Вы можете использовать @code{(append @var{listname} (list
+@var{newelt}))}, которая создает целый новый список путем копирования @var{listname}
+добавление @var{newelt} в конец. Или вы можете использовать @code{(nconc
+@var{listname} (list @var{newelt}))}, которая изменяет @var{listname}
+следуя всем @sc{cdr}s и затем заменяя завершающий
+@code{nil}.  Сравните это с добавлением элемента в начало
+списка с @code{cons}, которая не копирует и не изменяет список.}
+Например:
 
 @example
 (setq list (cons newelt list))
 @end example
 
-Note that there is no conflict between the variable named @code{list}
-used in this example and the function named @code{list} described below;
-any symbol can serve both purposes.
+Обратите внимание, что  переменная имеет имя @code{list}
+используемая в этом примере, и функция с именем @code{list} ,описанная ниже;
+такой символ может служить обеим целям.
 @end defun
 
 @defun list &rest objects
-This function creates a list with @var{objects} as its elements.  The
-resulting list is always @code{nil}-terminated.  If no @var{objects}
-are given, the empty list is returned.
+Эта функция создает список где @var{objects} его элементы.
+Результирующий список всегда @code{nil}-прекращены.  Если нет @var{objects},
+возвращается пустой список.
 
 @example
 @group
@@ -453,8 +453,8 @@ are given, the empty list is returned.
 @end defun
 
 @defun make-list length object
-This function creates a list of @var{length} elements, in which each
-element is @var{object}.  Compare @code{make-list} with
+Эта функция создает список @var{length} элементов, в котором каждый
+элемент @var{object}.  Сравнить @code{make-list} с
 @code{make-string} (@pxref{Creating Strings}).
 
 @example
@@ -477,23 +477,23 @@ element is @var{object}.  Compare @code{make-list} with
 
 @defun append &rest sequences
 @cindex copying lists
-This function returns a list containing all the elements of
-@var{sequences}.  The @var{sequences} may be lists, vectors,
-bool-vectors, or strings, but the last one should usually be a list.
-All arguments except the last one are copied, so none of the arguments
-is altered.  (See @code{nconc} in @ref{Rearrangement}, for a way to join
-lists with no copying.)
+Эта функция возвращает список, содержащий все элементы
+@var{sequences}.  @var{sequences} могут быть списки, векторы,
+bool-векторы или строки, но последний, как правило, должен быть списком.
+Все аргументы, кроме последнего, копируются, поэтому ни один из аргументов
+не изменяется.  (See @code{nconc} в @ref{Rearrangement}, как способ присоединиться
+к списку без копирования.)
 
-More generally, the final argument to @code{append} may be any Lisp
-object.  The final argument is not copied or converted; it becomes the
-@sc{cdr} of the last cons cell in the new list.  If the final argument
-is itself a list, then its elements become in effect elements of the
-result list.  If the final element is not a list, the result is a
-dotted list since its final @sc{cdr} is not @code{nil} as required
-in a true list.
+В более общем плане, последний аргумент @code{append} может быть любой Lisp
+объект. Последний аргумент не копируется и не конвертируется; Он становится
+@sc{cdr} последней ячейки cons в новом списке. Если последний аргумент
+сам является списком, то его элементы становятся действительными элементами
+результирующего списка. Если конечный элемент не является списком, результатом является
+точеччный список с момента его конечного @sc{cdr} не являющимся @code{nil} как требуется
+в истинном списке.
 @end defun
 
-  Here is an example of using @code{append}:
+  Вот пример использования @code{append}:
 
 @example
 @group
