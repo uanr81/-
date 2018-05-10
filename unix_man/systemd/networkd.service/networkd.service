@@ -1,0 +1,30 @@
+SYSTEMD-NETWORKD.SERVICE(8)                          systemd-networkd.service                         SYSTEMD-NETWORKD.SERVICE(8)
+
+NAME
+       systemd-networkd.service, systemd-networkd - Network manager
+
+SYNOPSIS
+       systemd-networkd.service
+
+       /lib/systemd/systemd-networkd
+
+DESCRIPTION
+       systemd-networkd это системная служба, которая управляет сетями. Он обнаруживает и настраивает сетевые устройства по мере их появления,
+       а также создает виртуальные сетевые устройства.
+
+       Настройка низкоуровневых настроек канала независимо от сетей, see systemd.link(5).
+
+       Сетевые конфигурации, применяемые до запуска сети, не удаляются, а статическая настройка, применяемая networkd, не удаляется при выходе из
+       сети. Динамическая конфигурация, применяемая networkd, также может быть оставлена ​​на месте при выключении. Это гарантирует, что
+       перезапуск networkd не отключит сетевое соединение и, в частности, безопасно переходить между initrd и реальным корнем и обратно.
+
+CONFIGURATION FILES
+       Конфигурационные файлы считываются из файлов, расположенных в системном сетевом каталоге /lib/systemd/network, волатильном сетевом каталоге
+       /run/systemd/network во время работы и сетевом каталоге локального администрирования /etc/systemd/network.
+
+       Сети настроены в сетевых файлах, см. Systemd.network (5), а виртуальные сетевые устройства настроены в файлах .netdev, см. Systemd.netdev 
+
+SEE ALSO
+       systemd(1), systemd.link(5), systemd.network(5), systemd.netdev(5), systemd-networkd-wait-online.service(8)
+
+systemd 229                                                                                           SYSTEMD-NETWORKD.SERVICE(8)

@@ -1,0 +1,27 @@
+(google-translate-request SOURCE-LANGUAGE TARGET-LANGUAGE TEXT)
+
+Отправляет  HTTP-запрос, для перевода текста TEXT на языке SOURCE-LANGUAGE на язык TARGET-LANGUAGE. Возвращает
+ответ в формате json.
+
+(google-translate-json-translation JSON)
+
+Получить из JSON (который возвращается
+`google-translate-request 'функцией) перевод
+перевод текста.
+
+(kill-new STRING &optional REPLACE)
+
+Сделайте STRING последним убийством в кольце убийства.
+Установите «kill-ring-yank-pointer», чтобы указать на него.
+Если `interprogram-cut-function 'не равно nil, примените его к STRING.
+Необязательный второй аргумент REPLACE non-nil означает, что STRING заменит
+перед кольцом уничтожения, а не добавляться в список.
+
+Когда `save-interprogram-paste-before-kill 'и` interprogram-paste-function'
+не ноль, сохраняет строку (ы) межпрограммной пасты в `kill-ring 'до
+STRING.
+
+Когда yank-обработчик имеет элемент non-nil PARAM, исходный STRING
+аргумент не используется `insert-for-yank '. Однако, поскольку код Lisp
+могут получать и использовать элементы из кольца уничтожения напрямую, STRING
+аргумент все равно должен быть «полезной» строкой для таких целей.

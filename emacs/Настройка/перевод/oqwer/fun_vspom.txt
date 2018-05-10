@@ -1,0 +1,39 @@
+replace-match is a built-in function in `search.c'.
+
+(replace-match NEWTEXT &optional FIXEDCASE LITERAL STRING SUBEXP)
+
+Заменить текст, соответствующий последнему поиску, с помощью NEWTEXT.
+Оставьте точку в конце текста замены.
+
+Если необязательный второй аргумент FIXEDCASE не равен нулю, не изменяйте случай
+заменяющий текст. В противном случае, возможно, заглавные буквы всего текста или
+возможно, просто инициалы слов, основанные на замененном тексте. Если заменить
+текст имеет только заглавные буквы и имеет как минимум одно слово мультиплекса,
+конвертируйте NEWTEXT во все кепки. В противном случае, если все слова капитализируются
+в замененном тексте, заглавные буквы каждого слова в NEWTEXT.
+
+If optional third arg LITERAL is non-nil, insert NEWTEXT literally.
+Otherwise treat `\' as special:
+  `\&' in NEWTEXT means substitute original matched text.
+  `\N' means substitute what matched the Nth `\(...\)'.
+       If Nth parens didn't match, substitute nothing.
+  `\\' means insert one `\'.
+  `\?' is treated literally
+       (for compatibility with `query-replace-regexp').
+  Any other character following `\' signals an error.
+Case conversion does not apply to these substitutions.
+
+If optional fourth argument STRING is non-nil, it should be a string
+to act on; this should be the string on which the previous match was
+done via `string-match'.  In this case, `replace-match' creates and
+returns a new string, made by copying STRING and replacing the part of
+STRING that was matched (the original STRING itself is not altered).
+
+The optional fifth argument SUBEXP specifies a subexpression;
+it says to replace just that subexpression with NEWTEXT,
+rather than replacing the entire matched text.
+This is, in a vague sense, the inverse of using `\N' in NEWTEXT;
+`\N' copies subexp N into NEWTEXT, but using N as SUBEXP puts
+NEWTEXT in place of subexp N.
+This is useful only after a regular expression search or match,
+since only regular expressions have distinguished subexpressions.

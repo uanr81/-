@@ -1,0 +1,166 @@
+SS(8)                                                System Manager's Manual                                                SS(8)
+
+NAME
+       ss - еще одна полезность для исследования сокетов
+
+SYNOPSIS
+       ss [options] [ FILTER ]
+
+DESCRIPTION
+       ss используется для вывода статистики сокетов. Он позволяет отображать информацию, аналогичную netstat. Он может отображать больше
+       информации о TCP и состоянии, чем другие инструменты.
+
+OPTIONS
+       Если параметр не используется, ss отображает список открытых не прослушивающих сокетов (например, TCP/UNIX/UDP), которые установили
+       соединение.
+
+       -h, --help
+              Показать список опций.
+
+       -V, --version
+              Информация о выходной версии.
+
+       -n, --numeric
+              Не пытайтесь разрешать имена служб.
+
+       -r, --resolve
+              Попробуйте разрешить числовой адрес/порты.
+
+       -a, --all
+              Отображать как прослушивающие, так и не прослушивающие (для TCP это означает установленные соединения).
+
+       -l, --listening
+              Отображать только прослушивающие сокеты (по умолчанию они опущены).
+
+       -o, --options
+              Показывать информацию о таймере.
+
+       -e, --extended
+              Показать подробную информацию о сокетах
+
+       -m, --memory
+              Отображение использования памяти сокета.
+
+       -p, --processes
+              Показать процесс с помощью сокета.
+
+       -i, --info
+              Отображение внутренней информации TCP.
+
+       -s, --summary
+              Печать итоговой статистики. Этот параметр не анализирует списки сокетов, получая резюме из разных источников. Это полезно, когда
+	      количество сокетов настолько велико, что синтаксический анализ /proc/net/tcp является болезненным.
+
+       -Z, --context
+              Как опция -p, но также показывает контекст безопасности процесса.
+
+              Для сокетов netlink (7) контекст инициирующего процесса отображается следующим образом:
+
+                     1.  Если действительный pid показывает контекст процесса.
+
+                     2.  Если destination - kernel (pid = 0), укажите исходный контекст ядра.
+
+                     3.  Если уникальный ящик был выделен ядром или пользователем сети, покажите контекст как «недоступный». Как правило, это
+		     указывает на то, что процесс имеет более одного сетевого сокета.
+
+       -z, --contexts
+              Как опция -Z, но также показывает контекст сокета. Контекст сокета берется из связанного inode и не является фактическим контекстом
+	      сокета, содержащимся в ядре. Сокеты обычно помечены контекстом процесса создания, однако в показанном контексте будут отображаться
+	      любые политики, типы и/или правила перехода диапазона, и поэтому полезная ссылка.
+
+       -N NSNAME, --net=NSNAME
+              Переключитесь на указанное имя пространства имен сети.
+
+       -b, --bpf
+              Отображать фильтры BPF сокета (только администраторы могут получать эту информацию).
+
+       -4, --ipv4
+              Отображать только сокеты IP версии 4 (псевдоним для -f inet).
+
+       -6, --ipv6
+              Отображать только сокеты IP версии 6 (псевдоним для -f inet6).
+
+       -0, --packet
+              Отображение сокетов PACKET (псевдоним для ссылки -f).
+
+       -t, --tcp
+              Отобразить сокеты TCP.
+
+       -u, --udp
+              Отображение сокетов UDP.
+
+       -d, --dccp
+              Отображение сокетов DCCP.
+
+       -w, --raw
+              Отображать разъемы RAW.
+
+       -x, --unix
+              Отображение сокетов домена Unix (псевдоним для -f unix).
+
+       -f FAMILY, --family=FAMILY
+              Дисплейные разъемы типа FAMILY. В настоящее время поддерживаются следующие семейства: unix, inet, inet6, link, netlink.
+
+       -A QUERY, --query=QUERY, --socket=QUERY
+              Список таблиц сокетов для дампа, разделенных запятыми. Подразумеваются следующие идентификаторы: all, inet, tcp, udp, raw, unix,
+	      packet, netlink, unix_dgram, unix_stream, unix_seqpacket, packet_raw, packet_dgram.
+
+       -D FILE, --diag=FILE
+              Не показывайте ничего, просто сбрасывайте сырую информацию о сокетах TCP в FILE после применения фильтров. Если используется
+	      FILE - используется stdout.
+
+       -F FILE, --filter=FILE
+              Прочтите информацию об фильтрах из FILE. Каждая строка FILE интерпретируется как опция одной командной строки. Если FILE -
+	      используется stdin.
+
+       FILTER := [ state STATE-FILTER ] [ EXPRESSION ]
+              Пожалуйста, ознакомьтесь с официальной документацией (пакет iproute-doc для Debian) для получения подробной информации о фильтрах.
+
+STATE-FILTER
+       STATE-FILTER  позволяет построить произвольное множество состояний для соответствия. Его синтаксис - это последовательность состояний
+       ключевых слов и исключение, за которыми следует идентификатор состояния.
+
+       Available identifiers are:
+
+              Все стандартные TCP состояния: established, syn-sent, syn-recv, fin-wait-1, fin-wait-2,  time-wait,  closed,  close-wait,
+              last-ack, listen и closing.
+
+              all - для всех состояний
+
+              connected - все состояния, за исключением прослушивания и закрытия
+
+              synchronized - все связанные состояния, за исключением syn-sent
+
+              bucket - states, which are maintained as minisockets, i.e.  time-wait and syn-recv
+
+              big - opposite to bucket
+
+USAGE EXAMPLES
+       ss -t -a
+              Display all TCP sockets.
+
+       ss -t -a -Z
+              Display all TCP sockets with process SELinux security contexts.
+
+       ss -u -a
+              Display all UDP sockets.
+
+       ss -o state established '( dport = :ssh or sport = :ssh )'
+              Display all established ssh connections.
+
+       ss -x src /tmp/.X11-unix/*
+              Find all local processes connected to X server.
+
+       ss -o state fin-wait-1 '( sport = :http or sport = :https )' dst 193.233.7/24
+              List all the tcp sockets in state FIN-WAIT-1 for our apache to network 193.233.7/24 and look at their timers.
+
+SEE ALSO
+       ip(8), /usr/share/doc/iproute-doc/ss.html (package iproutedoc),
+       RFC 793 - https://tools.ietf.org/rfc/rfc793.txt (TCP states)
+
+AUTHOR
+       ss was written by Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>.
+
+       This manual page was written by Michael Prokop <mika@grml.org> for the Debian project (but may be used by others).
+
+                                                                                                                            SS(8)

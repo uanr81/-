@@ -1,0 +1,94 @@
+replace-match is a built-in function in `C source code'.
+
+(replace-match NEWTEXT &optional FIXEDCASE LITERAL STRING SUBEXP)
+
+Заменить текст, соответствующий последнему поиску, с помощью NEWTEXT.
+Оставьте точку в конце текста замены.
+
+Если необязательный второй аргумент FIXEDCASE не равен нулю, не изменяйте случай
+заменяющий текст. В противном случае, возможно, заглавные буквы всего текста или
+возможно, просто инициалы слов, основанные на замененном тексте. Если заменить
+текст имеет только заглавные буквы и имеет как минимум одно слово мультиплекса,
+конвертируйте NEWTEXT во все кепки. В противном случае, если все слова капитализируются
+в замененном тексте, заглавные буквы каждого слова в NEWTEXT.
+
+If optional third arg LITERAL is non-nil, insert NEWTEXT literally.
+Otherwise treat `\' as special:
+  `\&' in NEWTEXT means substitute original matched text.
+  `\N' means substitute what matched the Nth `\(...\)'.
+       If Nth parens didn't match, substitute nothing.
+  `\\' means insert one `\'.
+  `\?' is treated literally
+       (for compatibility with `query-replace-regexp').
+  Any other character following `\' signals an error.
+Case conversion does not apply to these substitutions.
+
+If optional fourth argument STRING is non-nil, it should be a string
+to act on; this should be the string on which the previous match was
+done via `string-match'.  In this case, `replace-match' creates and
+returns a new string, made by copying STRING and replacing the part of
+STRING that was matched (the original STRING itself is not altered).
+
+The optional fifth argument SUBEXP specifies a subexpression;
+it says to replace just that subexpression with NEWTEXT,
+rather than replacing the entire matched text.
+This is, in a vague sense, the inverse of using `\N' in NEWTEXT;
+`\N' copies subexp N into NEWTEXT, but using N as SUBEXP puts
+NEWTEXT in place of subexp N.
+This is useful only after a regular expression search or match,
+since only regular expressions have distinguished subexpressions.
+
+
+string-match is a built-in function in `C source code'.
+
+(string-match REGEXP STRING &optional START)
+
+Возвратный индекс начала первого совпадения для REGEXP в STRING, или nil.
+Соответствие игнорирует случай, если `case-fold-search' is non-nil.
+If third arg START is non-nil, start search at that index in STRING.
+For index of first char beyond the match, do (match-end 0).
+`match-end' and `match-beginning' also give indices of substrings
+matched by parenthesis constructs in the pattern.
+
+You can use the function `match-string' to extract the substrings
+matched by the parenthesis constructions in REGEXP.
+
+replace-string is an interactive compiled Lisp function in
+`replace.el'.
+
+(replace-string FROM-STRING TO-STRING &optional DELIMITED START END
+BACKWARD)
+
+Замените появление FROM-STRING на TO-STRING.
+Сохраняйте регистр в каждом соответствии, если `case-replace' и `case-fold-search'
+указывает на non-nil и FROM-STRING не имеет заглавных букв.
+(Сохранять регистр означает, что если строка, сопоставленная всем шапкам или капитализированная,
+то его замена будет увеличена или капитализирована.)
+
+Ignore read-only matches if `query-replace-skip-read-only' is non-nil,
+ignore hidden Матчи if `search-invisible' is nil, and ignore more
+matches using `isearch-filter-predicate'.
+
+If `replace-lax-whitespace' is non-nil, a space or spaces in the string
+to be replaced will match a sequence of whitespace chars defined by the
+regexp in `search-whitespace-regexp'.
+
+Third arg DELIMITED (prefix arg if interactive), if non-nil, означает замену
+только спички, окруженные границами слов. Отрицательный префикс arg означает
+замените назад.
+
+Работает в регионе между START and END (если оба они равны нулю, из точки
+до конца буфера). Интерактивно, если режим Transient Mark
+включен и знак активен, работает с содержимым региона;
+иначе от точки до конца буфера.
+
+Используйте M-n, чтобы вывести последнюю инкрементную строку поиска в минибуфер
+который читает FROM-STRING.
+
+Обычно эта функция используется не в программе Lisp.
+Вероятно, вам нужен цикл:
+  (while (search-forward FROM-STRING nil t)
+    (replace-match TO-STRING nil t))
+который будет работать быстрее и не будет устанавливать отметку или печатать что-либо.
+(Возможно, вам понадобится более сложный цикл, если FROM-STRING может соответствовать нулевой строке
+и TO-STRING также является нулевым.)

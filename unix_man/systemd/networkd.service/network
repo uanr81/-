@@ -1,0 +1,536 @@
+SYSTEMD.NETWORK(5)                                       systemd.network                                       SYSTEMD.NETWORK(5)
+
+NAME
+       systemd.network - Network configuration
+
+SYNOPSIS
+       network.network
+
+DESCRIPTION
+       Настройка сети выполняется с помощью systemd-networkd (8).
+
+       Сетевые файлы должны иметь расширение .network; другие расширения игнорируются. Сети применяются к ссылкам всякий раз, когда появляются
+       ссылки.
+
+       Сетевые файлы считываются из файлов, расположенных в системном сетевом каталоге /lib/systemd/network, волатильном сетевом каталоге
+       /run/systemd/network во время работы и сетевом каталоге локального администрирования /etc/systemd/network. Все файлы конфигурации собираются
+       и обрабатываются в лексическом порядке независимо от каталогов, в которых они живут. Однако файлы с одинаковыми именами файлов заменяют
+       друг друга. Файлы в /etc имеют наивысший приоритет, файлы в /run имеют приоритет над файлами с тем же именем в /lib. Это может быть
+       использовано для переопределения файла конфигурации, поставляемого системой, при необходимости в локальном файле. В качестве специального
+       случая пустой файл (размер файла 0) или символическая ссылка с тем же именем, указывающая на /dev/null, полностью отключает файл
+       конфигурации (он «замаскирован»"masked").
+
+[MATCH] SECTION OPTIONS
+       Сетевой файл содержит раздел «[Match]», который определяет, может ли данный сетевой файл применяться к данному устройству; и раздел
+       «[Network]», определяющий, как устройство должно быть настроено. Первый (в лексическом порядке) сетевых файлов, который соответствует
+       данному устройству, применяется, все последующие файлы игнорируются, даже если они совпадают.
+
+       Сообщается, что сетевой файл соответствует устройству, если каждая из записей в разделе «[Match]» соответствует, или если раздел пуст.
+       Принимаются следующие ключи:
+
+       MACAddress=
+           Аппаратный адрес.
+
+       Path=
+           Список разделенных пробелами скобок в стиле оболочки, соответствующий постоянному пути, который отображается с помощью свойства udev
+           "ID_PATH".
+
+       Driver=
+           A whitespace-separated list of shell-style globs matching the driver currently bound to the device, as exposed by the
+           udev property "DRIVER" of its parent device, or if that is not set the driver as exposed by "ethtool -i" of the device
+           itself.
+
+       Type=
+           A whitespace-separated list of shell-style globs matching the device type, as exposed by the udev property "DEVTYPE".
+
+       Name=
+           A whitespace-separated list of shell-style globs matching the device name, as exposed by the udev property
+           "INTERFACE".
+
+       Host=
+           Matches against the hostname or machine ID of the host. See "ConditionHost=" in systemd.unit(5) for details.
+
+       Virtualization=
+           Checks whether the system is executed in a virtualized environment and optionally test whether it is a specific
+           implementation. See "ConditionVirtualization=" in systemd.unit(5) for details.
+
+       KernelCommandLine=
+           Checks whether a specific kernel command line option is set (or if prefixed with the exclamation mark unset). See
+           "ConditionKernelCommandLine=" in systemd.unit(5) for details.
+
+       Architecture=
+           Checks whether the system is running on a specific architecture. See "ConditionArchitecture=" in systemd.unit(5) for
+           details.
+
+[LINK] SECTION OPTIONS
+       The "[Link]" section accepts the following keys:
+
+       MACAddress=
+           The hardware address.
+
+       MTUBytes=
+           The maximum transmission unit in bytes to set for the device. The usual suffixes K, M, G, are supported and are
+           understood to the base of 1024.
+
+       ARP=
+           A boolean. Enables or disables the ARP (low-level Address Resolution Protocol) for this interface. Defaults to unset,
+           which means that the kernel default will be used.
+
+           For example, disabling ARP is useful when creating multiple MACVLAN or VLAN virtual interfaces atop a single
+           lower-level physical interface, which will then only serve as a link/"bridge" device aggregating traffic to the same
+           physical link and not participate in the network otherwise.
+
+       RequiredForOnline=
+           A boolean. When "yes", the network is deemed required when determining whether the system is online when running
+           "systemd-networkd-wait-online". When "no", the network is ignored when checking for online state. Defaults to "yes".
+
+           The network will be brought up normally in all cases, but in the event that there is no address being assigned by DHCP
+           or the cable is not plugged in, the link will simply remain offline and be skipped automatically by
+           "systemd-networkd-wait-online" if "RequiredForOnline=true".
+
+[NETWORK] SECTION OPTIONS
+       The "[Network]" section accepts the following keys:
+
+       Description=
+           A description of the device. This is only used for presentation purposes.
+
+       DHCP=
+           Enables DHCPv4 and/or DHCPv6 client support. Accepts "yes", "no", "ipv4", or "ipv6".
+
+           Note that DHCPv6 will by default be triggered by Router Advertisement, if that is enabled, regardless of this
+           parameter. By enabling DHCPv6 support explicitly, the DHCPv6 client will be started regardless of the presence of
+           routers on the link, or what flags the routers pass. See "IPv6AcceptRouterAdvertisements=".
+
+           Furthermore, note that by default the domain name specified through DHCP is not used for name resolution. See option
+           UseDomains= below.
+
+       DHCPServer=
+           A boolean. Enables DHCPv4 server support. Defaults to "no". Further settings for the DHCP server may be set in the
+           "[DHCPServer]" section described below.
+
+       LinkLocalAddressing=
+           Enables link-local address autoconfiguration. Accepts "yes", "no", "ipv4", or "ipv6". Defaults to "ipv6".
+
+       IPv4LLRoute=
+           A boolean. When true, sets up the route needed for non-IPv4LL hosts to communicate with IPv4LL-only hosts. Defaults to
+           false.
+
+       IPv6Token=
+           An IPv6 address with the top 64 bits unset. When set, indicates the 64-bit interface part of SLAAC IPv6 addresses for
+           this link. By default, it is autogenerated.
+
+       LLMNR=
+           A boolean or "resolve". When true, enables Link-Local Multicast Name Resolution[1] on the link. When set to "resolve",
+           only resolution is enabled, but not host registration and announcement. Defaults to true. This setting is read by
+           systemd-resolved.service(8).
+
+       MulticastDNS=
+           A boolean or "resolve". When true, enables Multicast DNS[2] support on the link. When set to "resolve", only
+           resolution is enabled, but not host or service registration and announcement. Defaults to false. This setting is read
+           by systemd-resolved.service(8).
+
+       DNSSEC=
+           A boolean or "allow-downgrade". When true, enables DNSSEC[3] DNS validation support on the link. When set to
+           "allow-downgrade", compatibility with non-DNSSEC capable networks is increased, by automatically turning off DNSEC in
+           this case. This option defines a per-interface setting for resolved.conf(5)'s global DNSSEC= option. Defaults to
+           false. This setting is read by systemd-resolved.service(8).
+
+       DNSSECNegativeTrustAnchors=
+           A space-separated list of DNSSEC negative trust anchor domains. If specified and DNSSEC is enabled, look-ups done via
+           the interface's DNS server will be subject to the list of negative trust anchors, and not require authentication for
+           the specified domains, or anything below it. Use this to disable DNSSEC authentication for specific private domains,
+           that cannot be proven valid using the Internet DNS hierarchy. Defaults to the empty list. This setting is read by
+           systemd-resolved.service(8).
+
+       LLDP=
+           A boolean. When true, enables LLDP link receive support.
+
+       BindCarrier=
+           A port or a list of ports. When set, controls the behavior of the current interface. When all ports in the list are in
+           an operational down state, the current interface is brought down. When at least one port has carrier, the current
+           interface is brought up.
+
+       Address=
+           A static IPv4 or IPv6 address and its prefix length, separated by a "/" character. Specify this key more than once to
+           configure several addresses. The format of the address must be as described in inet_pton(3). This is a short-hand for
+           an [Address] section only containing an Address key (see below). This option may be specified more than once.
+
+           If the specified address is 0.0.0.0 (for IPv4) or [::] (for IPv6), a new address range of the requested size is
+           automatically allocated from a system-wide pool of unused ranges. The allocated range is checked against all current
+           network interfaces and all known network configuration files to avoid address range conflicts. The default system-wide
+           pool consists of 192.168.0.0/16, 172.16.0.0/12 and 10.0.0.0/8 for IPv4, and fc00::/7 for IPv6. This functionality is
+           useful to manage a large number of dynamically created network interfaces with the same network configuration and
+           automatic address range assignment.
+
+       Gateway=
+           The gateway address, which must be in the format described in inet_pton(3). This is a short-hand for a [Route] section
+           only containing a Gateway key. This option may be specified more than once.
+
+       DNS=
+           A DNS server address, which must be in the format described in inet_pton(3). This option may be specified more than
+           once. This setting is read by systemd-resolved.service(8).
+
+       Domains=
+           The domains used for DNS host name resolution on this link. Takes a list of DNS domain names which are used as search
+           suffixes for extending single-label host names (host names containing no dots) to become fully qualified domain names
+           (FQDNs). If a single-label host name is resolved on this interface, each of the specified search domains are appended
+           to it in turn, converting it into a fully qualified domain name, until one of them may be successfully resolved.
+
+           The specified domains are also used for routing of DNS queries: look-ups for host names ending in the domains
+           specified here are preferably routed to the DNS servers configured for this interface. If a domain name is prefixed
+           with "~", the domain name becomes a pure "routing" domain, is used for DNS query routing purposes only and is not used
+           in the described domain search logic. By specifying a routing domain of "~."  (the tilda indicating definition of a
+           routing domain, the dot referring to the DNS root domain which is the implied suffix of all valid DNS names) it is
+           possible to route all DNS traffic preferably to the DNS server specified for this interface. The route domain logic is
+           particularly useful on multi-homed hosts with DNS servers serving particular private DNS zones on each interface.
+
+           This setting is read by systemd-resolved.service(8).
+
+       NTP=
+           An NTP server address. This option may be specified more than once. This setting is read by systemd-
+           timesyncd.service(8).
+
+       IPForward=
+           Configures IP packet forwarding for the system. If enabled, incoming packets on any network interface will be
+           forwarded to any other interfaces according to the routing table. Takes either a boolean argument, or the values
+           "ipv4" or "ipv6", which only enable IP packet forwarding for the specified address family. This controls the
+           net.ipv4.ip_forward and net.ipv6.conf.all.forwarding sysctl options of the network interface (see ip-sysctl.txt[4] for
+           details about sysctl options). Defaults to "no".
+
+           Note: this setting controls a global kernel option, and does so one way only: if a network that has this setting
+           enabled is set up the global setting is turned on. However, it is never turned off again, even after all networks with
+           this setting enabled are shut down again.
+
+           To allow IP packet forwarding only between specific network interfaces use a firewall.
+
+       IPMasquerade=
+           Configures IP masquerading for the network interface. If enabled, packets forwarded from the network interface will be
+           appear as coming from the local host. Takes a boolean argument. Implies IPForward=ipv4. Defaults to "no".
+
+       IPv6PrivacyExtensions=
+           Configures use of stateless temporary addresses that change over time (see RFC 4941[5], Privacy Extensions for
+           Stateless Address Autoconfiguration in IPv6). Takes a boolean or the special values "prefer-public" and "kernel". When
+           true, enables the privacy extensions and prefers temporary addresses over public addresses. When "prefer-public",
+           enables the privacy extensions, but prefers public addresses over temporary addresses. When false, the privacy
+           extensions remain disabled. When "kernel", the kernel's default setting will be left in place. Defaults to "no".
+
+       IPv6AcceptRouterAdvertisements=
+           Force the setting of the accept_ra (router advertisements) setting for the interface. When unset, the kernel default
+           is used, and router advertisements are accepted only when local forwarding is disabled for that interface. When router
+           advertisements are accepted, they will trigger the start of the DHCPv6 client if the relevant flags are passed, or if
+           no routers are found on the link. Takes a boolean. If true, router advertisements are accepted, when false, router
+           advertisements are ignored, independently of the local forwarding state.
+
+           See ip-sysctl.txt[4] in the kernel documentation, but note that systemd's setting of 1 corresponds to kernel's setting
+           of 2.
+
+       IPv6DuplicateAddressDetection=
+           Configures the amount of IPv6 Duplicate Address Detection (DAD) probes to send. Defaults to unset.
+
+       IPv6HopLimit=
+           Configures IPv6 Hop Limit. For each router that forwards the packet, the hop limit is decremented by 1. When the hop
+           limit field reaches zero, the packet is discarded. Defaults to unset.
+
+       Bridge=
+           The name of the bridge to add the link to.
+
+       Bond=
+           The name of the bond to add the link to.
+
+       VLAN=
+           The name of a VLAN to create on the link. This option may be specified more than once.
+
+       MACVLAN=
+           The name of a MACVLAN to create on the link. This option may be specified more than once.
+
+       VXLAN=
+           The name of a VXLAN to create on the link. This option may be specified more than once.
+
+       Tunnel=
+           The name of a Tunnel to create on the link. This option may be specified more than once.
+
+[ADDRESS] SECTION OPTIONS
+       An "[Address]" section accepts the following keys. Specify several "[Address]" sections to configure several addresses.
+
+       Address=
+           As in the "[Network]" section. This key is mandatory.
+
+       Peer=
+           The peer address in a point-to-point connection. Accepts the same format as the "Address" key.
+
+       Broadcast=
+           The broadcast address, which must be in the format described in inet_pton(3). This key only applies to IPv4 addresses.
+           If it is not given, it is derived from the "Address" key.
+
+       Label=
+           An address label.
+
+[ROUTE] SECTION OPTIONS
+       The "[Route]" section accepts the following keys. Specify several "[Route]" sections to configure several routes.
+
+       Gateway=
+           As in the "[Network]" section.
+
+       Destination=
+           The destination prefix of the route. Possibly followed by a slash and the prefix length. If omitted, a full-length
+           host route is assumed.
+
+       Source=
+           The source prefix of the route. Possibly followed by a slash and the prefix length. If omitted, a full-length host
+           route is assumed.
+
+       Metric=
+           The metric of the route (an unsigned integer).
+
+       Scope=
+           The scope of the route, which can be "global", "link" or "host". Defaults to "global".
+
+       PreferredSource=
+           The preferred source address of the route. The address must be in the format described in inet_pton(3).
+
+[DHCP] SECTION OPTIONS
+       The "[DHCP]" section configures the DHCPv4 and DHCP6 client, if it is enabled with the DHCP= setting described above:
+
+       UseDNS=
+           When true (the default), the DNS servers received from the DHCP server will be used and take precedence over any
+           statically configured ones.
+
+           This corresponds to the nameserver option in resolv.conf(5).
+
+       UseNTP=
+           When true (the default), the NTP servers received from the DHCP server will be used by systemd-timesyncd and take
+           precedence over any statically configured ones.
+
+       UseMTU=
+           When true, the interface maximum transmission unit from the DHCP server will be used on the current link. Defaults to
+           true.
+
+       SendHostname=
+           When true (the default), the machine's hostname will be sent to the DHCP server.
+
+       UseHostname=
+           When true (the default), the hostname received from the DHCP server will be set as the transient hostname of the
+           system
+
+       Hostname=
+           Use this value for the hostname which is sent to the DHCP server, instead of machine's hostname.
+
+       UseDomains=
+           Takes a boolean argument, or a the special value "route". When true, the domain name received from the DHCP server
+           will be used as DNS search domain over this link, similar to the effect of the Domains= setting. If set to "route",
+           the domain name received from the DHCP server will be used for routing DNS queries only, but not for searching,
+           similar to the effect of the Domains= setting when the argument is prefixed with "~". Defaults to false.
+
+           It is recommended to enable this option only on trusted networks, as setting this affects resolution of all host
+           names, in particular to single-label names. It is generally safer to use the supplied domain only as routing domain,
+           rather than as search domain, in order to not have it affect local resolution of single-label names.
+
+           When set to true, this setting corresponds to the domain option in resolv.conf(5).
+
+       UseRoutes=
+           When true (the default), the static routes will be requested from the DHCP server and added to the routing table with
+           a metric of 1024.
+
+       UseTimezone=
+           When true, the timezone received from the DHCP server will be set as timezone of the local system. Defaults to "no".
+
+       CriticalConnection=
+           When true, the connection will never be torn down even if the DHCP lease expires. This is contrary to the DHCP
+           specification, but may be the best choice if, say, the root filesystem relies on this connection. Defaults to false.
+
+       ClientIdentifier=
+           DHCP client identifier to use. Either "mac" to use the MAC address of the link or "duid" (the default) to use a
+           RFC4361-compliant Client ID.
+
+       VendorClassIdentifier=
+           The vendor class identifier used to identify vendor type and configuration.
+
+       RequestBroadcast=
+           Request the server to use broadcast messages before the IP address has been configured. This is necessary for devices
+           that cannot receive RAW packets, or that cannot receive packets at all before an IP address has been configured. On
+           the other hand, this must not be enabled on networks where broadcasts are filtered out.
+
+       RouteMetric=
+           Set the routing metric for routes specified by the DHCP server.
+
+[DHCPSERVER] SECTION OPTIONS
+       The "[DHCPServer]" section contains settings for the DHCP server, if enabled via the DHCPServer= option described above:
+
+       PoolOffset=, PoolSize=
+           Configures the pool of addresses to hand out. The pool is a contiguous sequence of IP addresses in the subnet
+           configured for the server address, which does not include the subnet nor the broadcast address.  PoolOffset= takes the
+           offset of the pool from the start of subnet, or zero to use the default value.  PoolSize= takes the number of IP
+           addresses in the pool or zero to use the default value. By default, the pool starts at the first address after the
+           subnet address and takes up the rest of the subnet, excluding the broadcast address. If the pool includes the server
+           address (the default), this is reserved and not handed out to clients.
+
+       DefaultLeaseTimeSec=, MaxLeaseTimeSec=
+           Control the default and maximum DHCP lease time to pass to clients. These settings take time values in seconds or
+           another common time unit, depending on the suffix. The default lease time is used for clients that did not ask for a
+           specific lease time. If a client asks for a lease time longer than the maximum lease time, it is automatically
+           shortened to the specified time. The default lease time defaults to 1h, the maximum lease time to 12h. Shorter lease
+           times are beneficial if the configuration data in DHCP leases changes frequently and clients shall learn the new
+           settings with shorter latencies. Longer lease times reduce the generated DHCP network traffic.
+
+       EmitDNS=, DNS=
+           Configures whether the DHCP leases handed out to clients shall contain DNS server information. The EmitDNS= setting
+           takes a boolean argument and defaults to "yes". The DNS servers to pass to clients may be configured with the DNS=
+           option, which takes a list of IPv4 addresses. If the EmitDNS= option is enabled but no servers configured, the servers
+           are automatically propagated from an "uplink" interface that has appropriate servers set. The "uplink" interface is
+           determined by the default route of the system with the highest priority. Note that this information is acquired at the
+           time the lease is handed out, and does not take uplink interfaces into account that acquire DNS or NTP server
+           information at a later point. DNS server propagation does not take /etc/resolv.conf into account. Also, note that the
+           leases are not refreshed if the uplink network configuration changes. To ensure clients regularly acquire the most
+           current uplink DNS server information, it is thus advisable to shorten the DHCP lease time via MaxLeaseTimeSec=
+           described above.
+
+       EmitNTP=, NTP=
+           Similar to the EmitDNS= and DNS= settings described above, these settings configure whether and what NTP server
+           information shall be emitted as part of the DHCP lease. The same syntax, propagation semantics and defaults apply as
+           for EmitDNS= and DNS=.
+
+       EmitTimezone=, Timezone=
+           Configures whether the DHCP leases handed out to clients shall contain timezone information. The EmitTimezone= setting
+           takes a boolean argument and defaults to "yes". The Timezone= setting takes a timezone string (such as "Europe/Berlin"
+           or "UTC") to pass to clients. If no explicit timezone is set, the system timezone of the local host is propagated, as
+           determined by the /etc/localtime symlink.
+
+[BRIDGE] SECTION OPTIONS
+       The "[Bridge]" section accepts the following keys.
+
+       UnicastFlood=
+           A boolean. Controls whether the bridge should flood traffic for which an FDB entry is missing and the destination is
+           unknown through this port. Defaults to on.
+
+       HairPin=
+           A boolean. Configures whether traffic may be sent back out of the port on which it was received. By default, this flag
+           is false, and the bridge will not forward traffic back out of the receiving port.
+
+       UseBPDU=
+           A boolean. Configures whether STP Bridge Protocol Data Units will be processed by the bridge port. Defaults to yes.
+
+       FastLeave=
+           A boolean. This flag allows the bridge to immediately stop multicast traffic on a port that receives an IGMP Leave
+           message. It is only used with IGMP snooping if enabled on the bridge. Defaults to off.
+
+       AllowPortToBeRoot=
+           A boolean. Configures whether a given port is allowed to become a root port. Only used when STP is enabled on the
+           bridge. Defaults to on.
+
+       Cost=
+           Sets the "cost" of sending packets of this interface. Each port in a bridge may have a different speed and the cost is
+           used to decide which link to use. Faster interfaces should have lower costs. It is an interger value between 1 and
+           65535.
+
+       Priority=
+           Sets the "priority" of sending packets on this interface. Each port in a bridge may have a different priority which is
+           used to decide which link to use. Lower value means higher priority. It is an interger value between 0 to 63. Networkd
+           does not set any default, meaning the kernel default value of 32 is used.
+
+[BRIDGEFDB] SECTION OPTIONS
+       The "[BridgeFDB]" section manages the forwarding database table of a port and accepts the following keys. Specify several
+       "[BridgeFDB]" sections to configure several static MAC table entries.
+
+       MACAddress=
+           As in the "[Network]" section. This key is mandatory.
+
+       VLANId=
+           The VLAN ID for the new static MAC table entry. If omitted, no VLAN ID info is appended to the new static MAC table
+           entry.
+
+EXAMPLE
+       Example 1. /etc/systemd/network/50-static.network
+
+           [Match]
+           Name=enp2s0
+
+           [Network]
+           Address=192.168.0.15/24
+           Gateway=192.168.0.1
+
+       Example 2. /etc/systemd/network/80-dhcp.network
+
+           [Match]
+           Name=en*
+
+           [Network]
+           DHCP=yes
+
+       Example 3. /etc/systemd/network/25-bridge-static.network
+
+           [Match]
+           Name=bridge0
+
+           [Network]
+           Address=192.168.0.15/24
+           Gateway=192.168.0.1
+           DNS=192.168.0.1
+
+       Example 4. /etc/systemd/network/25-bridge-slave-interface.network
+
+           [Match]
+           Name=enp2s0
+
+           [Network]
+           Bridge=bridge0
+
+       Example 5. /etc/systemd/network/25-ipip.network
+
+           [Match]
+           Name=em1
+
+           [Network]
+           Tunnel=ipip-tun
+
+       Example 6. /etc/systemd/network/25-sit.network
+
+           [Match]
+           Name=em1
+
+           [Network]
+           Tunnel=sit-tun
+
+       Example 7. /etc/systemd/network/25-gre.network
+
+           [Match]
+           Name=em1
+
+           [Network]
+           Tunnel=gre-tun
+
+       Example 8. /etc/systemd/network/25-vti.network
+
+           [Match]
+           Name=em1
+
+           [Network]
+           Tunnel=vti-tun
+
+       Example 9. /etc/systemd/network/25-bond.network
+
+           [Match]
+           Name=bond1
+
+           [Network]
+           DHCP=yes
+
+SEE ALSO
+       systemd(1), systemd-networkd.service(8), systemd.link(5), systemd.netdev(5), systemd-resolved.service(8)
+
+NOTES
+        1. Link-Local Multicast Name Resolution
+           https://tools.ietf.org/html/rfc4795
+
+        2. Multicast DNS
+           https://tools.ietf.org/html/rfc6762
+
+        3. DNSSEC
+           https://tools.ietf.org/html/rfc4033
+
+        4. ip-sysctl.txt
+           https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
+
+        5. RFC 4941
+           https://tools.ietf.org/html/rfc4941
+
+systemd 229                                                                                                    SYSTEMD.NETWORK(5)

@@ -1,0 +1,210 @@
+NAME
+scp — безопасная копия (удаленная программа копирования файлов)
+
+SYNOPSIS
+scp 	[-346BCpqrv] [-c cipher] [-F ssh_config] [-i identity_file] [-l limit] [-o ssh_option] [-P port] [-S program] source ... target
+DESCRIPTION
+scp копирует файлы между хостами в сети. Он использует ssh (1) для передачи данных и использует ту же аутентификацию и обеспечивает ту же
+безопасность, что и ssh (1). scp будет запрашивать пароли или кодовые фразы, если они необходимы для аутентификации.
+Источник и цель могут быть указаны как локальный путь, удаленный хост с необязательным путем в форме [user @] host: [путь] или URI в форме
+scp: // [user @] host [: port] [/дорожка]. Локальные имена файлов могут быть сделаны явным, используя абсолютные или относительные имена путей,
+чтобы избежать использования scp-файлов, содержащих имена «:» в качестве спецификаторов хоста.
+При копировании между двумя удаленными хостами, если используется формат URI, порт может быть указан только на целевом объекте, если используется
+опция -3.
+Возможны следующие варианты:
+
+ 
+     
+-3
+    Копии между двумя удаленными хостами передаются через локальный хост. Без этой опции данные копируются напрямую между двумя удаленными хостами.
+    Обратите внимание, что этот параметр отключает индикатор выполнения.
+ 
+     
+-4
+    Заставляет scp использовать только адреса IPv4.
+ 
+     
+-6
+    Заставляет scp использовать только адреса IPv6.
+ 
+     
+-B
+    Выбирает пакетный режим (предотвращает запрос паролей или фраз).
+ 
+     
+-C
+    Разрешение компрессии. Пропускает флаг -C для ssh (1) для включения сжатия.
+ 
+     
+-c cipher
+    Выбирает шифр для шифрования передачи данных. Этот параметр передается непосредственно в ssh (1).
+ 
+     
+-F ssh_config
+    Задает альтернативный файл конфигурации для каждого пользователя для ssh. Этот параметр передается непосредственно в ssh (1).
+ 
+     
+-i identity_file
+    Выбирает файл, из которого считывается идентификатор (закрытый ключ) для проверки подлинности открытого ключа. Этот параметр передается
+    непосредственно в ssh (1).
+ 
+     
+-l limit
+    Ограничивает используемую полосу пропускания, указанную в Кбит/с.
+ 
+     
+-o ssh_option
+    Может использоваться для передачи параметров ssh в формате, используемом в ssh_config (5). Это полезно для указания параметров, для которых
+    нет отдельного флага командной строки scp. Полную информацию о параметрах, перечисленных ниже, и их возможные значения см. В разделе
+    ssh_config (5).
+
+    AddressFamily
+         
+    BatchMode
+         
+    BindAddress
+         
+    CanonicalDomains
+         
+    CanonicalizeFallbackLocal
+         
+    CanonicalizeHostname
+         
+    CanonicalizeMaxDots
+         
+    CanonicalizePermittedCNAMEs
+         
+    CertificateFile
+         
+    ChallengeResponseAuthentication
+         
+    CheckHostIP
+         
+    Ciphers
+         
+    Compression
+         
+    ConnectionAttempts
+         
+    ConnectTimeout
+         
+    ControlMaster
+         
+    ControlPath
+         
+    ControlPersist
+         
+    GlobalKnownHostsFile
+         
+    GSSAPIAuthentication
+         
+    GSSAPIDelegateCredentials
+         
+    HashKnownHosts
+         
+    Host
+         
+    HostbasedAuthentication
+         
+    HostbasedKeyTypes
+         
+    HostKeyAlgorithms
+         
+    HostKeyAlias
+         
+    HostName
+         
+    IdentitiesOnly
+         
+    IdentityAgent
+         
+    IdentityFile
+         
+    IPQoS
+         
+    KbdInteractiveAuthentication
+         
+    KbdInteractiveDevices
+         
+    KexAlgorithms
+         
+    LogLevel
+         
+    MACs
+         
+    NoHostAuthenticationForLocalhost
+         
+    NumberOfPasswordPrompts
+         
+    PasswordAuthentication
+         
+    PKCS11Provider
+         
+    Port
+         
+    PreferredAuthentications
+         
+    ProxyCommand
+         
+    ProxyJump
+         
+    PubkeyAcceptedKeyTypes
+         
+    PubkeyAuthentication
+         
+    RekeyLimit
+         
+    SendEnv
+         
+    ServerAliveInterval
+         
+    ServerAliveCountMax
+         
+    StrictHostKeyChecking
+         
+    TCPKeepAlive
+         
+    UpdateHostKeys
+         
+    UsePrivilegedPort
+         
+    User
+         
+    UserKnownHostsFile
+         
+    VerifyHostKeyDNS
+         
+
+ 
+     
+-P port
+    Указывает порт для подключения к удаленному хосту. Обратите внимание, что этот параметр записывается с капиталом «P», потому что -p уже
+    зарезервирован для сохранения времени и режимов файла.
+ 
+     
+-p
+    Сохраняет время модификации, время доступа и режимы из исходного файла.
+ 
+     
+-q
+    Тихий режим: отключает индикатор выполнения, а также предупреждающие и диагностические сообщения от ssh (1).
+ 
+     
+-r
+    Рекурсивно скопировать целые каталоги. Обратите внимание, что scp следует символическим ссылкам, встречающимся в обход дерева.
+ 
+     
+-S program
+    Название программы для шифрованного подключения. Программа должна понимать параметры ssh (1).
+ 
+     
+-v
+    Подробный режим. Заставляет scp и ssh (1) печатать отладочные сообщения об их прогрессе. Это полезно при отладке проблем подключения, проверки
+    подлинности и конфигурации.
+
+EXIT STATUS
+Утилита scp завершает 0 при успешном завершении, а> 0, если возникает ошибка.
+SEE ALSO
+sftp(1), ssh(1), ssh-add(1), ssh-agent(1), ssh-keygen(1), ssh_config(5), sshd(8)
+HISTORY
+scp is based on the rcp program in BSD source code from the Regents of the University of California. 
