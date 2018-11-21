@@ -1,0 +1,9 @@
+#!/bin/bash
+#сценарий вывода всех аргументов
+
+count=1
+while [[ $# -gt 0 ]]; do
+    echo "Аргумент № $count = $1"
+    count=$((count + 1))
+    shift
+    done

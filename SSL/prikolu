@@ -1,0 +1,1 @@
+openssl x509 -in /home/uanr81/SSLsert/ca/ca.crt -out /home/uanr81/SSLsert/ca/ca.pem -outform PEM

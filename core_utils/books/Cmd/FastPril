@@ -1,0 +1,81 @@
+#!/bin/bash
+usage (){
+    echo "$PROGNAME: usage: $PROGNAME [-f file | -i]"
+    return
+}
+
+write_html_page () {
+    cat <<-EOF
+    <HTML>
+            <HEAD>
+                  <TITLE>$TITLE</TITLE>
+            </HEAD>
+            <BODY>
+                  <H1>$TITLE</H1>
+                  <P>$TIME_STAMP</P>
+                  $(report_uptime)
+                  $(report_disk_space)
+                  $(report_home_space)
+            </BODY>
+     </HTML>
+     EOF
+    retrurn
+}
+
+# вывод страницы html
+
+if [[ -n $filename ]]; then
+    if touch $filename && [[ -f $filename ]]; then
+	write_html_page > $filename
+    else
+	echo "$PROGNAME: Не могу записать файл '$filename'" >&2
+	exit 1
+    fi
+else
+    write_html_page
+fi
+
+#обработка параметров командной строки
+
+interactive=
+filename=
+
+while [[ -n $1 ]]; do
+    case $1 in
+	-f | --file) shift
+		    filename=$1
+		    ;;
+	-i | --interactive) interactive=1
+			    ;;
+	-h | --help) usage
+		     exit
+		     ;;
+	*) usage >&2
+	   exit 1
+	   ;;
+    esac
+    shift
+done
+
+# интерактивный режим
+if [[ -n $interactive ]]; then
+    while true; do
+	read -p "Введите имя выходного файла " filename
+	if [[ -e $filename ]]; then
+	    read -p "'$filename' существует. Перезаписать? [y/n/q] "
+	    case $REPLY in
+		Y|y) break
+		     ;;
+		Q|q) echo "Программа прекращена."
+		     exit
+		     ;;
+		*) continue
+		   ;;
+	    esac
+	elif [[ -z $filename ]]; then
+	    continue
+	else
+	    break
+	fi
+    done
+fi
