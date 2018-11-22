@@ -10,12 +10,7 @@ argument within braces.  For example, the command @code{@@dfn} indicates
 the introductory or defining use of a term; it is used as follows: @samp{In
 Texinfo, @@@@-commands are @@dfn@{mark-up@} commands.}
 
-@item 2. Line commands
-These commands occupy an entire line.  The line starts with @@,
-followed by the name of the command (a word); for example, @code{@@center}
-or @code{@@cindex}.  If no argument is needed, the word is followed by
-the end of the line.  If there is an argument, it is separated from
-the command name by a space.  Braces are not used.
+@item 2. Линейные команды Эти команды занимают целую строку. Строка начинается с @@, за которой следует имя команды (слово); например, @code {@@ center} или @code {@@ cindex}. Если аргумент не требуется, за словом следует конец строки. Если есть аргумент, он отделен от имени команды пробелом. Скобки не используются.
 
 @item 3. Block commands
 These commands are written at the start of a line, with general text on
