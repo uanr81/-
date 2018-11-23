@@ -11,14 +11,14 @@ or @code{@@cindex}.  If no argument is needed, the word is followed by
 the end of the line.  If there is an argument, it is separated from
 the command name by a space.  Braces are not used.
 
-@item 3. Block commands
-These commands are written at the start of a line, with general text on
-following lines, terminated by a matching @code{@@end} command on a
-line of its own.  For example, @code{@@example}, then the lines of a
-coding example, then @code{@@end example}.  Some of these block commands
-take arguments as line commands do; for example, @code{@@enumerate A}
-opening an environment terminated by @code{@@end enumerate}.  Here
-@samp{A} is the argument.
+@item 3.
+Команды блокировки Эти команды записываются в начале строки с общим текстом
+в следующих строках, заканчивающимся соответствующей командой @code {@@ end}
+на отдельной строке. Например, @code {@@ example}, затем строки примера
+кодирования, затем @code {@@ end example}. Некоторые из этих команд блока
+принимают аргументы в виде команд линии; например, @code {@@ enumerate A},
+открывая среду, завершенную @code {@@ end enumerate}. Здесь @samp {A} -
+аргумент.
 
 @item 4. Symbol insertion commands with no arguments
 These commands start with @@ followed by a word followed by a
