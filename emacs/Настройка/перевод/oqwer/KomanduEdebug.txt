@@ -1,0 +1,128 @@
+edebug-mode is an interactive compiled Lisp function in `edebug.el'.
+
+(edebug-mode &optional ARG)
+
+Режим для буферов Emacs Lisp, в Edebug.
+
+В дополнение ко всем командам Emacs Lisp (кроме тех, которые
+изменяют буфер), существуют локальные и глобальные привязки
+клавиш к нескольким специальным командам Edebug.  E.g.
+`edebug-step-mode' связан с SPC в буфере Edebug и C-x X
+SPC в любом буфере.
+
+Также см. Привязки для буфера списка eval *edebug* в
+`edebug-eval-mode'.
+
+The edebug buffer commands:
+key             binding
+---             -------
+
+C-c		Prefix Command
+C-x		Prefix Command
+ESC		Prefix Command
+SPC		edebug-step-mode
+-		negative-argument
+=		edebug-temp-display-freq-count
+?		edebug-help
+B		edebug-next-breakpoint
+C		edebug-Continue-fast-mode
+E		edebug-visit-eval-list
+G		edebug-Go-nonstop-mode
+I		edebug-instrument-callee
+P		edebug-view-outside
+Q		edebug-top-level-nonstop
+S		edebug-stop
+T		edebug-Trace-fast-mode
+W		edebug-toggle-save-windows
+X		edebug-set-global-break-condition
+a		abort-recursive-edit
+b		edebug-set-breakpoint
+c		edebug-continue-mode
+d		edebug-backtrace
+e		edebug-eval-expression
+f		edebug-forward-sexp
+g		edebug-go-mode
+h		edebug-goto-here
+i		edebug-step-in
+n		edebug-next-mode
+o		edebug-step-out
+p		edebug-bounce-point
+q		top-level
+r		edebug-previous-result
+t		edebug-trace-mode
+u		edebug-unset-breakpoint
+v		edebug-view-outside
+w		edebug-where
+x		edebug-set-conditional-breakpoint
+DEL		backward-delete-char-untabify
+
+C-c C-c		edebug-go-mode
+C-c C-d		edebug-unset-breakpoint
+C-c C-l		edebug-where
+C-c C-n		edebug-next-mode
+C-c C-s		edebug-step-mode
+C-c C-t		??
+
+C-x C-a		Prefix Command
+C-x C-e		edebug-eval-last-sexp
+C-x SPC		edebug-set-breakpoint
+
+C-M-i		completion-at-point
+C-M-q		indent-pp-sexp
+C-M-x		eval-defun
+
+C-M-q		indent-sexp
+  (эта привязка в настоящее время затенена другим режимом)
+
+C-M-q		prog-indent-sexp
+  (эта привязка в настоящее время затенена другим режимом)
+
+C-x C-a C-c	edebug-go-mode
+C-x C-a C-l	edebug-where
+C-x C-a C-n	edebug-next-mode
+C-x C-a C-s	edebug-step-mode
+
+
+
+Global commands prefixed by `global-edebug-prefix':
+key             binding
+---             -------
+
+SPC		edebug-step-mode
+=		edebug-display-freq-count
+C		edebug-Continue-fast-mode
+G		edebug-Go-nonstop-mode
+Q		edebug-top-level-nonstop
+T		edebug-Trace-fast-mode
+W		edebug-toggle-save-windows
+X		edebug-set-global-break-condition
+a		abort-recursive-edit
+b		edebug-set-breakpoint
+c		edebug-continue-mode
+g		edebug-go-mode
+q		top-level
+t		edebug-trace-mode
+u		edebug-unset-breakpoint
+w		edebug-where
+x		edebug-set-conditional-breakpoint
+
+
+
+Options:
+`edebug-setup-hook'
+`edebug-all-defs'
+`edebug-all-forms'
+`edebug-save-windows'
+`edebug-save-displayed-buffer-points'
+`edebug-initial-mode'
+`edebug-trace'
+`edebug-test-coverage'
+`edebug-continue-kbd-macro'
+`edebug-print-length'
+`edebug-print-level'
+`edebug-print-circle'
+`edebug-on-error'
+`edebug-on-quit'
+`edebug-on-signal'
+`edebug-unwrap-results'
+`edebug-global-break-condition'

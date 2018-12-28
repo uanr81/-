@@ -20,6 +20,8 @@ the command name by a space.  Braces are not used.
 открывая среду, завершенную @code {@@ end enumerate}. Здесь @samp {A} -
 аргумент.
 
+stroka @[[:alpha:]]+{\\(@\\{1,2\\}[[:alpha:]]+}\\|@\\{1,2\\}[[:alpha:]]+\\)
+
 @item 4. Symbol insertion commands with no arguments
 These commands start with @@ followed by a word followed by a
 left and right- brace.  These commands insert special symbols in
