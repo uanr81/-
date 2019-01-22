@@ -1,0 +1,66 @@
+\input texinfo
+@setfilename ../../info/BSP_3_0_1.info
+@documentencoding UTF-8
+@settitle Програмный Интерфейс БСП 3.0.1
+@node Top, Базовая Функциональность Интерфейс, (dir), (dir)
+@top Глава 4. Программный интерфейс
+@ifinfo
+@heading Глава 4. Программный интерфейс
+@end ifinfo
+
+
+
+@include BazFunkcInterf.texi
+@include BazFunPereopr.texi
+@bye
+
+makeinfo --html --no-split namefile.texi
+
+
+
+texi2info
+texinfmt-version
+texinfo-all-menus-update
+texinfo-delete-from-print-queue
+texinfo-every-node-update
+texinfo-format-buffer
+texinfo-format-region
+texinfo-indent-menu-description
+texinfo-insert-@code
+texinfo-insert-@dfn
+texinfo-insert-@email
+texinfo-insert-@emph
+texinfo-insert-@end
+texinfo-insert-@example
+texinfo-insert-@file
+texinfo-insert-@item
+texinfo-insert-@kbd
+texinfo-insert-@node
+texinfo-insert-@noindent
+texinfo-insert-@quotation
+texinfo-insert-@samp
+texinfo-insert-@strong
+texinfo-insert-@table
+texinfo-insert-@uref
+texinfo-insert-@url
+texinfo-insert-@var
+texinfo-insert-block
+texinfo-insert-braces
+texinfo-insert-node-lines
+texinfo-insert-quote
+texinfo-make-menu
+texinfo-master-menu
+texinfo-mode
+texinfo-mode-menu
+texinfo-multiple-files-update
+texinfo-quit-job
+texinfo-sequential-node-update
+texinfo-show-structure
+texinfo-start-menu-description
+texinfo-tex-buffer
+texinfo-tex-print
+texinfo-tex-region
+texinfo-tex-view
+texinfo-texindex
+texinfo-update-node 	
+

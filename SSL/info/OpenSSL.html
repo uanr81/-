@@ -1,0 +1,2074 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>Руководство OpenSSL 1.1.1a  20 Nov 2018</title>
+
+<meta name="description" content="Руководство OpenSSL 1.1.1a  20 Nov 2018">
+<meta name="keywords" content="Руководство OpenSSL 1.1.1a  20 Nov 2018">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="#Top" rel="start" title="Top">
+<link href="dir.html#Top" rel="up" title="(dir)">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">Руководство OpenSSL 1.1.1a  20 Nov 2018</h1>
+<a name="Top"></a>
+<div class="header">
+<p>
+Next: <a href="#X509" accesskey="n" rel="next">X509</a>, Previous: <a href="dir.html#Top" accesskey="p" rel="prev">(dir)</a>, Up: <a href="dir.html#Top" accesskey="u" rel="up">(dir)</a> &nbsp; </p>
+</div>
+<a name="OpenSSL-verkhnii-uzel"></a>
+<h1 class="top">OpenSSL верхний узел</h1>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#X509" accesskey="1">X509</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#req" accesskey="2">req</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#CONFIG" accesskey="3">CONFIG</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<a name="X509"></a>
+<div class="header">
+<p>
+Next: <a href="#req" accesskey="n" rel="next">req</a>, Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="X509-1"></a>
+<h2 class="chapter">1 X509</h2>
+
+<p>X509                             OpenSSL                            X509
+</p><dl compact="compact">
+<dt>NAME</dt>
+<dd><p>openssl-x509, x509 - Утилита отображения и подписи сертификатов
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>openssl x509 [<a href="#x509-_002dhelp">-help</a>] [<a href="#x509-_002dinform-DER_007cPEM">-inform DER|PEM</a>] [<a href="#x509-_002doutform-DER_007cPEM">-outform DER|PEM</a>] [<a href="#x509-_002dkeyform-DER_007cPEM">-keyform DER|PEM</a>] [-CAform DER|PEM] [-CAkeyform DER|PEM] [<a href="#x509-_002din-filename">-in filename</a>] [<a href="#x509-_002dout-filename">-out filename</a>] [<a href="#x509-_002dserial">-serial</a>] [<a href="#x509-_002dhash">-hash</a>] [<a href="#x509-_002dsubject_005fhash">-subject_hash</a>] [<a href="#x509-_002dsubject_005fhash_005fold">-subject_hash_old</a>] [<a href="#x509-_002dissuer_005fhash">-issuer_hash</a>] [<a href="#x509-_002dissuer_005fhash_005fold">-issuer_hash_old</a>] [<a href="#x509-_002docspid">-ocspid</a>] [<a href="#x509-_002dsubject">-subject</a>] [<a href="#x509-_002dissuer">-issuer</a>] [<a href="#x509-_002dnameopt-option">-nameopt option</a>](NAMEOPT OPTIONS&mdash;[<a href="#x509-compat">compat</a>[<a href="#x509-RFC2253">RFC2253</a>][<a href="#x509-oneline">oneline</a>][<a href="#x509-multiline">multiline</a>][<a href="#x509-esc_005f2253">esc_2253</a>][<a href="#x509-esc_005f2254">esc_2254</a>][<a href="#x509-esc_005fctrl">esc_ctrl</a>][<a href="#x509-esc_005fmsb">esc_msb</a>][<a href="#x509-use_005fquote">use_quote</a>][<a href="#x509-utf8">utf8</a>][<a href="#x509-ignore_005ftype">ignore_type</a>][<a href="#x509-show_005ftype">show_type</a>][<a href="#x509-dump_005fder">dump_der</a>][<a href="#x509-dump_005fnostr">dump_nostr</a>][<a href="#x509-dump_005fall">dump_all</a>][<a href="#x509-dump_005funknown">dump_unknown</a>][<a href="sep_multiline.html#x509-sep_005fcomma_005fplus">sep_semi_plus_space</a> in <cite>, sep_comma_plus, sep_comma_plus_space, sep_semi_plus_space,sep_multiline</cite>][<a href="#x509-dn_005frev">dn_rev</a>][<a href="oid.html#x509-nofname">lname</a> in <cite>, nofname, sname, lname, oid</cite>][<a href="#x509-align">align</a>][<a href="#x509-space_005feq">space_eq</a>]]&mdash;NAMEOPT OPTIONS) [<a href="#x509-_002demail">-email</a>] [<a href="#x509-_002docsp_005furi">-ocsp_uri</a>] [<a href="#x509-_002dstartdate">-startdate</a>] [<a href="#x509-_002denddate">-enddate</a>] [<a href="#x509-_002dpurpose">-purpose</a>] [<a href="#x509-_002ddates">-dates</a>] [<a href="#x509-_002dcheckend-arg">-checkend arg</a>] [<a href="#x509-_002dmodulus">-modulus</a>] [<a href="#x509-_002dpubkey">-pubkey</a>] [<a href="#x509-_002dfingerprint">-fingerprint</a>] [<a href="#x509-_002dalias">-alias</a>] [<a href="#x509-_002dnoout">-noout</a>] [<a href="#x509-_002dtrustout">-trustout</a>] [<a href="#x509-_002dclrtrust">-clrtrust</a>] [<a href="#x509-_002dclrreject">-clrreject</a>] [<a href="#x509-_002daddtrust-arg">-addtrust arg</a>] [<a href="#x509-_002daddreject-arg">-addreject arg</a>] [<a href="#x509-_002dsetalias-arg">-setalias arg</a>] [<a href="#x509-_002ddays-arg">-days arg</a>] [<a href="#x509-_002dset_005fserial-n">-set_serial n</a>] [<a href="#x509-_002dsignkey-filename">-signkey filename</a>] [<a href="#x509-_002dpassin-arg">-passin arg</a>] [<a href="#x509-_002dx509toreq">-x509toreq</a>] [<a href="#x509-_002dreq">-req</a>] [<a href="#x509-_002dCA-filename">-CA filename</a>] [<a href="#x509-_002dCAkey-filename">-CAkey filename</a>] [<a href="#x509-_002dCAcreateserial">-CAcreateserial</a>] [<a href="#x509-_002dCAserial-filename">-CAserial filename</a>] [<a href="#x509-_002dforce_005fpubkey-key">-force_pubkey key</a>] [<a href="#x509-_002dtext">-text</a>] (TEXT OPTIONS&mdash; [[<a href="#x509-compatible">compatible</a>][<a href="#x509-no_005fheader">no_header</a>][<a href="#x509-no_005fversion">no_version</a>][<a href="#x509-no_005fserial">no_serial</a>][<a href="#x509-no_005fsigname">no_signame</a>][<a href="#x509-no_005fvalidity">no_validity</a>][<a href="#x509-no_005fsubject">no_subject</a>][<a href="#x509-no_005fissuer">no_issuer</a>][<a href="#x509-no_005fpubkey">no_pubkey</a>][<a href="#x509-no_005fsigdump">no_sigdump</a>][<a href="#x509-no_005faux">no_aux</a>][<a href="#x509-no_005fextensions">no_extensions</a>][<a href="#x509-ext_005fdefault">ext_default</a>][<a href="#x509-ext_005ferror">ext_error</a>][<a href="#x509-ext_005fparse">ext_parse</a>][<a href="#x509-ext_005fdump">ext_dump</a>][<a href="#x509-ca_005fdefault">ca_default</a>]] &mdash;TEXT OPTIONS) [<a href="#x509-_002dext-extensions">-ext extensions</a>] [<a href="#x509-_002dcertopt-option">-certopt option</a>] [<a href="#x509-_002dC">-C</a>] [<a href="#x509-_002ddigest">-digest</a>] [<a href="#x509-_002dclrext">-clrext</a>] [<a href="#x509-_002dextfile-filename">-extfile filename</a>] [<a href="#x509-_002dextensions-section">-extensions section</a>] [<a href="#x509-_002drand-file_002e_002e_002e">-rand file...</a>]  [<a href="#x509-_005b_002dwriterand-file_005d">[-writerand file]</a>] [<a href="#x509-_002dengine-id">-engine id</a>] [<a href="#x509-_002dpreserve_005fdates">-preserve_dates</a>]
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Команда x509 - это утилита многоцелевого сертификата. Его можно
+       использовать для отображения информации о сертификате, преобразования
+       сертификатов в различные формы, подписания запросов на сертификаты,
+       таких как &quot;mini CA&quot;, или редактирования настроек доверия сертификатов.
+</p>
+<p>Поскольку существует большое количество параметров, они будут разбиты
+       на различные разделы.
+</p>
+</dd>
+<dt>OPTIONS</dt>
+<dd><p>Параметры ввода, вывода и общего назначения
+</p><dl compact="compact">
+<dt>-help <a name="x509-_002dhelp"></a></dt>
+<dd><p>Распечатайте сообщение об использовании.
+</p>
+</dd>
+<dt>-inform DER|PEM <a name="x509-_002dinform-DER_007cPEM"></a></dt>
+<dd><p>Это указывает формат ввода, обычно команда ожидает сертификат X509,
+           но это может измениться, если присутствуют другие параметры, такие
+           как -req. Формат DER - это кодировка сертификата DER, а PEM -
+           кодировка base64 кодировки DER с добавлением строк верхнего и
+           нижнего колонтитула. Формат по умолчанию - PEM.
+</p>
+</dd>
+<dt>-outform DER|PEM <a name="x509-_002doutform-DER_007cPEM"></a></dt>
+<dd><p>Это определяет формат вывода, параметры имеют то же значение и значение
+           по умолчанию, что и опция -inform.
+</p>
+</dd>
+<dt>-in filename <a name="x509-_002din-filename"></a></dt>
+<dd><p>Здесь указывается имя входного файла для чтения сертификата или
+           стандартного ввода, если эта опция не указана.
+</p>
+</dd>
+<dt>-out filename <a name="x509-_002dout-filename"></a></dt>
+<dd><p>Это указывает имя выходного файла для записи или стандартный вывод
+           по умолчанию.
+</p>
+</dd>
+<dt>-digest <a name="x509-_002ddigest"></a></dt>
+<dd><p>Дайджест для использования. Это влияет на любой параметр подписи или
+           отображения, использующий дайджест сообщения, например параметры
+           -fingerprint, -signkey и -CA. Можно использовать любой дайджест,
+           поддерживаемый командой OpenSSL dgst. Если не указано иное,
+           SHA1 используется с -fingerprint или используется дайджест по
+           умолчанию для алгоритма подписи, обычно SHA256.
+</p>
+</dd>
+<dt>-rand file... <a name="x509-_002drand-file_002e_002e_002e"></a></dt>
+<dd><p>Файл или файлы, содержащие случайные данные, используемые для заполнения
+           генератора случайных чисел. Можно указать несколько файлов, разделенных
+           символом, зависящим от ОС. Разделителем является ; for MS-Windows,
+           , for OpenVMS, и : для остальных.
+</p>
+</dd>
+<dt>[-writerand file] <a name="x509-_005b_002dwriterand-file_005d"></a></dt>
+<dd><p>Записывает случайные данные в указанный файл при выходе. Это может быть
+           использовано с последующим флагом -rand.
+</p>
+</dd>
+<dt>-engine id <a name="x509-_002dengine-id"></a></dt>
+<dd><p>Указание обработчика (по его уникальной строке идентификатора) приведет
+           к тому, что x509 попытается получить функциональную ссылку на указанный
+           обработчик, тем самым инициализируя его при необходимости. Движок будет
+           установлен по умолчанию для всех доступных алгоритмов.
+</p>
+</dd>
+<dt>-preserve_dates <a name="x509-_002dpreserve_005fdates"></a></dt>
+<dd><p>При подписании сертификата сохраняйте даты &quot;notBefore&quot; и &quot;notAfter&quot;
+           вместо их настройки на текущее время и продолжительность. Не может
+           использоваться с опцией -days.
+</p></dd>
+</dl>
+</dd>
+<dt>Display Options</dt>
+<dd><p>Примечание: параметры -alias и -purpose также являются параметрами отображения,
+       но описаны в разделе TRUST SETTINGS.
+</p><dl compact="compact">
+<dt>-text <a name="x509-_002dtext"></a></dt>
+<dd><p>Распечатывает сертификат в текстовом виде. Выводятся полные сведения,
+           включая открытый ключ, алгоритмы подписи, имена эмитента и субъекта,
+           серийный номер, любые имеющиеся расширения и любые параметры доверия.
+</p>
+</dd>
+<dt>-ext extensions <a name="x509-_002dext-extensions"></a></dt>
+<dd><p>Распечатывает расширения сертификата в текстовом виде. Расширения
+           указываются через запятую, например, &quot;subjectAltName,subjectKeyIdentifier&quot;.
+           См. Страницу руководства x509v3_config для имен расширений.
+</p>
+</dd>
+<dt>-certopt option <a name="x509-_002dcertopt-option"></a></dt>
+<dd><p>Настройте формат вывода, используемый с -text. Аргументом опции может
+           быть одна опция или несколько опций, разделенных запятыми. Переключатель
+           -certopt также можно использовать более одного раза для установки нескольких
+           параметров. Смотрите раздел TEXT OPTIONS для получения дополнительной
+           информации.
+</p>
+</dd>
+<dt>-noout <a name="x509-_002dnoout"></a></dt>
+<dd><p>Эта опция предотвращает вывод закодированной версии запроса.
+</p>
+</dd>
+<dt>-pubkey <a name="x509-_002dpubkey"></a></dt>
+<dd><p>Выводит блок SubjectPublicKeyInfo сертификата в формате PEM.
+</p>
+</dd>
+<dt>-modulus <a name="x509-_002dmodulus"></a></dt>
+<dd><p>Эта опция выводит значение модуля открытого ключа, содержащегося в
+           сертификате.
+</p>
+</dd>
+<dt>-serial <a name="x509-_002dserial"></a></dt>
+<dd><p>Выводит серийный номер сертификата.
+</p>
+</dd>
+<dt>-subject_hash <a name="x509-_002dsubject_005fhash"></a></dt>
+<dd><p>Выводит &quot;hash&quot; имени субъекта сертификата. Это используется в OpenSSL
+           для формирования индекса, позволяющего искать сертификаты в каталоге
+           по имени субъекта.
+</p>
+</dd>
+<dt>-issuer_hash <a name="x509-_002dissuer_005fhash"></a></dt>
+<dd><p>Выводит &quot;hash&quot; имени издателя сертификата.
+</p>
+</dd>
+<dt>-ocspid <a name="x509-_002docspid"></a></dt>
+<dd><p>Выводит значения хеша OCSP для имени субъекта и открытого ключа.
+</p>
+</dd>
+<dt>-hash <a name="x509-_002dhash"></a></dt>
+<dd><p>Синоним &quot;-subject_hash&quot; по причинам обратной совместимости.
+</p>
+</dd>
+<dt>-subject_hash_old <a name="x509-_002dsubject_005fhash_005fold"></a></dt>
+<dd><p>Выводит &quot;hash&quot; имени субъекта сертификата, используя более старый алгоритм,
+           который использовался OpenSSL до версии 1.0.0.
+</p>
+</dd>
+<dt>-issuer_hash_old <a name="x509-_002dissuer_005fhash_005fold"></a></dt>
+<dd><p>Выводит &quot;hash&quot; имени издателя сертификата, используя более старый алгоритм,
+           который использовался OpenSSL до версии 1.0.0.
+</p>
+</dd>
+<dt>-subject <a name="x509-_002dsubject"></a></dt>
+<dd><p>Выводит имя субъекта.
+</p>
+</dd>
+<dt>-issuer <a name="x509-_002dissuer"></a></dt>
+<dd><p>Выводит имя эмитента.
+</p>
+</dd>
+<dt>-nameopt option <a name="x509-_002dnameopt-option"></a></dt>
+<dd><p>Опция, которая определяет, как отображаются имена субъекта или эмитента.
+           Аргументом опции может быть одна опция или несколько опций, разделенных
+           запятыми. В качестве альтернативы опция -nameopt может использоваться
+           более одного раза для установки нескольких параметров. Смотрите раздел
+           NAME OPTIONS для получения дополнительной информации.
+</p>
+</dd>
+<dt>-email <a name="x509-_002demail"></a></dt>
+<dd><p>Выводит адреса электронной почты, если таковые имеются.
+</p>
+</dd>
+<dt>-ocsp_uri <a name="x509-_002docsp_005furi"></a></dt>
+<dd><p>Выводит адрес(а) респондента OCSP, если есть.
+</p>
+</dd>
+<dt>-startdate <a name="x509-_002dstartdate"></a></dt>
+<dd><p>Распечатывает дату начала сертификата, то есть дату notBefore.
+</p>
+</dd>
+<dt>-enddate <a name="x509-_002denddate"></a></dt>
+<dd><p>Распечатывает срок действия сертификата, то есть дату notAfter.
+</p>
+</dd>
+<dt>-dates <a name="x509-_002ddates"></a></dt>
+<dd><p>Распечатывает даты начала и окончания срока действия сертификата.
+</p>
+</dd>
+<dt>-checkend arg <a name="x509-_002dcheckend-arg"></a></dt>
+<dd><p>Проверяет, истекает ли срок действия сертификата в течение
+           следующих arg секунд, и выходит ли он ненулевым, если да,
+           истекает или ноль, если нет.
+</p>
+</dd>
+<dt>-fingerprint <a name="x509-_002dfingerprint"></a></dt>
+<dd><p>Вычисляет и выводит дайджест версии всего сертификата в кодировке
+           DER (см. Параметры дайджеста). Это обычно называется &quot;fingerprint&quot;.
+           Из-за характера дайджестов сообщений отпечаток сертификата
+           является уникальным для этого сертификата, и два сертификата
+           с одинаковым отпечатком могут считаться одинаковыми.
+</p>
+</dd>
+<dt>-C <a name="x509-_002dC"></a>Это выводит сертификат в виде исходного файла C.</dt>
+</dl>
+</dd>
+<dt>Trust Settings</dt>
+<dd><p>Доверенный сертификат - это обычный сертификат, к которому прикреплено
+       несколько дополнительных частей информации, таких как разрешенное
+       и запрещенное использование сертификата и объект &quot;alias&quot;.
+</p>
+<p>Обычно, когда сертификат проверяется, по крайней мере один
+       сертификат должен быть &quot;trusted&quot;. По умолчанию доверенный
+       сертификат должен храниться локально и должен быть корневым CA:
+       любая цепочка сертификатов, оканчивающаяся на этом CA,
+       может быть использована для любых целей.
+</p>
+<p>Настройки Trust в настоящее время используются только с корневым CA.
+       Они позволяют лучше контролировать цели, для которых может использоваться
+       корень CA. Например, CA может быть доверенным для клиента SSL, но
+       не для использования сервера SSL.
+</p>
+<p>См. Описание утилиты проверки для получения дополнительной информации
+       о значении параметров доверия.
+</p>
+<p>Будущие версии OpenSSL будут распознавать параметры доверия для любого
+       сертификата: не только для корневых CA.
+</p><dl compact="compact">
+<dt>-trustout <a name="x509-_002dtrustout"></a></dt>
+<dd><p>Это заставляет x509 выводить доверенный сертификат. Может быть введен
+           обычный или доверенный сертификат, но по умолчанию выводится обычный
+           сертификат, а любые параметры доверия отбрасываются. С опцией
+           -trustout выводится доверенный сертификат. Доверенный сертификат
+           автоматически выводится при изменении любых параметров доверия.
+</p>
+</dd>
+<dt>-setalias arg <a name="x509-_002dsetalias-arg"></a></dt>
+<dd><p>Устанавливает псевдоним сертификата. Это позволит ссылаться на сертификат,
+           используя псевдоним, например, &quot;Steve&rsquo;s Certificate&quot;.
+</p>
+</dd>
+<dt>-alias <a name="x509-_002dalias"></a></dt>
+<dd><p>Выводит псевдоним сертификата, если есть.
+</p>
+</dd>
+<dt>-clrtrust <a name="x509-_002dclrtrust"></a></dt>
+<dd><p>Удаляет все разрешенные или доверенные виды использования сертификата.
+</p>
+</dd>
+<dt>-clrreject <a name="x509-_002dclrreject"></a></dt>
+<dd><p>Удаляет все запрещенные или отклоненные использования сертификата.
+</p>
+</dd>
+<dt>-addtrust arg <a name="x509-_002daddtrust-arg"></a></dt>
+<dd><p>Добавляет доверенный сертификат использования. Здесь можно использовать
+           любое имя объекта, но в настоящее время используются только
+           clientAuth (SSL client use), serverAuth (SSL server use),
+           emailProtection (S/MIME email) и anyExtendedKeyUsage. Начиная с
+           OpenSSL 1.1.0, последний из этих блоков блокирует все цели при
+           отклонении или разрешает все цели при наличии доверия. Другие
+           приложения OpenSSL могут определять дополнительное использование.
+</p>
+</dd>
+<dt>-addreject arg <a name="x509-_002daddreject-arg"></a></dt>
+<dd><p>Добавляет запрещенное использование. Он принимает те же значения,
+           что и опция -addtrust.
+</p>
+</dd>
+<dt>-purpose <a name="x509-_002dpurpose"></a></dt>
+<dd><p>Эта опция выполняет тестирование расширений сертификата и выводит
+           результаты. Для более полного описания смотрите раздел
+           CERTIFICATE EXTENSIONS.
+</p></dd>
+</dl>
+</dd>
+<dt>Signing Options</dt>
+<dd><p>Утилита x509 может использоваться для подписи сертификатов и запросов:
+       она может вести себя как &quot;mini CA&quot;.
+</p><dl compact="compact">
+<dt>-signkey filename <a name="x509-_002dsignkey-filename"></a></dt>
+<dd><p>Эта опция заставляет входной файл быть самоподписанным, используя
+           предоставленный закрытый ключ.
+</p>
+<p>Если входной файл является сертификатом, он устанавливает имя
+           эмитента на имя субъекта (т.е. делает его самоподписанным),
+           изменяет открытый ключ на предоставленное значение и изменяет
+           даты начала и окончания. Дата начала устанавливается на текущее
+           время, а дата окончания устанавливается на значение, определенное
+           параметром -days. Любые расширения сертификата сохраняются, если
+           не указана опция -clrext; это включает, например, любые
+           существующие расширения идентификатора ключа.
+</p>
+<p>Если вход представляет собой запрос сертификата, то самозаверяющий
+           сертификат создается с использованием предоставленного закрытого ключа
+           с использованием имени субъекта в запросе.
+</p>
+</dd>
+<dt>-passin arg <a name="x509-_002dpassin-arg"></a></dt>
+<dd><p>Ключевой источник пароля. Для получения дополнительной информации о
+           формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl(1).
+</p>
+</dd>
+<dt>-clrext <a name="x509-_002dclrext"></a></dt>
+<dd><p>Удалите все расширения из сертификата. Эта опция используется, когда
+           сертификат создается из другого сертификата (например, с опциями
+           -signkey или -CA). Обычно все расширения сохраняются.
+</p>
+</dd>
+<dt>-keyform PEM|DER <a name="x509-_002dkeyform-DER_007cPEM"></a></dt>
+<dd><p>Определяет формат (DER или PEM) файла закрытого ключа, используемого
+           в опции -signkey.
+</p>
+</dd>
+<dt>-days arg <a name="x509-_002ddays-arg"></a></dt>
+<dd><p>Задает количество дней, в течение которых сертификат действителен. По
+           умолчанию 30 дней. Не может использоваться с опцией -preserve_dates.
+</p>
+</dd>
+<dt>-x509toreq <a name="x509-_002dx509toreq"></a></dt>
+<dd><p>Преобразует сертификат в запрос сертификата. Опция -signkey используется
+           для передачи требуемого закрытого ключа.
+</p>
+</dd>
+<dt>-req <a name="x509-_002dreq"></a></dt>
+<dd><p>По умолчанию ожидается сертификат на входе. С этой опцией вместо этого
+           ожидается запрос сертификата.
+</p>
+</dd>
+<dt>-set_serial n <a name="x509-_002dset_005fserial-n"></a></dt>
+<dd><p>Указывает серийный номер для использования. Эта опция может использоваться
+           либо с опциями -signkey или -CA. Если используется вместе с опцией -CA,
+           файл серийного номера (как указано в опциях -CAserial или -CAcreateserial)
+           не используется.
+</p>
+<p>Серийный номер может быть десятичным или шестнадцатеричным
+           (если ему предшествует 0x).
+</p>
+</dd>
+<dt>-CA filename <a name="x509-_002dCA-filename"></a></dt>
+<dd><p>Указывает сертификат CA, который будет использоваться для подписи. Когда
+           эта опция присутствует, x509 ведет себя как &quot;mini CA&quot;. Входной файл
+           подписывается этим CA с использованием этой опции: это означает, что
+           его имя издателя установлено на имя субъекта CA, и он имеет цифровую
+           подпись с использованием закрытого ключа CA.
+</p>
+<p>Эта опция обычно сочетается с опцией -req. Без опции -req вход является
+           сертификатом, который должен быть самозаверяющим.
+</p>
+</dd>
+<dt>-CAkey filename <a name="x509-_002dCAkey-filename"></a></dt>
+<dd><p>Устанавливает закрытый ключ CA для подписи сертификата. Если эта опция
+           не указана, предполагается, что закрытый ключ CA присутствует в файле
+           сертификата CA.
+</p>
+</dd>
+<dt>-CAserial filename <a name="x509-_002dCAserial-filename"></a></dt>
+<dd><p>Устанавливает файл серийного номера CA для использования.
+</p>
+<p>Когда опция -CA используется для подписи сертификата, она использует
+           серийный номер, указанный в файле. Этот файл состоит из одной строки,
+           содержащей четное число шестнадцатеричных цифр с используемым серийным
+           номером. После каждого использования серийный номер увеличивается и
+           снова записывается в файл.
+</p>
+<p>Имя файла по умолчанию состоит из базового имени файла сертификата CA
+           с добавлением &quot;.srl&quot;. Например, если файл сертификата CA называется
+           &quot;mycacert.pem&quot;, он ожидает найти файл серийного номера с именем
+           &quot;mycacert.srl&quot;.
+</p>
+</dd>
+<dt>-CAcreateserial <a name="x509-_002dCAcreateserial"></a></dt>
+<dd><p>С помощью этой опции файл серийного номера CA создается, если он не
+           существует: он будет содержать серийный номер &quot;02&quot;, а подписываемый
+           сертификат будет иметь 1 в качестве серийного номера. Если указана
+           опция -CA и файл серийного номера не существует, генерируется
+           случайное число; это рекомендуемая практика.
+</p>
+</dd>
+<dt>-extfile filename <a name="x509-_002dextfile-filename"></a></dt>
+<dd><p>Файл, содержащий расширения сертификата для использования. Если не
+           указано иное, расширения не добавляются в сертификат.
+</p>
+</dd>
+<dt>-extensions section <a name="x509-_002dextensions-section"></a></dt>
+<dd><p>Раздел для добавления расширений сертификатов. Если эта опция не указана,
+           то расширения должны содержаться либо в безымянном (по умолчанию) section,
+           либо в section по умолчанию должна содержаться переменная с именем
+           &quot;extensions&quot;, которая содержит section для использования. Обратитесь к
+           странице справочника x509v3_config за подробностями формата раздела
+           расширения.
+</p>
+</dd>
+<dt>-force_pubkey key <a name="x509-_002dforce_005fpubkey-key"></a></dt>
+<dd><p>Когда сертификат создан, установите его открытый ключ на ключ вместо
+           ключа в сертификате или запросе сертификата. Эта опция полезна для
+           создания сертификатов, где алгоритм обычно не может подписывать
+           запросы, например, DH.
+</p>
+<p>Формат или ключ можно указать с помощью опции -keyform.
+</p></dd>
+</dl>
+</dd>
+<dt>Name Options</dt>
+<dd><p>Параметр командной строки nameopt определяет способ отображения имен
+       субъекта и эмитента. Если переключатель nameopt отсутствует,
+       используется формат &quot;oneline&quot; по умолчанию, который совместим с
+       предыдущими версиями OpenSSL. Каждый параметр подробно описан ниже,
+       всем параметрам может предшествовать a- чтобы отключить параметр. Обычно
+       будут использоваться только первые четыре.
+</p><dl compact="compact">
+<dt>compat <a name="x509-compat"></a></dt>
+<dd><p>Используйте старый формат.
+</p>
+</dd>
+<dt>RFC2253 <a name="x509-RFC2253"></a></dt>
+<dd><p>Отображает имена, совместимые с RFC2253, эквивалентные esc_2253, esc_ctrl,
+           esc_msb, utf8, dump_nostr, dump_unknown, dump_der, sep_comma_plus,
+           dn_rev и sname.
+</p>
+</dd>
+<dt>oneline <a name="x509-oneline"></a></dt>
+<dd><p>Онлайновый формат, более читабельный, чем RFC2253. Это эквивалентно
+           указанию параметров esc_2253, esc_ctrl, esc_msb, utf8, dump_nostr,
+           dump_der, use_quote, sep_comma_plus_space, space_eq и sname. Это
+           значение по умолчанию, при котором параметры имени не указываются явно.
+</p>
+</dd>
+<dt>multiline <a name="x509-multiline"></a></dt>
+<dd><p>Многострочный формат. Это эквивалентно esc_ctrl, esc_msb, sep_multiline,
+           space_eq, lname и align.
+</p>
+</dd>
+<dt>esc_2253 <a name="x509-esc_005f2253"></a></dt>
+<dd><p>Экранируйте символы &quot;special&quot;, необходимые для RFC2253 в поле.
+           Это ,+&quot;&lt;&gt;;. Кроме того, # экранируется в начале строки и пробел
+           в начале или конце строки.
+</p>
+</dd>
+<dt>esc_2254 <a name="x509-esc_005f2254"></a></dt>
+<dd><p>Экранируйте символы &quot;special&quot;, необходимые для RFC2254 в поле. Это
+           символ NUL, такой же, как и ()*.
+</p>
+</dd>
+<dt>esc_ctrl <a name="x509-esc_005fctrl"></a></dt>
+<dd><p>Побег управляющих персонажей. Это те, у которых значения ASCII меньше,
+           чем 0x20 (пробел) и символ удаления (0x7f). Они экранируются с
+           использованием записи RFC2253 /XX (где XX - две шестнадцатеричные
+           цифры, представляющие значение символа).
+</p>
+</dd>
+<dt>esc_msb <a name="x509-esc_005fmsb"></a></dt>
+<dd><p>Экранировать символы с установленным MSB, то есть со значениями ASCII
+           больше, чем 127.
+</p>
+</dd>
+<dt>use_quote <a name="x509-use_005fquote"></a></dt>
+<dd><p>Избегает некоторых символов, окружая всю строку символами &quot;, без
+           опции все экранирование выполняется с помощью символа /.
+</p>
+</dd>
+<dt>utf8 <a name="x509-utf8"></a></dt>
+<dd><p>Сначала преобразуйте все строки в формат UTF8. Это требуется для
+           RFC2253. Если вам повезло иметь совместимый с UTF8 терминал, то
+           использование этой опции (а не установка esc_msb) может привести
+           к правильному отображению многобайтовых (международных) символов.
+           Если эта опция отсутствует, то многобайтовые символы больше 0xff
+           будут представлены в формате /UXXXX для битов 16 и /WXXXXXXXX для
+           битов 32. Кроме того, если эта опция отключена, любой
+           UTF8Strings будет сначала преобразован в их символьную форму.
+</p>
+</dd>
+<dt>ignore_type <a name="x509-ignore_005ftype"></a></dt>
+<dd><p>Эта опция никак не пытается интерпретировать многобайтовые символы.
+           То есть их октеты содержимого просто сбрасываются, как будто один
+           октет представляет каждого символа. Это полезно для диагностических
+           целей, но приведет к довольно странным результатам.
+</p>
+</dd>
+<dt>show_type <a name="x509-show_005ftype"></a></dt>
+<dd><p>Показать тип строки символов ASN1. Тип предшествует содержимому поля.
+           Например, &quot;BMPSTRING: Hello World&quot;.
+</p>
+</dd>
+<dt>dump_der <a name="x509-dump_005fder"></a></dt>
+<dd><p>Когда эта опция установлена, любые поля, которые должны быть
+           зашифрованы, будут выгружаться с использованием кодировки поля DER.
+           В противном случае будут отображаться только октеты содержимого.
+           Оба варианта используют формат RFC2253 #XXXX....
+</p>
+</dd>
+<dt>dump_nostr <a name="x509-dump_005fnostr"></a></dt>
+<dd><p>Дамп не символьных строковых типов (например, OCTET STRING), если
+           эта опция не установлена, тогда не символьные строковые типы будут
+           отображаться так, как если бы каждый октет содержимого представлял
+           один символ.
+</p>
+</dd>
+<dt>dump_all <a name="x509-dump_005fall"></a></dt>
+<dd><p>Дамп всех полей. Эта опция при использовании с dump_der позволяет
+           однозначно определить кодировку структуры DER.
+</p>
+</dd>
+<dt>dump_unknown <a name="x509-dump_005funknown"></a></dt>
+<dd><p>Дамп любого поля, OID которого не распознается OpenSSL.
+</p>
+</dd>
+<dt>sep_comma_plus, sep_comma_plus_space, sep_semi_plus_space,sep_multiline <a name="x509-sep_005fcomma_005fplus_002c-sep_005fcomma_005fplus_005fspace_002c-sep_005fsemi_005fplus_005fspace_002csep_005fmultiline"></a></dt>
+<dd><p>Эти параметры определяют разделители полей. Первый символ находится
+           между RDNs, а второй между несколькими AVAs (множественные AVAs очень
+           редки и их использование не рекомендуется). Опции, оканчивающиеся на
+           &quot;space&quot;, дополнительно помещают пробел после разделителя, чтобы
+           сделать его более читаемым. Объект sep_multiline использует символ
+           перевода строки для разделителя RDN и интервал + для разделителя AVA.
+           Он также выравнивает поля четырьмя символами. Если разделитель полей
+           не указан, по умолчанию используется sep_comma_plus_space.
+</p>
+</dd>
+<dt>dn_rev <a name="x509-dn_005frev"></a></dt>
+<dd><p>Поменяйте местами поля DN. Это требуется для RFC2253. В качестве
+           побочного эффекта это также меняет порядок краткого AVAs, но это
+           допустимо.
+</p>
+</dd>
+<dt>nofname, sname, lname, oid <a name="x509-nofname_002c-sname_002c-lname_002c-oid"></a></dt>
+<dd><p>Эти параметры изменяют способ отображения имени поля. nofname
+           вообще не отображает поле. sname использует форму &quot;short name&quot;
+           (например, CN для commonName). lname использует длинную форму.
+           oid представляет OID в числовой форме и полезен для диагностических
+           целей.
+</p>
+</dd>
+<dt>align <a name="x509-align"></a></dt>
+<dd><p>Выровняйте значения полей для более удобочитаемого вывода.
+           Используется только с sep_multiline.
+</p>
+</dd>
+<dt>space_eq <a name="x509-space_005feq"></a></dt>
+<dd><p>Размещает пробелы вокруг символа =, который следует за именем поля.
+</p></dd>
+</dl>
+</dd>
+<dt>Text Options</dt>
+<dd><p>Наряду с настройкой формата вывода имени, также можно настроить
+       фактические поля, напечатанные с использованием параметров certopt,
+       когда присутствует текстовый параметр. Поведение по умолчанию -
+       печать всех полей.
+</p><dl compact="compact">
+<dt>compatible <a name="x509-compatible"></a></dt>
+<dd><p>Используйте старый формат. Это эквивалентно тому, что вообще не
+           указывается никаких параметров вывода.
+</p>
+</dd>
+<dt>no_header <a name="x509-no_005fheader"></a></dt>
+<dd><p>Не печатайте информацию заголовка: это строки, обозначающие
+           &quot;Certificate&quot; и &quot;Data&quot;.
+</p>
+</dd>
+<dt>no_version <a name="x509-no_005fversion"></a></dt>
+<dd><p>Не печатайте номер версии.
+</p>
+</dd>
+<dt>no_serial <a name="x509-no_005fserial"></a></dt>
+<dd><p>Не печатайте серийный номер.
+</p>
+</dd>
+<dt>no_signame <a name="x509-no_005fsigname"></a></dt>
+<dd><p>Не распечатывайте используемый алгоритм подписи.
+</p>
+</dd>
+<dt>no_validity <a name="x509-no_005fvalidity"></a></dt>
+<dd><p>Не печатайте валидность, это поля notBefore и notAfter.
+</p>
+</dd>
+<dt>no_subject <a name="x509-no_005fsubject"></a></dt>
+<dd><p>Не печатайте имя subject.
+</p>
+</dd>
+<dt>no_issuer <a name="x509-no_005fissuer"></a></dt>
+<dd><p>Не печатайте имя issuer.
+</p>
+</dd>
+<dt>no_pubkey <a name="x509-no_005fpubkey"></a></dt>
+<dd><p>Не распечатывайте public key.
+</p>
+</dd>
+<dt>no_sigdump <a name="x509-no_005fsigdump"></a></dt>
+<dd><p>Не распечатывайте шестнадцатеричный дамп подписи сертификата.
+</p>
+</dd>
+<dt>no_aux <a name="x509-no_005faux"></a></dt>
+<dd><p>Не распечатывайте информацию о доверии сертификата.
+</p>
+</dd>
+<dt>no_extensions <a name="x509-no_005fextensions"></a></dt>
+<dd><p>Не печатайте никаких расширений X509V3.
+</p>
+</dd>
+<dt>ext_default <a name="x509-ext_005fdefault"></a></dt>
+<dd><p>Сохранение поведения расширения по умолчанию: попытка
+           распечатать неподдерживаемые расширения сертификата.
+</p>
+</dd>
+<dt>ext_error <a name="x509-ext_005ferror"></a></dt>
+<dd><p>Распечатайте сообщение об ошибке для неподдерживаемых
+           расширений сертификата.
+</p>
+</dd>
+<dt>ext_parse <a name="x509-ext_005fparse"></a></dt>
+<dd><p>ASN1 анализирует неподдерживаемые расширения.
+</p>
+</dd>
+<dt>ext_dump <a name="x509-ext_005fdump"></a></dt>
+<dd><p>Hex dump неподдерживаемые расширения.
+</p>
+</dd>
+<dt>ca_default <a name="x509-ca_005fdefault"></a></dt>
+<dd><p>Значение, используемое утилитой ca, эквивалентно no_issuer,
+           no_pubkey, no_header, и no_version.
+</p></dd>
+</dl>
+</dd>
+<dt>EXAMPLES</dt>
+<dd><p>Примечание: в этих примерах &rsquo;\&rsquo; означает, что пример должен
+       быть в одной строке.
+</p><dl compact="compact">
+<dt>Показать содержимое сертификата:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -noout -text
+</p>
+</dd>
+<dt>Показать расширение сертификата &quot;Subject Alternative Name&quot;:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -noout -ext subjectAltName
+</p>
+</dd>
+<dt>Показать больше расширений сертификата:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -noout -ext subjectAltName,nsCertType
+</p>
+</dd>
+<dt>Показать серийный номер сертификата:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -noout -serial
+</p>
+</dd>
+<dt>Вывести имя субъекта сертификата:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -noout -subject
+</p>
+</dd>
+<dt>Отобразить имя субъекта сертификата в форме RFC2253:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -noout -subject -nameopt RFC2253
+</p>
+</dd>
+<dt>Выведите имя субъекта сертификата в oneline форме на терминале, поддерживающем UTF8:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -noout -subject -nameopt oneline,-esc_msb
+</p>
+</dd>
+<dt>Покажите сертификат SHA1 по отпечатку пальца:</dt>
+<dd>
+<p>openssl x509 -sha1 -in cert.pem -noout -fingerprint
+</p>
+</dd>
+<dt>Преобразовать сертификат из формата PEM в формат DER:</dt>
+<dd>
+<p>openssl x509 -in cert.pem -inform PEM -out cert.der -outform DER
+</p>
+</dd>
+<dt>Преобразовать сертификат в запрос сертификата:</dt>
+<dd>
+<p>openssl x509 -x509toreq -in cert.pem -out req.pem -signkey key.pem
+</p>
+</dd>
+<dt>Преобразуйте запрос сертификата в самоподписанный сертификат, используя расширения для CA:</dt>
+<dd>
+<p>openssl x509 -req -in careq.pem -extfile openssl.cnf -extensions v3_ca \<br>
+               -signkey key.pem -out cacert.pem
+</p>
+</dd>
+<dt>Подпишите запрос на сертификат, используя вышеуказанный сертификат CA, и добавьте расширения сертификата пользователя:</dt>
+<dd>
+<p>openssl x509 -req -in req.pem -extfile openssl.cnf -extensions v3_usr \<br>
+               -CA cacert.pem -CAkey key.pem -CAcreateserial
+</p>
+</dd>
+<dt>Установите сертификат как надежный для использования клиентом SSL и измените его псевдоним на &quot;Steve&rsquo;s Class 1 CA&quot;</dt>
+<dd>
+<p>openssl x509 -in cert.pem -addtrust clientAuth \<br>
+               -setalias &quot;Steve&rsquo;s Class 1 CA&quot; -out trust.pem
+</p></dd>
+</dl>
+</dd>
+<dt>NOTES</dt>
+<dd><dl compact="compact">
+<dt>Формат PEM использует строки верхнего и нижнего колонтитула:</dt>
+<dd>
+<p>&mdash;&ndash;BEGIN CERTIFICATE&mdash;&ndash;
+        &mdash;&ndash;END CERTIFICATE&mdash;&ndash;
+</p>
+</dd>
+<dt>он также будет обрабатывать файлы, содержащие:</dt>
+<dd>
+<p>&mdash;&ndash;BEGIN X509 CERTIFICATE&mdash;&ndash;
+        &mdash;&ndash;END X509 CERTIFICATE&mdash;&ndash;
+</p>
+</dd>
+<dt>Доверенные сертификаты имеют строки</dt>
+<dd>
+<p>&mdash;&ndash;BEGIN TRUSTED CERTIFICATE&mdash;&ndash;
+        &mdash;&ndash;END TRUSTED CERTIFICATE&mdash;&ndash;
+</p></dd>
+</dl>
+<p>Преобразование в формат UTF8, используемый с опциями имени,
+       предполагает, что T61Strings использует набор символов
+       ISO8859-1. Это неправильно, но Netscape и MSIE делают это так же,
+       как и многие сертификаты. Поэтому, хотя это неверно, более
+       вероятно, что большинство сертификатов будет отображаться правильно
+</p>
+<p>Опция -email ищет имя субъекта и расширение альтернативного имени
+       субъекта. Будут распечатаны только уникальные адреса электронной почты:
+       один и тот же адрес не будет напечатан более одного раза.
+</p>
+</dd>
+<dt>CERTIFICATE EXTENSIONS</dt>
+<dd><p>Опция -purpose проверяет расширения сертификата и определяет, для чего
+       сертификат может использоваться. Фактические проверки довольно сложны
+       и включают различные способы взлома и обходные пути для обработки
+       поврежденных сертификатов и программного обеспечения.
+</p>
+<p>Тот же код используется при проверке недоверенных сертификатов в цепочках,
+       поэтому этот раздел полезен, если цепочка отклоняется кодом проверки.
+</p>
+<p>Флаг CA расширения basicConstraints используется для определения, может ли
+       сертификат использоваться в качестве CA. Если флаг CA имеет значение true,
+       то это CA, если флаг CA имеет значение false, то это не CA. Все CAs должны
+       иметь флаг CA, установленный в true.
+</p>
+<p>Если расширение basicConstraints отсутствует, то сертификат считается
+       &quot;possible CA&quot;, другие расширения проверяются в соответствии с
+       предполагаемым использованием сертификата. В этом случае выдается
+       предупреждение, потому что сертификат на самом деле не должен
+       рассматриваться как CA: однако он может быть CA для работы с неработающим
+       программным обеспечением.
+</p>
+<p>Если сертификат является сертификатом V1 (и, следовательно, не имеет
+       расширений) и самоподписан, предполагается, что он также является CA, но
+       снова выдается предупреждение: это позволяет обойти проблему с корнями
+       Verisign, которые являются самозаверяющими сертификатами V1 ,
+</p>
+<p>Если расширение keyUsage присутствует, тогда применяются дополнительные
+       ограничения на использование сертификата. Сертификат CA должен иметь
+       установленный бит keyCertSign, если присутствует расширение keyUsage.
+</p>
+<p>Расширение использования расширенного ключа накладывает дополнительные
+       ограничения на использование сертификата. Если это расширение присутствует
+       (критическое или нет), ключ может использоваться только для указанных целей.
+</p>
+<p>Полное описание каждого теста приведено ниже. Комментарии относительно базовых
+       ограничений и сертификатов keyUsage и V1, приведенные выше, относятся ко всем
+       сертификатам CA.
+</p><dl compact="compact">
+<dt>SSL Client</dt>
+<dd><p>Расширение расширенного использования ключа должно отсутствовать или
+           включать &quot;web client authentication&quot; OID. keyUsage должен отсутствовать
+           или должен иметь установленный бит digitalSignature. Тип сертификата
+           Netscape должен отсутствовать или в нем должен быть установлен бит
+           клиента SSL.
+</p>
+</dd>
+<dt>SSL Client CA</dt>
+<dd><p>Расширение расширенного использования ключа должно отсутствовать или
+           включать &quot;web client authentication&quot; OID. Тип сертификата Netscape должен
+           отсутствовать или должен иметь установленный бит SSL CA: это используется
+           в качестве обходного пути, если расширение basicConstraints отсутствует.
+</p>
+</dd>
+<dt>SSL Server</dt>
+<dd><p>Расширение расширенного использования ключа должно отсутствовать или
+           включать &quot;web server authentication&quot; и / или один из SGC OIDs. keyUsage
+           должен отсутствовать или должен иметь digitalSignature, установленный
+           keyEncipherment или оба установленных бита. Тип сертификата Netscape
+           должен отсутствовать или иметь установленный бит сервера SSL.
+</p>
+</dd>
+<dt>SSL Server CA</dt>
+<dd><p>Расширение расширенного использования ключа должно отсутствовать или
+           включать &quot;web server authentication&quot; и / или один из SGC OIDs. Тип
+           сертификата Netscape должен отсутствовать или должен быть установлен
+           бит SSL CA: это используется в качестве обходного пути, если расширение
+           basicConstraints отсутствует.
+</p>
+</dd>
+<dt>Netscape SSL Server</dt>
+<dd><p>Чтобы клиенты Netscape SSL могли подключаться к серверу SSL, он должен
+           иметь установленный бит keyEncipherment, если присутствует расширение
+           keyUsage. Это не всегда верно, потому что некоторые комплекты шифров
+           используют ключ для цифровой подписи. В остальном он такой же, как
+           обычный сервер SSL.
+</p>
+</dd>
+<dt>Common S/MIME Client Tests</dt>
+<dd><p>Расширение расширенного использования ключа должно отсутствовать или
+           включать &quot;email protection&quot; OID. Тип сертификата Netscape должен
+           отсутствовать или должен иметь установленный бит S/MIME. Если бит типа
+           S/MIME не установлен в типе сертификата Netscape, тогда бит клиента SSL
+           допускается в качестве альтернативы, но отображается предупреждение: это
+           связано с тем, что некоторые сертификаты Verisign не устанавливают бит
+           S/MIME.
+</p>
+</dd>
+<dt>S/MIME Signing</dt>
+<dd><p>В дополнение к обычным тестам клиента S/MIME необходимо установить бит
+           digitalSignature или бит nonRepudiation, если присутствует расширение keyUsage.
+</p>
+</dd>
+<dt>S/MIME Encryption</dt>
+<dd><p>В дополнение к обычным тестам S/MIME должен быть установлен бит
+           keyEncipherment, если присутствует расширение keyUsage.
+</p>
+</dd>
+<dt>S/MIME CA</dt>
+<dd><p>Расширение расширенного использования ключа должно отсутствовать или
+           включать &quot;email protection&quot; OID. Тип сертификата Netscape должен
+           отсутствовать или должен иметь установленный бит S/MIME CA: это
+           используется как обходной путь, если расширение basicConstraints
+           отсутствует.
+</p>
+</dd>
+<dt>CRL Signing</dt>
+<dd><p>Расширение keyUsage должно отсутствовать или в нем должен быть
+           установлен бит подписи CRL.
+</p>
+</dd>
+<dt>CRL Signing CA</dt>
+<dd><p>Применяются обычные тесты CA. За исключением этого случая должно
+           присутствовать расширение basicConstraints.
+</p></dd>
+</dl>
+</dd>
+<dt>BUGS</dt>
+<dd><p>Расширения в сертификатах не переносятся в запросы сертификатов и наоборот.
+</p>
+<p>Можно создать недействительные сертификаты или запросы, указав неправильный
+       закрытый ключ или в некоторых случаях используя несовместимые параметры: они
+       должны быть проверены.
+</p>
+<p>Должны быть опции для явной установки таких вещей, как даты начала и окончания,
+       а не смещение от текущего времени.
+</p>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>req(1), ca(1), genrsa(1), gendsa(1), verify(1), x509v3_config(5)
+</p>
+</dd>
+<dt>HISTORY</dt>
+<dd><p>Алгоритм хеширования, использовавшийся в параметрах -subject_hash и
+       -issuer_hash до OpenSSL 1.0.0, был основан на устаревшем алгоритме MD5 и
+       кодировании различаемого имени. В OpenSSL 1.0.0 и более поздних версиях он
+       основан на канонической версии DN с использованием SHA1. Это означает, что
+       любые каталоги, использующие старую форму, должны перестраивать свои ссылки,
+       используя c_rehash или аналогичные.
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p><br>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       &lt;https://www.openssl.org/source/license.html&gt;.
+</p><br>
+<p>1.1.1a                            2018-11-20                           X509(1)
+</p></dd>
+</dl>
+<hr>
+<a name="req"></a>
+<div class="header">
+<p>
+Next: <a href="#CONFIG" accesskey="n" rel="next">CONFIG</a>, Previous: <a href="#X509" accesskey="p" rel="prev">X509</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="req-1"></a>
+<h2 class="chapter">2 req</h2>
+<p>REQ(1)                              OpenSSL                             REQ(1)
+</p><dl compact="compact">
+<dt>NAME</dt>
+<dd><p>openssl-req, req - PKCS#10 сертификат запроса и утилита
+       генерации сертификата
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>openssl req [<a href="#req-_002dhelp">-help</a>] [<a href="#req-_002dinform-DER_007cPEM">-inform DER|PEM</a>] [<a href="#req-_002doutform-DER_007cPEM">-outform DER|PEM</a>] [<a href="#req-_002din-filename">-in filename</a>] [<a href="#req-_002dpassin-arg">-passin arg</a>] [<a href="#req-_002dout-filename">-out filename</a>] [<a href="#req-_002dpassout-arg">-passout arg</a>] [<a href="#req-_002dtext">-text</a>] [<a href="#req-_002dpubkey">-pubkey</a>] [<a href="#req-_002dnoout">-noout</a>] [<a href="#req-_002dverify">-verify</a>] [<a href="#req-_002dmodulus">-modulus</a>] [<a href="#req-_002dnew">-new</a>] [<a href="#req-_002drand-file_002e_002e_002e">-rand file...</a>] [<a href="#req-_005b_002dwriterand-file_005d">[-writerand file]</a>] [<a href="#req-_002dnewkey-arg">-newkey arg</a>] [<a href="#req-rsa_003anbits">-newkey rsa:bits</a>] [<a href="#req-_002dnewkey-alg_003afile">-newkey alg:file</a>] [<a href="#req-_002dpkeyopt-opt_003avalue">-pkeyopt opt:value</a>] [<a href="#req-_002dnodes">-nodes</a>] [<a href="#req-_002dkey-filename">-key filename</a>] [<a href="#req-_002dkeyform-PEM_007cDER">-keyform PEM|DER</a>] [<a href="#req-_002dkeyout-filename">-keyout filename</a>] [<a href="#req-_002dkeygen_005fengine-id">-keygen_engine id</a>] [<a href="#req-_002ddigest">-digest</a>] [<a href="#req-_002dconfig-filename">-config filename</a>] [<a href="#req-_002dmultivalue_002drdn">-multivalue-rdn</a>] [<a href="#req-_002dx509">-x509</a>] [<a href="#req-_002ddays-n">-days n</a>] [<a href="#req-_002dset_005fserial-n">-set_serial n</a>] [<a href="#req-_002dnewhdr">-newhdr</a>] [<a href="#req-_002daddext-ext">-addext ext</a>] [<a href="#req-_002dextensions-section">-extensions section</a>] [<a href="#req-_002dreqexts-section">-reqexts section</a>] [<a href="#req-_002dprecert">-precert</a>] [<a href="#req-_002dutf8">-utf8</a>] [<a href="#req-_002dnameopt-option">-nameopt option</a>] [<a href="#req-_002dreqopt">-reqopt</a>] [<a href="#req-_002dsubject">-subject</a>] [<a href="#req-_002dsubj-arg">-subj arg</a>] [<a href="#req-_002dbatch">-batch</a>] [<a href="#req-_002dverbose">-verbose</a>] [<a href="#req-_002dengine-id">-engine id</a>]
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Команда req в первую очередь создает и обрабатывает запросы сертификатов
+       в формате PKCS#10. Кроме того, она может создавать самозаверяющие
+       сертификаты для использования в качестве например корневых CA.
+</p>
+</dd>
+<dt>OPTIONS</dt>
+<dd><dl compact="compact">
+<dt>-help <a name="req-_002dhelp"></a></dt>
+<dd><p>Распечатайте сообщение об использовании.
+</p>
+</dd>
+<dt>-inform DER|PEM <a name="req-_002dinform-DER_007cPEM"></a></dt>
+<dd><p>Это определяет формат ввода. Опция DER использует закодированную
+           форму ASN1 DER, совместимую с PKCS#10. Форма PEM является форматом
+           по умолчанию: она состоит из формата DER base64, закодированного
+           с дополнительными строками верхнего и нижнего колонтитула.
+</p>
+</dd>
+<dt>-outform DER|PEM <a name="req-_002doutform-DER_007cPEM"></a></dt>
+<dd><p>Это определяет формат вывода, параметры имеют то же значение и
+           значение по умолчанию, что и опция -inform.
+</p>
+</dd>
+<dt>-in filename <a name="req-_002din-filename"></a></dt>
+<dd><p>Здесь указывается имя входного файла для чтения запроса или стандартный
+           ввод, если эта опция не указана. Запрос читается только в том случае,
+           если не указаны параметры создания (-new и -newkey).
+</p>
+</dd>
+<dt>-passin arg <a name="req-_002dpassin-arg"></a></dt>
+<dd><p>Источник пароля входного файла. Для получения дополнительной информации
+           о формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl (1).
+</p>
+</dd>
+<dt>-out filename <a name="req-_002dout-filename"></a></dt>
+<dd><p>Это указывает имя выходного файла для записи или стандартный вывод
+           по умолчанию.
+</p>
+</dd>
+<dt>-passout arg <a name="req-_002dpassout-arg"></a></dt>
+<dd><p>Исходный файл с паролем источника. Для получения дополнительной
+           информации о формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl (1).
+</p>
+</dd>
+<dt>-text <a name="req-_002dtext"></a></dt>
+<dd><p>Распечатывает запрос сертификата в текстовом виде.
+</p>
+</dd>
+<dt>-subject <a name="req-_002dsubject"></a></dt>
+<dd><p>Распечатывает тему запроса (или сертификат subject, если указан -x509)
+</p>
+</dd>
+<dt>-pubkey <a name="req-_002dpubkey"></a></dt>
+<dd><p>Выводит открытый ключ.
+</p>
+</dd>
+<dt>-noout <a name="req-_002dnoout"></a></dt>
+<dd><p>Эта опция предотвращает вывод закодированной версии запроса.
+</p>
+</dd>
+<dt>-modulus <a name="req-_002dmodulus"></a></dt>
+<dd><p>Эта опция выводит значение модуля открытого ключа, содержащегося в запросе.
+</p>
+</dd>
+<dt>-verify <a name="req-_002dverify"></a></dt>
+<dd><p>Проверяет подпись на запросе.
+</p>
+</dd>
+<dt>-new <a name="req-_002dnew"></a></dt>
+<dd><p>Эта опция генерирует новый запрос сертификата. Он запросит
+           у пользователя соответствующие значения поля. Фактические
+           запрашиваемые поля и их максимальный и минимальный размеры
+           указываются в файле конфигурации и любых запрошенных расширениях.
+</p>
+<p>Если опция -key не используется, она сгенерирует новый закрытый
+           ключ RSA, используя информацию, указанную в файле конфигурации.
+</p>
+</dd>
+<dt>-rand file... <a name="req-_002drand-file_002e_002e_002e"></a></dt>
+<dd><p>Файл или файлы, содержащие случайные данные, используемые для
+           заполнения генератора случайных чисел. Можно указать несколько
+           файлов, разделенных символом, зависящим от ОС. Разделителем
+           является (;) для MS-Windows, (,) для OpenVMS, и (:) для других.
+</p>
+</dd>
+<dt>[-writerand file] <a name="req-_005b_002dwriterand-file_005d"></a></dt>
+<dd><p>Записывает случайные данные в указанный файл при выходе. Это может
+           быть использовано с последующим флагом -rand.
+</p>
+</dd>
+<dt>-newkey arg <a name="req-_002dnewkey-arg"></a></dt>
+<dd><p>Эта опция создает новый запрос сертификата и новый закрытый ключ.
+           Аргумент принимает одну из нескольких форм. rsa:nbits <a name="req-rsa_003anbits"></a>,
+           где nbits - это количество битов, генерирует ключ RSA размером nbit. Если
+           nbits не указан, т.е. указан -newkey rsa, используется размер ключа
+           по умолчанию, указанный в файле конфигурации.
+</p>
+<p>Все остальные алгоритмы поддерживают форму -newkey alg:file <a name="req-_002dnewkey-alg_003afile"></a>, где
+           файл может быть файлом параметров алгоритма, созданным командой
+           genpkey -genparam или сертификатом X.509 для ключа с
+           соответствующим алгоритмом.
+</p>
+<p>param:file генерирует ключ, используя файл параметров или файл
+           сертификата, алгоритм определяется параметрами. algname:file
+           использует алгоритм algname и файл параметров file:, оба алгоритма
+           должны совпадать, иначе возникает ошибка. algname просто использует
+           алгоритм algname, а параметры, если необходимо, должны быть указаны
+           через параметр -pkeyopt.
+</p>
+<p>dsa:filename генерирует ключ DSA, используя параметры в имени файла
+           filenameфайла. ec: filename генерирует ключ EC (может использоваться
+           как с алгоритмами ECDSA, так и с ECDH), gost2001:filename генерирует
+           ключ GOST R 34.10-2001 (требуется механизм ccgost, настроенный в
+           файле конфигурации). Если указан только gost2001, набор параметров
+           должен быть указан как -pkeyopt paramset:X
+</p>
+</dd>
+<dt>-pkeyopt opt:value <a name="req-_002dpkeyopt-opt_003avalue"></a></dt>
+<dd><p>Установите опцию алгоритма открытого ключа opt в значение. Точный
+           набор поддерживаемых параметров зависит от используемого алгоритма
+           открытого ключа и его реализации. Смотрите KEY GENERATION OPTIONS
+           на странице руководства genpkey для более подробной информации.
+</p>
+</dd>
+<dt>-key filename <a name="req-_002dkey-filename"></a></dt>
+<dd><p>Это указывает файл для чтения закрытого ключа из. Он также принимает
+           закрытые ключи формата PKCS#8 для файлов формата PEM.
+</p>
+</dd>
+<dt>-keyform PEM|DER <a name="req-_002dkeyform-PEM_007cDER"></a></dt>
+<dd><p>Формат файла закрытого ключа, указанный в аргументе -key. PEM является
+           значением по умолчанию.
+</p>
+</dd>
+<dt>-keyout filename <a name="req-_002dkeyout-filename"></a></dt>
+<dd><p>Это дает имя файла для записи недавно созданного закрытого ключа.
+           Если эта опция не указана, то используется имя файла, присутствующее
+           в файле конфигурации.
+</p>
+</dd>
+<dt>-nodes <a name="req-_002dnodes"></a></dt>
+<dd><p>Если указан этот параметр, то при создании закрытого ключа он не
+           будет зашифрован.
+</p>
+</dd>
+<dt>-digest <a name="req-_002ddigest"></a></dt>
+<dd><p>Здесь указывается дайджест сообщения для подписи запроса. Можно
+           использовать любой дайджест, поддерживаемый командой OpenSSL dgst.
+           Это переопределяет алгоритм дайджеста, указанный в файле конфигурации.
+</p>
+<p>Некоторые алгоритмы с открытым ключом могут отменять этот выбор.
+           Например, сигнатуры DSA всегда используют сигнатуры SHA1, GOST R 34.10,
+           всегда используют GOST R 34.11-94 (-md_gost94), Ed25519 и Ed448,
+           никогда не используют дайджест.
+</p>
+</dd>
+<dt>-config filename <a name="req-_002dconfig-filename"></a></dt>
+<dd><p>Это позволяет указать альтернативный файл конфигурации. Optional;
+           для описания значения по умолчанию, см. &quot;COMMAND SUMMARY&quot; в openssl.
+</p>
+</dd>
+<dt>-subj arg <a name="req-_002dsubj-arg"></a></dt>
+<dd><p>Устанавливает имя субъекта для нового запроса или заменяет имя
+           субъекта при обработке запроса. Объект arg должен быть
+           отформатирован как /type0=value0/type1=value1/type2=.....
+           Символы ключевых слов могут быть экранированы / (backslash), и
+           пробел сохраняется. Пустые значения разрешены, но соответствующий
+           тип не будет включен в запрос.
+</p>
+</dd>
+<dt>-multivalue-rdn <a name="req-_002dmultivalue_002drdn"></a></dt>
+<dd><p>Эта опция заставляет аргумент -subj интерпретироваться с полной
+           поддержкой многозначного RDN. Пример:
+</p>
+<p>/DC=org/DC=OpenSSL/DC=users/UID=123456+CN=John Doe
+</p>
+<p>Если -multi-rdn не используется, тогда значением UID является
+           123456+CN=John Doe.
+</p>
+</dd>
+<dt>-x509 <a name="req-_002dx509"></a></dt>
+<dd><p>Эта опция выводит самозаверяющий сертификат вместо запроса
+           сертификата. Обычно это используется для создания тестового
+           сертификата или самозаверяющего корневого объекта CA. Добавленные
+           в сертификат расширения (если таковые имеются) указываются в
+           файле конфигурации. Если не указано использование опции
+           set_serial, для серийного номера будет использоваться
+           большое случайное число.
+</p>
+<p>Если существующий запрос указан с помощью опции -in, он
+           преобразуется в самозаверяющий сертификат, в противном случае
+           создается новый запрос.
+</p>
+</dd>
+<dt>-days n <a name="req-_002ddays-n"></a></dt>
+<dd><p>Когда используется опция -x509, это указывает количество дней для
+           сертификации сертификата, в противном случае он игнорируется.
+           n должно быть положительным целым числом. По умолчанию 30 дней.
+</p>
+</dd>
+<dt>-set_serial n <a name="req-_002dset_005fserial-n"></a></dt>
+<dd><p>Серийный номер для использования при выводе самозаверяющего
+           сертификата. Это может быть указано как десятичное значение
+           или шестнадцатеричное значение, если ему предшествует 0x.
+</p>
+</dd>
+<dt>-addext ext <a name="req-_002daddext-ext"></a></dt>
+<dd><p>Добавьте конкретное расширение к сертификату (если присутствует
+           опция -x509) или запрос сертификата. Аргумент должен иметь форму
+           пары key=value, как это будет отображаться в файле конфигурации.
+</p>
+<p>Эта опция может быть дана несколько раз.
+</p>
+</dd>
+<dt>-extensions section <a name="req-_002dextensions-section"></a></dt>
+<dt>-reqexts section <a name="req-_002dreqexts-section"></a></dt>
+<dd>            
+<p>Эти параметры указывают альтернативный объект sections, который
+           включает расширения сертификата (если присутствует параметр -x509)
+           или расширения запроса сертификата. Это позволяет использовать
+           несколько разных разделов в одном и том же файле конфигурации
+           для указания запросов для различных целей.
+</p>
+</dd>
+<dt>-precert <a name="req-_002dprecert"></a></dt>
+<dd><p>Расширение будет добавлено к сертификату, что сделает его
+           &quot;pre-certificate&quot; (смотри RFC6962). Это может быть отправлено
+           в журналы прозрачности сертификата для получения подписанных
+           временных отметок сертификата (SCTs). Эти SCTs могут быть затем
+           встроены в предварительный сертификат как расширение перед удалением
+           и подписанием сертификата.
+</p>
+<p>Это подразумевает флаг -new.
+</p>
+</dd>
+<dt>-utf8 <a name="req-_002dutf8"></a></dt>
+<dd><p>Эта опция заставляет значения полей интерпретироваться как строки
+           UTF8, по умолчанию они интерпретируются как ASCII. Это означает,
+           что значения полей, запрашиваемые из терминала или полученные из
+           файла конфигурации, должны быть действительными строками UTF8.
+</p>
+</dd>
+<dt>-nameopt option <a name="req-_002dnameopt-option"></a></dt>
+<dd><p>Опция, которая определяет, как отображаются имена subject или
+           issuer. Аргумент option может быть одним или несколькими параметрами,
+           разделенными запятыми. В качестве альтернативы переключатель -nameopt
+           может использоваться более одного раза для установки нескольких
+           параметров. Смотрите страницу руководства x509 для деталей.
+</p>
+</dd>
+<dt>-reqopt <a name="req-_002dreqopt"></a></dt>
+<dd><p>Настройте формат вывода, используемый с -text. Аргументом опции
+           может быть одна опция или несколько опций, разделенных запятыми.
+</p>
+<p>Смотрите обсуждение параметра -certopt в команде x509.
+</p>
+</dd>
+<dt>-newhdr <a name="req-_002dnewhdr"></a></dt>
+<dd><p>Добавляет слово NEW в заголовок файла и строки нижнего колонтитула
+           в выводимом запросе. Некоторое программное обеспечение
+           (сервер сертификатов Netscape) и некоторое CAs нуждаются
+           в этом.
+</p>
+</dd>
+<dt>-batch <a name="req-_002dbatch"></a></dt>
+<dd><p>Неинтерактивный режим.
+</p>
+</dd>
+<dt>-verbose <a name="req-_002dverbose"></a></dt>
+<dd><p>Распечатайте дополнительную информацию о выполняемых операциях.
+</p>
+</dd>
+<dt>-engine id <a name="req-_002dengine-id"></a></dt>
+<dd><p>Указание механизма (по его уникальной строке идентификатора)
+           приведет к тому, что req попытается получить функциональную
+           ссылку на указанный механизм, тем самым инициализируя его при
+           необходимости. Движок будет установлен по умолчанию для всех
+           доступных алгоритмов.
+</p>
+</dd>
+<dt>-keygen_engine id <a name="req-_002dkeygen_005fengine-id"></a></dt>
+<dd><p>Определяет механизм (его уникальной строкой идентификатора),
+           который будет использоваться для операций генерации ключа.
+</p></dd>
+</dl>
+</dd>
+<dt>CONFIGURATION FILE FORMAT</dt>
+<dd><p>Параметры конфигурации указаны в разделе req файла конфигурации.
+       Как и во всех файлах конфигурации, если в конкретном разделе не
+       указано значение (то есть req), то выполняется поиск и в
+       исходном безымянном разделе или разделе по умолчанию.
+</p>
+<p>Доступные варианты подробно описаны ниже.
+</p><dl compact="compact">
+<dt>input_password output_password</dt>
+<dd><p>Пароли для входного файла закрытого ключа (если есть) и
+           выходного файла закрытого ключа (если он будет создан).
+           Параметры командной строки passin и passout переопределяют
+           значения файла конфигурации.
+</p>
+</dd>
+<dt>default_bits</dt>
+<dd><p>Определяет размер ключа по умолчанию в битах.
+</p>
+<p>Эта опция используется вместе с опцией -new для генерации нового
+           ключа. Его можно переопределить, указав явный размер ключа в опции
+           -newkey. Наименьший принятый размер ключа составляет 512 бит. Если
+           размер ключа не указан, то используется 2048 бит.
+</p>
+</dd>
+<dt>default_keyfile</dt>
+<dd><p>Это имя файла по умолчанию для записи закрытого ключа. Если не
+           указано, ключ записывается в стандартный вывод. Это может быть
+           отменено с помощью опции -keyout.
+</p>
+</dd>
+<dt>oid_file</dt>
+<dd><p>Это указывает на файл, содержащий дополнительные OBJECT IDENTIFIERS.
+           Каждая строка файла должна состоять из числовой формы идентификатора
+           объекта, за которым следует пробел, затем короткое имя, затем пробел и,
+           наконец, длинное имя.
+</p>
+</dd>
+<dt>oid_section</dt>
+<dd><p>Это указывает на раздел в файле конфигурации, содержащий дополнительные
+           идентификаторы объекта. Каждая строка должна состоять из короткого имени
+           идентификатора объекта, затем = и числовой формы. Короткие и длинные имена
+           одинаковы при использовании этой опции.
+</p>
+</dd>
+<dt>RANDFILE</dt>
+<dd><p>При запуске указанный файл загружается в генератор случайных чисел, а при
+           выходе в него записывается 256 байт. Используется для генерации закрытого ключа.
+</p>
+</dd>
+<dt>encrypt_key</dt>
+<dd><p>Если для этого параметра установлено значение no, то, если сгенерирован закрытый
+           ключ, он не шифруется. Это эквивалентно опции командной строки -nodes. Для
+           совместимости encrypt_rsa_key является эквивалентной опцией.
+</p>
+</dd>
+<dt>default_md</dt>
+<dd><p>Эта опция указывает алгоритм дайджеста для использования. Можно использовать
+           любой дайджест, поддерживаемый командой OpenSSL dgst. Эта опция может быть
+           переопределена в командной строке. Некоторые алгоритмы подписывания
+           (Ed25519 и Ed448) будут игнорировать любой дайджест, который был установлен.
+</p>
+</dd>
+<dt>string_mask</dt>
+<dd><p>Эта опция маскирует использование определенных типов строк в определенных полях.
+           Большинству пользователей не нужно менять эту опцию.
+</p>
+<p>Он может быть установлен на несколько значений по умолчанию, который также
+           является параметром по умолчанию, который использует PrintableStrings, T61Strings
+           и BMPStrings, если используется значение pkix, тогда будет использоваться только
+           PrintableStrings и BMPStrings. Это следует за рекомендацией PKIX в RFC2459. Если
+           используется опция utf8only, то будет использоваться только UTF8Strings: это
+           рекомендация PKIX в RFC2459 после 2003 года. Наконец, опция nombstr просто
+           использует PrintableStrings и T61Strings: у определенного программного обеспечения
+           есть проблемы с BMPStrings и UTF8Strings: в частности, Netscape.
+</p>
+</dd>
+<dt>req_extensions</dt>
+<dd><p>Здесь указывается раздел файла конфигурации, содержащий список расширений для
+           добавления в запрос сертификата. Это может быть отменено переключателем командной
+           строки -reqexts. См. Страницу руководства x509v3_config для получения подробной
+           информации о формате раздела расширения.
+</p>
+</dd>
+<dt>x509_extensions</dt>
+<dd><p>Здесь указывается раздел файла конфигурации, содержащий список расширений для
+           добавления в сертификат, сгенерированный при использовании переключателя -x509.
+           Это может быть отменено переключателем командной строки -extensions.
+</p>
+</dd>
+<dt>prompt</dt>
+<dd><p>Если установлено значение no, это отключает запрос полей сертификата и просто
+           принимает значения из файла конфигурации напрямую. Это также изменяет ожидаемый
+           формат разделов отличительного имени и атрибутов.
+</p>
+</dd>
+<dt>utf8</dt>
+<dd><p>Если установлено значение yes, то значения полей будут интерпретироваться как
+           строки UTF8, по умолчанию они интерпретируются как ASCII. Это означает, что
+           значения полей, запрашиваемые из терминала или полученные из файла конфигурации,
+           должны быть действительными строками UTF8.
+</p>
+</dd>
+<dt>attributes</dt>
+<dd><p>Это определяет раздел, содержащий любые атрибуты запроса: его формат такой же, как
+           у distinguished_name. Обычно они могут содержать типы challengePassword и
+           unstructuredName. В настоящее время они игнорируются утилитами подписывания
+           запросов OpenSSL, но некоторые CA могут захотеть их.
+</p>
+</dd>
+<dt>distinguished_name</dt>
+<dd><p>Здесь указывается раздел, содержащий поля различающихся имен, которые необходимо
+           запрашивать при создании сертификата или запроса сертификата. Формат описан в
+           следующем разделе.
+</p></dd>
+</dl>
+</dd>
+<dt>DISTINGUISHED NAME AND ATTRIBUTE SECTION FORMAT</dt>
+<dd><p>ФОРМАТ ОТЛИЧИТЕЛЬНОГО ИМЕНИ И АТРИБУТА
+</p><div class="display">
+<pre class="display">       Существует два отдельных формата для разделов с выделенными именами и атрибутами.
+       Если опция приглашения установлена ​​в no, то эти разделы просто состоят из имен
+       полей и значений: например,
+
+        CN=My Name
+        OU=My Organization
+        emailAddress=someone@somewhere.org
+
+       Это позволяет внешним программам (GUI based) сгенерировать файл шаблона со всеми
+       именами и значениями полей и просто передать его в req. Пример такого типа файла
+       конфигурации содержится в разделе EXAMPLES.
+
+       В качестве альтернативы, если опция подсказки отсутствует или не установлена ​​в no,
+       тогда файл содержит информацию о подсказке поля. Он состоит из строк вида:
+
+        fieldName=&quot;prompt&quot;
+        fieldName_default=&quot;default field value&quot;
+        fieldName_min= 2
+        fieldName_max= 4
+
+       &quot;fieldName&quot; - это используемое имя поля, например, commonName (или CN). Строка
+       &quot;prompt&quot; используется, чтобы попросить пользователя ввести соответствующие данные.
+       Если пользователь ничего не вводит, то используется значение по умолчанию, если
+       значение по умолчанию отсутствует, тогда поле опускается. Поле все еще может быть
+       опущено, если присутствует значение по умолчанию, если пользователь просто
+       вводит символ &rsquo;.&rsquo;.
+
+       Количество вводимых символов должно быть между fieldName_min и fieldName_max limits:
+       могут быть дополнительные ограничения в зависимости от используемого поля
+       (например, countryName может быть длиной всего два символа и должен
+       помещаться в PrintableString).
+
+       Некоторые поля (такие как organizationName) могут использоваться более одного
+       раза в DN. Это создает проблему, потому что файлы конфигурации не распознают
+       одно и то же имя, встречающееся дважды. Чтобы избежать этой проблемы, если
+       fieldName содержит несколько символов, за которыми следует полная остановка,
+       они будут игнорироваться. Так, например, второй organizationName можно
+       ввести, называя его &quot;1.organizationName&quot;.
+
+       Фактически разрешенными именами полей являются любые короткие или длинные
+       идентификаторы объектов. Они скомпилированы в OpenSSL и включают обычные
+       значения, такие как commonName, countryName, localityName, organizationName,
+       organizationalUnitName, stateOrProvinceName. Кроме того, emailAddress включает
+       в себя,также имя, фамилию, инициалы givenName и dnQualifier.
+
+       Дополнительные идентификаторы объекта могут быть определены с помощью
+       параметров oid_file или oid_section в файле конфигурации. Любые
+       дополнительные поля будут обрабатываться так, как если бы они
+       были объектами DirectoryString.
+</pre></div>
+</dd>
+<dt>EXAMPLES</dt>
+<dd>
+<p>Изучите и подтвердите запрос сертификата:
+</p><blockquote>
+<p>openssl req -in req.pem -text -verify -noout
+</p></blockquote>
+<p>Создайте закрытый ключ, а затем сгенерируйте запрос сертификата из него:
+</p><blockquote>
+<p>openssl genrsa -out key.pem 2048
+        openssl req -new -key key.pem -out req.pem
+</p></blockquote>
+<p>То же самое, но только с использованием req:
+</p><blockquote>
+<p>openssl req -newkey rsa:2048 -keyout key.pem -out req.pem
+</p></blockquote>
+<p>Создайте самоподписанный корневой сертификат:
+</p><blockquote>
+<p>openssl req -x509 -newkey rsa:2048 -keyout key.pem -out req.pem
+</p></blockquote>
+<p>Пример файла, на который указывает опция oid_file:
+</p><blockquote>
+<p>1.2.3.4        shortName       A longer Name
+        1.2.3.6        otherName       Other longer Name
+</p></blockquote>
+<p>Пример раздела, на который указывает oid_section, использующий
+       расширение переменной:
+</p><blockquote>
+<p>testoid1=1.2.3.5
+        testoid2=${testoid1}.6
+</p></blockquote>
+<p>Пример файла конфигурации, запрашивающий значения полей:
+</p><div class="display">
+<pre class="display">        [ req ]
+        default_bits           = 2048
+        default_keyfile        = privkey.pem
+        distinguished_name     = req_distinguished_name
+        attributes             = req_attributes
+        req_extensions         = v3_ca
+
+        dirstring_type = nobmp
+
+        [ req_distinguished_name ]
+        countryName                    = Country Name (2 letter code)
+        countryName_default            = AU
+        countryName_min                = 2
+        countryName_max                = 2
+
+        localityName                   = Locality Name (eg, city)
+
+        organizationalUnitName         = Organizational Unit Name (eg, section)
+
+        commonName                     = Common Name (eg, YOUR name)
+        commonName_max                 = 64
+
+        emailAddress                   = Email Address
+        emailAddress_max               = 40
+
+        [ req_attributes ]
+        challengePassword              = A challenge password
+        challengePassword_min          = 4
+        challengePassword_max          = 20
+
+        [ v3_ca ]
+
+        subjectKeyIdentifier=hash
+        authorityKeyIdentifier=keyid:always,issuer:always
+        basicConstraints = critical, CA:true
+</pre></div>
+<p>Пример конфигурации, содержащий все значения полей:
+</p><div class="display">
+<pre class="display">        RANDFILE               = $ENV::HOME/.rnd
+
+        [ req ]
+        default_bits           = 2048
+        default_keyfile        = keyfile.pem
+        distinguished_name     = req_distinguished_name
+        attributes             = req_attributes
+        prompt                 = no
+        output_password        = mypass
+
+        [ req_distinguished_name ]
+        C                      = GB
+        ST                     = Test State or Province
+        L                      = Test Locality
+        O                      = Organization Name
+        OU                     = Organizational Unit Name
+        CN                     = Common Name
+        emailAddress           = test@email.address
+
+        [ req_attributes ]
+        challengePassword              = Пароль для вызова
+</pre></div>
+<p>Пример предоставления наиболее распространенных атрибутов
+       (subject и extensions) в командной строке:
+</p><div class="display">
+<pre class="display">        openssl req -new -subj &quot;/C=GB/CN=foo&quot; \
+                         -addext &quot;subjectAltName = DNS:foo.co.uk&quot; \
+                         -addext &quot;certificatePolicies = 1.2.3.4&quot; \
+                         -newkey rsa:2048 -keyout key.pem -out req.pem
+</pre></div>
+</dd>
+<dt>NOTES</dt>
+<dd><div class="display">
+<pre class="display">       Строки верхнего и нижнего колонтитула в формате PEM обычно:
+
+        &mdash;&ndash;BEGIN CERTIFICATE REQUEST&mdash;&ndash;
+        &mdash;&ndash;END CERTIFICATE REQUEST&mdash;&ndash;
+
+       Некоторое программное обеспечение (некоторые версии сервера сертификатов
+       Netscape) вместо этого требует:
+
+        &mdash;&ndash;BEGIN NEW CERTIFICATE REQUEST&mdash;&ndash;
+        &mdash;&ndash;END NEW CERTIFICATE REQUEST&mdash;&ndash;
+
+       который производится с опцией -newhdr, но в остальном совместим. Любая
+       форма принимается прозрачно на входе.
+
+       Запросы на сертификат, сгенерированные Xenroll с MSIE, имеют добавленные
+       расширения. Он включает в себя расширение keyUsage, которое определяет
+       тип ключа (только для подписи или общего назначения) и любой дополнительный
+       OIDs, введенный сценарием в расширение extendedKeyUsage.
+</pre></div>
+</dd>
+<dt>DIAGNOSTICS</dt>
+<dd>
+<p>Следующие сообщения часто спрашивают о:
+</p><blockquote>
+<p>Using configuration from /some/path/openssl.cnf
+               Unable to load config info<br>
+               (Использование конфигурации из /some/path/openssl.cnf
+               Невозможно загрузить информацию о конфигурации)
+</p></blockquote>
+<p>Это сопровождается некоторое время спустя...
+</p><blockquote>
+<p>unable to find &rsquo;distinguished_name&rsquo; in config
+               problems making Certificate Request<br>
+               (не удается найти &rsquo;distinguished_name&rsquo; проблема d
+               конфигурации, делающих Certificate Request)
+</p></blockquote>
+<p>Первое сообщение об ошибке - ключ: он не может найти файл
+       конфигурации! Некоторым операциям (например, проверка запроса
+       сертификата) не требуется файл конфигурации, поэтому его использование
+       не является обязательным. Однако для создания сертификатов или
+       запросов необходим файл конфигурации. Это можно рассматривать
+       как ошибку.
+</p>
+<p>Еще одно загадочное сообщение это:
+</p><div class="display">
+<pre class="display">               Attributes:
+                   a0:00
+</pre></div>
+<p>это отображается, когда атрибуты отсутствуют, и запрос включает в
+       себя правильную пустую структуру SET OF (кодировка DER которой -
+       0xa0 0x00). Если вы просто видите:
+</p><div class="display">
+<pre class="display">               Attributes:
+</pre></div>
+<p>тогда SET OF отсутствует и кодировка технически недопустима (но это
+       допустимо). См. Описание параметра командной строки -asn1-kludge
+       для получения дополнительной информации..
+</p>
+</dd>
+<dt>BUGS</dt>
+<dd>
+<p>OpenSSL не работает с T61Strings (он же TeletexStrings): он эффективно
+       обрабатывает их, поскольку ISO-8859-1 (Latin 1), Netscape и MSIE ведут
+       себя одинаково. Это может вызвать проблемы, если вам нужны символы,
+       которых нет в PrintableStrings, и вы не хотите или не можете
+       использовать BMPStrings.
+</p>
+<p>Как следствие обработки T61String, единственный правильный способ
+       представления акцентированных символов в OpenSSL - это использование
+       BMPString: к сожалению, в настоящее время Netscape подавляет их. Если
+       вам нужно использовать акцентированные символы с Netscape и MSIE, вам
+       необходимо использовать недействительную форму T61String.
+</p>
+<p>Текущие побуждения не очень дружелюбны. Это не позволяет вам подтвердить
+       то, что вы только что ввели. Другие вещи, такие как расширения в запросах
+       сертификатов, статически определены в файле конфигурации. Некоторые из них:
+       например, адрес электронной почты в subjectAltName должен быть введен
+       пользователем.
+</p>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>x509(1), ca(1), genrsa(1), gendsa(1), config(5), x509v3_config(5)
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                            2018-11-20                            REQ(1)
+</p><hr>
+<a name="CONFIG"></a>
+<div class="header">
+<p>
+Previous: <a href="#req" accesskey="p" rel="prev">req</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="CONFIG-1"></a>
+<h2 class="chapter">3 CONFIG</h2>
+<p>CONFIG(5)                           OpenSSL                          CONFIG(5)
+</p><dl compact="compact">
+<dt>NAME</dt>
+<dd><p>config - OpenSSL CONF файлы конфигурации библиотеки
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Библиотека OpenSSL CONF может использоваться для чтения файлов
+       конфигурации. Он используется для главного файла конфигурации
+       OpenSSL openssl.cnf и в некоторых других местах, таких как
+       файлы SPKAC и файлы расширений сертификатов для утилиты x509.
+       Приложения OpenSSL также могут использовать библиотеку CONF для
+       своих собственных целей.
+</p>
+<p>Файл конфигурации разделен на несколько разделов. Каждый раздел
+       начинается со строки [ section_name ] и заканчивается, когда
+       начинается новый раздел или достигается конец файла. Название
+       раздела может состоять из буквенно-цифровых символов и символов
+       подчеркивания.
+</p>
+<p>Первый раздел файла конфигурации является специальным и называется
+       разделом по умолчанию. Этот раздел обычно безымянный и охватывает
+       от начала файла до первого именованного раздела. Когда имя ищется,
+       оно сначала ищется в именованном разделе (если есть), а затем в
+       разделе по умолчанию.
+</p>
+<p>Среда отображается на раздел с именем ENV.
+</p>
+<p>Комментарии могут быть включены, с предшествующим им символом #
+</p>
+<p>Другие файлы могут быть включены с использованием директивы .include,
+       за которой следует путь. Если путь указывает на каталог, все файлы
+       с именами, заканчивающимися на .cnf или .conf, включаются из каталога.
+       Рекурсивное включение каталогов из файлов в такой каталог не
+       поддерживается. Это означает, что файлы во включенном каталоге
+       также могут содержать директивы .include, но там поддерживается
+       только включение обычных файлов. Включение каталогов не поддерживается
+       в системах без поддержки POSIX IO.
+</p>
+<p>Настоятельно рекомендуется использовать абсолютные пути с директивой
+       .include. Относительные пути оцениваются на основе текущего рабочего
+       каталога приложения, поэтому, если файл конфигурации, содержащий
+       директиву .include, не является специфическим для приложения,
+       включение не будет работать должным образом.
+</p>
+<p>Каждый раздел в файле конфигурации состоит из нескольких пар имени
+       и значения в форме name=value.
+</p>
+<p>Строка имени может содержать любые буквенно-цифровые символы, а
+       также несколько знаков пунктуации, таких как . , ; и _.
+</p>
+<p>Строка значения состоит из строки, следующей за символом = до конца
+       строки с удаленными пробелами в начале и в конце.
+</p>
+<p>Строка значения подвергается расширению переменной. Это можно сделать,
+       включив форму $var или ${var}: это заменит значение именованной
+       переменной в текущем разделе. Также возможно заменить значение из
+       другого раздела, используя синтаксис $section::name или ${section::name}.
+       С помощью формы $ ENV :: name можно заменить переменные окружения. Также
+       возможно присвоить значения переменным среды, используя имя ENV::name,
+       это будет работать, если программа ищет переменные среды, используя
+       библиотеку CONF вместо прямого вызова getenv(). Строка значения не
+       должна превышать длину 64k после раскрытия переменной. В противном
+       случае произойдет ошибка.
+</p>
+<p>Можно экранировать определенные символы, используя кавычки любого типа
+       или символ \. Сделав последний символ строки \, строку значений можно
+       распределить по нескольким строкам. Кроме того, последовательности \n,
+       \r, \b или \t распознаются.
+</p>
+<p>Все описанные выше правила раскрытия и экранирования, которые
+       применяются к значению, также применяются к пути директивы .include.
+</p>
+</dd>
+<dt>OPENSSL LIBRARY CONFIGURATION</dt>
+<dd><p>Приложения могут автоматически настраивать определенные аспекты
+       OpenSSL, используя главный файл конфигурации OpenSSL или,
+       опционально, альтернативный файл конфигурации. Утилита openssl
+       включает эту функциональность: любая подкоманда использует главный
+       файл конфигурации OpenSSL, если в подкоманде не используется опция
+       для использования альтернативного файла конфигурации.
+</p>
+<p>Чтобы включить настройку библиотеки, раздел по умолчанию должен
+       содержать соответствующую строку, которая указывает на основной
+       раздел конфигурации. Имя по умолчанию - openssl_conf, которое
+       используется утилитой openssl. Другие приложения могут использовать
+       альтернативное имя, например, myapplication_conf. Все строки
+       конфигурации библиотеки отображаются в разделе по умолчанию в
+       начале файла конфигурации.
+</p>
+<p>Раздел конфигурации должен состоять из набора пар имя-значение,
+       которые содержат конкретную информацию о конфигурации модуля. Имя
+       представляет собой имя модуля конфигурации. Значение значения
+       зависит от модуля: оно может, например, представлять дополнительный
+       раздел конфигурации, содержащий информацию, специфичную для модуля
+       конфигурации. Как здесь:
+</p><div class="display">
+<pre class="display">        # Это должно быть в разделе по умолчанию
+        openssl_conf = openssl_init
+
+        [openssl_init]
+
+        oid_section = new_oids
+        engines = engine_section
+
+        [new_oids]
+
+        ... new oids here ...
+
+        [engine_section]
+
+        ... engine stuff here ...
+</pre></div>
+<p>Особенности каждого модуля конфигурации описаны ниже.
+</p>
+</dd>
+<dt>ASN1 Object Configuration Module</dt>
+<dd><p>Этот модуль имеет имя oid_section. Значение этой переменной
+       указывает на раздел, содержащий пары значений имени OID: имя -
+       это короткое и полное имя OID, значение - числовая форма объекта OID.
+       Хотя некоторые из подкоманд утилиты openssl уже имеют свои собственные
+       функции раздела ASN1 OBJECT, не все это делают. Используя модуль
+       конфигурации ASN1 OBJECT, все подкоманды утилиты openssl могут
+       видеть новые объекты, а также любые совместимые приложения. Например:
+</p><div class="display">
+<pre class="display">        [new_oids]
+
+        some_new_oid = 1.2.3.4
+        some_other_oid = 1.2.3.5
+</pre></div>
+<p>Также возможно установить значение на полное имя, за которым
+       следуют запятая и числовая форма OID. Например:
+</p><div class="display">
+<pre class="display">        shortName = some object long name, 1.2.3.4
+</pre></div>
+</dd>
+<dt>Engine Configuration Module</dt>
+<dd><p>Этот модуль конфигурации ENGINE имеет название engine. Значение
+       этой переменной указывает на раздел, содержащий дополнительную
+       информацию о конфигурации ENGINE.
+</p>
+<p>Раздел, на который указывают движки, представляет собой таблицу
+       имен движков (смотри engine_id below) и других разделов, содержащих
+       информацию о конфигурации, специфичную для каждого ENGINE.
+</p>
+<p>Каждый специфический для ENGINE раздел используется для установки
+       алгоритмов по умолчанию, загрузки динамического кода, выполнения
+       инициализации и отправки ctrls. Фактическая операция зависит от
+       имени команды, которое является именем пары имя-значение. В настоящее
+       время поддерживаемые команды перечислены ниже.
+</p><div class="display">
+<pre class="display">       Для примера:
+
+        [engine_section]
+
+        # Настройте ENGINE с именем &quot;foo&quot;
+        foo = foo_section
+        # Настройте ENGINE с именем &quot;bar&quot;
+        bar = bar_section
+
+        [foo_section]
+        ... foo ENGINE конкретные команды ...
+
+        [bar_section]
+        ... &quot;bar&quot; ENGINE конкретные команды ...
+</pre></div>
+<p>Команда engine_id используется для присвоения имени ENGINE.
+       Если используется эта команда должна быть первой. Например:
+</p><div class="display">
+<pre class="display">        [engine_section]
+        # Это обычно обрабатывает объект ENGINE с именем &quot;foo&quot;
+        foo = foo_section
+
+        [foo_section]
+        # Переопределите имя по умолчанию и используйте вместо него &quot;myfoo&quot;.
+        engine_id = myfoo
+</pre></div>
+<p>Команда dynamic_path загружает и добавляет ENGINE из заданного пути.
+       Это эквивалентно отправке ctrls SO_PATH с аргументом пути, за которым
+       следует LIST_ADD со значением 2 и LOAD, в динамический ENGINE. Если
+       это не обязательное поведение, альтернативные ctrls могут быть отправлены
+       непосредственно в динамический ENGINE с помощью команд ctrl.
+</p>
+<p>Команда init определяет, инициализировать ли ENGINE. Если значение
+       равно 0, ENGINE не будет инициализирован, если 1 будет сделана попытка
+       немедленно инициализировать ENGINE. Если команда init отсутствует,
+       тогда будет предпринята попытка инициализировать ENGINE после того,
+       как все команды в ее разделе были обработаны.
+</p>
+<p>Команда default_algorithms устанавливает алгоритмы по умолчанию,
+       которые ENGINE будет предоставлять, используя функции
+       ENGINE_set_default_string().
+</p>
+<p>Если имя не соответствует ни одному из приведенных выше имен команд,
+       предполагается, что это команда ctrl, которая отправляется в ENGINE.
+       Значением команды является аргумент команды ctrl. Если значением
+       является строка EMPTY, то никакое значение не отправляется команде.
+</p><div class="display">
+<pre class="display">       Для примера:
+
+        [engine_section]
+
+        # Настройте ENGINE с именем &quot;foo&quot;
+        foo = foo_section
+
+        [foo_section]
+        # Загрузить движек из DSO
+        dynamic_path = /some/path/fooengine.so
+        # Специфичный для foo объект ctrl.
+        some_ctrl = some_value
+        # Еще один ctrl, который не имеет значения.
+        other_ctrl = EMPTY
+        # Поставьте все алгоритмы по умолчанию
+        default_algorithms = ALL
+</pre></div>
+</dd>
+<dt>EVP Configuration Module</dt>
+<dd><p>Этот модуль имеет имя alg_section, которое указывает на раздел,
+       содержащий команды алгоритма.
+</p>
+<p>В настоящее время поддерживается только команда алгоритма fips_mode,
+       значением которой может быть только отключенная логическая строка.
+       Если fips_mode включен, возникает ошибка, так как эта версия
+       библиотеки не поддерживает FIPS.
+</p>
+</dd>
+<dt>SSL Configuration Module</dt>
+<dd><p>Этот модуль имеет имя ssl_conf, которое указывает на раздел, содержащий
+       конфигурации SSL.
+</p>
+<p>Каждая строка в разделе конфигурации SSL содержит название конфигурации
+       и раздел, содержащий ее.
+</p>
+<p>Каждый раздел конфигурации состоит из пар значений команд для SSL_CONF.
+       Каждая пара будет передана в структуру SSL_CTX или SSL, если она вызовет
+       SSL_CTX_config() или SSL_config() с соответствующим именем конфигурации.
+</p>
+<p>Примечание: любые символы перед начальной точкой в ​​разделе конфигурации
+       игнорируются, поэтому одну и ту же команду можно использовать
+       несколько раз.
+</p><div class="display">
+<pre class="display">       Для примера:
+
+        ssl_conf = ssl_sect
+
+        [ssl_sect]
+
+        server = server_section
+
+        [server_section]
+
+        RSA.Certificate = server-rsa.pem
+        ECDSA.Certificate = server-ecdsa.pem
+        Ciphers = ALL:!RC4
+</pre></div>
+<p>Конфигурация системы по умолчанию с именем system_default,
+       если она есть, будет применена при любом создании
+       структуры SSL_CTX.
+</p><div class="display">
+<pre class="display">       Пример конфигурации с системой по умолчанию:
+
+        ssl_conf = ssl_sect
+
+        [ssl_sect]
+
+        system_default = system_default_sect
+
+        [system_default_sect]
+
+        MinProtocol = TLSv1.2
+</pre></div>
+</dd>
+<dt>NOTES</dt>
+<dd><p>Если файл конфигурации пытается раскрыть переменную, которая не
+       существует, то отмечается ошибка, и файл не загружается. Это может
+       произойти, если попытаться расширить несуществующую переменную среды.
+       Например, в предыдущей версии OpenSSL в основном файле конфигурации
+       OpenSSL по умолчанию использовалось значение HOME, которое не может быть
+       определено в системах, отличных от Unix, и может вызвать ошибку.
+</p>
+<p>Эту проблему можно обойти, включив раздел по умолчанию, чтобы указать
+       значение по умолчанию: тогда, если поиск среды не удался, вместо него
+       будет использоваться значение по умолчанию. Чтобы это работало правильно,
+       значение по умолчанию должно быть определено в файле конфигурации раньше,
+       чем в расширении. Смотрите раздел EXAMPLES для примера того, как это сделать.
+</p>
+<p>Если в том же разделе существует одна и та же переменная, все значения,
+       кроме последнего, будут игнорироваться. В определенных обстоятельствах,
+       таких как DN, одно и то же поле может встречаться несколько раз. Обычно
+       это обходится путем игнорирования любых символов перед начальной &rsquo;.&rsquo; как здесь:
+</p><div class="display">
+<pre class="display">        1.OU=&quot;My first OU&quot;
+        2.OU=&quot;My Second OU&quot;
+</pre></div>
+</dd>
+<dt>EXAMPLES</dt>
+<dd><p>Вот пример файла конфигурации с использованием некоторых из функций,
+       упомянутых выше.
+</p><div class="display">
+<pre class="display">        # Это раздел по умолчанию.
+
+        HOME=/temp
+        RANDFILE= ${ENV::HOME}/.rnd
+        configdir=$ENV::HOME/config
+
+        [ section_one ]
+
+        # Мы сейчас в первом разделе.
+
+        # Кавычки допускают пробелы в начале и в конце
+        any = &quot; any variable name &quot;
+
+        other = A string that can \
+        cover several lines \
+        by including \\ characters
+
+        message = Hello World\n
+
+        [ section_two ]
+
+        greeting = $section_one::message
+</pre></div>
+<p>В следующем примере показано, как безопасно развернуть переменные среды.
+</p>
+<p>Предположим, вы хотите, чтобы переменная с именем tmpfile ссылалась
+       на временное имя файла. Каталог, в который он помещен, может определяться
+       переменными окружения TEMP или TMP, но они могут вообще не иметь никакого
+       значения. Если вы просто включите имена переменных среды, а переменная не
+       существует, это приведет к ошибке при попытке загрузить файл конфигурации.
+       Используя раздел по умолчанию, можно найти оба значения, причем TEMP имеет
+       приоритет, а \tmp можно использовать, если не определено ни одно из них:
+</p><div class="display">
+<pre class="display">        TMP=/tmp
+        # Вышеуказанное значение используется, если TMP не в среде
+        TEMP=$ENV::TMP
+        # Вышеуказанное значение используется, если TEMP не в среде
+        tmpfile=${ENV::TEMP}/tmp.filename
+</pre></div>
+<p>Простой пример конфигурации библиотеки OpenSSL для входа в режим FIPS:
+</p><div class="display">
+<pre class="display">        # Имя приложения по умолчанию: должно соответствовать параметру
+        # &quot;appname&quot; (если есть), предоставленному в CONF_modules_load_file
+        # и др.
+        openssl_conf = openssl_conf_section
+
+        [openssl_conf_section]
+        # Список модулей конфигурации
+        alg_section = evp_sect
+
+        [evp_sect]
+        # Установите &quot;yes&quot; для входа в режим FIPS, если поддерживается
+        fips_mode = yes
+</pre></div>
+<p>Примечание: в приведенном выше примере вы получите ошибку в
+       версиях OpenSSL, не поддерживающих FIPS.
+</p>
+<p>Более сложная конфигурация библиотеки OpenSSL. Добавьте OID и не
+       переходите в режим FIPS:
+</p><div class="display">
+<pre class="display">        # Имя приложения по умолчанию: должно соответствовать параметру
+        # &quot;appname&quot; (если есть), предоставленному CONF_modules_load_file
+        # и др.
+        openssl_conf = openssl_conf_section
+
+        [openssl_conf_section]
+        # Список модулей конфигурации
+        alg_section = evp_sect
+        oid_section = new_oids
+
+        [evp_sect]
+        # Это не будет иметь никакого эффекта, так как режим FIPS по умолчанию
+        # отключен. Установите &quot;yes&quot; для входа в режим FIPS, если поддерживается
+        fips_mode = no
+
+        [new_oids]
+        # Новый OID, просто короткое имя
+        newoid1 = 1.2.3.4.1
+        # Новое имя и полное имя OID
+        newoid2 = New OID 2 long name, 1.2.3.4.2
+</pre></div>
+<p>Приведенные выше примеры можно использовать с любым приложением,
+       поддерживающим конфигурацию библиотеки, если &quot;openssl_conf&quot; изменен
+       для соответствия соответствующему &quot;appname&quot;.
+</p><div class="display">
+<pre class="display">       Например, если второй пример файла выше сохранен в &quot;example.cnf&quot;, то
+       командная строка:
+
+        OPENSSL_CONF=example.cnf openssl asn1parse -genstr OID:1.2.3.4.1
+
+       будет выводить:
+
+           0:d=0  hl=2 l=   4 prim: OBJECT            :newoid1
+
+       показывая, что объект OID &quot;newoid1&quot; был добавлен как объект &quot;1.2.3.4.1&quot;.
+</pre></div>
+</dd>
+<dt>ENVIRONMENT</dt>
+<dd><dl compact="compact">
+<dt>OPENSSL_CONF</dt>
+<dd><p>Путь к файлу конфигурации. Игнорируется в программах set-user-ID и
+           set-group-ID.
+</p>
+</dd>
+<dt>OPENSSL_ENGINES</dt>
+<dd><p>Путь к каталогу движка. Игнорируется в программах set-user-ID и
+           set-group-ID.
+</p></dd>
+</dl>
+</dd>
+<dt>BUGS</dt>
+<dd><p>В настоящее время нет способа включить символы с использованием восьмеричной
+       формы \nnn. Все строки имеют нулевое окончание, поэтому нулевые значения не
+       могут составлять часть значения.
+</p>
+<p>Экранирование не совсем правильно: если вы хотите использовать
+       последовательности, такие как \n, вы не можете использовать
+       экранирование кавычек в той же строке.
+</p>
+<p>Файлы загружаются за один проход. Это означает, что расширение
+       переменной будет работать только в том случае, если указанные выше
+       переменные определены в файле ранее.
+</p>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>x509(1), req(1), ca(1)
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                            2018-11-20                         CONFIG(5)
+</p><hr>
+
+
+
+</body>
+</html>

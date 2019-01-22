@@ -1,0 +1,21 @@
+(defun zasx ()
+  "Создание метки и указатель на метку"
+  (interactive)
+  (setq odnastroka (buffer-substring-no-properties (region-beginning) (region-end)))
+  (delete-region (region-beginning) (region-end))
+  (setq ssulka (concat "@ref{req " odnastroka ",, " odnastroka "}"))
+  (insert ssulka)
+  (setq yakor (concat "@anchor{req " odnastroka "}"))
+  (kill-new yakor 't)
+  )
+
+(defun azxs ()
+  "Создание указателя и метки"
+  (interactive)
+  (setq odnastroka (buffer-substring-no-properties (region-beginning) (region-end)))
+  (delete-region (region-beginning) (region-end))
+  (setq yakor (concat odnastroka " @anchor{req " odnastroka "}"))
+  (insert yakor)
+  (setq ssulka (concat "@ref{req " odnastroka ",, " odnastroka "}"))
+  (kill-new ssulka 't)
+  )
