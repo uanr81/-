@@ -1,4 +1,4 @@
-@node X509, req, Top, Top
+@node X509, req, CA, Top
 @chapter X509
 
 X509                             OpenSSL                            X509

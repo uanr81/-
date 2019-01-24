@@ -2,19 +2,25 @@
 @setfilename ../../info/OpenSSL.info
 @documentencoding UTF-8
 @settitle Руководство OpenSSL 1.1.1a  20 Nov 2018
-@node Top, X509, (dir), (dir)
+@node Top, OpenSSL, (dir), (dir)
 @top OpenSSL верхний узел
 @ifinfo
 @heading OpenSSL верхний узел
 @end ifinfo
 
 @menu
+* OpenSSL::                     
+* CONFIG::                      
+* Пример конфигурации OpenSSL::  
+* CA::                          
 * X509::                        
 * req::                         
-* CONFIG::                      
 @end menu
 
-@include x509man.texi
-@include reqman.texi 
+@include manOpenSSL.texi
 @include manConfig.texi
+@include FileOpensslConf.texi
+@include manCA.texi
+@include x509man.texi
+@include reqman.texi
 @bye

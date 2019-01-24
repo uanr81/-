@@ -1,0 +1,359 @@
+@node Пример конфигурации OpenSSL, CA, CONFIG, Top
+@chapter Пример конфигурации OpenSSL
+@display
+#
+# Пример конфигурации OpenSSL.
+# Это в основном используется для генерации запросов на сертификат.
+#
+
+# Обратите внимание, что вы можете включить другие файлы из основного
+# файла конфигурации, используя директиву .include.
+#.include filename
+
+# Это определение останавливает засорение следующих строк, если HOME
+не определен.
+HOME			= .
+
+# Дополнительная информация об объекте:
+#oid_file		= $ENV::HOME/.oid
+oid_section		= new_oids
+
+# Чтобы использовать этот файл конфигурации с опцией "-extfile" утилиты
+# "openssl x509", назовите здесь раздел, содержащий используемые расширения
+# X.509v3:
+# extensions =
+# (В качестве альтернативы, используйте файл конфигурации, который имеет только
+# расширения X.509v3 в своей основной [= default] секции.)
+
+[ new_oids ]
+
+# Здесь мы можем добавить новые OID для использования 'ca', 'req' и 'ts'.
+# Добавьте простой OID, как это:
+# testoid1=1.2.3.4
+# Или используйте подстановку файла конфигурации следующим образом:
+# testoid2=$@{testoid1@}.5.6
+
+# Политики, используемые в примерах TSA.
+tsa_policy1 = 1.2.3.4.1
+tsa_policy2 = 1.2.3.4.5.6
+tsa_policy3 = 1.2.3.4.5.7
+
+####################################################################
+[ ca ]
+default_ca	= CA_default		# Раздел по умолчанию ca
+
+####################################################################
+[ CA_default ]
+
+dir		= ./demoCA		# Где все хранится
+certs		= $dir/certs		# Где хранятся выданные сертификаты
+crl_dir		= $dir/crl		# Где хранятся выданные crl
+database	= $dir/index.txt	# индексный файл базы данных.
+#unique_subject	= no			# Установите значение 'no', чтобы разрешить создание
+                                        # нескольких сертификатов с одной и той же темой.
+new_certs_dir	= $dir/newcerts		# место по умолчанию для новых сертификатов.
+
+certificate	= $dir/cacert.pem 	# Сертификат CA
+serial		= $dir/serial 		# Текущий серийный номер
+crlnumber	= $dir/crlnumber	# текущее число crl должно быть закомментировано,
+                                        # чтобы оставить V1 CRL
+crl		= $dir/crl.pem 		# Текущий CRL
+private_key	= $dir/private/cakey.pem# Закрытый ключ
+
+x509_extensions	= usr_cert		# Расширения для добавления в сертификат
+
+# Закомментируйте следующие две строки для формата "traditional"
+# (и сильно испорченного).
+name_opt 	= ca_default		# Параметры имени субъекта
+cert_opt 	= ca_default		# Параметры поля сертификата
+
+# Возможность копирования расширений: используйте с осторожностью.
+# copy_extensions = copy
+
+# Расширения для добавления в CRL. Примечание: коммуникатор Netscape подавляет V2 CRLs,
+# так что по умолчанию это закомментировано, чтобы оставить V1 CRL.
+# crlnumber также должен быть закомментирован, чтобы оставить объект V1 CRL.
+# crl_extensions	= crl_ext
+
+default_days	= 365			# время сертификации
+default_crl_days= 30			# время до следующего CRL
+default_md	= default		# использовать открытый ключ по умолчанию MD
+preserve	= no			# сохранить порядок DN
+
+# Несколько отличающийся способ указать, насколько похожим должен быть запрос.
+# Для типа CA перечисленные атрибуты должны быть одинаковыми, а
+# необязательные и предоставленные поля - это просто :-).
+policy		= policy_match
+
+# For the CA policy
+[ policy_match ]
+countryName		= match
+stateOrProvinceName	= match
+organizationName	= match
+organizationalUnitName	= optional
+commonName		= supplied
+emailAddress		= optional
+
+# Для политики 'anything' На данный момент
+# вы должны перечислить все допустимые
+# типы 'object'.
+[ policy_anything ]
+countryName		= optional
+stateOrProvinceName	= optional
+localityName		= optional
+organizationName	= optional
+organizationalUnitName	= optional
+commonName		= supplied
+emailAddress		= optional
+
+####################################################################
+[ req ]
+default_bits		= 2048
+default_keyfile 	= privkey.pem
+distinguished_name	= req_distinguished_name
+attributes		= req_attributes
+x509_extensions	= v3_ca	# Расширения, чтобы добавить к самоподписанному сертификату
+
+# Пароли для закрытых ключей, если они отсутствуют, будут запрошены для
+# input_password = secret
+# output_password = secret
+
+# Это устанавливает маску для разрешенных типов строк. Есть несколько вариантов. 
+# default: PrintableString, T61String, BMPString.
+# pkix	 : PrintableString, BMPString (PKIX рекомендация перед 2004)
+# utf8only: only UTF8Strings (PKIX рекомендация после 2004).
+# nombstr : PrintableString, T61String (no BMPStrings или UTF8Strings).
+# MASK:XXXX буквальное значение маски.
+# WARNING: древние версии Netscape вылетали на BMPStrings или UTF8Strings.
+string_mask = utf8only
+
+# req_extensions = v3_req # Расширения для добавления в запрос сертификата
+
+[ req_distinguished_name ]
+countryName			= Название страны (двухбуквенный код)
+countryName_default		= AU
+countryName_min			= 2
+countryName_max			= 2
+
+stateOrProvinceName		= Название штата или провинции (полное название)
+stateOrProvinceName_default	= Некоторые-State
+
+localityName			= Название населенного пункта (например, город)
+
+0.organizationName		= Название организации (например, компания)
+0.organizationName_default	= Интернет Widgits Pty Ltd
+
+# мы можем сделать это, но это обычно не нужно :-)
+#1.organizationName		= Второе название организации (например, компания)
+#1.organizationName_default	= World Wide Web Pty Ltd
+
+organizationalUnitName		= Название организационной единицы (например, подразделение)
+#organizationalUnitName_default	=
+
+commonName			= Общее имя (например, полное доменное имя сервера или ваше имя)
+commonName_max			= 64
+
+emailAddress			= Email Address
+emailAddress_max		= 64
+
+# SET-ex3			= SET добавочный номер 3
+
+[ req_attributes ]
+challengePassword		= Пароль для вызова
+challengePassword_min		= 4
+challengePassword_max		= 20
+
+unstructuredName		= Необязательное название компании
+
+[ usr_cert ]
+
+# Эти расширения добавляются, когда 'ca' подписывает запрос.
+
+# Это идет вразрез с рекомендациями PKIX, но некоторые CAs делают
+# это, а некоторые программы требуют этого, чтобы избежать
+# интерпретации сертификата конечного пользователя как CA.
+
+basicConstraints=CA:FALSE
+
+# Вот несколько примеров использования nsCertType. Если он опущен,
+# сертификат может быть использован для подписи объекта *except*.
+
+# Это OK для сервера SSL.
+# nsCertType			= server
+
+# Для сертификата подписи объекта это будет использоваться.
+# nsCertType = objsign
+
+# Для обычного использования клиента это типично
+# nsCertType = client, email
+
+# и для всего, включая подписание объекта:
+# nsCertType = client, email, objsign
+
+# Это типично в keyUsage для сертификата клиента.
+# keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+# Это будет отображаться в списке комментариев Netscape.
+nsComment			= "OpenSSL Generated Certificate"
+
+# Рекомендации PKIX безвредны, если включены во все сертификаты.
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
+
+# Этот материал для subjectAltName или issuerAltname.
+# Импортируйте адрес электронной почты.
+# subjectAltName=email:copy
+# Альтернатива для создания сертификатов, которые не
+# являются устаревшими согласно PKIX.
+# subjectAltName=email:move
+
+# Копировать детали темы
+# issuerAltName=issuer:copy
+
+#nsCaRevocationUrl		= http://www.domain.dom/ca-crl.pem
+#nsBaseUrl
+#nsRevocationUrl
+#nsRenewalUrl
+#nsCaPolicyUrl
+#nsSslServerName
+
+# Это требуется для сертификатов TSA.
+# extendedKeyUsage = critical,timeStamping
+
+[ v3_req ]
+
+# Расширения для добавления в запрос сертификата
+
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+[ v3_ca ]
+
+
+# Расширения для типичного CA
+
+
+# PKIX рекомендация.
+
+subjectKeyIdentifier=hash
+
+authorityKeyIdentifier=keyid:always,issuer
+
+basicConstraints = critical,CA:true
+
+# Использование ключа: это типично для сертификата CA. Однако,
+# поскольку он не позволит использовать его в качестве тестового
+# самозаверяющего сертификата, его лучше оставить по умолчанию.
+# keyUsage = cRLSign, keyCertSign
+
+# Некоторые могут хотеть этого также
+# nsCertType = sslCA, emailCA
+
+# Включите адрес электронной почты в тему alt name: еще одна
+# рекомендация PKIX
+# subjectAltName=email:copy
+# Копировать данные эмитента
+# issuerAltName=issuer:copy
+
+# шестнадцатеричная кодировка расширения DER:
+# остерегайтесь только экспертов!
+# obj=DER:02:03
+# Где 'obj' является стандартным или добавленным объектом.
+# Вы даже можете переопределить поддерживаемое расширение:
+# basicConstraints= critical, DER:30:03:01:01:FF
+
+[ crl_ext ]
+
+# CRL расширение.
+# Только issuerAltName и authorityKeyIdentifier имеют смысл в CRL.
+
+# issuerAltName=issuer:copy
+authorityKeyIdentifier=keyid:always
+
+[ proxy_cert_ext ]
+# Эти расширения должны быть добавлены при создании прокси-сертификата.
+
+# Это идет вразрез с рекомендациями PKIX, но некоторые CAs делают это,
+# а некоторые программы требуют этого, чтобы избежать интерпретации
+# сертификата конечного пользователя как CA.
+
+basicConstraints=CA:FALSE
+
+# Вот несколько примеров использования nsCertType. Если он опущен,
+# сертификат может быть использован для подписи объекта *except*.
+
+# Это OK для сервера SSL.
+# nsCertType			= server
+
+# Для сертификата подписи объекта это будет использоваться.
+# nsCertType = objsign
+
+# Для обычного использования клиента это типично
+# nsCertType = client, email
+
+# и для всего, включая подпись объекта:
+# nsCertType = client, email, objsign
+
+# Это типично в keyUsage для сертификата клиента.
+# keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+# Это будет отображаться в списке комментариев Netscape.
+nsComment			= "OpenSSL Generated Certificate"
+
+# Рекомендации PKIX безвредны, если включены во все сертификаты.
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
+
+# Этот материал для subjectAltName и issuerAltname.
+# Импортируйте адрес электронной почты.
+# subjectAltName=email:copy
+# Альтернатива для создания сертификатов, которые не являются
+# устаревшими согласно PKIX.
+# subjectAltName=email:move
+
+# Копировать детали субъекта
+# issuerAltName=issuer:copy
+
+#nsCaRevocationUrl		= http://www.domain.dom/ca-crl.pem
+#nsBaseUrl
+#nsRevocationUrl
+#nsRenewalUrl
+#nsCaPolicyUrl
+#nsSslServerName
+
+# Это действительно должно быть на месте, чтобы это был прокси-сертификат.
+proxyCertInfo=critical,language:id-ppl-anyLanguage,pathlen:3,policy:foo
+
+####################################################################
+[ tsa ]
+
+default_tsa = tsa_config1	# раздел TSA по умолчанию
+
+[ tsa_config1 ]
+
+# Они используются только генерацией ответа TSA.
+dir		= ./demoCA		# корневой каталог TSA
+serial		= $dir/tsaserial	# Текущий серийный номер (обязательный)
+crypto_device	= builtin		# движок OpenSSL для подписи
+signer_cert	= $dir/tsacert.pem 	# Сертификат подписи TSA (необязательный)
+certs		= $dir/cacert.pem	# Цепочка сертификатов для включения в ответ
+                                        # (необязательный)
+signer_key	= $dir/private/tsakey.pem # Закрытый ключ TSA (необязательный)
+signer_digest  = sha256			# Подписание дайджеста для использования.
+                                        # (необязательный)
+default_policy	= tsa_policy1		# Политика, если запрос не указал её
+                                        # (необязательный)
+other_policies	= tsa_policy2, tsa_policy3	# приемлемые политики (необязательный)
+digests     = sha1, sha256, sha384, sha512  # Приемлемые дайджесты сообщений (обязательно)
+accuracy	= secs:1, millisecs:500, microsecs:100	# (необязательный)
+clock_precision_digits  = 0	# number of digits after dot. (необязательный)
+ordering		= yes	# Определен ли порядок для меток времени?
+				# (необязательный, по умолчанию: no)
+tsa_name		= yes	# Должно ли имя TSA быть включено в ответ?
+				# (необязательный, по умолчанию: no)
+ess_cert_id_chain	= no	# Должна ли быть включена цепочка идентификаторов
+                                # сертификатов ESS?
+				# (необязательный, по умолчанию: no)
+ess_cert_id_alg		= sha1	# алгоритм для вычисления идентификатора сертификата
+                                # (необязательно, по умолчанию: sha1)
+@end display

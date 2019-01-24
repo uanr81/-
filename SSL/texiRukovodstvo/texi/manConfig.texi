@@ -1,4 +1,4 @@
-@node CONFIG, , req, Top
+@node CONFIG, Пример конфигурации OpenSSL, OpenSSL, Top
 @chapter CONFIG
 CONFIG(5)                           OpenSSL                          CONFIG(5)
 @table @asis

@@ -1,4 +1,4 @@
-@node req, CONFIG, X509, Top
+@node req, , X509, Top
 @chapter req
 REQ(1)                              OpenSSL                             REQ(1)
 @table @asis
