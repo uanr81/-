@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Введение.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Посвящение."
+HREF="c61.html"><LINK
+REL="NEXT"
+TITLE="Предварительные сведения"
+HREF="x96.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c61.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x96.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER2"
+></A
+>Глава 2. Введение.</H1
+><P
+>    Добро пожаловать, уважаемый читатель!
+  </P
+><P
+>    Этот документ расскажет вам -- как повысить эффективность управления трафиком в системах,
+    построеных на базе Linux 2.2/2.4. Многие из вас даже не подозревают, что уже работают с 
+    инструментальными средствами, которые позволяют делать весьма интересные вещи. Широко известные 
+    команды, такие как <B
+CLASS="COMMAND"
+>route</B
+> и <B
+CLASS="COMMAND"
+>ifconfig</B
+> -- фактически являются
+    довольно тонкой оберткой вокруг очень мощной инфраструктуры <B
+CLASS="COMMAND"
+>iproute2</B
+>.
+  </P
+><P
+>    Я надеюсь, что это HOWTO станет столь же востребованным как и документация к netfilter от Rusty Rassel. 
+  </P
+><P
+>    Вы всегда можете <A
+HREF="mailto:HOWTO@ds9a.nl"
+TARGET="_top"
+>связаться с нами</A
+>. Однако, если ваши вопросы 
+    непосредственно не связаны с этим документом, вам следует обращаться к соответствующему списку рассылки. 
+    Мы не настолько свободны, чтобы заниматься исключительно ответами на вопросы, но нередко
+    оказываем помощь участникам списков рассылки.
+  </P
+><P
+>    Если вас интересуют лишь простейшие приемы управления трафиком, то прежде, чем вы начнете 
+    <SPAN
+CLASS="QUOTE"
+>"блуждать"</SPAN
+> по этому HOWTO, загляните в главу <A
+HREF="c3070.html"
+> 
+    <SPAN
+CLASS="QUOTE"
+>"Прочие возможности"</SPAN
+></A
+> и прочитайте раздел, посвященный <A
+HREF="c3070.html#CBQINIT"
+>CBQ.init</A
+>. 
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="DISCLAIMERLICENSE"
+></A
+>2.1. Ограничения и лицензионное соглашение</H1
+><P
+>      Этот документ распротраняется в надежде на то, что он окажется полезным для вас, но без каких-либо
+      гарантий, явных или подразумеваемых, включая, но не ограничиваясь ими, подразумеваемые гарантии
+      коммерческого успеха и пригодности в конкретных целях.
+    </P
+><P
+>      Короче говоря, если ваша магистраль STM-64 была взломана и по ней стала распространяться
+      порнография вашим самым уважаемым клиентам -- это не наша вина. Уж простите.
+    </P
+><P
+>      Держателями авторских прав на этот документ являются: Bert Hubert, Gregory Maxwell, 
+      Martijn van Oosterhout, Remco van Mook, Paul B. Schroeder и другие. Этот материал может
+      распространяться только на условиях Open Publication License, v1.0 или более поздней
+      (самую последнюю версию текста лицензии вы найдете по адресу
+      <A
+HREF="http://www.opencontent.org/openpub/"
+TARGET="_top"
+>http://www.opencontent.org/openpub/</A
+>).
+    </P
+><P
+>      Допускается свободное копирование и распространение (в том числе и продажа) этого документа в любом
+      виде. Настоятельно просим о всех, вносимых вами изменениях (а так же ваши комментарии), сообщать 
+      руководителю проекта.
+    </P
+><P
+>      Если вы опубликовали твердую копию этого HOWTO, просим вас передать авторам документа несколько
+      экземпляров в "ознакомительных целях" :-)
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c61.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x96.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Посвящение.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Предварительные сведения</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

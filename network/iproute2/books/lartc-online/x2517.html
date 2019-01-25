@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Управление приоритетами для трафика различных типов.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Решебник."
+HREF="c2475.html"><LINK
+REL="PREVIOUS"
+TITLE="Ограничение пропускной способности для ICMP-пакетов, с целью предотвращения dDoS атак."
+HREF="x2502.html"><LINK
+REL="NEXT"
+TITLE="Прозрачное проксирование с помощью netfilter, iproute2, ipchains и squid."
+HREF="x2540.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2502.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 15. Решебник.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2540.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="PRIORITIZINGINTERACTIVETRAFFIC"
+></A
+>15.4. Управление приоритетами для трафика различных типов.</H1
+><P
+>      Если канал практически полностью забит отправляемыми/получаемыми данными, то работа через
+      <B
+CLASS="COMMAND"
+>telnet</B
+> или <B
+CLASS="COMMAND"
+>ssh</B
+> становится практически невозможной.
+      Как было бы здорово, если бы интерактивный трафик не блокировался другими пакетами.
+      Linux поможет вам в этом!
+    </P
+><P
+>      Как и прежде, необходимо настроить обслуживание трафика на обоих концах канала. Наилучший
+      вариант -- когда с обоих концов установлена операционная система Linux, однако UNIX тоже
+      может выполнять управление приоритетами трафика. 
+    </P
+><P
+>      Стандартный планировщик <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>pfifo_fast</I
+></SPAN
+> имеет три различных
+      <SPAN
+CLASS="QUOTE"
+>"полосы"</SPAN
+>. В первую очередь обслуживается полоса 0, а
+      затем полосы 1 и 2. Поэтому, необходимо весь интерактивный трафик
+      отправить в полосу 0!
+    </P
+><P
+>      Отталкиваясь от <SPAN
+CLASS="QUOTE"
+>"Ipchais HOWTO"</SPAN
+> (уже довольно устаревшего):
+    </P
+><P
+>      В IP-заголовке имеется 4 редко используемых бита -- TOS (Type of Service -- Тип Обслуживания).
+      Они задают способ обслуживания пакета: "Minimum Delay" (минимальная задержка), 
+      "Maximum Throughput" (максимальная пропускная способность), 
+      "Maximum Reliability" (максимальная надежность) и "Minimum Cost" (минимальная стоимость канала).
+      Причем одновременно может быть установлен только один из этих битов. Роб ван Ньюкерк (Rob van Nieuwkerk),
+      автор кода ipchains TOS-mangling, дает следующее пояснение:
+      <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+></DT
+><DD
+><P
+>            Наиболее важным для меня, является флаг "Minimum Delay" (минимальная задержка). Я включаю
+            его в пакетах интерактивного трафика на моем роутере, работающем под управлением Linux.
+            Я подключен к сети через модем 33.6. Linux <SPAN
+CLASS="QUOTE"
+>"раскидывает"</SPAN
+> пакеты по 3-м очередям. 
+            Таким образом я получаю вполне приемлемую скорость обслуживания интерактивного трафика 
+            при большой загрузке канала.
+          </P
+></DD
+></DL
+></DIV
+>
+      Как правило, флаг "Minimum Delay" устанавливается в пакетах для <B
+CLASS="COMMAND"
+>telnet</B
+>
+      и <B
+CLASS="COMMAND"
+>ftp-control</B
+>, а в пакетах <B
+CLASS="COMMAND"
+>ftp-data</B
+> -- "Maximum Throughput".
+      Делается это следующим образом:
+      <PRE
+CLASS="SCREEN"
+># iptables -A PREROUTING -t mangle -p tcp --sport telnet \
+  -j TOS --set-tos Minimize-Delay
+# iptables -A PREROUTING -t mangle -p tcp --sport ftp \
+  -j TOS --set-tos Minimize-Delay
+# iptables -A PREROUTING -t mangle -p tcp --sport ftp-data \
+  -j TOS --set-tos Maximize-Throughput      
+      </PRE
+>
+      Эти правила прописываются на удаленном хосте и воздействуют на входящие, по отношению к вашему компьютеру, 
+      пакеты. Для пакетов, отправляемых в обратном направлении, эти флаги (вроде бы) устанавливаются 
+      автоматически. Если это не так, можете на своей системе прописать следующие правила:
+      <PRE
+CLASS="SCREEN"
+># iptables -A OUTPUT -t mangle -p tcp --dport telnet \
+  -j TOS --set-tos Minimize-Delay
+# iptables -A OUTPUT -t mangle -p tcp --dport ftp \
+  -j TOS --set-tos Minimize-Delay
+# iptables -A OUTPUT -t mangle -p tcp --dport ftp-data \
+  -j TOS --set-tos Maximize-Throughput      
+      </PRE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2502.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2540.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ограничение пропускной способности для ICMP-пакетов, с целью предотвращения dDoS атак.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2475.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Прозрачное проксирование с помощью netfilter, iproute2, ipchains и squid.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

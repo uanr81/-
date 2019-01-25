@@ -1,0 +1,409 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Настройка BGP4 с помощью Zebra.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Динамическая маршрутизация -- OSPF и BGP."
+HREF="c2925.html"><LINK
+REL="PREVIOUS"
+TITLE="Динамическая маршрутизация -- OSPF и BGP."
+HREF="c2925.html"><LINK
+REL="NEXT"
+TITLE="Прочие возможности."
+HREF="c3070.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c2925.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 17. Динамическая маршрутизация -- OSPF и BGP.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c3070.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="SETTINGUPBGP4WITHZEBRA"
+></A
+>17.2. Настройка BGP4 с помощью Zebra.</H1
+><P
+>        Версия 4 <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Протокола Пограничных Маршрутизаторов</I
+></SPAN
+> (BGP4) -- это протокол динамический 
+        маршрутизации, описанный в RFC 1771. Он предназначен для обмена информацией (т.е. таблицами 
+        маршрутизации) между маршрутизаторами, с 
+        целью обеспечить согласующееся представление о данной <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Автономной Системе</I
+></SPAN
+> 
+        (Autonomous System -- AS). Может использоваться в режиме EGP 
+        (от англ. Exterior Gateway Protocol -- Протокол Внешних Маршрутизаторов) или
+        IGP (от англ. Interior Gateway Protocol -- Протокол Внутренних Маршрутизаторов). В случае EGP --
+        требуется, чтобы каждый из узлов сети имел свой собственный номер <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Автономной Системы</I
+></SPAN
+> 
+        (AS). BGP4 поддерживает <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Безклассовую Внутридоменную Маршрутизацию</I
+></SPAN
+>
+        (Classless Inter Domain Routing -- CIDR) и объединение маршрутов (объединение нескольких маршрутов
+        в один).
+      </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN3043"
+></A
+>17.2.1. Конфигурация сети (пример).</H2
+><P
+>        Последующие примеры будем рассматривать на основе конфигурации сети, которая приведена ниже. 
+        AS 1 и 50 имеют еще ряд <SPAN
+CLASS="QUOTE"
+>"соседей"</SPAN
+>, но мы будем рассматривать только эти две 
+        Автономные Системы, в качестве своих <SPAN
+CLASS="QUOTE"
+>"соседей"</SPAN
+>. Взаимодействие между
+        сетями, в данном примере, производится через туннели, но в общем случае это не обязательно.
+      </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/note.gif"
+HSPACE="5"
+ALT="Примечание:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>          В данном примере используются зарезервированные номера AS, поэтому вы должны будете подставить
+          свои собственные числа.
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>        <PRE
+CLASS="SCREEN"
+>          --------------------
+          | 192.168.23.12/24 |
+          |    AS: 23        |
+          --------------------
+            /             \
+           /               \
+          /                 \
+------------------       ------------------
+| 192.168.1.1/24 |-------| 10.10.1.1/16   |
+|    AS: 1       |       |    AS: 50      |
+------------------       ------------------        
+        </PRE
+>
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN3052"
+></A
+>17.2.2. Конфигурирование (пример).</H2
+><P
+>        Следующая конфигурация написана для узла 192.168.23.12/24, но может быть с легкостью адаптирована
+        и для других узлов.
+      </P
+><P
+>        Начинается с установки некоторых общих параметров, таких как: имя хоста, пароль и ключи отладки:
+        <PRE
+CLASS="SCREEN"
+>! имя хоста
+hostname anakin
+
+! пароль
+password xxx
+
+! разрешить пароль (режим суперпользователя)
+enable password xxx
+
+! путь к файлу журнала
+log file /var/log/zebra/bgpd.log
+
+! отладка: выводить отладочную информацию (этот раздел позднее может быть удален)
+debug bgp events
+debug bgp filters
+debug bgp fsm
+debug bgp keepalives
+debug bgp updates        
+        </PRE
+>
+        Список доступа, используемый для ограничения перераспределения в локальных сетях (RFC 1918).
+        <PRE
+CLASS="SCREEN"
+>! RFC 1918 networks
+access-list local_nets permit 192.168.0.0/16
+access-list local_nets permit 172.16.0.0/12
+access-list local_nets permit 10.0.0.0/8
+access-list local_nets deny any        
+        </PRE
+>
+        Следующий шаг -- настройка каждой из AS:
+        <PRE
+CLASS="SCREEN"
+>! Собственный номер AS
+router bgp 23
+
+    ! IP-адрес маршрутизатора
+    bgp router-id 192.168.23.12
+
+    ! наша сеть, для оповещения "соседей"
+    network 192.168.23.0/24
+
+    ! объявлять о всех подключенных маршрутах (= непосредственно подключенных интерфейсах)
+    redistribute connected
+
+    ! объявлять о корневых маршрутах (= подставленных вручную)
+    redistribute kernel
+        </PRE
+>
+        Блок <SPAN
+CLASS="QUOTE"
+>"router bgp"</SPAN
+> должен содержать сведения о своих <SPAN
+CLASS="QUOTE"
+>"соседях"</SPAN
+>:
+        <PRE
+CLASS="SCREEN"
+>neighbor 192.168.1.1 remote-as 1
+neighbor 192.168.1.1 distribute-list local_nets in
+neighbor 10.10.1.1   remote-as 50
+neighbor 10.10.1.1   distribute-list local_nets in        
+        </PRE
+>
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN3062"
+></A
+>17.2.3. Проверка конфигурации.</H2
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/note.gif"
+HSPACE="5"
+ALT="Примечание:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>          vtysh -- это мультиплексор, соединяющий все интерфейсы Zebra.
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>        <PRE
+CLASS="SCREEN"
+>anakin# sh ip bgp summary 
+BGP router identifier 192.168.23.12, local AS number 23
+2 BGP AS-PATH entries
+0 BGP community entries
+
+Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.10.0.1       4    50      35      40        0    0    0 00:28:40        1
+192.168.1.1     4     1   27574   27644        0    0    0 03:26:04       14
+
+Total number of neighbors 2
+anakin#
+anakin# sh ip bgp neighbors 10.10.0.1
+BGP neighbor is 10.10.0.1, remote AS 50, local AS 23, external link
+  BGP version 4, remote router ID 10.10.0.1
+  BGP state = Established, up for 00:29:01
+  ....
+anakin#        
+        </PRE
+>
+        А теперь посмотрим -- какие маршруты были полученв от <SPAN
+CLASS="QUOTE"
+>"соседей"</SPAN
+>:
+        <PRE
+CLASS="SCREEN"
+>anakin# sh ip ro bgp 
+Codes: K - kernel route, C - connected, S - static, R - RIP, O - OSPF,
+       B - BGP, &#62; - selected route, * - FIB route
+
+B&#62;* 172.16.0.0/14 [20/0] via 192.168.1.1, tun0, 2d10h19m
+B&#62;* 172.30.0.0/16 [20/0] via 192.168.1.1, tun0, 10:09:24
+B&#62;* 192.168.5.10/32 [20/0] via 192.168.1.1, tun0, 2d10h27m
+B&#62;* 192.168.5.26/32 [20/0] via 192.168.1.1, tun0, 10:09:24
+B&#62;* 192.168.5.36/32 [20/0] via 192.168.1.1, tun0, 2d10h19m
+B&#62;* 192.168.17.0/24 [20/0] via 192.168.1.1, tun0, 3d05h07m
+B&#62;* 192.168.17.1/32 [20/0] via 192.168.1.1, tun0, 3d05h07m
+B&#62;* 192.168.32.0/24 [20/0] via 192.168.1.1, tun0, 2d10h27m
+anakin#        
+        </PRE
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c2925.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c3070.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Динамическая маршрутизация -- OSPF и BGP.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2925.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Прочие возможности.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

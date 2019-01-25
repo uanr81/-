@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Ограничение скорости для отдельного хоста или подсети.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Решебник."
+HREF="c2475.html"><LINK
+REL="PREVIOUS"
+TITLE="Формирователь трафика: Низкая задержка, максимальная производительность."
+HREF="x2670.html"><LINK
+REL="NEXT"
+TITLE="Пример подключения локальной сети к Интернет через NAT, с организацией QoS."
+HREF="x2755.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2670.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 15. Решебник.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2755.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="RATELIMITINGASINGLEHOSTORNETMASK"
+></A
+>15.9. Ограничение скорости для отдельного хоста или подсети.</H1
+><P
+>      Хотя очень подробные описания темы раздела можно найти в разных местах, в том числе и в справочном
+      руководстве <B
+CLASS="COMMAND"
+>man</B
+>, тем не менее этот вопрос задается очень часто. К счастью,
+      ответ на него настолько прост, что не нуждается в полном понимании принципов управления трафиком.
+    </P
+><P
+>      Эти три строки сделают все что вам нужно: 
+      <PRE
+CLASS="SCREEN"
+>tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit 
+
+tc class add dev $DEV parent 1: classid 1:1 cbq rate 512kbit \
+allot 1500 prio 5 bounded isolated 
+
+tc filter add dev $DEV parent 1: protocol ip prio 16 u32 \
+match ip dst 195.96.96.97 flowid 1:1      
+      </PRE
+>
+      Первая строка -- назначает базовую дисциплину на заданный интерфейс и сообщает ядру, что
+      пропускная способность интерфейса составляет 10 Мбит/сек. Если вы установите неверное значение,
+      то особого вреда не будет, однако, всегда стремитесь устанавливать верные значения,
+      это повысит точность вычислений.
+    </P
+><P
+>      Вторая строка создает класс с полосой пропускания 512 Кбит/сек. Подробное описание CBQ
+      содержит раздел <A
+HREF="c834.html"
+>Дисциплины обработки очередей для управления пропускной способностью</A
+>.
+    </P
+><P
+>      Последняя строка говорит о том, какой трафик должен формироваться классом, определенным выше.
+      Трафик, не подпадающий под заданное в фильтре условие, НЕ ОГРАНИЧИВАЕТСЯ! Более сложные примеры
+      назначения условий (подсети, порт отправителя, порт адресата), вы найдете в разделе
+      <A
+HREF="x1308.html#ALLTHEFILTERINGCOMMANDSYOUWILLNORMALLYNEED"
+>Наиболее употребимые способы фильтрации</A
+>.
+    </P
+><P
+>      Если вы внесли какие-либо изменения в сценарий и желаете перезапустить его -- предварительно
+      запустите команду <B
+CLASS="COMMAND"
+>tc qdisc del dev $DEV root</B
+>, чтобы очистить существующую конфигурацию. 
+    </P
+><P
+>      Сценарий может быть немного улучшен, за счет добавления в конец дополнительной строки
+      <B
+CLASS="COMMAND"
+>tc qdisc add dev $DEV parent 1:1 sfq perturb 10</B
+>.
+      За подробным описанием обращайтесь к разделу <A
+HREF="x852.html#STOCHASTICFAIRNESSQUEUEING"
+>Stochastic Fairness Queueing</A
+>.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2670.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2755.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Формирователь трафика: Низкая задержка, максимальная производительность.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2475.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Пример подключения локальной сети к Интернет через NAT, с организацией QoS.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

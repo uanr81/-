@@ -12,15 +12,19 @@
 * OpenSSL::                     
 * CONFIG::                      
 * Пример конфигурации OpenSSL::  
+* X509V3_CONFIG::               
 * CA::                          
 * X509::                        
 * req::                         
+* ASN1PARSE::                   
 @end menu
 
 @include manOpenSSL.texi
 @include manConfig.texi
 @include FileOpensslConf.texi
+@include manx509v3_config.texi
 @include manCA.texi
 @include x509man.texi
 @include reqman.texi
+@include asn1parse.texi
 @bye

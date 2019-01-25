@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Введение в iproute2</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Структура документа."
+HREF="x170.html"><LINK
+REL="NEXT"
+TITLE="Краткий обзор iproute2"
+HREF="x192.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x170.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x192.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER3"
+></A
+>Глава 3. Введение в <B
+CLASS="COMMAND"
+>iproute2</B
+></H1
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="WHYIPROUTE2"
+></A
+>3.1. Почему <B
+CLASS="COMMAND"
+>iproute2?</B
+></H1
+><P
+>      Большинство дистрибутивов Linux, как и большинство ОС UNIX, в настоящее время используют 
+      довольно древние утилиты <B
+CLASS="COMMAND"
+>arp</B
+>, <B
+CLASS="COMMAND"
+>ifconfig</B
+> и 
+      <B
+CLASS="COMMAND"
+>route</B
+>. 
+      Пока что эти инструменты работают достаточно адекватно, но иногда, на ядрах Linux версии 2.2 и выше,
+      они могут вести себя довольно неожиданно. 
+    </P
+><P
+>      Сетевая подсистема, в ядрах 2.2 и выше, была полностью переписана. Новый сетевой код дал увеличение
+      производительности и более высокие эксплуатационные характеристики, что делает Linux еще более 
+      привлекательным на рынке операционных систем.
+    </P
+><P
+>      Фактически, реализация сетевой подсистемы в Linux, выполняющая классификацию, маршрутизацию и 
+      фильтрацию, оказалась даже более полной, чем в специализированных маршрутизаторах, межсетевых экранах и 
+      других устройствах управления трафиком.
+    </P
+><P
+>      По мере появления новых разработок, 
+      они <SPAN
+CLASS="QUOTE"
+>"наслаивались"</SPAN
+> поверх существующих реализаций в существующих операционных
+      системах. Это постоянное наслаивание привело к тому, что код, решающий задачи управления
+      сетевым трафиком, временами проявлял весьма странное поведение.
+    </P
+><P
+>      Эта, заново переписанная, реализация сетевой подсистемы позволила достичь таких
+      характеристик, которые раньше были просто недоступны.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x170.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x192.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Структура документа.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Краткий обзор iproute2</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Решебник.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Weighted Round Robin (WRR)."
+HREF="x2467.html"><LINK
+REL="NEXT"
+TITLE="Защита от SYN flood."
+HREF="x2493.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2467.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2493.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER15"
+></A
+>Глава 15. Решебник.</H1
+><P
+>    В этой главе приводятся решения типовых задач, которые смогут помочь вам в преодолении
+    некоторых проблем. Она не дает универсальных рецептов на все случаи жизни, но тем не менее,
+    изучение чужого опыта никогда не бывает лишним.
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="RUNNINGMULTIPLESITESWITHDIFFERENTSLAS"
+></A
+>15.1. Запуск нескольких сайтов с различными SLA.</H1
+><P
+>      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>        <B
+CLASS="COMMAND"
+>От переводчика (А.К.)</B
+>: SLA (от англ. Service Level Agreement) означает
+        <SPAN
+CLASS="QUOTE"
+>"Соглашение об Уровне Обслуживания"</SPAN
+> -- основной документ, регламентирующий взаимоотношения
+        между ИТ-компанией и заказчиком.
+      </I
+></SPAN
+>
+    </P
+><P
+>      Сделать это можно несколькими способами. Прежде всего следует упомянуть, что <B
+CLASS="COMMAND"
+>Apache</B
+>
+      поддерживает подобную функциональность в виде модулей, но мы продемонстрируем как добиться этого 
+      средствами операционной системы. Эти строки взяты из примера, представленного Джамалом Хади (Jamal Hadi).
+    </P
+><P
+>      Допустим, что у нас есть два клиента, которые арендуют некоторую долю нашего канала под http,
+      ftp и потоковое audio. Первый клиент
+      арендует полосу в 2 Мбита, второй -- 5 Мбит. Для начала назначим нашим клиентам виртуальные IP-адреса
+      на нашем сервере:
+      <PRE
+CLASS="SCREEN"
+># ip address add 188.177.166.1 dev eth0
+# ip address add 188.177.166.2 dev eth0      
+      </PRE
+>
+      Решение проблемы о том, как назначить правильные IP-адреса различным службам, оставляем за вами.
+      Практически все популярные демоны поддерживают такую возможность.
+    </P
+><P
+>      Присоединяем CBQ qdisc к eth0:
+      <PRE
+CLASS="SCREEN"
+># tc qdisc add dev eth0 root handle 1: cbq bandwidth 10Mbit cell 8 avpkt 1000 \
+  mpu 64      
+      </PRE
+>
+      Создаем классы клиентов:
+      <PRE
+CLASS="SCREEN"
+># tc class add dev eth0 parent 1:0 classid 1:1 cbq bandwidth 10Mbit rate \
+  2MBit avpkt 1000 prio 5 bounded isolated allot 1514 weight 1 maxburst 21
+# tc class add dev eth0 parent 1:0 classid 1:2 cbq bandwidth 10Mbit rate \
+  5Mbit avpkt 1000 prio 5 bounded isolated allot 1514 weight 1 maxburst 21      
+      </PRE
+>
+      И добавляем фильтры к классам:
+      <PRE
+CLASS="SCREEN"
+>##FIXME: Для чего нужна первая строка, что она делает? Каково назначение <SPAN
+CLASS="QUOTE"
+>"делителя"</SPAN
+> (divisor)?:
+##FIXME: Делитель имеет отношение к хеш-таблице и номеру пула
+##       (bucket) - ahu
+# tc filter add dev eth0 parent 1:0 protocol ip prio 5 handle 1: u32 divisor 1
+# tc filter add dev eth0 parent 1:0 prio 5 u32 match ip src 188.177.166.1
+  flowid 1:1
+# tc filter add dev eth0 parent 1:0 prio 5 u32 match ip src 188.177.166.2
+  flowid 1:2      
+      </PRE
+>
+      FIXME: Почему нет token bucket filter? 
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2467.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2493.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Weighted Round Robin (WRR).</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Защита от SYN flood.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,580 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Пример подключения локальной сети к Интернет через NAT, с организацией QoS.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Решебник."
+HREF="c2475.html"><LINK
+REL="PREVIOUS"
+TITLE="Ограничение скорости для отдельного хоста или подсети."
+HREF="x2740.html"><LINK
+REL="NEXT"
+TITLE="Построение мостов и псевдо-мостов с Proxy ARP."
+HREF="c2854.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2740.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 15. Решебник.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c2854.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="EXAMPLEOFAFULLNATSOLUTIONWITHQOS"
+></A
+>15.10. Пример подключения локальной сети к Интернет через NAT, с организацией QoS.</H1
+><P
+>      Меня зовут Педро Ларрой (Pedro Larroy) <TT
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:piotr%member.fsf.org"
+>piotr%member.fsf.org</A
+>&#62;</TT
+>. Здесь я расскажу
+      об общих принципах настройки соединения локальной сети, в которой имеется большое число пользователей, 
+      к Интернет через маршрутизатор, работающий под управлением Linux. Маршрутизатор имеет 
+      реальный IP-адрес и производит Трансляцию Сетевых Адресов (NAT). 
+      Я живу в университетском общежитии, где проложена локальная сеть на 198 пользователей. Эта сеть соединена 
+      с Интернет через маршрутизатор, который я администрирую. Пользователи очень интенсивно работают
+      в пиринговых сетях, что требует соответствующего управления трафиком. Надеюсь, что этот
+      пример будет интересен читателям lartc. 
+    </P
+><P
+>      Прежде всего я опишу процесс настройки своего маршрутизатора шаг за шагом, и в заключение расскажу, 
+      как сделать 
+      этот процесс автоматическим, выполняющимся в процессе загрузки системы. 
+      Сеть, к которой относится этот пример, является локальной (LAN). Она подключена к Интернет 
+      через маршрутизатор, который имеет единственный реальный IP-адрес. 
+      Разделение единственного реального IP-адреса между всеми пользователями в локальной сети осуществляется 
+      с помощью нескольких правил <B
+CLASS="COMMAND"
+>iptables</B
+>. Для этого необходимо: 
+      <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Ядро Linux 2.4.18 или выше</DT
+><DD
+><P
+> 
+              На ядро нужно наложить заплату, для поддержки HTB.
+            </P
+></DD
+><DT
+>iproute</DT
+><DD
+><P
+> 
+              Убедитесь, что <B
+CLASS="COMMAND"
+>tc</B
+> поддерживает HTB. Скомпилированная версия 
+              распространяется вместе с HTB.
+            </P
+></DD
+><DT
+>iptables</DT
+><DD
+><P
+> 
+            </P
+></DD
+></DL
+></DIV
+>
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN2775"
+></A
+>15.10.1. Начнем с оптимизации пропускной способности.</H2
+><P
+>        Для начала создадим несколько дисциплин (qdiscs), которые будут обслуживать трафик. 
+        Первой создается htb qdisc с 6-ю классами и различными приоритетами. 
+        Каждому классу назначена определенная пропускная способность, но при этом они могут задействовать
+        неиспользуемую пропускную способность, если она не занята другими классами. 
+        Напомню, что классы с более высоким приоритетом (т.е. с более низким числом prio) 
+        будут получать <SPAN
+CLASS="QUOTE"
+>"излишек"</SPAN
+> канала первыми. Подключение к Интернет осуществляется
+        через модем ADSL, с пропускной способностью для входящего трафика 2 Мбит/сек, исходящего -- 
+        300 Кбит/сек. Я ограничиваю исходящую пропускную способность величиной в 240 Кбит/сек по
+        той простой причине, что это максимальное значение, при котором время ожидания отклика
+        остается минимальным. Величина этот параметра может быть определена экспериментально, 
+        путем наблюдения за изменением времени отклика при изменении величины пропускной способности. 
+      </P
+><P
+>        Для начала, присвойте переменной CEIL величину, составляющую 75% от общей пропускной способности
+        для исходящего трафика. Там, где я использую eth0 -- назначьте свой интерфейс, который 
+        <SPAN
+CLASS="QUOTE"
+>"смотрит"</SPAN
+> в Интернет. Сценарий (на языке командной оболочки), выполняющий настройку, 
+        начинается со следующих строк:
+        <PRE
+CLASS="SCREEN"
+>CEIL=240
+tc qdisc add dev eth0 root handle 1: htb default 15
+tc class add dev eth0 parent 1: classid 1:1 htb rate ${CEIL}kbit ceil ${CEIL}kbit
+tc class add dev eth0 parent 1:1 classid 1:10 htb rate 80kbit ceil 80kbit prio 0
+tc class add dev eth0 parent 1:1 classid 1:11 htb rate 80kbit ceil ${CEIL}kbit prio 1
+tc class add dev eth0 parent 1:1 classid 1:12 htb rate 20kbit ceil ${CEIL}kbit prio 2
+tc class add dev eth0 parent 1:1 classid 1:13 htb rate 20kbit ceil ${CEIL}kbit prio 2
+tc class add dev eth0 parent 1:1 classid 1:14 htb rate 10kbit ceil ${CEIL}kbit prio 3
+tc class add dev eth0 parent 1:1 classid 1:15 htb rate 30kbit ceil ${CEIL}kbit prio 3
+tc qdisc add dev eth0 parent 1:12 handle 120: sfq perturb 10
+tc qdisc add dev eth0 parent 1:13 handle 130: sfq perturb 10
+tc qdisc add dev eth0 parent 1:14 handle 140: sfq perturb 10
+tc qdisc add dev eth0 parent 1:15 handle 150: sfq perturb 10        
+        </PRE
+>
+        Эти строки создают одноярусное дерево HTB:
+        <PRE
+CLASS="SCREEN"
+>+---------+
+| root 1: |
++---------+
+     |
++---------------------------------------+
+| class 1:1                             |
++---------------------------------------+
+  |      |      |      |      |      |      
++----+ +----+ +----+ +----+ +----+ +----+
+|1:10| |1:11| |1:12| |1:13| |1:14| |1:15| 
++----+ +----+ +----+ +----+ +----+ +----+         
+        </PRE
+>
+      <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>classid 1:10 htb rate 80kbit ceil 80kbit prio 0</DT
+><DD
+><P
+> 
+              Это класс с наивысшим приоритетом. Пакеты, попадающие в этот класс, будут иметь самую низкую
+              задержку и получат избыток канала в первую очередь. Сюда будет направляться интерактивный 
+              трафик: <B
+CLASS="COMMAND"
+>ssh</B
+>, <B
+CLASS="COMMAND"
+>telnet</B
+>, <B
+CLASS="COMMAND"
+>dns</B
+>, 
+              <B
+CLASS="COMMAND"
+>quake3</B
+>, <B
+CLASS="COMMAND"
+>irc</B
+>, а так же пакеты с установленным
+              флагом SYN. 
+            </P
+></DD
+><DT
+>classid 1:11 htb rate 80kbit ceil ${CEIL}kbit prio 1</DT
+><DD
+><P
+> 
+              Это первый класс, через который будет проходить довольно объемный трафик. В моем случае -- это
+              трафик от локального WEB-сервера и запросы к внешним WEB-серверам, исходящий порт 80 и порт
+              назначения 80, соответственно.
+            </P
+></DD
+><DT
+>classid 1:12 htb rate 20kbit ceil ${CEIL}kbit prio 2</DT
+><DD
+><P
+> 
+              В этот класс помещаются пакеты, с установленным битом Maximize-Throughput в поле TOS, а
+              так же иной трафик, который генерируется <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>локальными процессами</I
+></SPAN
+> на 
+              маршрутизаторе, отправляемый в Интернет. Таким образом, все последующие классы будут
+              иметь дело только с перенаправляемым трафиком.
+            </P
+></DD
+><DT
+>classid 1:13 htb rate 20kbit ceil ${CEIL}kbit prio 2</DT
+><DD
+><P
+>              Высокоприоритетный класс, обслуживающий объемный трафик, поступающий от компьютеров из 
+              локальной сети.
+            </P
+></DD
+><DT
+>classid 1:14 htb rate 10kbit ceil ${CEIL}kbit prio 3</DT
+><DD
+><P
+> 
+              Этот класс обслуживает почтовый трафик (SMTP,pop3...) и пакеты, с установленным битом
+              Minimize-Cost в поле TOS.
+            </P
+></DD
+><DT
+>classid 1:15 htb rate 30kbit ceil ${CEIL}kbit prio 3</DT
+><DD
+><P
+> 
+              Последний класс. Он обслуживает прочий трафик, поступающий от компьютеров из локальной сети.
+              Сюда попадает все, что относится к работе в пиринговых сетях, т.е.  kazaa, edonkey и пр.
+            </P
+></DD
+></DL
+></DIV
+>
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN2814"
+></A
+>15.10.2. Классификация пакетов.</H2
+><P
+>        Мы создали различные классы обработки трафика, но классификация пока отсутствует, 
+        поэтому, к настоящему моменту, весь трафик пойдет через класс 1:15 
+        ( который назначен классом по-умолчанию: 
+        <B
+CLASS="COMMAND"
+>tc qdisc add dev eth0 root handle 1: htb default 15</B
+> ).
+        Теперь самое главное -- нужно распределить трафик по имеющимся классам. 
+      </P
+><P
+>        Устанавим фильтры, которые будут выполнять классификацию пакетов, основываясь на метках
+        <B
+CLASS="COMMAND"
+>iptables</B
+>. Мне нравятся <B
+CLASS="COMMAND"
+>iptables</B
+> за их
+        чрезвычайную гибкость и за возможность подсчитывать количество пакетов, пропущенных тем
+        или иным правилом. Добавим в сценарий следующие строки:
+        <PRE
+CLASS="SCREEN"
+>tc filter add dev eth0 parent 1:0 protocol ip prio 1 handle 1 fw classid 1:10
+tc filter add dev eth0 parent 1:0 protocol ip prio 2 handle 2 fw classid 1:11
+tc filter add dev eth0 parent 1:0 protocol ip prio 3 handle 3 fw classid 1:12
+tc filter add dev eth0 parent 1:0 protocol ip prio 4 handle 4 fw classid 1:13
+tc filter add dev eth0 parent 1:0 protocol ip prio 5 handle 5 fw classid 1:14
+tc filter add dev eth0 parent 1:0 protocol ip prio 6 handle 6 fw classid 1:15        
+        </PRE
+>
+        Здесь задаются соответствия между специфическими значениями FWMARK ( handle x fw )
+        и классами (classid x:x). Теперь рассмотрим процесс установки меток на пакеты.
+      </P
+><P
+>        Для начала необходимо разобраться с тем, как движутся пакеты через <B
+CLASS="COMMAND"
+>iptables</B
+>:
+        <PRE
+CLASS="SCREEN"
+>        +------------+   принятие     +---------+               +-------------+
+Вход ---| PREROUTING |--- решения о --| FORWARD |-------+-------| POSTROUTING |- Выход
+        +------------+  маршрутизации +---------+       |       +-------------+    
+                             |                          |
+                        +-------+                    +--------+   
+                        | INPUT |-Локальные процессы-| OUTPUT |
+                        +-------+                    +--------+        
+        </PRE
+>
+        Далее я буду исходить из предположения, что всем таблицам назначена политика по-умолчанию
+        <B
+CLASS="COMMAND"
+>-P ACCEPT</B
+>. Наша локальная сеть относится к классу B, с адресами 172.17.0.0/16.
+        Реальный IP-адрес -- 212.170.21.172
+      </P
+><P
+>        Добавим правило <B
+CLASS="COMMAND"
+>iptables</B
+>, которое будет выполнять SNAT, что
+        позволит пользователям локальной сети общаться с внешним миром, и разрешим форвардинг 
+        пакетов:
+        <PRE
+CLASS="SCREEN"
+>echo 1 &#62; /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -s 172.17.0.0/255.255.0.0 -o eth0 -j SNAT --to-source 212.170.21.172          
+        </PRE
+>
+        Проверим, что пакеты уходят через класс 1:15:
+        <PRE
+CLASS="SCREEN"
+>tc -s class show dev eth0        
+        </PRE
+>
+        Добавим в цепочку PREROUTING, таблицы mangle, правила для установки меток на пакеты:
+        <PRE
+CLASS="SCREEN"
+>iptables -t mangle -A PREROUTING -p icmp -j MARK --set-mark 0x1
+iptables -t mangle -A PREROUTING -p icmp -j RETURN        
+        </PRE
+>
+        Теперь вы должны наблюдать увеличение значения счетчика пакетов в классе 1:10, при попытке
+        <B
+CLASS="COMMAND"
+>ping</B
+>-ануть из локальной сети какой-нибудь сайт в Интернете.
+        <PRE
+CLASS="SCREEN"
+>tc-s класс показывают dev eth0
+        </PRE
+>
+        Действие <B
+CLASS="COMMAND"
+>-j RETURN</B
+> предотвращает движение пакетов по всем правилам. Поэтому
+        все ICMP-пакеты будут проходить только это правило. Добавим еще ряд правил, которые будут
+        изменять биты в поле TOS:
+        <PRE
+CLASS="SCREEN"
+>iptables -t mangle -A PREROUTING -m tos --tos Minimize-Delay -j MARK --set-mark 0x1
+iptables -t mangle -A PREROUTING -m tos --tos Minimize-Delay -j RETURN
+iptables -t mangle -A PREROUTING -m tos --tos Minimize-Cost -j MARK --set-mark 0x5
+iptables -t mangle -A PREROUTING -m tos --tos Minimize-Cost -j RETURN
+iptables -t mangle -A PREROUTING -m tos --tos Maximize-Throughput -j MARK --set-mark 0x6
+iptables -t mangle -A PREROUTING -m tos --tos Maximize-Throughput -j RETURN        
+        </PRE
+>
+        Поднимем приоритет для <B
+CLASS="COMMAND"
+>ssh</B
+>-пакетов:
+        <PRE
+CLASS="SCREEN"
+>iptables -t mangle -A PREROUTING -p tcp -m tcp --sport 22 -j MARK --set-mark 0x1
+iptables -t mangle -A PREROUTING -p tcp -m tcp --sport 22 -j RETURN        
+        </PRE
+>
+        а так же для пакетов, с которых начинается TCP-соединение, т.е. SYN-пакетов:
+        <PRE
+CLASS="SCREEN"
+>iptables -t mangle -I PREROUTING -p tcp -m tcp --tcp-flags SYN,RST,ACK SYN -j MARK --set-mark 0x1
+iptables -t mangle -I PREROUTING -p tcp -m tcp --tcp-flags SYN,RST,ACK SYN -j RETURN        
+        </PRE
+>
+        И так далее. После того, как в цепочку PREROUTING, таблицы mangle, будут внесены все необходимые правила,
+        закончим ее правилом:
+        <PRE
+CLASS="SCREEN"
+>iptables -t mangle -A PREROUTING -j MARK --set-mark 0x6        
+        </PRE
+>
+        Это заключительное правило отправит оставшиеся немаркированные пакеты в класс 1:15. Фактически, это 
+        правило можно опустить, так как класс 1:15 был задан по-умолчанию, но тем не менее, я оставляю его,
+        чтобы сохранить единство настроек и кроме того, иногда бывает полезно увидеть счетчик пакетов
+        для этого правила.
+      </P
+><P
+>        Нелишним будет добавить те же правила в цепочку OUTPUT, заменив имя цепочки PREROUTING на OUTPUT
+        (s/PREROUTING/OUTPUT/). Тогда трафик, сгенерированный локальными процессами на маршрутизаторе,
+        также будет классифицирован по категориям. Но, в отличие от вышеприведенных правил, в цепочке
+        OUTPUT, я устанавливаю метку <B
+CLASS="COMMAND"
+>-j MARK --set-mark 0x3</B
+>, таким образом
+        трафик от маршрутизатора получает более высокий приоритет. 
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN2841"
+></A
+>15.10.3. Дополнительная оптимизация</H2
+><P
+>        В результате приведенных настроек, мы получили вполне работоспособную конфигурацию.
+        Однако, в каждом конкретном случае, эти настройки всегда можно немного улучшить.
+        Найдите время и проследите -- куда идет основной трафик и как лучше им распорядиться.
+        Я потратил огромное количество времени и наконец довел свою конфигурацию до оптимального
+        уровня, практически сведя на нет бесчисленные таймауты.
+      </P
+><P
+>        Если вдруг обнаружится, что через некоторые классы проходит подавляющее большинство трафика, 
+        то к ним можно прикрепить другую дисциплину организации очереди, чтобы распределить канал
+        более равномерно: 
+        <PRE
+CLASS="SCREEN"
+>tc qdisc add dev eth0 parent 1:13 handle 130: sfq perturb 10
+tc qdisc add dev eth0 parent 1:14 handle 140: sfq perturb 10
+tc qdisc add dev eth0 parent 1:15 handle 150: sfq perturb 10        
+        </PRE
+>
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN2846"
+></A
+>15.10.4. Выполнение настроек во время загрузки системы.</H2
+><P
+>        Уверен, что можно найти множество способов, чтобы произвести настройку маршрутизатора во время
+        загрузки. Для себя я создал скрипт <TT
+CLASS="FILENAME"
+>/etc/init.d/packetfilter</TT
+>, который принимает
+        команды [start | stop | stop-tables | start-tables | reload-tables]. 
+        Он конфигурирует дисциплины (qdiscs) и загружает необходимые модули ядра. 
+        Этот же сценарий загружает правила <B
+CLASS="COMMAND"
+>iptables</B
+> из файла 
+        <TT
+CLASS="FILENAME"
+>/etc/network/iptables-rules</TT
+>, которые предварительно могут быть сохранены 
+        утилитой <B
+CLASS="COMMAND"
+>iptables-save</B
+> и восстановлены -- <B
+CLASS="COMMAND"
+>iptables-restore</B
+>. 
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2740.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c2854.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Ограничение скорости для отдельного хоста или подсети.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2475.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Построение мостов и псевдо-мостов с Proxy ARP.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

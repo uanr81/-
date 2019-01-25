@@ -1,0 +1,413 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Текущая конфигурация</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Введение в iproute2"
+HREF="c177.html"><LINK
+REL="PREVIOUS"
+TITLE="Необходимые условия"
+HREF="x197.html"><LINK
+REL="NEXT"
+TITLE="ARP"
+HREF="x270.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x197.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 3. Введение в <B
+CLASS="COMMAND"
+>iproute2</B
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x270.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="EXPLORINGYOURCURRENTCONFIGURATION"
+></A
+>3.4. Текущая конфигурация</H1
+><P
+>      Для вас может оказаться сюрпризом, но <B
+CLASS="COMMAND"
+>iproute2</B
+> уже сконфигурирована! 
+      Существующие команды <B
+CLASS="COMMAND"
+>ifconfig</B
+> и <B
+CLASS="COMMAND"
+>route</B
+> уже используют 
+      расширенные системные вызовы, но главным образом с настройками, заданным по-умолчанию.
+    </P
+><P
+>      Утилита <B
+CLASS="COMMAND"
+>ip</B
+> является основной в пакете. Попробуем с ее помощью исследовать
+      имеющиеся в системе сетевые интерфейсы.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="IPSHOWSUSOURLINKS"
+></A
+>3.4.1. Просмотр списка сетевых интерфейсов с помощью утилиты <B
+CLASS="COMMAND"
+>ip</B
+></H2
+><PRE
+CLASS="PROGRAMLISTING"
+>      
+[ahu@home ahu]$ ip link list
+1: lo: &lt;LOOPBACK,UP&gt; mtu 3924 qdisc noqueue 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: dummy: &lt;BROADCAST,NOARP&gt; mtu 1500 qdisc noop 
+    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+3: eth0: &lt;BROADCAST,MULTICAST,PROMISC,UP&gt; mtu 1400 qdisc pfifo_fast qlen 100
+    link/ether 48:54:e8:2a:47:16 brd ff:ff:ff:ff:ff:ff
+4: eth1: &lt;BROADCAST,MULTICAST,PROMISC,UP&gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:e0:4c:39:24:78 brd ff:ff:ff:ff:ff:ff
+3764: ppp0: &lt;POINTOPOINT,MULTICAST,NOARP,UP&gt; mtu 1492 qdisc pfifo_fast qlen 10
+    link/ppp       
+      </PRE
+><P
+>        Здесь приведен результат работы команды <B
+CLASS="COMMAND"
+>ip link list</B
+> на моем домашнем 
+        маршрутизаторе ( с <SPAN
+CLASS="QUOTE"
+>"поднятым"</SPAN
+> NAT), у вас он может несколько отличаться.
+        Я поясню часть того, что вы видите, но не все, а только то, что нас интересует в данный момент.
+      </P
+><P
+>        Первым в списке находится локальный (loopback) интерфейс. В принципе, при крнфигурировании ядра,
+        можно отключить поддержку этого интерфейса, но я бы не советовал этого делать.
+        Размер <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>максимального блока передачи данных</I
+></SPAN
+> (MTU -- Maximum Transfer Unit) для 
+        этого интерфейса составляет 3924 октета, и для него отсутствует очередь, поскольку 
+        он не соответствует никакому физическому устройству и существует только в 
+        <SPAN
+CLASS="QUOTE"
+>"воображении"</SPAN
+> ядра.
+      </P
+><P
+>        Я пропущу фиктивный (dummy) интерфейс, так как он может отсутствовать на вашем компьютере. 
+        Дальше у меня идут два физических сетевых интерфейса, один -- со стороны модема, другой --
+        обслуживает мою домашнюю локальную сеть. И наконец последним в списке стоит интерфейс ppp0.
+      </P
+><P
+>        Обратите внимание на отсутствие IP-адресов в листинге. <B
+CLASS="COMMAND"
+>iproute</B
+> отделяет
+        понятие <SPAN
+CLASS="QUOTE"
+>"интерфейса"</SPAN
+> от понятия <SPAN
+CLASS="QUOTE"
+>"IP-адреса"</SPAN
+>. При назначении нескольких
+        IP-адресов одному интерфейсу (IP-алиасинг), понятие IP-адреса становится достаточно
+        расплывчатым.
+      </P
+><P
+>        Зато показываются MAC-адреса -- аппаратные идентификаторы сетевых интерфейсов.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="IPSHOWSUSOURIPADDRESSES"
+></A
+>3.4.2. Просмотр списка IP-адресов с помощью утилиты <B
+CLASS="COMMAND"
+>ip</B
+></H2
+><PRE
+CLASS="PROGRAMLISTING"
+>      
+[ahu@home ahu]$ ip address show        
+1: lo: &lt;LOOPBACK,UP&gt; mtu 3924 qdisc noqueue 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 brd 127.255.255.255 scope host lo
+2: dummy: &lt;BROADCAST,NOARP&gt; mtu 1500 qdisc noop 
+    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+3: eth0: &lt;BROADCAST,MULTICAST,PROMISC,UP&gt; mtu 1400 qdisc pfifo_fast qlen 100
+    link/ether 48:54:e8:2a:47:16 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.1/8 brd 10.255.255.255 scope global eth0
+4: eth1: &lt;BROADCAST,MULTICAST,PROMISC,UP&gt; mtu 1500 qdisc pfifo_fast qlen 100
+    link/ether 00:e0:4c:39:24:78 brd ff:ff:ff:ff:ff:ff
+3764: ppp0: &lt;POINTOPOINT,MULTICAST,NOARP,UP&gt; mtu 1492 qdisc pfifo_fast qlen 10
+    link/ppp 
+    inet 212.64.94.251 peer 212.64.94.1/32 scope global ppp0      
+      </PRE
+><P
+>        Этот листинг содержит более подробную информацию. Здесь показаны все IP-адреса, и каким 
+        интерфейсам они принадлежат. Здесь <SPAN
+CLASS="QUOTE"
+>"inet"</SPAN
+> соответствует термину <SPAN
+CLASS="QUOTE"
+>"Internet 
+        (IPv4)"</SPAN
+>. Существует целый ряд типов сетевых адресов, но нас они пока не интересуют.
+      </P
+><P
+>        Взглянем поближе на интерфейс <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>eth0</I
+></SPAN
+>. Из листинга видно, что ему назначен
+        адрес <SPAN
+CLASS="QUOTE"
+>"inet"</SPAN
+> -- 10.0.0.1/8, где <SPAN
+CLASS="QUOTE"
+>"/8"</SPAN
+> определяет число бит, 
+        соответствующих адресу сети. Таким образом, для адресации хостов в сети у нас остается
+        32 - 8 = 24 бита, что соответствует адресу сети -- 10.0.0.0 и маске сети -- 255.0.0.0.
+      </P
+><P
+>        Это говорит о том, что любой хост в этой сети, например 10.250.3.13, будет непосредственно
+        доступен через наш интерфейс с IP-адресом 10.0.0.1.
+      </P
+><P
+>        Для <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>ppp0</I
+></SPAN
+> применима та же концепция, хотя числа в IP-адресе отличаются. 
+        Ему присвоен  адрес - 212.64.94.251, без маски сети. Это означает, что он обслуживает
+        соединение типа <SPAN
+CLASS="QUOTE"
+>"точка-точка"</SPAN
+> (point-to-point), и что каждый адрес, за исключением 
+        212.64.94.251, является удаленным. Но и это еще не все. Для этого интерфейса указывается
+        адрес другого конца соединения -- 212.64.94.1.
+        Здесь число <SPAN
+CLASS="QUOTE"
+>"/32"</SPAN
+> говорит о том, что это конкретный IP-адрес и он не содержит
+        адреса сети. 
+      </P
+><P
+>        Очень важно, чтобы вы поняли суть этой концепции. Если у вас возникают какие либо 
+        затруднения, обращайтесь к документации, упомянутой 
+        <A
+HREF="x96.html"
+>в начале этого HOWTO</A
+>.
+      </P
+><P
+>        Вы наверняка обратили внимание на слово <SPAN
+CLASS="QUOTE"
+>"qdisc"</SPAN
+>. Оно обозначает 
+        дисциплину обработки очереди (Queueing Discipline). Позднее мы коснемся этой темы
+        подробнее. 
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="IPSHOWSUSOURROUTES"
+></A
+>3.4.3. Просмотр списка маршрутов с помощью утилиты <B
+CLASS="COMMAND"
+>ip</B
+></H2
+><P
+>        Итак, мы теперь знаем, как можно отыскать адреса 10.x.y.z, и как обратиться к адресу 212.64.94.1. 
+        Однако этого недостаточно, поскольку нам необходимо иметь возможность общения
+        с внешним миром. Интернет доступен нам через ppp-соединение, которое объявляет, что 
+        хост с адресом 212.64.94.1, готов передать наши пакеты во внешний мир и вернуть результаты
+        обратно.
+      </P
+><PRE
+CLASS="PROGRAMLISTING"
+>      
+[ahu@home ahu]$ ip route show
+212.64.94.1 dev ppp0  proto kernel  scope link  src 212.64.94.251 
+10.0.0.0/8 dev eth0  proto kernel  scope link  src 10.0.0.1 
+127.0.0.0/8 dev lo  scope link 
+default via 212.64.94.1 dev ppp0      
+      </PRE
+><P
+>        Этот листинг достаточно <SPAN
+CLASS="QUOTE"
+>"прозрачен"</SPAN
+>. Первые 3 строки сообщают сведения,
+        которые нами уже обсуждались выше. Последняя строка говорит о том, что внешний мир 
+        доступен через 212.64.94.1 -- шлюз, заданный по-умолчанию. 
+        То что это шлюз, видно благодаря наличию слова <SPAN
+CLASS="QUOTE"
+>"via"</SPAN
+> (в переводе с англ. -- 
+        <SPAN
+CLASS="QUOTE"
+>"через"</SPAN
+>). Этот шлюз (с адресом 212.64.94.1) готов перенаправлять наши пакеты в 
+        Интернет и возвращать обратно результаты наших запросов.
+      </P
+><P
+>        Для примера, более <SPAN
+CLASS="QUOTE"
+>"старая"</SPAN
+> утилита <B
+CLASS="COMMAND"
+>route</B
+>, 
+        дает такой результат на моей машине:
+      </P
+><PRE
+CLASS="PROGRAMLISTING"
+>      
+[ahu@home ahu]$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use
+Iface
+212.64.94.1     0.0.0.0         255.255.255.255 UH    0      0        0 ppp0
+10.0.0.0        0.0.0.0         255.0.0.0       U     0      0        0 eth0
+127.0.0.0       0.0.0.0         255.0.0.0       U     0      0        0 lo
+0.0.0.0         212.64.94.1     0.0.0.0         UG    0      0        0 ppp0      
+      </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x197.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x270.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Необходимые условия</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c177.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ARP</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

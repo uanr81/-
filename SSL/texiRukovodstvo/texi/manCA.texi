@@ -1,4 +1,4 @@
-@node CA, X509, Пример конфигурации OpenSSL, Top
+@node CA, X509, X509V3_CONFIG, Top
 @chapter CA
 @table @asis
 @item NAME

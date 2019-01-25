@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Intermediate queueing device.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Дисциплины обработки очередей для управления пропускной способностью"
+HREF="c834.html"><LINK
+REL="PREVIOUS"
+TITLE="Классификация пакетов с помощью фильтров."
+HREF="x1308.html"><LINK
+REL="NEXT"
+TITLE="Распределение нагрузки по нескольким интерфейсам."
+HREF="c1389.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1308.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 9. Дисциплины обработки очередей для управления пропускной способностью</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1389.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="THEINTERMEDIATEQUEUEINGDEVICEIMQ"
+></A
+>9.7. Intermediate queueing device.</H1
+><P
+>      Устройство IMQ не является дисциплиной обработки очереди, но тесно с ними связано. В Linux, дисциплины 
+      обработки очередей присоединяются к сетевым устройствам и все, что помещается в очередь устройства, 
+      попадает сначала в очередь дисциплины обработки очереди. Из-за этого подхода существуют два ограничения:
+      <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>            Ограничение пропускной способности полноценно работает только для исходящего трафика (дисциплина 
+            обработки входящего трафика существует, но ее возможности мизерны по сравнению с полноклассовыми 
+            дисциплинами).
+          </P
+></LI
+><LI
+><P
+>            Дисциплина обработки очереди обслуживает трафик только для одного интерфейса, нет никакой возможности 
+            задать глобальные ограничения.
+          </P
+></LI
+></OL
+>
+        Устройство IMQ пытается решить эти проблемы. С помощью подсистемы фильтрации ОС Linux можно определенные 
+        пакеты направлять через этот псевдо-интерфейс, к которому подключаются различные дисциплины обработки 
+        очередей. Таким образом, можно управлять полосой пропускания, как входящего, так и общего трафика.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN1374"
+></A
+>9.7.1. Пример конфигурирования.</H2
+><P
+>        Первое, что может прийти на ум -- попытаться сформировать входящий трафик так, чтобы дать себе наивысший 
+        приоритет ;) Конфигурация IMQ очень похожа на конфигурацию любого другого интерфейса:
+        <PRE
+CLASS="SCREEN"
+>tc qdisc add dev imq0 root handle 1: htb default 20
+
+tc class add dev imq0 parent 1: classid 1:1 htb rate 2mbit burst 15k
+
+tc class add dev imq0 parent 1:1 classid 1:10 htb rate 1mbit
+tc class add dev imq0 parent 1:1 classid 1:20 htb rate 1mbit
+
+tc qdisc add dev imq0 parent 1:10 handle 10: pfifo
+tc qdisc add dev imq0 parent 1:20 handle 20: sfq
+
+tc filter add dev imq0 parent 10:0 protocol ip prio 1 u32 match \
+		ip dst 10.0.0.230/32 flowid 1:10
+        </PRE
+>
+        В этом примере для классификации пакетов используется селектор u32, однако, при работе с imq, могут 
+        использоваться и другие селекторы.
+      </P
+><P
+>        Отбираемый трафик маркируется средствами <B
+CLASS="COMMAND"
+>iptables</B
+>:
+        <PRE
+CLASS="SCREEN"
+>iptables -t mangle -A PREROUTING -i eth0 -j IMQ --todev 0
+
+ip link set imq0 up
+        </PRE
+>
+        Действие IMQ в <B
+CLASS="COMMAND"
+>iptables</B
+> допускается использовать только в цепочках
+        PREROUTING и POSTROUTING, таблицы mangle. Его синтаксис:
+        <PRE
+CLASS="SCREEN"
+>IMQ [ --todev n ]	
+        </PRE
+>
+        где n -- это номер устройства imq.
+      </P
+><P
+>        Это действие существует и в <B
+CLASS="COMMAND"
+>ip6tables</B
+>.
+      </P
+><P
+>        Обратите внимание: трафик попадает на интерфейс не в тот момент, когда переходит к цели IMQ, а после 
+        обработки соответствующей цепочки. Точное место входа на устройство imq зависит от типа трафика 
+        (входящий/исходящий).
+      </P
+><P
+>        Для входящего трафика imq регистрируется с приоритетом NF_IP_PRI_MANGLE + 1. Это означает, что пакеты 
+        попадают на устройство сразу после прохождения цепочки PREROUTING. Для исходящего трафика, imq использует 
+        приоритет NF_IP_PRI_LAST, который гарантирует, что пакеты, уничтоженные пакетным фильтром не будут 
+        занимать полосу пропускания устройства.
+      </P
+><P
+>        Дополнительные сведения и "заплаты" вы найдете на сайте <A
+HREF="http://luxik.cdi.cz/~patrick/imq/"
+TARGET="_top"
+>        http://luxik.cdi.cz/~patrick/imq/</A
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1308.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1389.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Классификация пакетов с помощью фильтров.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c834.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Распределение нагрузки по нескольким интерфейсам.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

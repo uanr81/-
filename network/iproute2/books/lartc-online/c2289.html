@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Специализированные дисциплины управления очередями.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Малоизвестные настройки."
+HREF="x1727.html"><LINK
+REL="NEXT"
+TITLE="Алгоритм Кларка-Шенкера-Чанга."
+HREF="x2313.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1727.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2313.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER14"
+></A
+>Глава 14. Специализированные дисциплины управления очередями.</H1
+><P
+>    Если вы придете к выводу, что ранее упомянутые дисциплины организации очередей вас не устраивают,
+    то ядро может предложить вам ряд более специализированных дисциплин.
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="BFIFOPFIFO"
+></A
+>14.1. bfifo/pfifo</H1
+><P
+>      Эти бесклассовые дисциплины еще более просты, чем <TT
+CLASS="CLASSNAME"
+>pfifo_fast</TT
+> -- они не имеют
+      внутренних полос, все виды трафика в них равноправны. Единственное их преимущество -- возможность получения
+      некоторых статистик. Таким образом, если вы не собираетесь ограничивать трафик или раскидывать его по 
+      приоритетам, то использование этой дисциплины позволит вам получить дополнительную информацию, которая 
+      поможет выявить узкие места на интерфейсе.
+    </P
+><P
+>      Длина <TT
+CLASS="CLASSNAME"
+>pfifo</TT
+> измеряется в пакетах, <TT
+CLASS="CLASSNAME"
+>bfifo</TT
+> -- в байтах.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PARAMETERSUSAGE"
+></A
+>14.1.1. Параметры и порядок использования.</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>limit</DT
+><DD
+><P
+>              Задает длину очереди. Для <TT
+CLASS="CLASSNAME"
+>pfifo</TT
+> измеряется в пакетах, для
+              <TT
+CLASS="CLASSNAME"
+>bfifo</TT
+> -- в байтах. По-умолчанию имеет значение: для 
+              <TT
+CLASS="CLASSNAME"
+>pfifo</TT
+> -- <TT
+CLASS="PARAMETER"
+><I
+>txqueuelen</I
+></TT
+> интерфейса (см. раздел <A
+HREF="x852.html#PFIFO_FAST"
+>pfifo_fast</A
+>), в пакетах, и <TT
+CLASS="PARAMETER"
+><I
+>txqueuelen * mtu</I
+></TT
+> байт -- для
+              <TT
+CLASS="CLASSNAME"
+>bfifo</TT
+>.
+              </P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1727.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2313.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Малоизвестные настройки.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Алгоритм Кларка-Шенкера-Чанга.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

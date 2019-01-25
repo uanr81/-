@@ -1,0 +1,464 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Тоннелирование IPv6 при помощьи Cisco и/или 6bone.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Тоннели неядерного уровня."
+HREF="x452.html"><LINK
+REL="NEXT"
+TITLE="IPSEC: безопасная передача данных протоколами IP через Интернет"
+HREF="c518.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x452.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c518.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER6"
+></A
+>Глава 6. Тоннелирование IPv6 при помощьи Cisco и/или 6bone.</H1
+><P
+>    Марко Давидс (Marco Davids) <TT
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:marco@sara.nl"
+>marco@sara.nl</A
+>&#62;</TT
+>
+  </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/note.gif"
+HSPACE="5"
+ALT="Примечание:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>    Мэйнтейнеру:
+    </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>    Насколько я понимаю, этот способ тоннелирования IPv6-IPv4 по определению не GRE-тоннелирование. Вы можете
+    тоннелировать IPv6 по IPv4 с помощью тоннельных устройств GRE (GRE тоннелирует что угодно через IPv4), 
+    но в этом варианте используются интерфейс ("sit") тоннелирующий только IPv6 через IPv4, а потому это 
+    что-то другое.
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="IPV6TUNNELING2"
+></A
+>6.1. Тоннелирование IPv6.</H1
+><P
+>      Это еще однин вариант применения возможностей тоннелирования Linux. Он популярен среди пионеров во 
+      внедрении протокола IPv6. Практический пример, описанный ниже, конечно не единственный способ 
+      организовать тоннелирование IPv6. Однако, этот метод часто используется при создании тоннеля между 
+      Linux и маршрутизатором Cisco. Опыт говорит, что многих пользователей интересует именно этот. Десять к 
+      одному -- это относится и к вам ;-)
+    </P
+><P
+>      Небольшое отступление об адресах IPv6:
+    </P
+><P
+>      По сравнению с адресами IPv4, адреса IPv6 действительно большие: 128 бит по сравнению с 32 битами. 
+      Это дает нам именно то, что нужно -- много, очень много IP-адресов, если быть более точным:
+      340,282,266,920,938,463,463,374,607,431,768,211,465. Кроме этого, IPv6 (или IPng, сокращение от 
+      IP Next Generation) позволяет уменьшить таблицы маршрутизации на магистральных маршрутизаторах Internet, 
+      упростить конфигурацию оборудования, увеличить безопасность на уровне IP и улучшить качество 
+      обслуживания (QoS).
+    </P
+><P
+>      Пример: 2002:836b:9820:0000:0000:0000:836b:9886
+    </P
+><P
+>      Использование адресов IPv6 может оказазаться весьма трудным. Потому, существуют некоторые правила:
+      <P
+></P
+><UL
+><LI
+><P
+>            Не используйте лидирующие нули. Аналогично с IPv4.
+          </P
+></LI
+><LI
+><P
+>            Используйте двоеточия для отделения каждой 16-битной (2-байтной) группы .
+          </P
+></LI
+><LI
+><P
+>            Если в адресе есть последовательность нулей, ее можно записать как ::. Это можно сделать только 
+            один раз в адресе и только для кратных 16-ти битам последовательностей.
+          </P
+></LI
+></UL
+>
+      Так, например, адрес 2002:836b:9820:0000:0000:0000:836b:9886 может быть записан как 
+      2002:836b:9820::836b:9886, что гораздо короче и удобней. 
+    </P
+><P
+>      Другой пример, адрес 3ffe:0000:0000:0000:0000:0020:34A1:F32C может быть записан как 
+      3ffe::20:34A1:F32C, что значительно короче.
+    </P
+><P
+>      IPv6 предназначен для замены текущего IPv4. Поскольку это относительно новая технология, пока не 
+      существует всемирной сети, где в качестве основного протокола используется IPv6. Для быстрейшего 
+      продвижения этой технологии, была создана 6bone. 
+    </P
+><P
+>      Сети основанные на IPv6 соединяются одна с другой инкапсуляцией IPv6 в IPv4 и пересылкой по 
+      существующей инфраструктуре IPv4. 
+    </P
+><P
+>      Именно здесь применяются тоннели.
+    </P
+><P
+>      Для того, чтобы использовать IPv6, наше ядро должно иметь его поддержку. Существует много хороших 
+      описаний, как это сделать. Но все сводится к нескольким шагам: 
+      <P
+></P
+><UL
+><LI
+><P
+>            Возьмите достаточно новую версию дистрибутива Linux, с соответствуюшей glibc.
+          </P
+></LI
+><LI
+><P
+>            Обновите исходные тексты ядра.
+          </P
+></LI
+></UL
+>
+      После этого можно приступать к сборке ядра, с включенной поддержкой IPv6: 
+      <P
+></P
+><UL
+><LI
+><P
+>            Перейдите в каталог <TT
+CLASS="FILENAME"
+>/usr/src/linux</TT
+> и запустите:
+          </P
+></LI
+><LI
+><P
+>            <B
+CLASS="COMMAND"
+>make menuconfig</B
+>
+          </P
+></LI
+><LI
+><P
+>            Перейдите в раздел "Networking Options"
+          </P
+></LI
+><LI
+><P
+>            Отметьте пункты "The IPv6 protocol", "IPv6: enable EUI-64 token format", 
+            "IPv6: disable provider based addresses"
+          </P
+></LI
+></UL
+>
+    </P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/tip.gif"
+HSPACE="5"
+ALT="Совет:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>        Не используйте "модули". Часто они плохо работают.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>      Другими словами, код поддержки IPv6 должен быть связан с ядром статически. 
+      Теперь сохраните конфигурацию и соберите ядро.
+    </P
+><DIV
+CLASS="TIP"
+><P
+></P
+><TABLE
+CLASS="TIP"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/tip.gif"
+HSPACE="5"
+ALT="Совет:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>        Перед сборкой измените строку в Makefile: EXTRAVERSION = -x ; --&#62; ; EXTRAVERSION = -x-IPv6
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+> 
+      Есть большое количество хорошей документации по сборке и установке ядра, но это выходит за рамки 
+      данного документа. Если вы будете испытывать трудности на этом этапе, обратитесь к соответствующей 
+      документации.
+    </P
+><P
+>      Начать стоит с файла <TT
+CLASS="FILENAME"
+>/usr/src/linux/README</TT
+>. После того, как вы разберетесь 
+      с пересборкой ядра и перезагрузитесь с новым ядром, выполните команду <B
+CLASS="COMMAND"
+>/sbin/ifconfig -a</B
+>. 
+      Вы должны будете увидеть новый класс устройств <TT
+CLASS="FILENAME"
+>sit0-device</TT
+>, где SIT означает Simple 
+      Internet Transition. Поздравляю, вы сделали большой шаг в направлении IP Next Generation ;-)
+    </P
+><P
+>      Теперь следующий шаг. Вы хотите подключить ваш хост или сеть к другой сети IPv6. Это может быть "6bone", 
+      которая и была создана для таких задач.
+    </P
+><P
+>      Предположим, что у вас имеется сеть IPv6 3ffe:604:6:8::/64 и вы хотите подключить ее к 6bone или 
+      аналогичной ей. Обратите внимание, что нотация /64 означает тоже самое, что и в обычном IP вдресе.
+    </P
+><P
+>      Ваш адрес IPv4 -- 145.100.24.181, а адрес маршрутизатора 6bone -- 145.100.1.5
+      <PRE
+CLASS="SCREEN"
+># ip tunnel add sixbone mode sit remote 145.100.1.5 [local 145.100.24.181 ttl 255]
+# ip link set sixbone up
+# ip addr add 3FFE:604:6:7::2/126 dev sixbone
+# ip route add 3ffe::0/16 dev sixbone        
+      </PRE
+>
+      Обсудим приведенные команды. Первой строкой создается интерфейс тоннеля с именем sixbone и
+      определяется его режим -- sit (т.е. тоннелирование IPv6 в IPv4), а так же указываются 
+      адреса отправителя и получателя. Напоследок устанавливается максимальный TTL -- 255. 
+    </P
+><P
+>      В следующей строке интерфейс активируется (up). Далее, добавляется наш сетевой адрес и задается 
+      маршрут к сети 3ffe::/15 (что на сегодняшний день является всей 6bone) через тоннель. Если машина, 
+      на которой выполняются эти команды, является шлюзом IPv6, то нужно будет выполнить еще и такие команды:
+      <PRE
+CLASS="SCREEN"
+># echo 1 &#62;/proc/sys/net/ipv6/conf/all/forwarding
+# /usr/local/sbin/radvd      
+      </PRE
+>
+      radvd, как и zebra, демон маршутизации, поддерживающий автоконфигурационные возможности IPv6. Более 
+      детальную информацию ищите в Internet. Проверить настройку системы можно командой:
+      <PRE
+CLASS="SCREEN"
+># /sbin/ip -f inet6 addr      
+      </PRE
+>
+      Если на вашем шлюзе IPv6 запущен radvd и вы загрузите в вашей сети систему Linux с поддержкой IPv6, 
+      то сможете оценить возможности автонастройки IPv6:
+      <PRE
+CLASS="SCREEN"
+># /sbin/ip -f inet6 addr
+1: lo: &lt;LOOPBACK,UP&gt; mtu 3924 qdisc noqueue inet6 ::1/128 scope host
+
+3: eth0: &lt;BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc pfifo_fast qlen 100
+inet6 3ffe:604:6:8:5054:4cff:fe01:e3d6/64 scope global dynamic
+valid_lft forever preferred_lft 604646sec inet6 fe80::5054:4cff:fe01:e3d6/10 
+scope link      
+      </PRE
+>
+      Теперь можно сделать следующий шаг и настроить bind для адресов IPv6. У типа A существует эквиваоент для 
+      IPv6: AAAA. Для in-addr.arpa эквивалентом является: ip6.int. По данной теме доступно множество информации.
+    </P
+><P
+>      Существует много приложений поддерживающих IPv6 и их количество все время увеличивается. 
+      Это secure shell, telnet, inetd, браузер Mozilla, веб-сервер Apache и многие другие. Но все это 
+      выходит за рамки данного документа ;-)
+    </P
+><P
+>      На стороне Cisco конфигурация должна выглядеть примерно так: 
+      <PRE
+CLASS="SCREEN"
+>!
+interface Tunnel1
+description IPv6 tunnel
+no ip address
+no ip directed-broadcast
+ipv6 address 3FFE:604:6:7::1/126
+tunnel source Serial0
+tunnel destination 145.100.24.181
+tunnel mode ipv6ip
+!
+ipv6 route 3FFE:604:6:8::/64 Tunnel1        
+      </PRE
+>
+      Если в вашем распоряжении нет Cisco, можно попробовать использовать тоннельные брокеры IPv6, которых 
+      сейчас в Internet существует предостаточное количество. В большинстве случаев они не откажут вам
+      в создании дополнительного тоннеля к вам на своих маршрутизаторах Cisco. Чаще всего это 
+      можно сделать при помощи веб-интерфейса. Поищите фразу "ipv6 tunnel broker" в вашей любимой 
+      поисковой системе.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x452.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c518.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Тоннели неядерного уровня.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>IPSEC: безопасная передача данных протоколами IP через Интернет</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

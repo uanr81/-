@@ -1,0 +1,425 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Фильтры-ограничители трафика.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Расширенная фильтрация."
+HREF="c1452.html"><LINK
+REL="PREVIOUS"
+TITLE="Классификатор route."
+HREF="x1578.html"><LINK
+REL="NEXT"
+TITLE="Хеш-фильтры."
+HREF="x1661.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1578.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 12. Расширенная фильтрация.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1661.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="POLICINGFILTERS"
+></A
+>12.3. Фильтры-ограничители трафика.</H1
+><P
+>      Более сложные системы управления трафиком можно строить на основе фильтров, которые 
+      зависят от пропускной способности и загруженности канала. Вы можете объявить фильтр, который
+      не будет срабатывать, если загрузка канала превысила некоторую величину или наоборот,
+      срабатывать только в том случае, если пропускная способность превысила заданное значение.
+    </P
+><P
+>      Так, если вы решили ограничить 5 Мбитный канал величиной в 4 Мбит/сек, вы можете вообще
+      прекратить прием пакетов, если загруженность канала превысит 4 Мбит/сек, либо отбросить
+      1 Мбит/сек, а 4 Мбит/сек передать заданному классу.
+    </P
+><P
+>      При превышении заданного порога вы можете отбрасывать <SPAN
+CLASS="QUOTE"
+>"лишние"</SPAN
+> пакеты, 
+      переклассифицировать их или передать другим фильтрам.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="WAYSTOPOLICE"
+></A
+>12.3.1. Способы ограничения.</H2
+><P
+>        Существует две основных возможности ограничения. Если вы собрали ядро с
+        <SPAN
+CLASS="QUOTE"
+>"функциями оценки"</SPAN
+> (<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>estimators</I
+></SPAN
+>), то оно сможет более или менее точно 
+        измерять объем трафика, переданного тому или иному фильтру. Устройство функции оценки достаточно
+        несложное -- 25 раз в секунду подсчитывается объем переданных данных, на основе которого
+        вычисляется загруженность канала.
+      </P
+><P
+>        Другой способ -- Token Bucket Filter, который реализуется в пределах вашего фильтра. 
+        Это типичный шейпер, который может использоваться, если вам нужно просто ограничить полосу 
+        пропускания по какому-нибудь критерию.
+      </P
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="WITHTHEKERNELESTIMATOR"
+></A
+>12.3.1.1. Оценочная функция в ядре (estimator).</H3
+><P
+>          Тут все очень просто и имеется всего один параметр: <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>avrate</I
+></SPAN
+>. 
+          Либо объем трафика остается ниже <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>avrate</I
+></SPAN
+> и фильтр классифицирует его
+          как сконфигурированный classid, либо, в случае превышения заданной границы, выполняется 
+          указанное действие, которое по-умолчанию выполняет переклассификацию.
+        </P
+><P
+>          Для оценки загруженности канала, ядро использует экспоненциальное взвешенное смещенное среднее 
+          значение, которое менее чувствительно к коротким пикам.
+        </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="WITHTOKENBUCKETFILTER"
+></A
+>12.3.1.2. Token Bucket Filter.</H3
+><P
+>          Используются следующие параметры:
+          <P
+></P
+><UL
+><LI
+><P
+>                burst/buffer/maxburst
+              </P
+></LI
+><LI
+><P
+>                mtu/minburst
+              </P
+></LI
+><LI
+><P
+>                mpu
+              </P
+></LI
+><LI
+><P
+>                rate
+              </P
+></LI
+></UL
+>
+          Которые ведут себя идентично описанным в разделе <A
+HREF="x852.html#TOKENBUCKETFILTER"
+>Token Bucket Filter</A
+>. 
+          Обратите внимание, если вы установите <TT
+CLASS="PARAMETER"
+><I
+>mtu</I
+></TT
+> слишком низким, 
+          то входящий трафик будет подавлен, в то время как исходящий TBF qdisc передаст 
+          с более низкой скоростью.
+        </P
+><P
+>          Еще одно важное отличие такого фильтра -- он может только либо пропустить пакет, либо отбросить.
+          Он не может задержать пакет на какое-то время.
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="OVERLIMITACTIONS"
+></A
+>12.3.2. Действия в случае превышения ограничения.</H2
+><P
+>        Если правило <SPAN
+CLASS="QUOTE"
+>"решит"</SPAN
+>, что произошло превышение заданного предела, то оно
+        выполнит соответствующее действие. Имеются четыре вида действий:
+        <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><B
+CLASS="COMMAND"
+>continue</B
+></DT
+><DD
+><P
+>                Выполняется в случае несовпадения с условной частью правила, чтобы передать
+                пакет следующему фильтру.
+              </P
+></DD
+><DT
+><B
+CLASS="COMMAND"
+>drop</B
+></DT
+><DD
+><P
+>                Очень жестокое действие, которое просто отказывает <SPAN
+CLASS="QUOTE"
+>"в праве на жизнь"</SPAN
+> трафику, 
+                объем которого превысил заданную величину. Часто используется во входных фильтрах
+                и имеет ограниченное применение. Например, представим, что имеется сервер имен,
+                который не в состоянии работать при нагрузке выше чем 5Мбит/сек, в этом случае
+                можно построить входной фильтр, который ограничит входящий трафик для нашего сервера.
+              </P
+></DD
+><DT
+><B
+CLASS="COMMAND"
+>Pass/OK</B
+></DT
+><DD
+><P
+>                Пропустить трафик. Может использоваться для того, чтобы отключить сложный фильтр, 
+                оставив его на месте.
+              </P
+></DD
+><DT
+><B
+CLASS="COMMAND"
+>reclassify</B
+></DT
+><DD
+><P
+>                Действие, заданное по-умолчанию. 
+                Наиболее часто сводится к переклассификации в <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Best Effort</I
+></SPAN
+>
+                (в данном контексте фразу <SPAN
+CLASS="QUOTE"
+>"Best Effort"</SPAN
+> следует понимать как -- 
+                <SPAN
+CLASS="QUOTE"
+>"лучшее из оставшегося"</SPAN
+>. 
+                <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>прим. перев.</I
+></SPAN
+>)
+              </P
+></DD
+></DL
+></DIV
+>
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="EXAMPLES"
+></A
+>12.3.3. Примеры.</H2
+><P
+>        Единственный, известный нам, реальный пример приведен в разделе 
+        <A
+HREF="x2493.html"
+>Защита от SYN flood</A
+>
+      </P
+><P
+>        Ограничение входящего icmp-трафика до 2 Кбит. При превышении предела -- пакеты отбросить.
+        <PRE
+CLASS="SCREEN"
+>tc filter add dev $DEV parent ffff: \
+    protocol ip prio 20 \
+    u32 match ip protocol 1 0xff \
+    police rate 2kbit buffer 10k drop \
+    flowid :1        
+        </PRE
+>
+        Ограничить размер пакетов (т.е. все пакеты, имеющие размер более чем 84 байта, будут сброшены)         
+        <PRE
+CLASS="SCREEN"
+>tc filter add dev $DEV parent ffff: \
+   protocol ip prio 20 \
+   u32 match tos 0 0 \
+   police mtu 84 drop \
+   flowid :1        
+        </PRE
+>
+        Этот метод может использоваться для полного подавления icmp-трафика:
+        <PRE
+CLASS="SCREEN"
+>tc filter add dev $DEV parent ffff: \
+   protocol ip prio 20 \
+   u32 match ip protocol 1 0xff \
+   police mtu 1 drop \
+   flowid :1        
+        </PRE
+>
+        Фактически означает: <SPAN
+CLASS="QUOTE"
+>"отбросить все icmp-пакеты, размер которых превышает 1 байт"</SPAN
+>.
+        Чисто теоретически, пакеты могут иметь размер в 1 байт, но на практике вы с ними никогда не 
+        встретитесь.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1578.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1661.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Классификатор route.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1452.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Хеш-фильтры.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

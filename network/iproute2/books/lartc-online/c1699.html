@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Параметры настройки сети в ядре.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Фильтрация трафика IPv6."
+HREF="x1677.html"><LINK
+REL="NEXT"
+TITLE="Малоизвестные настройки."
+HREF="x1727.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1677.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1727.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER13"
+></A
+>Глава 13. Параметры настройки сети в ядре.</H1
+><P
+>    В ядре имеется масса параметров, которые могут быть изменены под различные нужды. 
+    Хотя, заданные по-умолчанию параметры удовлетворяют потребности в 99% случаев, 
+    но не зря же мы назвали это руководство Advanced HOWTO!
+  </P
+><P
+>    Очень интересные настройки вы найдете в <TT
+CLASS="FILENAME"
+>/proc/sys/net</TT
+>, загляните туда. 
+    Конечно же, изначально не все тонкости будут описаны здесь, но мы работаем над этим.
+  </P
+><P
+>    Между прочим, значительная часть настроек описана в файле 
+    <TT
+CLASS="FILENAME"
+>Documentation/filesystems/proc.txt</TT
+>, в дереве каталогов с исходными
+    текстами ядра.
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="REVERSEPATHFILTERING"
+></A
+>13.1. Reverse Path Filtering.</H1
+><P
+>      Reverse Path Filtering -- Проверка Обратного Адреса, хотя это слишком вольный перевод термина, но мне 
+      он кажется наиболее близким по смыслу. <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>прим. перев.</I
+></SPAN
+>.
+    </P
+><P
+>      По-умолчанию, маршрутизаторы перенаправляют все подряд, даже пакеты, которые не принадлежат 
+      вашей сети. В качестве примера можно привести утечку локального трафика в Интернет. 
+      Если у вас имеется интерфейс с маршрутом к нему 195.96.96.0/24, то вы наверняка не ожидаете 
+      получить на него пакеты от 212.64.94.1.
+    </P
+><P
+>      В файловой системе <TT
+CLASS="FILENAME"
+>/proc</TT
+> лежит файл, изменив который вы сможете 
+      отключить или включить эту проверку. Смысл этого параметра достаточно прост -- все, что поступает к 
+      нам, проходит проверку на соответствие исходящего адреса с нашей таблицей маршрутизации и такая 
+      проверка считается успешной, если принятый пакет предполагает передачу ответа через тот же самый 
+      интерфейс.
+    </P
+><P
+>      Следующий фрагмент включит проверку исходящего адреса для всех существующих интерфейсов:
+      <PRE
+CLASS="PROGRAMLISTING"
+># for i in /proc/sys/net/ipv4/conf/*/rp_filter ; do
+&gt;  echo 2 &gt; $i 
+&gt; done      
+      </PRE
+>
+      Возвращаясь к примеру выше: пусть имеется маршрутизатор, построенный на базе Linux, который
+      обслуживает две подсети -- <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>net1</I
+></SPAN
+> и <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>net2</I
+></SPAN
+>, причем
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>net1</I
+></SPAN
+> подключена к интерфейсу eth0, а <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>net2</I
+></SPAN
+> -- 
+      к интерфейсу eth1. Теперь, если на eth0, придет пакет с обратным адресом <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>net2</I
+></SPAN
+>,
+      то он будет сброшен. Аналогичным образом будет отвергнут пакет, с обратным адресом 
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>net1</I
+></SPAN
+>, пришедший на интерфейс eth1.
+    </P
+><P
+>      Это есть полная проверка обратного адреса. Но такая фильтрация возможна только на основе
+      анализа IP-адресов сетей связанных напрямую маршрутизатором. Это потому, что полная фильтрация 
+      становится невозможной в случае асимметричной маршрутизации (когда пакеты приходят через 
+      один интерфейс, а ответный трафик через другой), например через спутник (или в случае динамической 
+      маршрутизации (bgp, ospf, rip) в вашей сети), когда данные поступают со спутниковой антенны, а ответы 
+      отправляются по обычной наземной линии связи.
+    </P
+><P
+>      Если у вас как раз такой случай (вы наверняка точно знаете об этом), то можете просто выключить 
+      <TT
+CLASS="FILENAME"
+>rp_filter</TT
+> на интерфейсе, куда приходят данные со спутника. 
+      Если вам интересно узнать -- сбрасываются ли какие-нибудь пакеты, файл      
+      <TT
+CLASS="FILENAME"
+>log_martians</TT
+>, в том же самом каталоге, сообщит ядру о необходимости
+      журналирования таких пакетов.
+      <PRE
+CLASS="SCREEN"
+># echo 1 &gt;/proc/sys/net/ipv4/conf/&lt;interfacename&gt;/log_martians      
+      </PRE
+>
+      FIXME: достаточно ли настроек в файлах <TT
+CLASS="FILENAME"
+>conf/[default,all]/*</TT
+> ? - martijn
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1677.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1727.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Фильтрация трафика IPv6.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Малоизвестные настройки.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

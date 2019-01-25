@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Фильтрация трафика IPv6.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Расширенная фильтрация."
+HREF="c1452.html"><LINK
+REL="PREVIOUS"
+TITLE="Хеш-фильтры."
+HREF="x1661.html"><LINK
+REL="NEXT"
+TITLE="Параметры настройки сети в ядре."
+HREF="c1699.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1661.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 12. Расширенная фильтрация.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1699.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="FILTERINGIPV6TRAFFIC"
+></A
+>12.5. Фильтрация трафика IPv6.</H1
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="HOWCOMETHATIPV6TCFILTERSDONOTWORK"
+></A
+>12.5.1. Почему не работают tc-фильтры в IPv6?</H2
+><P
+>        Дело в том, что в ядре Linux, модель маршрутизации и адресации IPv4 (замечательные 
+        особенности которой описывает этот HOWTO) строилась на основе Базы Политик Маршрутизации (RPDB -- 
+        Routing Policy Database). К сожалению, модель IPv6 в Linux была реализована совершенно
+        иным образом. Хотя они используют совместно некоторые средства, но основа основ -- RPDB,
+        не принимает участия в адресации и маршрутизации IPv6.
+      </P
+><P
+>        Надеюсь, что такое положение дел наверняка изменится, надо только подождать.
+      </P
+><P
+>        FIXME: : Ждем ваших замечаний и предложений по этому поводу, может кто-то работает над этим?
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="MARKINGIPV6PACKETSUSINGIP6TABLES"
+></A
+>12.5.2. Маркировка пакетов IPv6 средствами ip6tables.</H2
+><P
+>        <B
+CLASS="COMMAND"
+>ip6tables</B
+> имеет возможность пометить пакеты:
+        <PRE
+CLASS="SCREEN"
+># ip6tables -A PREROUTING -i eth0 -t mangle -p tcp -j MARK --mark 1        
+        </PRE
+>
+        Но тем не менее, это крайне слабое утешение, поскольку пакет пройдет мимо RPDB.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="USINGTHEU32SELECTORTOMATCHIPV6PACKET"
+></A
+>12.5.3. Использование селектора u32 для пакетов IPv6.</H2
+><P
+>        Для передачи по сетям IPv4, трафик IPv6 обычно инкапсулируется в <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>SIT</I
+></SPAN
+>-туннель.
+        За дополнительной информацией по созданию такого рода туннелей, обращайтесь к разделу
+        <A
+HREF="x418.html#IPV6TUNNELING1"
+>Тоннелирование IPv6</A
+>. Это позволяет выполнять фильтрацию IPv4-пакетов, которые,
+        в качестве полезной нагрузки, несут пакеты IPv6.
+      </P
+><P
+>        Следующий фильтр отберет все пакеты IPv6, инкапсулированные в IPv4:
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev $DEV parent 10:0 protocol ip prio 10 u32 \
+            match ip protocol 41 0xff flowid 42:42        
+        </PRE
+>
+        Продолжим в том же духе. Предположим, что пакеты IPv6 передаются по сети IPv4, и не имеют 
+        набора опций. Тогда, для обнаружения пакетов ICMPv6 можно использовать следующий фильтр. 
+        0x3a (58) -- Next-Header для ICMPv6.
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev $DEV parent 10:0 protocol ip prio 10 u32 \
+           match ip protocol 41 0xff \
+           match u8 0x05 0x0f at 0 \
+           match u8 0x3a 0xff at 26 \
+           flowid 42:42        
+        </PRE
+>
+        Фильтрация по адресу получателя потребует от нас дополнительных усилий. Например,
+        следующий фильтр отбирает пакеты с адресом получателя 3ffe:202c:ffff:32:230:4fff:fe08:358d:
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev $DEV parent 10:0 protocol ip prio 10 u32 \
+            match ip protocol 41 0xff \
+            match u8 0x05 0x0f at 0 \
+            match u8 0x3f 0xff at 44 \
+            match u8 0xfe 0xff at 45 \
+            match u8 0x20 0xff at 46 \
+            match u8 0x2c 0xff at 47 \
+            match u8 0xff 0xff at 48 \
+            match u8 0xff 0xff at 49 \
+            match u8 0x00 0xff at 50 \
+            match u8 0x32 0xff at 51 \
+            match u8 0x02 0xff at 52 \
+            match u8 0x30 0xff at 53 \
+            match u8 0x4f 0xff at 54 \
+            match u8 0xff 0xff at 55 \
+            match u8 0xfe 0xff at 56 \
+            match u8 0x08 0xff at 57 \
+            match u8 0x35 0xff at 58 \
+            match u8 0x8d 0xff at 59 \
+            flowid 10:13        
+        </PRE
+>
+        Эту же методику можно использовать для отбора по адресу подсети, например 2001::
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev $DEV parent 10:0 protocol ip prio 10 u32 \
+            match ip protocol 41 0xff \
+            match u8 0x05 0x0f at 0 \
+            match u8 0x20 0xff at 28 \
+            match u8 0x01 0xff at 29 \
+            flowid 10:13        
+        </PRE
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1661.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1699.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Хеш-фильтры.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1452.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Параметры настройки сети в ядре.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

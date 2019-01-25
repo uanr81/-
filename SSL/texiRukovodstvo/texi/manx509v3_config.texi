@@ -1,0 +1,550 @@
+@node X509V3_CONFIG, CA, Пример конфигурации OpenSSL, Top
+@chapter X509V3_CONFIG
+@table @asis
+@item NAME
+       x509v3_config - X509 V3 формат конфигурации расширения сертификата
+@item Расширения
+@table @asis
+@item строковые расширения
+[@ref{ca inhibitAnyPolicy,, inhibitAnyPolicy}] [@ref{ca noCheck,, noCheck}] []
+@item многозначные расширения
+[@ref{ca basicConstraints,, basicConstraints}[@ref{ca pathlen,, pathlen}]] [@ref{ca keyUsage,, keyUsage}] [@ref{ca extendedKeyUsage,, extendedKeyUsage}] [@ref{ca subjectKeyIdentifier,, subjectKeyIdentifier}] [@ref{ca authorityKeyIdentifier,, authorityKeyIdentifier}] [@ref{ca subjectAltName,, subjectAltName}] [@ref{ca issuerAltName,, issuerAltName}] [@ref{ca authorityInfoAccess,, authorityInfoAccess}] [@ref{ca crlDistributionPoints,, crlDistributionPoints}] [@ref{ca issuingDistributionPoint,, issuingDistributionPoint}] [@ref{ca policyConstraints,, policyConstraints}] [@ref{ca nameConstraints,, nameConstraints}] [@ref{ca tlsfeature,, tlsfeature}] []
+@item Необрабатываемые расширения
+[@ref{ca certificatePolicies,, certificatePolicies}] []
+@item Произвольные расширения
+[@ref{ca ARBITRARY EXTENSIONS,, ARBITRARY EXTENSIONS}]
+@item устаревшие расширения
+@ref{ca УСТАРЕВШИЕ РАСШИРЕНИЯ без категорий,, УСТАРЕВШИЕ РАСШИРЕНИЯ без категорий}
+[@ref{ca nsComment,, nsComment}] [@ref{ca nsBaseUrl, nsRevocationUrl, nsCaRevocationUrl, nsRenewalUrl, nsCaPolicyUrl nsSslServerName,, nsBaseUrl, nsRevocationUrl, nsCaRevocationUrl, nsRenewalUrl, nsCaPolicyUrl nsSslServerName}] [@ref{ca Netscape Certificate Type,, Netscape Certificate Type}]
+@end table
+@item DESCRIPTION
+       Некоторые из утилит OpenSSL могут добавлять расширения к сертификату
+       или запросу сертификата на основе содержимого файла конфигурации.
+
+       Обычно приложение будет содержать опцию, указывающую на раздел
+       расширения. Каждая строка раздела расширения имеет вид:
+
+        extension_name=[critical,] extension_options
+
+       Если критическое значение присутствует, расширение будет критическим.
+
+       Формат extension_options зависит от значения extension_name.
+
+       Существует четыре основных типа расширений: строковые расширения,
+       многозначные расширения, необработанные и произвольные расширения.
+
+       Строковые расширения просто имеют строку, которая содержит либо
+       само значение, либо способ его получения.
+
+       Например:
+
+        nsComment="This is a Comment"
+
+       Многозначные расширения имеют краткую форму и длинную форму. Краткая
+       форма представляет собой список имен и значений:
+
+        basicConstraints=critical,CA:true,pathlen:1
+
+       Длинная форма позволяет помещать значения в отдельный раздел:
+
+        basicConstraints=critical,@@bs_section
+
+        [bs_section]
+
+        CA=true
+        pathlen=1
+
+       Обе формы эквивалентны.
+
+       Синтаксис необработанных расширений регулируется кодом расширения:
+       он может, например, содержать данные в нескольких разделах.
+       Правильный синтаксис для использования определяется самим кодом
+       расширения: посмотрите пример расширения политик сертификатов.
+
+       Если тип расширения не поддерживается, то должен использоваться
+       произвольный синтаксис расширения, подробнее см. Раздел
+       ARBITRARY EXTENSIONS.
+
+@item STANDARD EXTENSIONS
+       В следующих разделах подробно описывается каждое поддерживаемое
+       расширение.
+@table @asis
+@item   Basic Constraints. @anchor{ca basicConstraints}
+       Это многозначное расширение, которое указывает, является ли
+       сертификат сертификатом CA. Первое (обязательное) имя - CA, за
+       которым следует TRUE или FALSE. Если CA - TRUE, то может быть
+       включено необязательное имя pathlen, за которым следует
+       неотрицательное значение.
+@display
+       Для примера:
+
+        basicConstraints=CA:TRUE
+
+        basicConstraints=CA:FALSE
+
+        basicConstraints=critical,CA:TRUE, pathlen:0
+@end display
+       Сертификат CA должен включать значение basicConstraints с полем CA,
+       установленным в TRUE. Сертификат конечного пользователя должен либо
+       установить CA в FALSE, либо полностью исключить расширение.
+       Некоторое программное обеспечение может требовать включения
+       basicConstraints с CA, установленным в FALSE для сертификатов
+       конечного объекта.
+
+       Параметр pathlen @anchor{ca pathlen} указывает максимальное количество CA, которое может
+       появиться ниже этого в цепочке. Таким образом, если у вас есть
+       объект CA с pathlen, равным нулю, он может использоваться только
+       для подписи сертификатов конечного пользователя, а не для
+       дальнейшего использования CA.
+
+@item   Key Usage @anchor{ca keyUsage}
+       Использование ключа - это многозначное расширение, состоящее из
+       списка имен разрешенных вариантов использования ключа.
+
+       Поддерживаемые имена: digitalSignature, nonRepudiation,
+       keyEncipherment, dataEncipherment, keyAgreement, keyCertSign, cRLSign,
+       encipherOnly и decipherOnly.
+@display
+       Пример:
+
+        keyUsage=digitalSignature, nonRepudiation
+
+        keyUsage=critical, keyCertSign
+@end display
+@item   Extended Key Usage. @anchor{ca extendedKeyUsage}
+       Это расширение состоит из списка использований, указывающих цели,
+       для которых открытый ключ сертификата может использоваться.
+
+       Это могут быть короткие имена объектов или точечная числовая форма
+       OIDs. В то время как любой OID может быть использован, только
+       определенные значения имеют смысл. В частности, следующие значения
+       PKIX, NS и MS имеют смысл:
+@display
+        Value                  Meaning
+        -----                  -------
+        serverAuth             SSL/TLS Аутентификация веб-сервера.
+        clientAuth             SSL/TLS Аутентификация веб-клиента.
+        codeSigning            Подписание кода.
+        emailProtection        Защита электронной почты (S/MIME).
+        timeStamping           Доверенная временная метка
+        OCSPSigning            OCSP подписание
+        ipsecIKE               ipsec Обмен ключами в Интернете
+        msCodeInd              Индивидуальная подпись кода Microsoft (authenticode)
+        msCodeCom              Подписание коммерческого кода Microsoft (authenticode)
+        msCTLSign              Подписание списка доверия Microsoft
+        msEFS                  Зашифрованная файловая система Microsoft
+
+       Примеры:
+
+        extendedKeyUsage=critical,codeSigning,1.2.3.4
+        extendedKeyUsage=serverAuth,clientAuth
+@end display
+@item   Subject Key Identifier. @anchor{ca subjectKeyIdentifier}
+       Это действительно расширение строки и может принимать два
+       возможных значения. Либо хэш слова, который будет автоматически
+       следовать указаниям в RFC3280, либо шестнадцатеричная строка,
+       содержащая значение расширения для включения. Использование
+       шестнадцатеричной строки настоятельно не рекомендуется.
+@display
+       Пример:
+
+        subjectKeyIdentifier=hash
+@end display
+@item   Authority Key Identifier. @anchor{ca authorityKeyIdentifier}
+       Расширение идентификатора ключа доступа допускает два варианта.
+       ключ и эмитент: оба могут принимать необязательное значение "always".
+
+       Если опция keyid присутствует, делается попытка скопировать
+       идентификатор ключа субъекта из родительского сертификата. Если
+       присутствует значение "always", то в случае сбоя опции
+       возвращается ошибка.
+
+       Опция эмитента копирует эмитента и серийный номер из сертификата
+       эмитента. Это будет сделано только в случае сбоя опции keyid или ее
+       отсутствия, если только флаг "always" не всегда будет содержать
+       значение.
+@display
+       Пример:
+
+        authorityKeyIdentifier=keyid,issuer
+@end display
+@item   Subject Alternative Name. @anchor{ca subjectAltName}
+       Расширение альтернативного имени субъекта позволяет включать
+       различные литеральные значения в файл конфигурации. К ним относятся
+       электронная почта (адрес электронной почты) URI, унифицированный
+       индикатор ресурсов, DNS (доменное имя DNS), RID (зарегистрированный
+       ID: OBJECT IDENTIFIER), IP (адрес IP), dirName (отличительное имя)
+       и otherName.
+
+       Опция электронной почты включает специальное значение 'copy'. Это будет
+       автоматически включать любые адреса электронной почты, содержащиеся в
+       имени субъекта сертификата в расширении.
+
+       Адрес IP, используемый в параметрах IP, может быть в формате IPv4
+       или IPv6.
+
+       Значение dirName должно указывать на раздел, содержащий различающееся
+       имя для использования в качестве набора пар имя-значение. Множественные
+       значения AVAs можно сформировать, предварительно указав имя с символом +.
+
+       otherName может включать произвольные данные, связанные с OID: значение
+       должно быть OID, за которым следует точка с запятой, и содержимое в
+       стандартном формате ASN1_generate_nconf.
+@display
+       Пример:
+
+        subjectAltName=email:copy,email:my@@other.address,URI:http://my.url.here/
+        subjectAltName=IP:192.168.7.1
+        subjectAltName=IP:13::17
+        subjectAltName=email:my@@other.address,RID:1.2.3.4
+        subjectAltName=otherName:1.2.3.4;UTF8:some other identifier
+
+        subjectAltName=dirName:dir_sect
+
+        [dir_sect]
+        C=UK
+        O=My Organization
+        OU=My Unit
+        CN=My Name
+@end display
+@item   Issuer Alternative Name.  @anchor{ca issuerAltName}
+       Опция альтернативного имени эмитента поддерживает все буквальные
+       опции альтернативного имени субъекта. Он не поддерживает параметр
+       email:copy, потому что это не имеет смысла. Он поддерживает
+       дополнительную опцию issuer:copy, которая будет копировать все
+       значения альтернативных имен субъекта из сертификата эмитента
+       (если это возможно).
+@display
+       Пример:
+
+        issuerAltName = issuer:copy
+@end display
+@item   Authority Info Access.  @anchor{ca authorityInfoAccess}
+       Расширение доступа к авторитетной информации дает подробную
+       информацию о том, как получить доступ к определенной информации,
+       относящейся к объекту. Его синтаксис: accessOID; местоположение,
+       где местоположение имеет тот же синтаксис, что и альтернативное
+       имя субъекта (за исключением того, что email:copy не поддерживается).
+       accessOID может быть любым допустимым OID, но значимы только
+       определенные значения, например, OCSP и caIssuers.
+@display
+       Пример:
+
+        authorityInfoAccess = OCSP;URI:http://ocsp.my.host/
+        authorityInfoAccess = caIssuers;URI:http://my.ca/ca.html
+@end display
+@item   CRL distribution points  @anchor{ca crlDistributionPoints}
+       Это многозначное расширение, параметры которого могут быть либо
+       в паре name:value, используя ту же форму, что и альтернативное
+       имя субъекта, либо одно значение, представляющее имя раздела,
+       содержащее все поля точки распространения.
+
+       Для пары name:value новый DistributionPoint с полем fullName,
+       установленным на заданное значение, и поля cRLissuer, и причины
+       в этом случае опускаются.
+
+       В случае одного варианта указанный раздел содержит значения для
+       каждого поля. В этой секции:
+
+       Если имя - "fullname", поле значения должно содержать полное имя
+       точки распространения в том же формате, что и альтернативное
+       имя субъекта.
+
+       Если имя - "relativename", тогда поле значения должно содержать
+       имя раздела, содержимое которого представляет фрагмент DN, который
+       будет помещен в это поле.
+
+       Имя "CRLIssuer", если оно присутствует, должно содержать значение для
+       этого поля в формате альтернативного имени субъекта.
+
+       Если имя "reasons", поле значения должно состоять из поля, разделенного
+       запятыми и содержащего причины. Допустимые причины:
+       "keyCompromise", "CACompromise", "affiliationChanged", "superseded",
+       "cessationOfOperation", "certificateHold", "privilegeWithdrawn" и
+       "AACompromise".
+@display
+       Простой пример:
+
+        crlDistributionPoints=URI:http://myhost.com/myca.crl
+        crlDistributionPoints=URI:http://my.com/my.crl,URI:http://oth.com/my.crl
+
+       Пример полной точки распространения:
+
+        crlDistributionPoints=crldp1_section
+
+        [crldp1_section]
+
+        fullname=URI:http://myhost.com/myca.crl
+        CRLissuer=dirName:issuer_sect
+        reasons=keyCompromise, CACompromise
+
+        [issuer_sect]
+        C=UK
+        O=Organisation
+        CN=Some Name
+@end display
+@item   Issuing Distribution Point  @anchor{ca issuingDistributionPoint}
+       Это расширение должно появляться только в CRLs. Это многозначное
+       расширение, синтаксис которого похож на "section", на который
+       указывает расширение точек распространения CRL, с некоторыми
+       отличиями.
+
+       Имена "reasons" и "CRLissuer" не распознаются.
+
+       Принимается имя "onlysomereasons", которое устанавливает это поле.
+       Значение находится в том же формате, что и поле CRL точки
+       распространения CRL.
+
+       Имена "onlyuser", "onlyCA", "onlyAA" и "indirectCRL" также принимаются,
+       значения должны быть логическим значением (TRUE or FALSE), чтобы
+       указывать значение соответствующего поля.
+@display
+       Пример:
+
+        issuingDistributionPoint=critical, @@idp_section
+
+        [idp_section]
+
+        fullname=URI:http://myhost.com/myca.crl
+        indirectCRL=TRUE
+        onlysomereasons=keyCompromise, CACompromise
+
+        [issuer_sect]
+        C=UK
+        O=Organisation
+        CN=Some Name
+@end display
+@item   Certificate Policies.  @anchor{ca certificatePolicies}
+       Это необработанное расширение. Все поля этого расширения могут
+       быть установлены с использованием соответствующего синтаксиса.
+
+       Если вы следуете рекомендациям PKIX и просто используете один OID,
+       тогда вы просто включаете значение этого OID. Несколько OIDs могут
+       быть установлены через запятую, например:
+
+        certificatePolicies= 1.2.4.5, 1.1.3.4
+
+       Если вы хотите включить квалификаторы, то политика OID и
+       квалификаторы должны быть указаны в отдельном разделе: это
+       делается с использованием синтаксиса @@section вместо
+       литерального значения OID.
+
+       Упомянутый раздел должен включать политику OID с использованием
+       квалификаторов имени policyIdentifier, cPSuri, которые могут
+       быть включены с использованием синтаксиса:
+
+        CPS.nnn=value
+
+       Определители userNotice могут быть установлены с использованием
+       синтаксиса:
+
+        userNotice.nnn=@@notice
+
+       Значение квалификатора userNotice указано в соответствующем разделе.
+       Этот раздел может включать параметры explicitText, organization и
+       noticeNumbers. explicitText и organization - это текстовые строки,
+       noticeNumbers - список чисел через запятую. Организация и параметры
+       noticeNumbers (если включены) должны присутствовать в BOTH. Если вы
+       используете опцию userNotice с IE5, вам понадобится опция 'ia5org'
+       на верхнем уровне, чтобы изменить кодировку: в противном случае она
+       не будет правильно интерпретироваться.
+@display
+       Пример:
+
+        certificatePolicies=ia5org,1.2.3.4,1.5.6.7.8,@@polsect
+
+        [polsect]
+
+        policyIdentifier = 1.3.5.8
+        CPS.1="http://my.host.name/"
+        CPS.2="http://my.your.name/"
+        userNotice.1=@@notice
+
+        [notice]
+
+        explicitText="Explicit Text Here"
+        organization="Organisation Name"
+        noticeNumbers=1,2,3,4
+@end display
+       Опция ia5org изменяет тип поля организации. В RFC2459 это
+       может быть только тип DisplayText. В RFC3280 IA5String это
+       тоже допустимо. Некоторое программное обеспечение (например,
+       некоторые версии MSIE) может потребовать ia5org.
+
+       Тип ASN1 объекта explicitText можно указать, добавив префикс
+       UTF8, BMP или VISIBLE, а затем двоеточие. Для примера:
+@display
+        [notice]
+        explicitText="UTF8:Explicit Text Here"
+@end display
+@item   Policy Constraints  @anchor{ca policyConstraints}
+       Это многозначное расширение, состоящее из имен requireExplicitPolicy
+       или inhibitPolicyMapping и неотрицательного целочисленного значения.
+       По крайней мере, один компонент должен присутствовать.
+@display
+       Пример:
+
+        policyConstraints = requireExplicitPolicy:3
+@end display
+@item   Inhibit Any Policy  @anchor{ca inhibitAnyPolicy}
+       Это расширение строки, значение которого должно быть неотрицательным
+       целым числом.
+@display
+       Пример:
+
+        inhibitAnyPolicy = 2
+@end display
+@item   Name Constraints @anchor{ca nameConstraints}
+       Расширение ограничений имени является многозначным расширением. Имя
+       должно начинаться со слова разрешенного или исключенного, за которым
+       следует ';'. Остальная часть имени и значения соответствует синтаксису
+       subjectAltName, за исключением того, что email:copy не поддерживается,
+       а форма IP должна состоять из адресов IP и маски подсети,
+       разделенных '/'.
+@display
+       Пример:
+
+        nameConstraints=permitted;IP:192.168.0.0/255.255.0.0
+
+        nameConstraints=permitted;email:.somedomain.com
+
+        nameConstraints=excluded;email:.com
+@end display
+@item   OCSP No Check  @anchor{ca noCheck}
+       Расширение OCSP No Check является расширением строки, но его
+       значение игнорируется.
+@display
+       Пример:
+
+        noCheck = ignored
+@end display
+@item   TLS Feature (ака Must Staple) tlsfeature @anchor{ca tlsfeature}
+       Это многозначное расширение, состоящее из списка идентификаторов
+       расширения TLS. Каждый идентификатор может быть номером (0..65535)
+       или поддерживаемым именем. Когда клиент TLS отправляет указанное
+       расширение, сервер TLS должен включить это расширение в свой ответ.
+
+       Поддерживаемые имена: status_request и status_request_v2.
+@display
+       Пример:
+
+        tlsfeature = status_request
+@end display
+@end table
+@item DEPRECATED EXTENSIONS (УСТАРЕВШИЕ РАСШИРЕНИЯ без категорий @anchor{ca УСТАРЕВШИЕ РАСШИРЕНИЯ без категорий})
+       Следующие расширения являются нестандартными, специфичными для
+       Netscape и в значительной степени устарели. Их использование в
+       новых приложениях не рекомендуется.
+@table @asis
+@item   Netscape String extensions. @anchor{ca nsComment}
+       Netscape Comment (nsComment) - это расширение строки, содержащее
+       комментарий, который будет отображаться при просмотре сертификата
+       в некоторых браузерах.
+@display
+       Пример:
+
+        nsComment = "Some Random Comment"
+@end display
+       Другие поддерживаемые расширения в этой категории: nsBaseUrl, nsRevocationUrl, nsCaRevocationUrl, nsRenewalUrl, nsCaPolicyUrl nsSslServerName @anchor{ca nsBaseUrl, nsRevocationUrl, nsCaRevocationUrl, nsRenewalUrl, nsCaPolicyUrl nsSslServerName}.
+
+@item   Netscape Certificate Type @anchor{ca Netscape Certificate Type}
+       Это многозначное расширение, которое состоит из списка флагов,
+       которые необходимо включить. Он использовался для указания целей,
+       для которых может использоваться сертификат. Вместо этого теперь
+       используются расширения использования basicConstraints, keyUsage
+       и расширенного ключа.
+
+       Допустимые значения для nsCertType: client, server, email, objsign,
+       reserved, sslCA, emailCA, objCA.
+@end table
+@item ARBITRARY EXTENSIONS @anchor{ca ARBITRARY EXTENSIONS}
+       Если расширение не поддерживается кодом OpenSSL, то оно должно
+       быть закодировано с использованием произвольного формата расширения.
+       Также возможно использовать произвольный формат для поддерживаемых
+       расширений. Особое внимание следует уделить тому, чтобы данные
+       были правильно отформатированы для данного типа расширения.
+
+       Есть два способа кодирования произвольных расширений.
+
+       Первый способ - использовать слово ASN1 с последующим содержимым
+       расширения, используя тот же синтаксис, что и ASN1_generate_nconf.
+       Например:
+@display
+        1.2.3.4=critical,ASN1:UTF8String:Some random data
+
+        1.2.3.4=ASN1:SEQUENCE:seq_sect
+
+        [seq_sect]
+
+        field1 = UTF8:field1
+        field2 = UTF8:field2
+
+       It is also possible to use the word DER to include the raw encoded data
+       in any extension.
+
+        1.2.3.4=critical,DER:01:02:03:04
+        1.2.3.4=DER:01020304
+@end display
+       Значение, следующее за DER, представляет собой шестнадцатеричный
+       дамп кодировки DER расширения. Расширение Any можно поместить в
+       эту форму, чтобы переопределить поведение по умолчанию. Например:
+@display
+        basicConstraints=critical,DER:00:01:02:03
+@end display
+@item WARNING
+       Нет никакой гарантии, что конкретная реализация обработает данное
+       расширение. Поэтому иногда можно использовать сертификаты в целях,
+       запрещенных их расширениями, поскольку конкретное приложение не
+       распознает или не учитывает значения соответствующих расширений.
+
+       Параметры DER и ASN1 следует использовать с осторожностью. Можно
+       создать совершенно недопустимые расширения, если они не
+       используются осторожно.
+
+@item NOTES
+       Если расширение является многозначным, и значение поля должно
+       содержать запятую, следует использовать длинную форму, в
+       противном случае запятая будет неверно истолкована как
+       разделитель полей. Например:
+@display
+        subjectAltName=URI:ldap://somehost.com/CN=foo,OU=bar
+
+       выдаст ошибку, но эквивалентную форму:
+
+        subjectAltName=@@subject_alt_section
+
+        [subject_alt_section]
+        subjectAltName=URI:ldap://somehost.com/CN=foo,OU=bar
+
+       является действительным.
+@end display
+       Из-за поведения библиотеки OpenSSL conf одно и то же имя поля
+       может встречаться в разделе только один раз. Это означает, что:
+@display
+        subjectAltName=@@alt_section
+
+        [alt_section]
+
+        email=steve@@here
+        email=steve@@there
+@end display
+       распознает только последнее значение. Это можно обойти,
+       используя форму:
+@display
+        [alt_section]
+
+        email.1=steve@@here
+        email.2=steve@@there
+@end display
+@item SEE ALSO
+       req(1), ca(1), x509(1), ASN1_generate_nconf(3)
+
+@item COPYRIGHT
+       Copyright 2004-2016 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+@end table
+1.1.1a                            2018-11-20                  X509V3_CONFIG(5)

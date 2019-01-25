@@ -1,4 +1,4 @@
-@node Пример конфигурации OpenSSL, CA, CONFIG, Top
+@node Пример конфигурации OpenSSL, X509V3_CONFIG, CONFIG, Top
 @chapter Пример конфигурации OpenSSL
 @display
 #

@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Правила - база политик маршрутизации</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="ARP"
+HREF="x270.html"><LINK
+REL="NEXT"
+TITLE="Маршрутизация через несколько каналов/провайдеров."
+HREF="x348.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x270.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x348.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER4"
+></A
+>Глава 4. Правила - база политик маршрутизации</H1
+><P
+>     Если ваш маршрутизатор обслуживает сложную сеть, то нужно удовлетворять нужды разных людей, 
+     обслуживание которых, вероятно, должно отличаться. База политик маршрутизации позволяет 
+     реализовать это с помощью набора таблиц маршрутизации.
+  </P
+><P
+>     Если вы хотите использовать эту возможность, убедитесь что ядро собрано с поддержкой 
+     <SPAN
+CLASS="QUOTE"
+>"IP: advanced router"</SPAN
+> и <SPAN
+CLASS="QUOTE"
+>"IP: policy routing"</SPAN
+>.
+  </P
+><P
+>     Когда ядру необходимо выбрать маршрут, оно определяет в соответствии с какой таблицей это нужно
+     делать. По-умолчанию, определены три таблицы. Старая утилита <B
+CLASS="COMMAND"
+>route</B
+> изменяет
+     таблицы main и local, как и утилита <B
+CLASS="COMMAND"
+>ip</B
+> (по-умолчанию).
+  </P
+><P
+>     Правила по-умолчанию:
+     <PRE
+CLASS="SCREEN"
+>[ahu@home ahu]$ ip rule list
+0:	from all lookup local 
+32766:	from all lookup main 
+32767:	from all lookup default     
+     </PRE
+>
+      В этом листинге приведены приоритеты всех правил. Мы видим, что правила применяются ко всем
+      пакетам (<TT
+CLASS="COMPUTEROUTPUT"
+>from all</TT
+>). Мы уже видели таблицу 'main', она выводится 
+      командой <B
+CLASS="COMMAND"
+>ip route ls</B
+> , но таблицы 'local' и 'default' для нас новые.
+  </P
+><P
+>     Если мы хотим сделать что-то интересное, то нужно задать правила, использующие разные таблицы
+     маршрутизации. Это позволит нам переопределить общесистемную таблицу маршрутизации.
+  </P
+><P
+>     За точной семантикой происходящего в ядре, когда есть несколько подходящих правил, обратитесь 
+     к документации ip-cref Алексея Кузнецова.
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="SIMPLESOURCEPOLICYROUTING"
+></A
+>4.1. Простая маршрутизация по источнику.</H1
+><P
+>       Давайте опять рассмотрим реальный пример. У меня есть 2 (вообще-то 3, пора бы вернуть их) 
+       кабельных модема, подключенных к маршрутизатору Linux с NAT ('masquerading'). Люди с которыми я 
+       живу в одном доме, платят мне за использование Internet. Допустим одни из моих соседей ходит 
+       только на hotmail и хочет платить меньше. Мне это подходит, но при этом будет использоваться 
+       медленный канал.
+    </P
+><P
+>       Быстрое соединение имеет с моей стороны адрес 212.64.94.251, а с другой -- 212.64.94.1. 
+       Медленное соединение получает динамический адрес, в данном примере это 212.64.78.148, 
+       адрес провайдера -- 195.96.98.253.
+    </P
+><P
+>      Таблица local:
+      <PRE
+CLASS="SCREEN"
+>[ahu@home ahu]$ ip route list table local
+broadcast 127.255.255.255 dev lo  proto kernel  scope link  src 127.0.0.1 
+local 10.0.0.1 dev eth0  proto kernel  scope host  src 10.0.0.1 
+broadcast 10.0.0.0 dev eth0  proto kernel  scope link  src 10.0.0.1 
+local 212.64.94.251 dev ppp0  proto kernel  scope host  src 212.64.94.251 
+broadcast 10.255.255.255 dev eth0  proto kernel  scope link  src 10.0.0.1 
+broadcast 127.0.0.0 dev lo  proto kernel  scope link  src 127.0.0.1 
+local 212.64.78.148 dev ppp2  proto kernel  scope host  src 212.64.78.148 
+local 127.0.0.1 dev lo  proto kernel  scope host  src 127.0.0.1 
+local 127.0.0.0/8 dev lo  proto kernel  scope host  src 127.0.0.1       
+      </PRE
+>
+       Много очевидных вещей, но они должны быть где-то указаны. Вот здесь они и заданы. 
+       Таблица default -- пустая.
+    </P
+><P
+>       Посмотрим теперь на таблицу main:
+       <PRE
+CLASS="SCREEN"
+>[ahu@home ahu]$ ip route list table main 
+195.96.98.253 dev ppp2  proto kernel  scope link  src 212.64.78.148 
+212.64.94.1 dev ppp0  proto kernel  scope link  src 212.64.94.251 
+10.0.0.0/8 dev eth0  proto kernel  scope link  src 10.0.0.1 
+127.0.0.0/8 dev lo  scope link 
+default via 212.64.94.1 dev ppp0        
+      </PRE
+>
+      Создадим новое правило для нашего гипотетического соседа, которое будет называться 'John'. 
+      Хотя мы можем работать просто с числами, намного проще и понятней если мы определим названия 
+      наших таблиц в файле /etc/iproute2/rt_tables.
+      <PRE
+CLASS="SCREEN"
+># echo 200 John &gt;&gt; /etc/iproute2/rt_tables
+# ip rule add from 10.0.0.10 table John
+# ip rule ls
+0:	from all lookup local 
+32765:	from 10.0.0.10 lookup John
+32766:	from all lookup main 
+32767:	from all lookup default      
+      </PRE
+>
+      Теперь нам нужно лишь сгенерировать таблицу John и очистить кэш маршрутов:
+      <PRE
+CLASS="SCREEN"
+># ip route add default via 195.96.98.253 dev ppp2 table John
+# ip route flush cache      
+      </PRE
+>
+       Вот и все. В качестве упражнения вы можете добавить это в скрипт ip-up.
+    </P
+><P
+>    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x270.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x348.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ARP</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Маршрутизация через несколько каналов/провайдеров.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

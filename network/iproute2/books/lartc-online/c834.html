@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Дисциплины обработки очередей для управления пропускной способностью</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Маршрутизация групповых сообщений."
+HREF="c791.html"><LINK
+REL="NEXT"
+TITLE="Простые бесклассовые дисцплины обработки очереди."
+HREF="x852.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c791.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x852.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER9"
+></A
+>Глава 9. Дисциплины обработки очередей для управления пропускной способностью</H1
+><P
+>    Когда я узнал об этом, я был в полнейшем восторге. Linux 2.2/2.4 содержит все необходимое для 
+    управления полосой пропускания на уровне специализированных систем управления пропускной способностью.
+  </P
+><P
+>    Linux предоставляет даже больше возможностей, чем FrameRelay и ATM. 
+  </P
+><P
+>    Чтобы избежать путаницы, утилита <B
+CLASS="COMMAND"
+>tc</B
+> использует следующие единицы измерения для задания 
+    пропускной способности: 
+    <PRE
+CLASS="SCREEN"
+>mbps = 1024 kbps = 1024 * 1024 bps =&#62; byte/s
+mbit = 1024 kbit =&#62; kilo bit/s.
+mb = 1024 kb = 1024 * 1024 b =&#62; byte
+mbit = 1024 kbit =&#62; kilo bit      
+    </PRE
+>
+    Хранятся данные в bps и b.
+  </P
+><P
+>    Но при выводе, <B
+CLASS="COMMAND"
+>tc</B
+> использует сделующее соглашение:
+    <PRE
+CLASS="SCREEN"
+>1Mbit = 1024 Kbit = 1024 * 1024 bps =&#62; byte/s    
+    </PRE
+>
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="QUEUESANDQUEUEINGDISCIPLINESEXPLAINED"
+></A
+>9.1. Понятие очереди и дисциплины обработки</H1
+><P
+>      Организация очереди (очередизация) определяет способ отсылки данных. Важно понимать, что 
+      мы можем управлять лишь скоростью передачи отправляемых данных.
+    </P
+><P
+>      В том виде, в каком сейчас существует Internet, мы не можем контролировать объем входящего трафика. 
+      Это что-то вроде почтового ящика (не электронного!). Нет никакого способа влиять на то, 
+      какой объем почты приходит к вам, разве что общаясь с каждым респондентом.
+    </P
+><P
+>      Однако, Internet, в большистве своем, основан на протоколе TCP/IP, а у него есть несколько свойств, 
+      которые могут нам помочь. TCP/IP не может узнать пропускной способности сети между двумя хостами, 
+      поэтому он начинает передавать данные все быстрее и быстрее (это называется "медленный старт"). 
+      Когда пакеты начинают теряться из-за перегрузки передающей среды, передача тормозится. На самом деле 
+      все немного сложнее и умнее, но об этом позже.
+    </P
+><P
+>      Продолжая нашу аналогию, это можно сравнить с выбрасыванием половины вашей почты в надежде на то, что 
+      люди перестанут вам писать. Разница лишь в том, что в случае с Internet этот прием срабатывает :-)
+    </P
+><P
+>      Если у вас есть маршрутизатор и вы хотите ограничить скорость загрузки во внутренней сети, вам 
+      нужно это делать на внутреннем интерфейсе маршрутизатора, с которого данные передаются вашим компьютерам.
+    </P
+><P
+>      Кроме того, вы должны быть уверенны, что контролируете узкое место соединения. Так, если у вас есть 
+      100-мегабитная сетевая карта и маршрутизатор с соединением в 256 Кбит/сек, вы должны убедиться, 
+      что не посылаете данных больше, чем ваш маршрутизатор может передать. Иначе канал будет контролировать 
+      маршрутизатор и именно он будет ограничивать доступную пропускную способность. Нам нужно, так сказать, 
+      "владеть очередью" и быть самым медленным звеном. К счастью это легко реализуется.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c791.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x852.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Маршрутизация групповых сообщений.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Простые бесклассовые дисцплины обработки очереди.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

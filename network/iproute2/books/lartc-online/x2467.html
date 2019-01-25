@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Weighted Round Robin (WRR).</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Специализированные дисциплины управления очередями."
+HREF="c2289.html"><LINK
+REL="PREVIOUS"
+TITLE="Эмуляция VC/ATM."
+HREF="x2462.html"><LINK
+REL="NEXT"
+TITLE="Решебник."
+HREF="c2475.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2462.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 14. Специализированные дисциплины управления очередями.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c2475.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="WEIGHTEDROUNDROBINWRR"
+></A
+>14.8. Weighted Round Robin (WRR).</H1
+><P
+>      Эта дисциплина организации очередей не включена в состав ядра Linux, однако вы можете 
+      скачать все необходимое по адресу: 
+      <A
+HREF="http://wipl-wrr.dkik.dk/wrr/"
+TARGET="_top"
+>http://wipl-wrr.dkik.dk/wrr/</A
+>. 
+      Она была протестирована только на ядрах серии 2.2, но возможно будет работать и на ядрах
+      серий 2.4/2.5
+    </P
+><P
+>      WRR qdisc распределяет пропускную способность по классам, используя схему взвешенного циклического
+      обхода. Т.е., подобно CBQ qdisc, она содержит классы, которые могут включать в себя любые другие
+      дисциплины. Все классы получают ширину канала, пропорциональную присвоенным им весам. Весовые коэффициенты
+      могут быть установлены как вручную, с помощью утилиты <B
+CLASS="COMMAND"
+>tc</B
+>, так и автоматически,
+      в этом случае величина весового коэффициента устанавливается обратно пропорциональной объему передаваемых
+      через класс данных.
+    </P
+><P
+>      Дисциплина имеет внутренний классификатор, который распределяет пакеты, идущие на/из разные узлы сети,
+      по разным классам. Определение отправителя/получателя может производиться на основе MAC или IP адреса.
+      Однако, MAC адреса могут использоваться только в ethernet сетях. Привязка хостов к классам происходит 
+      автоматически, при появлении первых пакетов, прошедших по соединению.
+    </P
+><P
+>      Она неплохо зарекомендовала себя при обслуживании небольших локальных сетей, например в студенческих 
+      общежитиях, когда между несколькими индивидами разделяется единственное соединение с Интернет.
+      Центральной частью дистрибутива WRR является набор сценариев, выполняющих настройку алгоритма для
+      таких сетей.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2462.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c2475.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Эмуляция VC/ATM.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2289.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Решебник.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

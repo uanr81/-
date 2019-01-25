@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Тоннелирование IP в IP.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="GRE и другие тоннели."
+HREF="c392.html"><LINK
+REL="PREVIOUS"
+TITLE="GRE и другие тоннели."
+HREF="c392.html"><LINK
+REL="NEXT"
+TITLE="GRE тоннели."
+HREF="x418.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c392.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 5. GRE и другие тоннели.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x418.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="IPINIPTUNNELING"
+></A
+>5.2. Тоннелирование IP в IP.</H1
+><P
+>      Этот тип тоннелирования доступен в Linux уже давно. Для его работы требуются два модуля ядра: 
+      <TT
+CLASS="FILENAME"
+>ipip.o</TT
+> и <TT
+CLASS="FILENAME"
+>new_tunnel.o</TT
+>.
+    </P
+><P
+>      Допустим у вас есть три сети: внутренние сети A и B, и промежуточная сеть C (например, Internet). 
+      Итак, сеть A:
+      <PRE
+CLASS="SCREEN"
+>сеть          10.0.1.0
+маска         255.255.255.0
+маршрутизатор 10.0.1.1        
+      </PRE
+>
+      Адрес маршрутизатора в сети С -- 172.16.17.18.
+    </P
+><P
+>      сеть B:
+      <PRE
+CLASS="SCREEN"
+>сеть          10.0.2.0
+маска         255.255.255.0
+маршрутизатор 10.0.2.1      
+      </PRE
+>
+      Адрес маршрутизатора в сети С -- 172.19.20.21.
+    </P
+><P
+>      Мы полагаем, что сеть C передает пакеты от A к B и наоборот. Такой сетью может служить даже Internet.
+    </P
+><P
+>      Теперь, что нам нужно сделать?
+    </P
+><P
+>      Убедитесь, что все необходимые модули загружены:
+      <PRE
+CLASS="SCREEN"
+>insmod ipip.o
+insmod new_tunnel.o      
+      </PRE
+>
+      Теперь на маршрутизаторе сети A выполните:
+      <PRE
+CLASS="SCREEN"
+>ifconfig tunl0 10.0.1.1 pointopoint 172.19.20.21
+route add -net 10.0.2.0 netmask 255.255.255.0 dev tunl0      
+      </PRE
+>
+      А на маршрутизаторе сети B:
+      <PRE
+CLASS="SCREEN"
+>ifconfig tunl0 10.0.2.1 pointopoint 172.16.17.18
+route add -net 10.0.1.0 netmask 255.255.255.0 dev tunl0      
+      </PRE
+>
+      Когда вам нужно будет <SPAN
+CLASS="QUOTE"
+>"разрушить"</SPAN
+> тоннель, выполните:
+      <PRE
+CLASS="SCREEN"
+>ifconfig tunl0 down      
+      </PRE
+>
+      Вот и все. Через тоннель IP в IP нельзя передавать широковещательные пакеты или пакеты IPv6. 
+      Вы можете только соединить 2 сети IPv4, которые в обычной ситуации не могли бы работать друг с другом. 
+      При нынешнем положении вещей, совместимость этого кода доходит до ядер версии 1.3. Насколько я знаю, 
+      тоннелирование Linux IP-в-IP не работает с другими операционными системами и маршрутизаторами. Очень 
+      простое решение, если оно вам подходит -- используйте его, если вам нужно больше -- используйте GRE.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c392.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x418.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>GRE и другие тоннели.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c392.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>GRE тоннели.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

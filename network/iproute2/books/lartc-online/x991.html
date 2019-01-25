@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Какие типы дисциплин нужно использовать.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Дисциплины обработки очередей для управления пропускной способностью"
+HREF="c834.html"><LINK
+REL="PREVIOUS"
+TITLE="Простые бесклассовые дисцплины обработки очереди."
+HREF="x852.html"><LINK
+REL="NEXT"
+TITLE="Терминология"
+HREF="x1013.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x852.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 9. Дисциплины обработки очередей для управления пропускной способностью</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1013.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="ADVICEFORWHENTOUSEWHICHQUEUE"
+></A
+>9.3. Какие типы дисциплин нужно использовать.</H1
+><P
+>      Обобщая вышесказанное: мы рассмотрели простые дисциплины очередей, которые управляют трафиком 
+      переупорядочиванием, задержкой или уничтожением пакетов.
+    </P
+><P
+>      Следующие советы могут помочь при выборе типа применяемой дисциплины. Здесь также упоминаются некоторые 
+      дисциплины, описываемые в <A
+HREF="c2289.html"
+>главе 14</A
+>.
+      <P
+></P
+><UL
+><LI
+><P
+>            Чтобы просто ограничить скорость интерфейса, используйте Token Bucket Filter. Маштабируется 
+            до больших скоростей, при соответствующем увеличении буфера.
+          </P
+></LI
+><LI
+><P
+>            Если ваш канал полностью загружен и при этом вы не желаете допустить доминирование какого-либо 
+            сеанса, используйте SFQ.
+          </P
+></LI
+><LI
+><P
+>            Если вы хотите управлять скоротью магистральных каналов и хорошо понимаете как это делается, 
+            используйте Random Early Drop (описывается в <A
+HREF="c2289.html"
+>главе 14</A
+>).
+          </P
+></LI
+><LI
+><P
+>            Для управления скоростью входящего трафика, который не пересылается, используйте ограничитель 
+            (Ingress Policer).
+          </P
+></LI
+><LI
+><P
+>            Если вы пересылаете трафик, используйте дисциплину TBF на интерфейсе с которого отправляются 
+            данные. Этот подход работает, если вам не нужно пересылать трафик через разные интерфейсы. 
+            В этом случае единственным общим фактором является входящий интерфейс, потому используйте 
+            ограничитель.
+          </P
+></LI
+><LI
+><P
+>            Если вам не нужно ограничивать полосу пропускания, но вы хотите видеть, справляется ли ваш 
+            интерфейс с нагрузкой, используйте очередь pfifo (не pfifo_fast). У нее нет внутренних полос, 
+            но она ведет учет использования очереди.
+          </P
+></LI
+><LI
+><P
+>            Наконец, вы можете использовать <SPAN
+CLASS="QUOTE"
+>"человеческий"</SPAN
+> фактор. Использование технологических
+            решений не всегда приводит к желаемым результатам. Пользователи враждебно относятся к 
+            техническим ограничениям. Доброе слово тоже может помочь в правильном распределении пропускной 
+            способности!
+          </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x852.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1013.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Простые бесклассовые дисцплины обработки очереди.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c834.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Терминология</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

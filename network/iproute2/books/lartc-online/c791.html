@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Маршрутизация групповых сообщений.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Взаимодействие с другими операционными системами через IPSEC."
+HREF="x779.html"><LINK
+REL="NEXT"
+TITLE="Дисциплины обработки очередей для управления пропускной способностью"
+HREF="c834.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x779.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c834.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER8"
+></A
+>Глава 8. Маршрутизация групповых сообщений.</H1
+><P
+>    FIXME: Место редактора вакантно!
+  </P
+><P
+>    Multicast-HOWTO достаточно сильно устарел и по этой причине может быть местами неточен, а иногда и 
+    совершенно неверным.
+  </P
+><P
+>    Для того, чтобы иметь возможность маршрутизации групповых сообщений, необходимо 
+    определенным образом сконфигурировать ядро Linux. Это, в свою очередь, 
+    требует, чтобы вы определились -- какой из протоколов групповой маршрутизации будет
+    использоваться. На сегодняшний день, существует четыре основных протокола: DVMRP 
+    (групповая версия протокола RIP unicast), MOSPF (то же самое, но для OSPF), 
+    PIM-SM (Protocol Independent Multicast-Sparse Mode) -- Протокол Групповой Маршрутизации, не зависящий 
+    от <SPAN
+CLASS="QUOTE"
+>"обычного"</SPAN
+> протокола маршрутизации, который применяется для маршрутизации
+    групповых сообщений в малочисленные группы (слово <SPAN
+CLASS="QUOTE"
+>"sparse"</SPAN
+> можно перевести как 
+    <SPAN
+CLASS="QUOTE"
+>"рассеянные"</SPAN
+>, или <SPAN
+CLASS="QUOTE"
+>"разреженные"</SPAN
+>, или <SPAN
+CLASS="QUOTE"
+>"малочисленные"</SPAN
+>. 
+    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>прим перев.</I
+></SPAN
+>) и PIM-DM (то же самое, но для групп с компактным расположением).
+  </P
+><P
+>    Однако, в ядре Linux, эти опции отсутствуют, потому что собственно протокол обслуживается 
+    отдельными приложениями, выполняющими маршрутизацию, такими как <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Zebra</I
+></SPAN
+>, 
+    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>mrouted</I
+></SPAN
+> или <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>pimd</I
+></SPAN
+>. Тем не менее включение дополнительных
+    опций в ядре необходимо.
+  </P
+><P
+>    Независимо от протокола групповой рассылки необходимо включить опции 
+    <TT
+CLASS="OPTION"
+>IP: multicasting</TT
+> и <TT
+CLASS="OPTION"
+>IP: multicast routing</TT
+>. Для 
+    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>DVMRP</I
+></SPAN
+> и <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>MOSPF</I
+></SPAN
+> этого будет вполне достаточно. Если вы 
+    предполагаете использовать протокол маршрутизации PIM, то вы дополнительно должны разрешить опции 
+    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>PIM-SM version 1</I
+></SPAN
+> или <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>PIM-SM version 2</I
+></SPAN
+>, в зависимости
+    от версии протокола <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>PIM</I
+></SPAN
+>, используемого в вашей сети.
+  </P
+><P
+>    После того, как вы разберетесь с необходимыми опциями и пересоберете ядро, вы заметите, что во время
+    загрузки, среди прочих, в списке присутствует протокол <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>IGMP</I
+></SPAN
+>. Это
+    Протокол Управления Группами (IGMP -- Internet Group Management Protocol).
+    К моменту написания этих строк, Linux поддерживал только версии 1 и 2 протокола 
+    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>IGMP</I
+></SPAN
+>, хотя версия 3 уже вышла. Однако для нас это не имеет большого
+    знаения, поскольку <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>IGMP v3</I
+></SPAN
+> достаточно нов и его дополнительные
+    возможности еще не скоро найдут широкое применение. В дальнейшем описании мы будем предполагать 
+    использование самых основных характеристик протокола <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>IGMPv2</I
+></SPAN
+>, хотя
+    будем встречаться и с <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>IGMPv1</I
+></SPAN
+>.
+  </P
+><P
+>    Итак, мы разрешили групповую маршрутизацию в ядре. Теперь необходимо <SPAN
+CLASS="QUOTE"
+>"сообщить"</SPAN
+>
+    ему -- что собственно со всем этим делать. Это означает, что нужно добавить в таблицу маршрутизации
+    виртуальную сеть для групповых рассылок.
+    <PRE
+CLASS="SCREEN"
+>ip route add 224.0.0.0/4 dev eth0
+    </PRE
+>
+    (Естесственно, в данном случае предполагается, что маршрутизация производится через
+    устройство eth0! Если вы используете другое устройство -- измените команду соответствующим образом)
+  </P
+><P
+>    А теперь <SPAN
+CLASS="QUOTE"
+>"включим"</SPAN
+> перенаправление (forwarding):
+    <PRE
+CLASS="SCREEN"
+>echo 1 &#62; /proc/sys/net/ipv4/ip_forward
+    </PRE
+>
+    и попробуем -- что у нас получилось. Для этого <B
+CLASS="COMMAND"
+>ping</B
+>-анем предопределенную
+    группу, с адресом 224.0.0.1 (этоть адрес зарезервирован <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>IANA</I
+></SPAN
+> и обозначает
+    <SPAN
+CLASS="QUOTE"
+>"все узлы в данной сети"</SPAN
+>. <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>прим. перев.</I
+></SPAN
+>). В результате все машины
+    в локальной сети, на которых включена поддержка возможности обслуживания групповых рассылок, 
+    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>должны</I
+></SPAN
+> ответить. Вы наверняка заметите, что все ответившие 
+    <SPAN
+CLASS="QUOTE"
+>"подписываются"</SPAN
+> своим собственным IP-адресом, а не адресом 224.0.0.1. 
+    Вот это сюрприз! :) Все члены группы устанвливают в качестве исходящего, свой адрес, а не адрес 
+    группы.
+    <PRE
+CLASS="SCREEN"
+>ping -c 2 224.0.0.1    
+    </PRE
+>
+    С этого момента вы готовы производить групповую маршрутизацию. При этом предполагается, 
+    что у вас имеется две сети, между которыми и выполняется маршрутизация.
+  </P
+><P
+>    (Продолжение следует...)
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x779.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c834.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Взаимодействие с другими операционными системами через IPSEC.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Дисциплины обработки очередей для управления пропускной способностью</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

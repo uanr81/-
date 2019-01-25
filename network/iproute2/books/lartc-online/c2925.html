@@ -1,0 +1,645 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Динамическая маршрутизация -- OSPF и BGP.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Псевдо-мосты с проксированием ARP."
+HREF="x2879.html"><LINK
+REL="NEXT"
+TITLE="Настройка BGP4 с помощью Zebra."
+HREF="x3036.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2879.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3036.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER17"
+></A
+>Глава 17. Динамическая маршрутизация -- OSPF и BGP.</H1
+><P
+>    Как только ваша локальная сеть становится достаточно большой, или вы приступаете к обслуживанию некоего 
+    сегмента Интернет, у вас сразу же возникает необходимость в динамической маршрутизации ваших данных. 
+  </P
+><P
+>    Интернет стандартизирован главным образом на OSPF (от англ. Open Shortest Pass First -- Открытый протокол
+    поиска Кратчайшего Маршрута. RFC 2328) и BGP4 (Border Gateway Protocol -- Протокол Пограничных 
+    Маршрутизаторов, RFC 1771). Linux поддерживает оба, 
+    посредством <B
+CLASS="COMMAND"
+>gated</B
+> и <B
+CLASS="COMMAND"
+>zebra</B
+>.
+  </P
+><P
+>    Поскольку описание этих протоколов выходит за рамки данного документа, мы дадим лишь некоторые ссылки 
+    на документы, содержащие подробное описание:
+  </P
+><P
+>    Краткий обзор:
+  </P
+><P
+>    Cisco Systems <A
+HREF="http://www.cisco.com/univercd/cc/td/doc/cisintwk/idg4/nd2003.htm"
+TARGET="_top"
+>Designing 
+    large-scale IP Internetworks</A
+>
+  </P
+><P
+>    Протокол OSPF:
+  </P
+><P
+>    Moy, John T. "OSPF. The anatomy of an Internet routing protocol" Addison Wesley. Reading, MA. 1998.
+  </P
+><P
+>    Протокол BGP:
+  </P
+><P
+>    Halabi, Bassam "Internet routing architectures" Cisco Press (New Riders Publishing). Indianapolis, IN. 1997.
+  </P
+><P
+>    А так же:
+  </P
+><P
+>    Cisco Systems <A
+HREF="http://www.cisco.com/univercd/cc/td/doc/cisintwk/ics/icsbgp4.htm"
+TARGET="_top"
+>Using the Border 
+    Gateway Protocol for interdomain routing</A
+>
+  </P
+><P
+>    Хотя примеры приводятся исключительно для маршрутизаторов Cisco, они практически полностью
+    совпадают с языком конфигурирования в Zebra :-)
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="SETTINGUPOSPFWITHZEBRA"
+></A
+>17.1. Настройка OSPF в Zebra</H1
+><P
+>      Пожалуйста, дайте <A
+HREF="mailto:piotr%member.fsf.org"
+TARGET="_top"
+>мне</A
+> знать -- насколько верна
+      следующая информация, а так же присылайте ваши предложения, комментарии. 
+      <A
+HREF="http://www.zebra.org/"
+TARGET="_top"
+>Zebra</A
+> -- большой программный пакет динамической маршрутизации,
+      который разработали Кунихиро Ишигуро (Kunihiro Ishiguro), Тошиаки Такеда (Toshiaki Takada) и 
+      Ясахиро Охара (Yasuhiro Ohara). С помощью Zebra вы легко и быстро сможете настроить OSPF, но 
+      на практике, при настройке протокола под весьма специфические потребности, вы столкнетесь со
+      значительным числом параметров. Ниже приводятся некоторые из характеристик протокола OSPF: 
+      <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Иерархичность</DT
+><DD
+><P
+>              Сети объединяются в иерархические <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>области</I
+></SPAN
+> (area) -- группу 
+              смежных сетей, которые находятся под единым управлением и совместно используют общую 
+              стратегию маршрутизации. 
+              Взаимодействие между областями осуществляется посредством стержневой части (backbone),
+              которая обозначается как <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>область 0</I
+></SPAN
+> (area 0). Все стержневые маршрутизаторы
+              обладают информацией о маршрутах ко всем другим областям.
+            </P
+></DD
+><DT
+>Быстрая сходимость</DT
+><DD
+><P
+>              Алгоритм поиска кратчайшего пути (SPF) обеспечивает быструю сходимость, а отсюда и 
+              более быстрый, в сравнении с протоколом RIP, выбор маршрута.
+            </P
+></DD
+><DT
+>Эффективное использование пропускной способности</DT
+><DD
+><P
+>              Использование групповых сообщений, вместо широковещательных, предотвращает 
+              <SPAN
+CLASS="QUOTE"
+>"затопление"</SPAN
+> информацией о маршрутах посторонних узлов сети, которые
+              могут быть не заинтересованы в получении этих сведений, что значительно снижает нагрузку
+              на каналы связи. Кроме того, <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Внутренние Маршрутизаторы</I
+></SPAN
+> (т.е. те, которые
+              не имеют интерфейсов за пределами своей области) не обладают информацией о маршрутах
+              в других областях, за счет чего так же достигается уменьшение трафика маршрутизации.
+              Роутеры, имеющие несколько интерфейсов в более чем одной области, называются 
+              <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Пограничными Маршрутизаторами</I
+></SPAN
+> (Area Border Routers), они 
+              поддерживают отдельные топологические базы данных для каждой из областей, с которыми
+              соединены.
+            </P
+></DD
+><DT
+>Ресурсоемкость</DT
+><DD
+><P
+>              Протокол OSPF основан на алгоритме 
+              <A
+HREF="http://www.soi.wide.ad.jp/class/99007/slides/13/07.html"
+TARGET="_top"
+>              Shortest Path First</A
+>, предложенном Е.В.Дейкстрой (E.W.Dijkstra), который требует
+              больших вычислительных затрат, нежели иные алгоритмы маршрутизации. Но в действительности
+              он не так уж и плох, поскольку кратчайший маршрут рассчитывается только в пределах
+              одной области, причем для сетей малого и среднего размеров -- это вообще не проблема,
+              так что вы не будете даже обращать внимания на это обстоятельство.
+            </P
+></DD
+><DT
+>Состояние маршрута</DT
+><DD
+><P
+>              OSPF представляет собой протокол состояния маршрута. В качестве метрик используются -- пропускная 
+              способность, надежность и стоимость.
+            </P
+></DD
+><DT
+>Открытость и наличие программного обеспечения под GPL.</DT
+><DD
+><P
+>              OSPF -- это <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>открытый</I
+></SPAN
+> протокол, а Zebra выпускается под GPL, что
+              дает дополнительные преимущества перед проприетарными протоколами и программными продуктами.
+            </P
+></DD
+></DL
+></DIV
+>
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN2980"
+></A
+>17.1.1. Предварительные условия.</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Ядро Linux:</DT
+><DD
+><P
+>              Собранное с CONFIG_NETLINK_DEV и CONFIG_IP_MULTICAST (я не вполне уверен, возможно
+              требуется еще что-то)
+            </P
+></DD
+><DT
+>Iproute</DT
+><DD
+><P
+>            </P
+></DD
+><DT
+>Zebra</DT
+><DD
+><P
+>              Пакет может входить в состав вашего дистрибутива. Если нет, обращайтесь на
+              <A
+HREF="http://www.zebra.org/"
+TARGET="_top"
+>http://www.zebra.org/</A
+>.
+            </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN2996"
+></A
+>17.1.2. Конфигурирование.</H2
+><P
+>        Рассмотрим конфигурирование Zebra на примере сети:
+        <PRE
+CLASS="SCREEN"
+>----------------------------------------------------
+| 192.168.0.0/24                                   |
+|                                                  |
+|      Area 0    100BaseTX Switched                |
+|     Backbone     Ethernet                        |
+----------------------------------------------------
+  |           |                |              |
+  |           |                |              |
+  |eth1       |eth1            |eth0          |
+  |100BaseTX  |100BaseTX       |100BaseTX     |100BaseTX
+  |.1         |.2              |.253          |
+ ---------   ------------   -----------      ----------------
+ |R Omega|   |R Atlantis|   |R Legolas|      |R Frodo       |
+ ---------   ------------   -----------      ----------------
+  |eth0         |eth0             |             |          |
+  |             |                 |             |          |
+  |2MbDSL/ATM   |100BaseTX        |10BaseT      |10BaseT   |10BaseT
+------------   ------------------------------------       -------------------------------
+| Internet |   | 172.17.0.0/16        Area 1      |       |  192.168.1.0/24 wlan  Area 2|
+------------   |         Student network (dorm)   |       |       barcelonawireless     |
+               ------------------------------------       -------------------------------        
+        </PRE
+>
+        Пусть вас не пугает эта схема -- дело в том, что большую часть работы Zebra выполнит самостоятельно и 
+        вам не потребуется вручную <SPAN
+CLASS="QUOTE"
+>"поднимать"</SPAN
+> все маршруты. Самое главное, что вы должны уяснить 
+        из этой схемы -- это топология сети. И особое внимание обратите на <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>область 0</I
+></SPAN
+> 
+        (area 0), как самую важную часть. Для начала сконфигурируем zebra под свои потребности (поправим файл 
+        <TT
+CLASS="FILENAME"
+>zebra.conf</TT
+>):
+        <PRE
+CLASS="SCREEN"
+>hostname omega
+password xxx 
+enable password xxx
+!
+! Описание интерфейсов.
+!
+!interface lo
+! пример описания интерфейса.
+!
+interface eth1
+multicast
+!
+! Статический маршрут по-умолчанию
+!
+ip route 0.0.0.0/0 212.170.21.129
+!
+log file /var/log/zebra/zebra.log        
+        </PRE
+>
+        В дистрибутиве Debian, кроме того необходимо подредактировать файл 
+        <TT
+CLASS="FILENAME"
+>/etc/zebra/daemons</TT
+>, чтобы обеспечить запуск демонов во время загрузки системы.
+        <PRE
+CLASS="SCREEN"
+>zebra=yes
+ospfd=yes        
+        </PRE
+>
+        Затем нужно внести соответствующие изменения в <TT
+CLASS="FILENAME"
+>ospfd.conf</TT
+> (для случая IPv4) или
+        в <TT
+CLASS="FILENAME"
+>ospf6d.conf</TT
+> (для случая IPv6). Мой <TT
+CLASS="FILENAME"
+>ospfd.conf</TT
+> выглядит так:
+        <PRE
+CLASS="SCREEN"
+>hostname omega
+password xxx
+enable password xxx
+!
+router ospf
+  network 192.168.0.0/24 area 0
+  network 172.17.0.0/16 area 1
+!
+! направить вывод на stdout в журнал
+log file /var/log/zebra/ospfd.log        
+        </PRE
+>
+        Здесь размещены инструкции, описывающие топологию сети.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN3010"
+></A
+>17.1.3. Запуск Zebra</H2
+><P
+>        Теперь запустим Zebra. Сделать это можно вручную -- дав прямую команду <B
+CLASS="COMMAND"
+>zebra -d</B
+>,
+        либо с помощью сценария начальной загрузки -- <B
+CLASS="COMMAND"
+>/etc/init.d/zebra start</B
+>.
+        После запуска, в журнале <TT
+CLASS="FILENAME"
+>ospfd.log</TT
+>, появятся строки, примерно с таким содержанием:
+        <PRE
+CLASS="SCREEN"
+>2002/12/13 22:46:24 OSPF: interface 192.168.0.1 join AllSPFRouters Multicast group.
+2002/12/13 22:46:34 OSPF: SMUX_CLOSE with reason: 5   
+2002/12/13 22:46:44 OSPF: SMUX_CLOSE with reason: 5
+2002/12/13 22:46:54 OSPF: SMUX_CLOSE with reason: 5   
+2002/12/13 22:47:04 OSPF: SMUX_CLOSE with reason: 5   
+2002/12/13 22:47:04 OSPF: DR-Election[1st]: Backup 192.168.0.1
+2002/12/13 22:47:04 OSPF: DR-Election[1st]: DR     192.168.0.1
+2002/12/13 22:47:04 OSPF: DR-Election[2nd]: Backup 0.0.0.0
+2002/12/13 22:47:04 OSPF: DR-Election[2nd]: DR     192.168.0.1
+2002/12/13 22:47:04 OSPF: interface 192.168.0.1 join AllDRouters Multicast group.
+2002/12/13 22:47:06 OSPF: DR-Election[1st]: Backup 192.168.0.2
+2002/12/13 22:47:06 OSPF: DR-Election[1st]: DR     192.168.0.1
+2002/12/13 22:47:06 OSPF: Packet[DD]: Negotiation done (Slave).
+2002/12/13 22:47:06 OSPF: nsm_change_status(): scheduling new router-LSA origination
+2002/12/13 22:47:11 OSPF: ospf_intra_add_router: Start
+        </PRE
+>
+        Не обращайте внимания на строки "...SMUX_CLOSE...", поскольку они относятся к SNMP и не представляют 
+        интереса для нас. Из приведенного листинга видно, что 192.168.0.1 -- это <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Выделенный 
+        Маршрутизатор</I
+></SPAN
+> (Designated Router), а 192.168.0.2 -- <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Резервный Выделенный 
+        Маршрутизатор</I
+></SPAN
+> (Backup Designated Router).
+      </P
+><P
+>        И <B
+CLASS="COMMAND"
+>zebra</B
+>, и <B
+CLASS="COMMAND"
+>ospfd</B
+> допускают возможность интерактивного 
+        взаимодействия с ними через <B
+CLASS="COMMAND"
+>telnet</B
+>:
+        <PRE
+CLASS="SCREEN"
+>$ telnet localhost zebra
+$ telnet localhost ospfd        
+        </PRE
+>
+        Попробуем посмотреть список установленных маршрутов, залогировавшись в <B
+CLASS="COMMAND"
+>zebra</B
+>:
+        <PRE
+CLASS="SCREEN"
+>root@atlantis:~# telnet localhost zebra
+Trying 127.0.0.1...
+Connected to atlantis.
+Escape character is '^]'.
+
+Hello, this is zebra (version 0.92a).
+Copyright 1996-2001 Kunihiro Ishiguro.
+
+User Access Verification
+
+Password: 
+atlantis&#62; show ip route
+Codes: K - kernel route, C - connected, S - static, R - RIP, O - OSPF,
+       B - BGP, &#62; - selected route, * - FIB route
+
+K&#62;* 0.0.0.0/0 via 192.168.0.1, eth1
+C&#62;* 127.0.0.0/8 is directly connected, lo
+O   172.17.0.0/16 [110/10] is directly connected, eth0, 06:21:53
+C&#62;* 172.17.0.0/16 is directly connected, eth0
+O   192.168.0.0/24 [110/10] is directly connected, eth1, 06:21:53
+C&#62;* 192.168.0.0/24 is directly connected, eth1
+atlantis&#62; show ip ospf border-routers
+============ OSPF router routing table =============
+R    192.168.0.253         [10] area: (0.0.0.0), ABR
+			   via 192.168.0.253, eth1
+				 [10] area: (0.0.0.1), ABR
+			   via 172.17.0.2, eth0        
+        </PRE
+>
+        или напрямую, с помощью <B
+CLASS="COMMAND"
+>iproute</B
+>:
+        <PRE
+CLASS="SCREEN"
+>root@omega:~# ip route
+212.170.21.128/26 dev eth0  proto kernel  scope link  src 212.170.21.172 
+192.168.0.0/24 dev eth1  proto kernel  scope link  src 192.168.0.1 
+172.17.0.0/16 via 192.168.0.2 dev eth1  proto zebra  metric 20 
+default via 212.170.21.129 dev eth0  proto zebra 
+root@omega:~#         
+        </PRE
+>
+        Отсюда видно, что <B
+CLASS="COMMAND"
+>zebra</B
+> добавила ряд маршрутов, которых в таблице
+        раньше не было. Новые маршруты появляются спустя несколько секунд после того, как были
+        запущены <B
+CLASS="COMMAND"
+>zebra</B
+> и <B
+CLASS="COMMAND"
+>ospfd</B
+>. Теперь вы можете попробовать
+        <B
+CLASS="COMMAND"
+>ping</B
+>-ануть некоторые из узлов сети. <B
+CLASS="COMMAND"
+>Zebra</B
+> выставляет маршруты 
+        автоматически, все что от вас требуется -- прописать маршрутизаторы в конфигурационный файл 
+        и этого будет достаточно! 
+      </P
+><P
+>        Для захвата и анализа OSPF-пакетов можно воспользоваться командой:
+        <PRE
+CLASS="SCREEN"
+>tcpdump -i eth1 ip[9] == 89        
+        </PRE
+>
+        где число 89 -- это номер протокола OSPF, а 9 -- это номер октета в ip-заголовке, где хранится
+        номер протокола.
+      </P
+><P
+>        OSPF имеет ряд дополнительных настраиваемых параметров, имеющих особое значение при работе в больших 
+        сетях. В одном из следующих выпусков этого документа мы покажем некоторые методологии тонкой подстройки
+        протокола OSPF.
+      </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2879.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3036.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Псевдо-мосты с проксированием ARP.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Настройка BGP4 с помощью Zebra.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

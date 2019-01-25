@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Построение мостов и псевдо-мостов с Proxy ARP.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Пример подключения локальной сети к Интернет через NAT, с организацией QoS."
+HREF="x2755.html"><LINK
+REL="NEXT"
+TITLE="Бриджинг и шейпинг."
+HREF="x2875.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2755.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2875.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER16"
+></A
+>Глава 16. Построение мостов и псевдо-мостов с Proxy ARP.</H1
+><P
+>    Мосты (bridges) -- это специальные устройства, которые могут быть установлены в сети и не требуют
+    предварительной настройки. Сетевой коммутатор (swtch) -- это особый вид многопортового моста.
+    Мост -- это чаще всего двухпортовый коммутатор (switch). На базе Linux может быть построен
+    многопортовый (несколько интерфейсов) мост, по сути -- настоящий коммутатор (switch).
+  </P
+><P
+>    Мосты часто применяются для объединения фрагментированных стационарных сетей. Поскольку мост -- это
+    устройство 2-го уровня (Канальный уровень по классификации OCI), который лежит ниже сетевого уровня,
+    где <SPAN
+CLASS="QUOTE"
+>"заправляют"</SPAN
+> протоколы IP, то ни серверы, ни маршрутизаторы даже не подозревают
+    о его существовании. Это означает, что вы можете блокировать или изменять некоторые пакеты, а
+    так же формировать трафик по своему усмотрению.
+  </P
+><P
+>    Еще одно замечательное свойство моста -- в случае выхода из строя, мост может быть заменен отрезком кабеля 
+    или сетевым концентратором (hub -- хабом).
+  </P
+><P
+>    Одна из отрицательных сторон -- мост может стать причиной большой неразберихи. <B
+CLASS="COMMAND"
+>traceroute</B
+>
+    его не <SPAN
+CLASS="QUOTE"
+>"видит"</SPAN
+> и не сможет указать в каком месте теряются пакеты. Так что ничего удивительного, 
+    если какая-нибудь организация считает правильным <SPAN
+CLASS="QUOTE"
+>"ничего не менять"</SPAN
+>.
+  </P
+><P
+>    Мосты на базе Linux 2.4/2.5 подробно описаны на сайте <A
+HREF="http://bridge.sourceforge.net/"
+TARGET="_top"
+>    http://bridge.sourceforge.net/</A
+>.
+  </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="STATEOFBRIDGINGANDIPTABLES"
+></A
+>16.1. Бриджинг и iptables.</H1
+><P
+>    Что касается Linux 2.4.20, то бриджинг и <B
+CLASS="COMMAND"
+>iptables</B
+> не <SPAN
+CLASS="QUOTE"
+>"видят"</SPAN
+> друг друга
+    без установки вспомогательных модулей. Если построен мост между eth0 и eth1, то пакеты, передаваемые
+    по мосту, проходят мимо <B
+CLASS="COMMAND"
+>iptables</B
+>. Это означает, что ни фильтрация, ни NAT, ни 
+    возможность внесения изменений в заголовки пакетов (mangling) вам недоступны. Начиная с Linux 2.5.45
+    это было исправлено.
+    </P
+><P
+>    Хочу упомянуть еще об одном проекте -- <B
+CLASS="COMMAND"
+>etables</B
+>. Он позволяет вытворять такие 
+    штуки, как MACNAT и <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>brouting</I
+></SPAN
+>. Это действительно круто!
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2755.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2875.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Пример подключения локальной сети к Интернет через NAT, с организацией QoS.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Бриджинг и шейпинг.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

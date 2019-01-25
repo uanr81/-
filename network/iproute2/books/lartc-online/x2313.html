@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Алгоритм Кларка-Шенкера-Чанга.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Специализированные дисциплины управления очередями."
+HREF="c2289.html"><LINK
+REL="PREVIOUS"
+TITLE="Специализированные дисциплины управления очередями."
+HREF="c2289.html"><LINK
+REL="NEXT"
+TITLE="DSMARK."
+HREF="x2327.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c2289.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 14. Специализированные дисциплины управления очередями.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2327.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="CLARKSHENKERZHANGALGORITHMCSZ"
+></A
+>14.2. Алгоритм Кларка-Шенкера-Чанга.</H1
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Этот алгоритм настолько "заумный", что даже Алексей (главный автор CBQ) утверждает -- 
+        будто бы не до конца понял его суть. С его слов:</DT
+><DD
+><P
+>            David D. Clark, Scott Shenker и Lixia Zhang <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Поддержка Приложений Реального 
+            Времени в Пакетных Сетях c Интеграцией Сервисов: Архитектура и Механизм</I
+></SPAN
+>.
+          </P
+><P
+>            Насколько я понял, основная идея заключается в создании WFQ-потоков для каждого из сервисов с 
+            гарантированным качеством обслуживания и привязка оставшейся пропускной способности к фиктивному
+            потоку <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>flow-0</I
+></SPAN
+>. В поток <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>flow-0</I
+></SPAN
+> отправляется
+            весь предиктивный трафик и трафик, который обслуживается по принципу "лучшее из оставшегося"
+            (best effort). Планировщик потока в первую очередь пропускает предиктивный трафик, а
+            оставшаяся пропускная способность отдается трафику "best effort".
+          </P
+><P
+>            Примечательно, что в CSZ-потоках (Clark-Shenker-Zhang) НЕ производится наложения ограничений 
+            пропускной способности. Предполагается, что поток уже прошел входной контроль QoS сети и не нуждается 
+            в дополнительном формировании. Любая попытка что-то улучшить или ограничить, на промежуточных 
+            переходах, может привести к нежелательным задержкам и увеличению нестабильности.
+          </P
+><P
+>            На сегодняшний день CSZ - единственный планировщик, который может дать настоящую гарантию 
+            качества обслуживания. Другие схемы (включая CBQ) не гарантируют величину задержки.
+          </P
+><P
+>            В настоящее время не может быть рекомендован к использованию, если вы не читали или не достаточно
+            четко понимаете содержимое упомянутого документа.
+          </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c2289.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2327.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Специализированные дисциплины управления очередями.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2289.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>DSMARK.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

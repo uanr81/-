@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Классификация пакетов с помощью фильтров.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Дисциплины обработки очередей для управления пропускной способностью"
+HREF="c834.html"><LINK
+REL="PREVIOUS"
+TITLE="Классовые дисциплины обработки очередей."
+HREF="x1075.html"><LINK
+REL="NEXT"
+TITLE="Intermediate queueing device."
+HREF="x1366.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1075.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 9. Дисциплины обработки очередей для управления пропускной способностью</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1366.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="CLASSIFYINGPACKETSWITHFILTERS"
+></A
+>9.6. Классификация пакетов с помощью фильтров.</H1
+><P
+>      Для классификации того или иного пакета, всякий раз вызывается так называемая "цепочка классификации".
+      Эта цепочка состоит из всех фильтров, присоединенных к полноклассовой дисциплине.
+    </P
+><P
+>      Вернемся к дереву:
+      <PRE
+CLASS="SCREEN"
+>                   root 1:
+                      |
+                    _1:1_
+                   /  |  \
+                  /   |   \
+                 /    |    \
+               10:   11:   12:
+              /   \       /   \
+           10:1  10:2   12:1  12:2
+      </PRE
+>
+      Когда пакет необходимо поставить в очередь, проверяется каждая ветвь в цепочке фильтров. Например, 
+      некоторый пакет мог бы быть направлен фильтром 1:1 в класс 12: и далее в 12:2.
+    </P
+><P
+>      Фильтр, который сразу отправляет пакет в 12:2, мог бы быть сразу присоединен к 1:1, но в этом случае
+      пакет минует дополнительные проверки, которые могли бы быть сделаны в 12:.
+    </P
+><P
+>      Вы не можете выполнять фильтрацию в обратном порядке, только вниз! Кроме того, все фильтры в HTB должны
+      присоединяться к корню!
+    </P
+><P
+>      Повторюсь еще раз. Пакеты могут фильтроваться (классифицироваться) только в направлении сверху-вниз.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="SOMESIMPLEFILTERINGEXAMPLES"
+></A
+>9.6.1. Ряд простых примеров фильтрации.</H2
+><P
+>        Для начала продемонстрируем самый обычный случай, который, к счастью, достаточно прост. Допустим, что у 
+        нас имеется дисциплина PRIO, с дескриптором 10:, которая содержит три класса и нам нужно весь трафик,
+        отправляемый на 22 порт и с 80 порта, отдать в самую высокоприоритетную полосу, тогда набор фильтров мог 
+        бы выглядеть так:
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev eth0 protocol ip parent 10: prio 1 u32 match \ 
+  ip dport 22 0xffff flowid 10:1
+# tc filter add dev eth0 protocol ip parent 10: prio 1 u32 match \
+  ip sport 80 0xffff flowid 10:1
+# tc filter add dev eth0 protocol ip parent 10: prio 2 flowid 10:2
+        </PRE
+>
+        О чем говорят эти строки? Они говорят: "Присоединить к eth0, к узлу 10:, фильтр u32, с приоритетом 1,
+        который отбирает пакеты, направляемые на порт 22, и передает их в полосу 10:1". Аналогичное высказывание
+        делается относительно пакетов, отправленных с порта 80. И последняя строка говорит о том, что весь 
+        неклассифицированный трафик должен отправляться в полосу 10:2.
+      </P
+><P
+>        Вы обязательно должны указывать имя сетевого интерфейса, поскольку каждый из них имеет свое уникальное
+        пространство имен дескрипторов.
+      </P
+><P
+>        Отбор пакетов по IP-адресам выполняется аналогичным образом:
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev eth0 parent 10:0 protocol ip prio 1 u32 \ 
+  match ip dst 4.3.2.1/32 flowid 10:1
+# tc filter add dev eth0 parent 10:0 protocol ip prio 1 u32 \
+  match ip src 1.2.3.4/32 flowid 10:1
+# tc filter add dev eth0 protocol ip parent 10: prio 2      \
+  flowid 10:2
+        </PRE
+>
+        В этой конфигурации весь трафик, идущий на хост 4.3.2.1 и с хоста 1.2.3.4, ставится в очередь с наивысшим 
+        приоритетом.
+      </P
+><P
+>        Допускается смешивать проверку IP-адреса и номера порта:
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev eth0 parent 10:0 protocol ip prio 1 u32 match ip src 4.3.2.1/32 \
+  match ip sport 80 0xffff flowid 10:1
+        </PRE
+>
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="ALLTHEFILTERINGCOMMANDSYOUWILLNORMALLYNEED"
+></A
+>9.6.2. Наиболее употребимые способы фильтрации.</H2
+><P
+>        В большинстве случаев, команды фильтрации начинаются так:
+        <PRE
+CLASS="SCREEN"
+># tc filter add dev eth0 parent 1:0 protocol ip prio 1 u32 ..
+        </PRE
+>
+        Это так называемый селектор u32, который может выполнять отбор пакетов по любой его части.
+  <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>По IP-адресу</DT
+><DD
+><P
+>          По исходящему адресу: <B
+CLASS="COMMAND"
+>match ip src 1.2.3.0/24</B
+>, по адресу назначения:
+          <B
+CLASS="COMMAND"
+>match ip dst 4.3.2.0/24</B
+>. Чтобы отобрать пакеты, отправляемые с/на единственный
+          узел сети нужно указать сетевую маску /32 или вообще опустить ее.
+        </P
+></DD
+><DT
+>По номеру порта</DT
+><DD
+><P
+>          Исходящий порт: <B
+CLASS="COMMAND"
+>match ip sport 80 0xffff</B
+>, порт назначения: <B
+CLASS="COMMAND"
+>match ip dport 
+          80 0xffff</B
+>.
+        </P
+></DD
+><DT
+>По типу протокола, из семейства IP (tcp, udp, icmp, gre, ipsec)</DT
+><DD
+><P
+>          Номера протоколов вы найдете у себя, в файле <TT
+CLASS="FILENAME"
+>/etc/protocols</TT
+>.
+          Например, отбор ICMP-пакетов (номер протокола icmp -- 1) можно выполнить командой
+          <B
+CLASS="COMMAND"
+>match ip protocol 1 0xff</B
+>.
+        </P
+></DD
+><DT
+>По метке пакета</DT
+><DD
+><P
+>          Пакеты могут маркироваться либо средствами <B
+CLASS="COMMAND"
+>ipchains</B
+>, либо средствами 
+          <B
+CLASS="COMMAND"
+>iptables</B
+>. Это бывает полезно, например, для наложения ограничений на трафик,
+          который следует с интерфейса eth1 на интерфейс eth0:
+          <PRE
+CLASS="SCREEN"
+># tc filter add dev eth1 protocol ip parent 1:0 prio 1 handle 6 fw flowid 1:1
+          </PRE
+>
+          Обратите внимание -- этот фильтр не является селектором u32!
+        </P
+><P
+>          Установить метку можно следующим образом:
+          <PRE
+CLASS="SCREEN"
+># iptables -A PREROUTING -t mangle -i eth0 -j MARK --set-mark 6
+          </PRE
+>
+          В данном случае число 6 выбрано произвольным образом.
+        </P
+><P
+>          Если вы не хотите с головой погружаться в синтаксис <B
+CLASS="COMMAND"
+>tc</B
+>, тогда просто пользуйтесь
+          возможностями <B
+CLASS="COMMAND"
+>iptables</B
+> и запомните принцип отбора по метке.
+        </P
+></DD
+><DT
+>По полю TOS</DT
+><DD
+><P
+>          Отбор трафика с минимальной задержкой:
+          <PRE
+CLASS="SCREEN"
+># tc filter add dev ppp0 parent 1:0 protocol ip prio 10 u32 \
+      match ip tos 0x10 0xff \
+     flowid 1:4
+          </PRE
+>
+        </P
+></DD
+></DL
+></DIV
+>
+        Дополнительные сведения о фильтрации трафика вы найдете в главе <A
+HREF="c1452.html"
+>Расширенная фильтрация</A
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1075.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1366.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Классовые дисциплины обработки очередей.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c834.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Intermediate queueing device.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

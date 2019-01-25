@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Решение проблемы с Path MTU Discovery путем настройки MSS.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Решебник."
+HREF="c2475.html"><LINK
+REL="PREVIOUS"
+TITLE="Решение проблемы с Path MTU Discovery путем настройки MTU."
+HREF="x2627.html"><LINK
+REL="NEXT"
+TITLE="Формирователь трафика: Низкая задержка, максимальная производительность."
+HREF="x2670.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2627.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 15. Решебник.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2670.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="CIRCUMVENTINGPATHMTUDISCOVERYISSUESWITHMSSCL"
+></A
+>15.7. Решение проблемы с Path MTU Discovery путем настройки MSS.</H1
+><P
+>      Как уже говорилось выше, Path MTU Discovery не работает в Интернет должным образом. Если вам известны
+      факты существования сегментов в вашей сети, где размер MTU ограничен, то вы уже не можете 
+      полагаться на безотказную работу Path MTU Discovery.
+    </P
+><P
+>      Однако, помимо MTU, есть еще один способ ограничения размера пакета -- это, так называемый 
+      MSS (Maximum Segment Size -- Максимальный Размер Сегмента). MSS -- это поле в заголовке
+      TCP-пакета SYN.
+    </P
+><P
+>      С недавних пор, ядра Linux и некоторые драйверы PPPoE, стали поддерживать такую
+      особенность, как 'clamp the MSS' (ограничение размера MSS).
+    </P
+><P
+>      В этом есть свои плюсы и минусы. С одной стороны, устанавливая MSS, вы недвусмысленно извещаете
+      удаленную сторону о том, что размер пакета не должен превышать заданную величину. Причем для этого 
+      не требуется передачи ICMP-сообщений.
+    </P
+><P
+>      С другой стороны -- за атакущим сохраняется возможность нарушить связь путем модификации пакетов.
+      Однако, следует заметить, что мы довольно часто используем эту возможность и это приносит свои 
+      положительные плоды.
+    </P
+><P
+>      Чтобы иметь возможность манипулировать размером сегмента, у вас должны быть установлены 
+      <B
+CLASS="COMMAND"
+>iptables</B
+>, не ниже 1.2.1a и ядро Linux, не ниже 2.4.3.
+      Основная команда <B
+CLASS="COMMAND"
+>iptables</B
+>:
+      <PRE
+CLASS="SCREEN"
+># iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS  --clamp-mss-to-pmtu      
+      </PRE
+>
+      Она рассчитает правильный MSS для вашего соединения. Если вы достаточно уверены в себе и в своих знаниях,
+      можете попробовать нечто подобное:
+      <PRE
+CLASS="SCREEN"
+># iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 128      
+      </PRE
+>
+      Это правило устанавливает MSS равным 128. Очень полезно, если вы наблюдаете разрывы при передаче голосовых 
+      данных, когда поток небольших пакетов VoIP прерывается <SPAN
+CLASS="QUOTE"
+>"огромными"</SPAN
+> http-пакетами.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2627.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2670.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Решение проблемы с Path MTU Discovery путем настройки MTU.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2475.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Формирователь трафика: Низкая задержка, максимальная производительность.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

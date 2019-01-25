@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Туннели IPSEC</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="IPSEC: безопасная передача данных протоколами IP через Интернет"
+HREF="c518.html"><LINK
+REL="PREVIOUS"
+TITLE="Пример автоматического конфигурирования безопасного соединения между двумя хостами."
+HREF="x616.html"><LINK
+REL="NEXT"
+TITLE="Другое программное обеспечение для работы с IPSEC"
+HREF="x762.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x616.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 7. IPSEC: безопасная передача данных протоколами IP через Интернет</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x762.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="IPSECTUNNELS"
+></A
+>7.3. Туннели IPSEC</H1
+><P
+>        Выше мы обсуждали работу с IPSEC в так называемом <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>транспортном</I
+></SPAN
+> режиме, 
+        где обе стороны взаимодействуют друг с другом посредством протоколов IPSEC. 
+        Однако, это довольно редкий случай, чаще встречается другой вариант 
+        -- когда в транспортном режиме работают только маршрутизаторы, обеспечивая защищенными каналами связи 
+        компьютеры, находящиеся за ними. Такой режим работы называется <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>туннельным режимом</I
+></SPAN
+>. 
+      </P
+><P
+>        Настройка такого режима выполняется достаточно просто. 
+        Предположим, что нам необходимо <SPAN
+CLASS="QUOTE"
+>"проложить"</SPAN
+> туннель от хоста, с адресом 10.0.0.216,
+        к хосту, с адресом 10.0.0.11, через сеть 130.161.0.0/16. Для этого, на хосте 10.0.0.216 выполним
+        следующие действия: 
+        <PRE
+CLASS="SCREEN"
+>#!/sbin/setkey -f
+flush;
+spdflush;
+
+add 10.0.0.216 10.0.0.11 esp 34501
+	-m tunnel
+	-E 3des-cbc "123456789012123456789012";
+
+spdadd 10.0.0.0/24 130.161.0.0/16 any -P out ipsec
+           esp/tunnel/10.0.0.216-10.0.0.11/require;
+        </PRE
+>
+        Обратите внимание на параметр <TT
+CLASS="PARAMETER"
+><I
+>-m tunnel</I
+></TT
+> -- это очень важно. Сначала 
+        конфигурируется шифрование протоколом ESP для защищенного канала (SA) между конечными точками туннела
+        -- 10.0.0.216 и 10.0.0.11
+      </P
+><P
+>        Затем создается собственно туннель. Эта инструкция указывает ядру на необходимость шифрования 
+        всего трафика, который маршрутизируется из сети 10.0.0.0/24 в сеть 130.161.0.0/16. И наконец
+        этот трафик должен быть отправлен хосту 10.0.0.11.
+      </P
+><P
+>        На компьютере 10.0.0.11 также необходимо выполнить некоторую настройку:
+        <PRE
+CLASS="SCREEN"
+>#!/sbin/setkey -f
+flush;
+spdflush;
+
+add 10.0.0.216 10.0.0.11 esp 34501
+	-m tunnel
+	-E 3des-cbc "123456789012123456789012";
+
+spdadd 10.0.0.0/24 130.161.0.0/16 any -P in ipsec
+           esp/tunnel/10.0.0.216-10.0.0.11/require;        
+        </PRE
+>
+        Если вы были внимательны, то наверняка заметили, что конфигурации обоих узлов сети практически 
+        одинаковые. Исключение составляет аргумент <TT
+CLASS="PARAMETER"
+><I
+>-P out</I
+></TT
+>, который для 10.0.0.11
+        изменился на <TT
+CLASS="PARAMETER"
+><I
+>-P in</I
+></TT
+>. В отличие от предыдущих примеров, на этот раз мы настроили
+        передачу данных только в одном направлении. <SPAN
+CLASS="QUOTE"
+>"Постройку"</SPAN
+> второй половины туннеля оставляем
+        вам, в качестве самостоятельного упражнения.
+      </P
+><P
+>        У такой конфигурации есть еще одно название -- <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>proxy ESP</I
+></SPAN
+>, которое более точно
+        отражает ее назначение.
+        <DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/note.gif"
+HSPACE="5"
+ALT="Примечание:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>            Для того, чтобы туннель заработал, в ядре должна быть разрешена возможность форвардинга
+            (IP Forwarding)!
+          </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x616.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x762.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Пример автоматического конфигурирования безопасного соединения между двумя хостами.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c518.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Другое программное обеспечение для работы с IPSEC</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,1168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="NEXT"
+TITLE="Посвящение."
+HREF="c61.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="BOOK"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="LARTC"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="AEN2"
+></A
+>Linux Advanced Routing &#38; Traffic Control HOWTO</H1
+><H3
+CLASS="AUTHOR"
+><A
+NAME="AEN5"
+></A
+>Bert Hubert</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>bert.hubert&nbsp;[at]&nbsp;netherlabs.nl</P
+></DIV
+></DIV
+><H3
+CLASS="OTHERCREDIT"
+><A
+NAME="AEN10"
+></A
+>Thomas Graf</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>tgraf%suug.ch</P
+></DIV
+></DIV
+><H3
+CLASS="OTHERCREDIT"
+><A
+NAME="AEN15"
+></A
+>Gregory Maxwell</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+></P
+></DIV
+></DIV
+><H3
+CLASS="OTHERCREDIT"
+><A
+NAME="AEN20"
+></A
+>Remco van Mook</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>remco&nbsp;[at]&nbsp;virtu.nl</P
+></DIV
+></DIV
+><H3
+CLASS="OTHERCREDIT"
+><A
+NAME="AEN25"
+></A
+>Martijn van Oosterhout</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>kleptog&nbsp;[at]&nbsp;cupid.suninternet.com</P
+></DIV
+></DIV
+><H3
+CLASS="OTHERCREDIT"
+><A
+NAME="AEN30"
+></A
+>Paul B Schroeder</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>paulsch&nbsp;[at]&nbsp;us.ibm.com</P
+></DIV
+></DIV
+><H3
+CLASS="OTHERCREDIT"
+><A
+NAME="AEN35"
+></A
+>Jasper Spaans</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>jasper&nbsp;[at]&nbsp;spaans.ds9a.nl</P
+></DIV
+></DIV
+><H3
+CLASS="OTHERCREDIT"
+><A
+NAME="AEN40"
+></A
+>Pedro Larroy</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>piotr%member.fsf.org</P
+></DIV
+></DIV
+><DIV
+><DIV
+CLASS="ABSTRACT"
+><A
+NAME="AEN45"
+></A
+><P
+></P
+><P
+> </P
+><P
+>      <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Перевод выполнили:</DT
+><DD
+><P
+>              (C) <B
+CLASS="COMMAND"
+>Андрей Киселёв</B
+> (kis_an [at] mail.ru), 
+              <B
+CLASS="COMMAND"
+>Иван Песин</B
+> (ipesin [at] n-ix.com.ua)
+            </P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="LEGALNOTICE"
+><A
+NAME="AEN55"
+></A
+><P
+></P
+><P
+>      Оригинальную версию документа вы найдете по адресу <A
+HREF="http://lartc.org/"
+TARGET="_top"
+>http://lartc.org/</A
+>.
+	  </P
+><P
+>      Практическое руководство по применению <B
+CLASS="COMMAND"
+>iproute2</B
+> (и в меньшей степени
+      <B
+CLASS="COMMAND"
+>netfilter</B
+>) для управления трафиком. 
+	  </P
+><P
+></P
+></DIV
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Содержание</B
+></DT
+><DT
+>1. <A
+HREF="c61.html"
+>Посвящение.</A
+></DT
+><DT
+>2. <A
+HREF="c73.html"
+>Введение.</A
+></DT
+><DD
+><DL
+><DT
+>2.1. <A
+HREF="c73.html#DISCLAIMERLICENSE"
+>Ограничения и лицензионное соглашение</A
+></DT
+><DT
+>2.2. <A
+HREF="x96.html"
+>Предварительные сведения</A
+></DT
+><DT
+>2.3. <A
+HREF="x113.html"
+>Что может предложить вам Linux</A
+></DT
+><DT
+>2.4. <A
+HREF="x137.html"
+>Дополнительные замечания</A
+></DT
+><DT
+>2.5. <A
+HREF="x145.html"
+>Доступ к CVS и передача обновлений</A
+></DT
+><DT
+>2.6. <A
+HREF="x165.html"
+>Список рассылки</A
+></DT
+><DT
+>2.7. <A
+HREF="x170.html"
+>Структура документа.</A
+></DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="c177.html"
+>Введение в <B
+CLASS="COMMAND"
+>iproute2</B
+></A
+></DT
+><DD
+><DL
+><DT
+>3.1. <A
+HREF="c177.html#WHYIPROUTE2"
+>Почему <B
+CLASS="COMMAND"
+>iproute2?</B
+></A
+></DT
+><DT
+>3.2. <A
+HREF="x192.html"
+>Краткий обзор iproute2</A
+></DT
+><DT
+>3.3. <A
+HREF="x197.html"
+>Необходимые условия</A
+></DT
+><DT
+>3.4. <A
+HREF="x213.html"
+>Текущая конфигурация</A
+></DT
+><DD
+><DL
+><DT
+>3.4.1. <A
+HREF="x213.html#IPSHOWSUSOURLINKS"
+>Просмотр списка сетевых интерфейсов с помощью утилиты <B
+CLASS="COMMAND"
+>ip</B
+></A
+></DT
+><DT
+>3.4.2. <A
+HREF="x213.html#IPSHOWSUSOURIPADDRESSES"
+>Просмотр списка IP-адресов с помощью утилиты <B
+CLASS="COMMAND"
+>ip</B
+></A
+></DT
+><DT
+>3.4.3. <A
+HREF="x213.html#IPSHOWSUSOURROUTES"
+>Просмотр списка маршрутов с помощью утилиты <B
+CLASS="COMMAND"
+>ip</B
+></A
+></DT
+></DL
+></DD
+><DT
+>3.5. <A
+HREF="x270.html"
+>ARP</A
+></DT
+></DL
+></DD
+><DT
+>4. <A
+HREF="c322.html"
+>Правила - база политик маршрутизации</A
+></DT
+><DD
+><DL
+><DT
+>4.1. <A
+HREF="c322.html#SIMPLESOURCEPOLICYROUTING"
+>Простая маршрутизация по источнику.</A
+></DT
+><DT
+>4.2. <A
+HREF="x348.html"
+>Маршрутизация через несколько каналов/провайдеров.</A
+></DT
+><DD
+><DL
+><DT
+>4.2.1. <A
+HREF="x348.html#SPLITACCESS"
+>Раздельный доступ</A
+></DT
+><DT
+>4.2.2. <A
+HREF="x348.html#LOADBALANCING"
+>Распределение нагрузки.</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>5. <A
+HREF="c392.html"
+>GRE и другие тоннели.</A
+></DT
+><DD
+><DL
+><DT
+>5.1. <A
+HREF="c392.html#AFEWGENERALREMARKSABOUTTUNNELS"
+>Несколько общих замечаний о тоннелях:</A
+></DT
+><DT
+>5.2. <A
+HREF="x401.html"
+>Тоннелирование IP в IP.</A
+></DT
+><DT
+>5.3. <A
+HREF="x418.html"
+>GRE тоннели.</A
+></DT
+><DD
+><DL
+><DT
+>5.3.1. <A
+HREF="x418.html#IPV4TUNNELING"
+>Тоннелирование IPv4.</A
+></DT
+><DT
+>5.3.2. <A
+HREF="x418.html#IPV6TUNNELING1"
+>Тоннелирование IPv6.</A
+></DT
+></DL
+></DD
+><DT
+>5.4. <A
+HREF="x452.html"
+>Тоннели неядерного уровня.</A
+></DT
+></DL
+></DD
+><DT
+>6. <A
+HREF="c455.html"
+>Тоннелирование IPv6 при помощьи Cisco и/или 6bone.</A
+></DT
+><DD
+><DL
+><DT
+>6.1. <A
+HREF="c455.html#IPV6TUNNELING2"
+>Тоннелирование IPv6.</A
+></DT
+></DL
+></DD
+><DT
+>7. <A
+HREF="c518.html"
+>IPSEC: безопасная передача данных протоколами IP через Интернет</A
+></DT
+><DD
+><DL
+><DT
+>7.1. <A
+HREF="c518.html#INTROWITHMANUALKEYING"
+>Пример ручного конфигурирования безопасного соединения между двумя хостами.</A
+></DT
+><DT
+>7.2. <A
+HREF="x616.html"
+>Пример автоматического конфигурирования безопасного соединения между двумя хостами.</A
+></DT
+><DD
+><DL
+><DT
+>7.2.1. <A
+HREF="x616.html#THEORY"
+>Теория.</A
+></DT
+><DT
+>7.2.2. <A
+HREF="x616.html#EXAMPLE"
+>Пример.</A
+></DT
+><DT
+>7.2.3. <A
+HREF="x616.html#AUTOMATICKEYINGUSINGX.509CERTIFICATES"
+>Автоматизация с использованием сертификатов X.509</A
+></DT
+><DT
+>7.2.4. <A
+HREF="x616.html#HOWTOSETUPTUNNELSSECURELY"
+>Как сохранить настройки туннеля в безопасности.</A
+></DT
+></DL
+></DD
+><DT
+>7.3. <A
+HREF="x743.html"
+>Туннели IPSEC</A
+></DT
+><DT
+>7.4. <A
+HREF="x762.html"
+>Другое программное обеспечение для работы с IPSEC</A
+></DT
+><DT
+>7.5. <A
+HREF="x779.html"
+>Взаимодействие с другими операционными системами через IPSEC.</A
+></DT
+><DD
+><DL
+><DT
+>7.5.1. <A
+HREF="x779.html#WINDOWS"
+>Windows.</A
+></DT
+><DT
+>7.5.2. <A
+HREF="x779.html#CHECKPOINTVPN1NG"
+>Check Point VPN-1 NG</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>8. <A
+HREF="c791.html"
+>Маршрутизация групповых сообщений.</A
+></DT
+><DT
+>9. <A
+HREF="c834.html"
+>Дисциплины обработки очередей для управления пропускной способностью</A
+></DT
+><DD
+><DL
+><DT
+>9.1. <A
+HREF="c834.html#QUEUESANDQUEUEINGDISCIPLINESEXPLAINED"
+>Понятие очереди и дисциплины обработки</A
+></DT
+><DT
+>9.2. <A
+HREF="x852.html"
+>Простые бесклассовые дисцплины обработки очереди.</A
+></DT
+><DD
+><DL
+><DT
+>9.2.1. <A
+HREF="x852.html#PFIFO_FAST"
+>pfifo_fast</A
+></DT
+><DT
+>9.2.2. <A
+HREF="x852.html#TOKENBUCKETFILTER"
+>Token Bucket Filter</A
+></DT
+><DT
+>9.2.3. <A
+HREF="x852.html#STOCHASTICFAIRNESSQUEUEING"
+>Stochastic Fairness Queueing.</A
+></DT
+></DL
+></DD
+><DT
+>9.3. <A
+HREF="x991.html"
+>Какие типы дисциплин нужно использовать.</A
+></DT
+><DT
+>9.4. <A
+HREF="x1013.html"
+>Терминология</A
+></DT
+><DT
+>9.5. <A
+HREF="x1075.html"
+>Классовые дисциплины обработки очередей.</A
+></DT
+><DD
+><DL
+><DT
+>9.5.1. <A
+HREF="x1075.html#FLOWWITHINCLASSFULQDISCSCLASSES"
+>Порядок движения пакетов внутри полноклассовых дисциплин и классов.</A
+></DT
+><DT
+>9.5.2. <A
+HREF="x1075.html#THEQDISCFAMILYROOTSHANDLESSIBLINGSANDPARENTS"
+>Элементы дисциплины: корень, дескриптор, родительские элементы и элементы одного уровня.</A
+></DT
+><DT
+>9.5.3. <A
+HREF="x1075.html#THEPRIOQDISC"
+>Дисциплина PRIO.</A
+></DT
+><DT
+>9.5.4. <A
+HREF="x1075.html#THEFAMOUSCBQQDISC"
+>Дисциплина CBQ.</A
+></DT
+><DT
+>9.5.5. <A
+HREF="x1075.html#HIERARCHICALTOKENBUCKET"
+>Hierarchical Token Bucket</A
+></DT
+></DL
+></DD
+><DT
+>9.6. <A
+HREF="x1308.html"
+>Классификация пакетов с помощью фильтров.</A
+></DT
+><DD
+><DL
+><DT
+>9.6.1. <A
+HREF="x1308.html#SOMESIMPLEFILTERINGEXAMPLES"
+>Ряд простых примеров фильтрации.</A
+></DT
+><DT
+>9.6.2. <A
+HREF="x1308.html#ALLTHEFILTERINGCOMMANDSYOUWILLNORMALLYNEED"
+>Наиболее употребимые способы фильтрации.</A
+></DT
+></DL
+></DD
+><DT
+>9.7. <A
+HREF="x1366.html"
+>Intermediate queueing device.</A
+></DT
+><DD
+><DL
+><DT
+>9.7.1. <A
+HREF="x1366.html#AEN1374"
+>Пример конфигурирования.</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>10. <A
+HREF="c1389.html"
+>Распределение нагрузки по нескольким интерфейсам.</A
+></DT
+><DD
+><DL
+><DT
+>10.1. <A
+HREF="c1389.html#CAVEATS"
+>Предостережение.</A
+></DT
+><DT
+>10.2. <A
+HREF="x1425.html"
+>Другие возможности.</A
+></DT
+></DL
+></DD
+><DT
+>11. <A
+HREF="c1430.html"
+>Netfilter и iproute -- маркировка пакетов.</A
+></DT
+><DT
+>12. <A
+HREF="c1452.html"
+>Расширенная фильтрация.</A
+></DT
+><DD
+><DL
+><DT
+>12.1. <A
+HREF="c1452.html#THEU32CLASSIFIER"
+>Классификатор u32.</A
+></DT
+><DD
+><DL
+><DT
+>12.1.1. <A
+HREF="c1452.html#U32SELECTOR"
+>Селектор U32.</A
+></DT
+><DT
+>12.1.2. <A
+HREF="c1452.html#GENERALSELECTORS"
+>Селекторы общего назначения.</A
+></DT
+><DT
+>12.1.3. <A
+HREF="c1452.html#SPECIFICSELECTORS"
+>Селекторы специального назначения.</A
+></DT
+></DL
+></DD
+><DT
+>12.2. <A
+HREF="x1578.html"
+>Классификатор route.</A
+></DT
+><DT
+>12.3. <A
+HREF="x1589.html"
+>Фильтры-ограничители трафика.</A
+></DT
+><DD
+><DL
+><DT
+>12.3.1. <A
+HREF="x1589.html#WAYSTOPOLICE"
+>Способы ограничения.</A
+></DT
+><DT
+>12.3.2. <A
+HREF="x1589.html#OVERLIMITACTIONS"
+>Действия в случае превышения ограничения.</A
+></DT
+><DT
+>12.3.3. <A
+HREF="x1589.html#EXAMPLES"
+>Примеры.</A
+></DT
+></DL
+></DD
+><DT
+>12.4. <A
+HREF="x1661.html"
+>Хеш-фильтры.</A
+></DT
+><DT
+>12.5. <A
+HREF="x1677.html"
+>Фильтрация трафика IPv6.</A
+></DT
+><DD
+><DL
+><DT
+>12.5.1. <A
+HREF="x1677.html#HOWCOMETHATIPV6TCFILTERSDONOTWORK"
+>Почему не работают tc-фильтры в IPv6?</A
+></DT
+><DT
+>12.5.2. <A
+HREF="x1677.html#MARKINGIPV6PACKETSUSINGIP6TABLES"
+>Маркировка пакетов IPv6 средствами ip6tables.</A
+></DT
+><DT
+>12.5.3. <A
+HREF="x1677.html#USINGTHEU32SELECTORTOMATCHIPV6PACKET"
+>Использование селектора u32 для пакетов IPv6.</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>13. <A
+HREF="c1699.html"
+>Параметры настройки сети в ядре.</A
+></DT
+><DD
+><DL
+><DT
+>13.1. <A
+HREF="c1699.html#REVERSEPATHFILTERING"
+>Reverse Path Filtering.</A
+></DT
+><DT
+>13.2. <A
+HREF="x1727.html"
+>Малоизвестные настройки.</A
+></DT
+><DD
+><DL
+><DT
+>13.2.1. <A
+HREF="x1727.html#GENERICIPV4"
+>Параметры настройки IPv4.</A
+></DT
+><DT
+>13.2.2. <A
+HREF="x1727.html#PERDEVICESETTINGS"
+>Параметры настройки устройств.</A
+></DT
+><DT
+>13.2.3. <A
+HREF="x1727.html#NEIGHBORPOLICY"
+>Параметры сетевых политик.</A
+></DT
+><DT
+>13.2.4. <A
+HREF="x1727.html#ROUTINGSETTINGS"
+>Параметры маршрутизации.</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>14. <A
+HREF="c2289.html"
+>Специализированные дисциплины управления очередями.</A
+></DT
+><DD
+><DL
+><DT
+>14.1. <A
+HREF="c2289.html#BFIFOPFIFO"
+>bfifo/pfifo</A
+></DT
+><DD
+><DL
+><DT
+>14.1.1. <A
+HREF="c2289.html#PARAMETERSUSAGE"
+>Параметры и порядок использования.</A
+></DT
+></DL
+></DD
+><DT
+>14.2. <A
+HREF="x2313.html"
+>Алгоритм Кларка-Шенкера-Чанга.</A
+></DT
+><DT
+>14.3. <A
+HREF="x2327.html"
+>DSMARK.</A
+></DT
+><DD
+><DL
+><DT
+>14.3.1. <A
+HREF="x2327.html#INTRODUCTION"
+>Введение.</A
+></DT
+><DT
+>14.3.2. <A
+HREF="x2327.html#WHATISDSMARKRELATEDTO"
+>Что такое Dsmark и с чем его "едят"?</A
+></DT
+><DT
+>14.3.3. <A
+HREF="x2327.html#DIFFERENTIATEDSERVICESGUIDELINES"
+>Основные принципы.</A
+></DT
+><DT
+>14.3.4. <A
+HREF="x2327.html#WORKINGWITHDSMARK"
+>Как работать с Dsmark.</A
+></DT
+><DT
+>14.3.5. <A
+HREF="x2327.html#HOWSCH_DSMARKWORKS"
+>Как работает SCH_DSMARK.</A
+></DT
+><DT
+>14.3.6. <A
+HREF="x2327.html#TC_INDEXFILTER"
+>Фильтр TC_INDEX.</A
+></DT
+></DL
+></DD
+><DT
+>14.4. <A
+HREF="x2425.html"
+>Ingress qdisc.</A
+></DT
+><DD
+><DL
+><DT
+>14.4.1. <A
+HREF="x2425.html#PARAMETERSUSAGE2"
+>Параметры и порядок использования.</A
+></DT
+></DL
+></DD
+><DT
+>14.5. <A
+HREF="x2435.html"
+>Random Early Detection (RED)</A
+></DT
+><DT
+>14.6. <A
+HREF="x2457.html"
+>Generic Random Early Detection.</A
+></DT
+><DT
+>14.7. <A
+HREF="x2462.html"
+>Эмуляция VC/ATM.</A
+></DT
+><DT
+>14.8. <A
+HREF="x2467.html"
+>Weighted Round Robin (WRR).</A
+></DT
+></DL
+></DD
+><DT
+>15. <A
+HREF="c2475.html"
+>Решебник.</A
+></DT
+><DD
+><DL
+><DT
+>15.1. <A
+HREF="c2475.html#RUNNINGMULTIPLESITESWITHDIFFERENTSLAS"
+>Запуск нескольких сайтов с различными SLA.</A
+></DT
+><DT
+>15.2. <A
+HREF="x2493.html"
+>Защита от SYN flood.</A
+></DT
+><DT
+>15.3. <A
+HREF="x2502.html"
+>Ограничение пропускной способности для ICMP-пакетов, с целью предотвращения dDoS атак.</A
+></DT
+><DT
+>15.4. <A
+HREF="x2517.html"
+>Управление приоритетами для трафика различных типов.</A
+></DT
+><DT
+>15.5. <A
+HREF="x2540.html"
+>Прозрачное проксирование с помощью netfilter, iproute2, ipchains и squid.</A
+></DT
+><DD
+><DL
+><DT
+>15.5.1. <A
+HREF="x2540.html#AEN2618"
+>Схема движения пакетов после настройки.</A
+></DT
+></DL
+></DD
+><DT
+>15.6. <A
+HREF="x2627.html"
+>Решение проблемы с Path MTU Discovery путем настройки MTU.</A
+></DT
+><DD
+><DL
+><DT
+>15.6.1. <A
+HREF="x2627.html#AEN2639"
+>Решение</A
+></DT
+></DL
+></DD
+><DT
+>15.7. <A
+HREF="x2657.html"
+>Решение проблемы с Path MTU Discovery путем настройки MSS.</A
+></DT
+><DT
+>15.8. <A
+HREF="x2670.html"
+>Формирователь трафика: Низкая задержка, максимальная производительность.</A
+></DT
+><DD
+><DL
+><DT
+>15.8.1. <A
+HREF="x2670.html#AEN2692"
+>Почему все так сложно?</A
+></DT
+><DT
+>15.8.2. <A
+HREF="x2670.html#AEN2713"
+>Формирователь трафика на базе CBQ.</A
+></DT
+><DT
+>15.8.3. <A
+HREF="x2670.html#AEN2729"
+>Формирователь трафика на базе HTB.</A
+></DT
+></DL
+></DD
+><DT
+>15.9. <A
+HREF="x2740.html"
+>Ограничение скорости для отдельного хоста или подсети.</A
+></DT
+><DT
+>15.10. <A
+HREF="x2755.html"
+>Пример подключения локальной сети к Интернет через NAT, с организацией QoS.</A
+></DT
+><DD
+><DL
+><DT
+>15.10.1. <A
+HREF="x2755.html#AEN2775"
+>Начнем с оптимизации пропускной способности.</A
+></DT
+><DT
+>15.10.2. <A
+HREF="x2755.html#AEN2814"
+>Классификация пакетов.</A
+></DT
+><DT
+>15.10.3. <A
+HREF="x2755.html#AEN2841"
+>Дополнительная оптимизация</A
+></DT
+><DT
+>15.10.4. <A
+HREF="x2755.html#AEN2846"
+>Выполнение настроек во время загрузки системы.</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>16. <A
+HREF="c2854.html"
+>Построение мостов и псевдо-мостов с Proxy ARP.</A
+></DT
+><DD
+><DL
+><DT
+>16.1. <A
+HREF="c2854.html#STATEOFBRIDGINGANDIPTABLES"
+>Бриджинг и iptables.</A
+></DT
+><DT
+>16.2. <A
+HREF="x2875.html"
+>Бриджинг и шейпинг.</A
+></DT
+><DT
+>16.3. <A
+HREF="x2879.html"
+>Псевдо-мосты с проксированием ARP.</A
+></DT
+><DD
+><DL
+><DT
+>16.3.1. <A
+HREF="x2879.html#AEN2891"
+>ARP и проксирование ARP</A
+></DT
+><DT
+>16.3.2. <A
+HREF="x2879.html#IMPLEMENTINGIT"
+>Реализация</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>17. <A
+HREF="c2925.html"
+>Динамическая маршрутизация -- OSPF и BGP.</A
+></DT
+><DD
+><DL
+><DT
+>17.1. <A
+HREF="c2925.html#SETTINGUPOSPFWITHZEBRA"
+>Настройка OSPF в Zebra</A
+></DT
+><DD
+><DL
+><DT
+>17.1.1. <A
+HREF="c2925.html#AEN2980"
+>Предварительные условия.</A
+></DT
+><DT
+>17.1.2. <A
+HREF="c2925.html#AEN2996"
+>Конфигурирование.</A
+></DT
+><DT
+>17.1.3. <A
+HREF="c2925.html#AEN3010"
+>Запуск Zebra</A
+></DT
+></DL
+></DD
+><DT
+>17.2. <A
+HREF="x3036.html"
+>Настройка BGP4 с помощью Zebra.</A
+></DT
+><DD
+><DL
+><DT
+>17.2.1. <A
+HREF="x3036.html#AEN3043"
+>Конфигурация сети (пример).</A
+></DT
+><DT
+>17.2.2. <A
+HREF="x3036.html#AEN3052"
+>Конфигурирование (пример).</A
+></DT
+><DT
+>17.2.3. <A
+HREF="x3036.html#AEN3062"
+>Проверка конфигурации.</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>18. <A
+HREF="c3070.html"
+>Прочие возможности.</A
+></DT
+><DT
+>19. <A
+HREF="c3144.html"
+>Рекомендуемая литература.</A
+></DT
+><DT
+>20. <A
+HREF="c3207.html"
+>Благодарности.</A
+></DT
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c61.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Посвящение.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

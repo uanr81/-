@@ -1,0 +1,645 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>DSMARK.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Специализированные дисциплины управления очередями."
+HREF="c2289.html"><LINK
+REL="PREVIOUS"
+TITLE="Алгоритм Кларка-Шенкера-Чанга."
+HREF="x2313.html"><LINK
+REL="NEXT"
+TITLE="Ingress qdisc."
+HREF="x2425.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2313.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 14. Специализированные дисциплины управления очередями.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2425.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="DSMARK"
+></A
+>14.3. DSMARK.</H1
+><P
+>       Esteve Camps
+    </P
+><P
+>      <TT
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:marvin@grn.es"
+>marvin@grn.es</A
+>&#62;</TT
+>
+    </P
+><P
+>      Этот текст -- отрывки из моих тезисов <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Поддержка QoS в Linux</I
+></SPAN
+>, сентябрь 2000 года. 
+    </P
+><P
+>      Исходные документы:
+      <P
+></P
+><UL
+><LI
+><P
+>            <A
+HREF="ftp://icaftp.epfl.ch/pub/linux/diffserv/misc/dsid-01.txt.gz"
+TARGET="_top"
+>             Draft-almesberger-wajhak-diffserv-linux-01.txt</A
+>
+          </P
+></LI
+><LI
+><P
+>            Примеры, прилагаемые к дистрибутиву <B
+CLASS="COMMAND"
+>iproute2</B
+>
+          </P
+></LI
+><LI
+><P
+>            <A
+HREF="http://www.qosforum.com/white-papers/qosprot_v3.pdf"
+TARGET="_top"
+>White Paper-QoS protocols and 
+            architectures</A
+> и 
+            <A
+HREF="http://www.qosforum.com/docs/faq"
+TARGET="_top"
+>IP QoS Frequently Asked Questions</A
+>.
+          </P
+></LI
+></UL
+>
+      Автор главы: Esteve Camps <TT
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:esteve@hades.udg.es"
+>esteve@hades.udg.es</A
+>&#62;</TT
+>.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="INTRODUCTION"
+></A
+>14.3.1. Введение.</H2
+><P
+>        Прежде всего, было бы неплохо, если бы вы предварительно ознакомились с RFC, посвященными данной теме
+        (RFC2474, RFC2475, RFC2597 и RFC2598) по адресам: <A
+HREF="http://www.ietf.org/html.charters/diffserv-charter.html"
+TARGET="_top"
+>IETF DiffServ working Group 
+        </A
+> и <A
+HREF="http://diffserv.sf.net/"
+TARGET="_top"
+>домашняя страничка проекта diffserv</A
+>.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="WHATISDSMARKRELATEDTO"
+></A
+>14.3.2. Что такое Dsmark и с чем его "едят"?</H2
+><P
+>        <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Dsmark</I
+></SPAN
+> -- это дисциплина организации очереди, которая предлагает возможности, 
+        необходимые в "Differentiated Services" (известной также, как DiffServ, или просто -- DS). 
+        DiffServ -- фактически одна из двух архитектур QoS (вторая называется 
+        "Integrated Services"), которая базируется на значении поля DS в заголовке IP-пакетов.
+      </P
+><P
+>        Одним из первых решений в IP, которое предлагало некоторый уровень QoS, был "Type of Service"
+        (Тип Обслуживания) -- поле TOS в IP-заголовке. Изменяя это поле, можно было выбрать высокую/низкую
+        пропускную способность, минимальную задержку или высокую надежность. Но это решение не обеспечивало 
+        достаточной гибкости, которую требовали вновь появляющиеся услуги (например, приложения реального 
+        времени, интерактивные приложения и т.п.). С появлением новых требований, появились и новые 
+        архитектуры. Одна из них  -- DiffServ, которая подменяет первые шесть битов ToS в пакете IPv4 или октет 
+        "класс трафика" в пакете IPv6, полем, с названием DS, в котором можно указать до 64 классов трафика.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="DIFFERENTIATEDSERVICESGUIDELINES"
+></A
+>14.3.3. Основные принципы.</H2
+><P
+>        Differentiated Services (Дифференцированное Обслуживание) ориентирован на группы. Имеется ввиду, что
+        эта технология ничего не знает о потоках, она ориентирована на группы, а применяемые правила
+        зависят от того, к какой группе направляется пакет.
+      </P
+><P
+>        Сеть маршрутизаторов с поддержкой механизмов DiffServ называют "облаком DiffServ" (или "доменом 
+        DiffServ"). Классификация, формирование и установка меток (под установкой меток понимается
+        установка значений в поле DS) происходит на входе в "облако". Внутри домена метка определяет
+        -- какой уровень QoS должен применяться к трафику внутренними маршрутизаторами сети.
+      </P
+><P
+>        Самым большим преимуществом модели DiffServ является то, что она действует на границе "облака". После 
+        того как данные пересекли границу, внутренним маршрутизаторам можно не заниматься поддержанием 
+        информации о статусе QoS и полностью сосредоточиться на своей основной функции -- маршрутизации.
+      </P
+><P
+>        Фактически, внутри своих локальных доменов, вы можете диктовать любую политику обслуживания, но 
+        при соединении с другими DS-доменами вы должны следовать <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Соглашению об Уровне 
+        Обслуживания</I
+></SPAN
+> (SLA).
+      </P
+><P
+>        К этому моменту у вас наверняка возникла масса вопросов. Diffsrv -- это много больше, чем я смог
+        сказать. Вы должны понять, что я не в состоянии в 50 строках изложить содержимое трех RFC. :-)
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="WORKINGWITHDSMARK"
+></A
+>14.3.4. Как работать с Dsmark.</H2
+><P
+>        Как уже было определено выше, в случае с DiffServ, пограничные и внутренние узлы различаются между собой.
+        Это два важных пункта на пути трафика. Оба типа узлов выполняют классификацию трафика. Результат 
+        классификации может использоваться для различной DS-обработки, прежде чем пакет уйдет в сеть.
+        Код diffserv представляет пакет в виде структуры 
+        <TT
+CLASS="CLASSNAME"
+>sk_buff</TT
+>, в которой имеется поле <TT
+CLASS="VARNAME"
+>skb-&#62;tc_index</TT
+>. В данном поле
+        сохраняется результат начальной классификации, который может использоваться для различной
+        интерпретации DS на пограничных и внутренних маршрутизаторах.
+      </P
+><P
+>        Значение <TT
+CLASS="VARNAME"
+>skb-&#62;tc_index</TT
+> изначально устанавливается дисциплиной DSMARK qdisc для каждого
+        входящего пакета, в соответствии с полем DS в IP-заголовке. Кроме того, классификатор cls_tcindex
+        считывает, целиком или частично, значение skb-&#62;tcindex и использует его для выбора нужного класса.
+      </P
+><P
+>        Для начала рассмотрим команду DSMARK qdisc и ее параметры:
+        <PRE
+CLASS="SCREEN"
+>... dsmark indices INDICES [ default_index DEFAULT_INDEX ] [ set_tc_index ]
+        </PRE
+>
+        Каково назначение этих параметров?
+      <P
+></P
+><UL
+><LI
+><P
+>            <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+><B
+CLASS="COMMAND"
+>indices:</B
+></I
+></SPAN
+> размер таблицы пар маска-значение.
+            Максимальное значение 2^n, где n &#62;= 0.
+          </P
+></LI
+><LI
+><P
+>            <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+><B
+CLASS="COMMAND"
+>Default_index:</B
+></I
+></SPAN
+> индекс в таблице, принимаемый по-умолчанию,
+            если классификатор не находит ни одного совпадения.
+          </P
+></LI
+><LI
+><P
+>            <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+><B
+CLASS="COMMAND"
+>Set_tc_index:</B
+></I
+></SPAN
+> инструкция, которая считывает значение поля DS 
+            и записывает его в skb-&#62;tc_index.
+          </P
+></LI
+></UL
+>
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="HOWSCH_DSMARKWORKS"
+></A
+>14.3.5. Как работает SCH_DSMARK.</H2
+><P
+>        Эта дисциплина выполняет следующие шаги:
+      <P
+></P
+><UL
+><LI
+><P
+>            Если вставлена инструкция set_tc_index, то считывается поле DS и сохраняется в skb-&#62;tc_index.
+          </P
+></LI
+><LI
+><P
+>            Вызывается классификатор. Он возвращает идентификатор класса, который будет сохранен в skb-&#62;tc_index.
+            Если такой класс не найден, то используется класс по-умолчанию из параметра default_index.
+            Если ни set_tc_index, ни default_index не объявлены, то результат может оказаться непредсказуемым.
+          </P
+></LI
+><LI
+><P
+>            После этого управление передается внутренней qdisc, где вы можете повторно использовать
+            результаты фильтрации. Идентификатор класса, возвращаемый внутренней qdisc, запоминается в 
+            skb-&#62;tc_index. Это значение будет использоваться в качестве индекса таблицы маска-значение.
+            Конечный результат, который будет связан с пакетом, получается из выражения:
+            <PRE
+CLASS="SCREEN"
+>New_Ds_field = ( Old_DS_field &#38; mask ) | value            
+            </PRE
+>
+          </P
+></LI
+><LI
+><P
+>            Таким образом, конечный результат получается в результате объединения по "И" ds_field и маски,
+            и затем объединения по "ИЛИ" с параметром value. Следующая диаграмма иллюстрирует этот процесс:
+            <PRE
+CLASS="SCREEN"
+>                         skb-&#62;ihp-&#62;tos
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - &#62;
+     |                                                       |     ^
+     | -- Если объявлена инструкция set_tc_index,            |     |  &#60;-----Значение поля
+     |    то значение DS переписывается в skb-&#62;tc_index      |     |O       DS может измениться
+     |                                                      A|     |R
+   +-|-+      +------+    +---+-+    внутренняя +-+     +---N|-----|----+
+   | | |      | tc   |---&#62;|   | |--&#62;  . . .  --&#62;| |     |   D|     |    |
+   | | |-----&#62;|index |---&#62;|   | |     Qdisc     | |----&#62;|    v     |    |
+   | | |      |filter|---&#62;| | | +---------------+ |   ----&#62;(mask,value) |
+--&#62;| O |      +------+    +-|-+--------------^----+  /  |  (.  ,  .)    |
+   | | |          ^         |                |       |  |  (.  ,  .)    |
+   | | +----------|---------|----------------|-------|--+  (.  ,  .)    |
+   | | sch_dsmark |         |                |       |                  |
+   +-|------------|---------|----------------|-------|------------------+
+     |            |         | &#60;- tc_index -&#62; |       |
+     |            |(read)   |    может       |       |  &#60;--------------Индекс в таблице
+     |            |         |    измениться  |       |                    (mask,value)
+     v            |         v                v       |                               
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -&#62;
+                         skb-&#62;tc_index            
+            </PRE
+>
+          </P
+></LI
+></UL
+>
+        Как установить метку? Просто измените mask и value класса. См. следующий код:
+        <PRE
+CLASS="SCREEN"
+>tc class change dev eth0 classid 1:1 dsmark mask 0x3 value 0xb8        
+        </PRE
+>
+        Это изменение пары (mask,value) в хеш-таблице, пометит пакеты, принадлежащие классу 1:1.
+      </P
+><P
+>        Теперь перейдем к описанию фильтра TC_INDEX. Кроме всего прочего, фильтр TC_INDEX может использоваться 
+        и в других конфигурациях, а не только в тех, которые включают DS услуги.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="TC_INDEXFILTER"
+></A
+>14.3.6. Фильтр TC_INDEX.</H2
+><P
+>        Базовый синтаксис команды, объявляющей фильтр TC_INDEX:
+        <PRE
+CLASS="SCREEN"
+>... tcindex [ hash SIZE ] [ mask MASK ] [ shift SHIFT ]
+            [ pass_on | fall_through ]
+            [ classid CLASSID ] [ police POLICE_SPEC ]        
+        </PRE
+>
+        Ниже приводится пример, который описывает работу TC_INDEX (обратите внимание на места, выделенные жирным 
+        шрифтом:
+        <PRE
+CLASS="SCREEN"
+>tc qdisc add dev eth0 handle 1:0 root dsmark indices 64 <TT
+CLASS="USERINPUT"
+><B
+>set_tc_index</B
+></TT
+>
+
+tc filter add dev eth0 parent 1:0 protocol ip prio 1 tcindex <TT
+CLASS="USERINPUT"
+><B
+>mask 0xfc  shift 2</B
+></TT
+>
+
+tc qdisc add dev eth0 parent 1:0 handle 2:0 cbq bandwidth 10Mbit cell 8 avpkt 1000 mpu 64
+
+# EF traffic class
+
+tc class add dev eth0 parent 2:0 classid 2:1 cbq bandwidth 10Mbit rate 1500Kbit avpkt 1000 prio 1 bounded isolated allot 1514 weight 1 maxburst 10
+
+# Packet fifo qdisc for EF traffic
+
+tc qdisc add dev eth0 parent 2:1 pfifo limit 5
+
+tc filter add dev eth0 parent 2:0 protocol ip prio 1 <TT
+CLASS="USERINPUT"
+><B
+>handle 0x2e</B
+></TT
+> tcindex <TT
+CLASS="USERINPUT"
+><B
+>classid 2:1 pass_on        </B
+></TT
+>
+        </PRE
+>
+        (Это неполный код, я просто привел часть примера EFCBQ, включенного в состав дистрибутива 
+        <B
+CLASS="COMMAND"
+>iproute2</B
+>).
+      </P
+><P
+>        Будем исходить из предположения, что мы получаем пакет, помеченный как EF. Если вы прочитаете RFC2598, 
+        то увидите, что рекомендуемое значение DSCP для EF трафика -- 101110. Это означает, что в поле DS 
+        будет записано 10111000 (не забывайте, что младшие биты в поле TOS не используются в DS), или 0xb8, 
+        в шестнадцатиричном представлении.
+        <PRE
+CLASS="SCREEN"
+>              TC INDEX
+              FILTER
+   +---+      +-------+    +---+-+    +------+                +-+    +-------+
+   |   |      |       |    |   | |    |FILTER|  +-+    +-+    | |    |       |
+   |   |-----&#62;| MASK  | -&#62; |   | | -&#62; |HANDLE|-&#62;| |    | | -&#62; | | -&#62; |       |
+   |   |  .   | =0xfc |    |   | |    |0x2E  |  | +----+ |    | |    |       |
+   |   |  .   |       |    |   | |    +------+  +--------+    | |    |       |
+   |   |  .   |       |    |   | |                            | |    |       |
+--&#62;|   |  .   | SHIFT |    |   | |                            | |    |       |--&#62;
+   |   |  .   | =2    |    |   | +----------------------------+ |    |       |
+   |   |      |       |    |   |       CBQ 2:0                  |    |       |
+   |   |      +-------+    +---+--------------------------------+    |       |
+   |   |                                                             |       |
+   |   +-------------------------------------------------------------+       |
+   |                          DSMARK 1:0                                     |
+   +-------------------------------------------------------------------------+        
+        </PRE
+>
+        Полученный пакет имеет значение 0xb8 в поле DS. Дисциплина с идентификатором 1:0 считывает это значение 
+        и помещает его в skb-&#62;tc_index. На следующем шаге (вторая строка в примере), описанный фильтр выполняет 
+        следующие действия:
+        <PRE
+CLASS="SCREEN"
+>Value1 = skb-&#62;tc_index &#38; MASK
+Key = Value1 &#62;&#62; SHIFT        
+        </PRE
+>
+        В нашем примере MASK=0xFC и SHIFT=2.
+        <PRE
+CLASS="SCREEN"
+>Value1 = 10111000 &#38; 11111100 = 10111000
+Key = 10111000 &#62;&#62; 2 = 00101110 -&#62; 0x2E (в шестнадцатиричном виде)
+        </PRE
+>
+        Возвращаемое значение будет соответствовать фильтру внутренней qdisc (в примере, идентификатор 2:0).
+        Если фильтр с заданным идентификатором найден, то условия фильтра будут проверены (в случае, если фильтр
+        включает в себя эти условия) и будет возвращен classid (в нашем примере classid 2:1), который далее
+        будет записан в skb-&#62;tc_index. Если фильтр не будет найден, то результат будет зависеть от
+        объявления флага fall_through. Если объявление fall_through присутствует, то его значение будет
+        воспринято как classid. В противном случае продолжится просмотр остальных фильтров. Будьте предельно 
+        внимательны, при использовании флага fall_through -- его использование рекомендуется только в том случае, 
+        когда значение skb-&#62;tc_index и идентификаторы классов ссвязаны простыми (в смысле несложными)
+        отношениями.
+      </P
+><P
+>        И последние два параметра, которые мы опишем, это <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>hash</I
+></SPAN
+> и 
+        <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>pass_on</I
+></SPAN
+>. Первый из них определяет размер хеш-таблицы. <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>Pass_on</I
+></SPAN
+> --
+        означает, что если не будет найден classid, равный результату этого фильтра, то необходимо
+        попробовать применить следующий фильтр. Действие по-умолчанию -- fall_through (см. следующую таблицу). 
+      </P
+><P
+>        В заключение посмотрим -- какие значения параметров TCINDEX допустимы:
+        <PRE
+CLASS="SCREEN"
+>TC Name                 Value           Default
+-----------------------------------------------------------------
+Hash                    1...0x10000     Зависит от реализации   
+Mask                    0...0xffff      0xffff
+Shift                   0...15          0
+Fall through / Pass_on  Flag            Fall_through
+Classid                 Major:minor     None
+Police                  .....           None        
+        </PRE
+>
+        Это очень мощный тип фильтров. Кроме того, он может использоваться не только в конфигурации
+        DiffServ, но и как любой другой тип фильтров.
+      </P
+><P
+>        Я настоятельно рекомендую вам внимательно просмотреть все примеры DiffServ, включаемые в дистрибутив
+        <B
+CLASS="COMMAND"
+>iproute2</B
+>. Со своей стороны я обещаю, что дополню этот текст, как только найду время.
+        Все, что я здесь описал -- есть результат длительных экспериментов. Я буду весьма признателен, если вы
+        сообщите мне об обнаруженных ошибках.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2313.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2425.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Алгоритм Кларка-Шенкера-Чанга.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2289.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Ingress qdisc.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

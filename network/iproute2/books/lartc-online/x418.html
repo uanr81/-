@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>GRE тоннели.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="GRE и другие тоннели."
+HREF="c392.html"><LINK
+REL="PREVIOUS"
+TITLE="Тоннелирование IP в IP."
+HREF="x401.html"><LINK
+REL="NEXT"
+TITLE="Тоннели неядерного уровня."
+HREF="x452.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x401.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 5. GRE и другие тоннели.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x452.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="GRETUNNELING"
+></A
+>5.3. GRE тоннели.</H1
+><P
+>      GRE это протокол тоннелирования, который был разработан фирмой Cisco. Он может немного больше чем
+      тоннелирование IP-в-IP. Например, вы можете пересылать широковещательную передачу и IPv6 через 
+      тоннель GRE.
+    </P
+><P
+>      В ОС Linux вам будет нужен модуль <TT
+CLASS="FILENAME"
+>ip_gre.o</TT
+>.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="IPV4TUNNELING"
+></A
+>5.3.1. Тоннелирование IPv4.</H2
+><P
+>        Давайте сначала разберемся с тоннелированием IPv4:
+      </P
+><P
+>        Допустим у вас есть три сети: внутренние сети A и B, и промежуточная сеть C (например, Internet).
+      </P
+><P
+>        Сеть А:      
+        <PRE
+CLASS="SCREEN"
+>сеть          10.0.1.0
+маска         255.255.255.0
+маршрутизатор 10.0.1.1        
+        </PRE
+>
+        Адрес маршрутизатора в сети С -- 172.16.17.18. Назовем эту сеть neta (крайне оригинально)
+      </P
+><P
+>        сеть B:
+        <PRE
+CLASS="SCREEN"
+>сеть          10.0.2.0
+маска         255.255.255.0
+маршрутизатор 10.0.2.1        
+        </PRE
+>
+        Адрес маршрутизатора в сети С -- 172.19.20.21. Назовем эту сеть netb
+      </P
+><P
+>        Мы полагаем, что сеть C передает пакеты от A к B и наоборот. Как и почему -- это нас не интересует.
+      </P
+><P
+>        На маршрутизаторе сети A, вам необходимо сделать следующее:
+        <PRE
+CLASS="SCREEN"
+>        
+ip tunnel add netb mode gre remote 172.19.20.21 local 172.16.17.18 ttl 255
+ip link set netb up
+ip addr add 10.0.1.1 dev netb
+ip route add 10.0.2.0/24 dev netb          
+        </PRE
+>        
+        Давайте немного обсудим эти команды. В первой строке мы добавляем тоннельное устройство и присваиваем 
+        ему имя netb (имея при этом ввиду место, куда мы хотим попасть). Потом мы сообщаем, что хотим
+        использовать протокол GRE (mode gre), удаленный адрес 172.19.20.21 (второй маршрутизатор), и адрес 
+        с которого должны отправлятся данные, предназначенные для передачи по этому тоннелю -- 
+        172.16.17.18 (это позволяет вашему маршрутизатору иместь несколько IP-адресов в сети C и оставлять 
+        возможность выбора конкретного адреса для тоннеля) и, наконец, TTL-поле пакета должно равняться 
+        255 (ttl 255).
+      </P
+><P
+>        Вторая строка переводит устройство в активное состояние.
+      </P
+><P
+>        В третьей строке мы присваиваем созданному интерфейсу born адрес 10.0.1.1. Это нормально для небольших 
+        сетей, но когда вы становитель <SPAN
+CLASS="QUOTE"
+>"шахтером"</SPAN
+> (т.е. создаете МНОГО тоннелей), возможно вам 
+        нужно будет выбрать другой диапазон адресов для тоннельных интерфейсов (в этом примере мы могли бы
+        использовать 10.0.3.0).
+      </P
+><P
+>        В четвертой строке определяется маршрут к сети B. Обратите внимание на формат представления сетевой 
+        маски. Если вы не знакомы с такой нотацией, краткое пояснение: записываете сетевую маску в двоичной 
+        форме и считаете все "единички". Если вы не знаете как это делается, тогда просто запомните, что 
+        255.0.0.0 это /8, 255.255.0.0 -- /16, а 255.255.255.0 -- /24. Да, а 255.255.254.0 выглядит как /23, 
+        если вам интересно.
+      </P
+><P
+>        Но хватит об этом, продолжим настройку маршрутизатора сети B. 
+        <PRE
+CLASS="SCREEN"
+>ip tunnel add neta mode gre remote 172.16.17.18 local 172.19.20.21 ttl 255
+ip link set neta up
+ip addr add 10.0.2.1 dev neta
+ip route add 10.0.1.0/24 dev neta        
+        </PRE
+>
+        Когда захотите уничтожить тоннель -- выполните на маршрутизаторе A:
+        <PRE
+CLASS="SCREEN"
+>ip link set netb down
+ip tunnel del netb        
+        </PRE
+>
+        Конечно, вы можете изменить netb на neta и выполить это на маршрутизаторе B.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="IPV6TUNNELING1"
+></A
+>5.3.2. Тоннелирование IPv6.</H2
+><P
+>        За кратким описанием адресации IPv6 обратитесь к шеcтой главе: <A
+HREF="c455.html"
+>Тоннелирование IPv6 при помощьи Cisco и/или 6bone</A
+>.
+      </P
+><P
+>        Продолжим с тоннелями.
+      </P
+><P
+>        Предположим у вас есть сеть IPv6 и вы хотите подключить ее к 6bone, или к другу.
+        <PRE
+CLASS="SCREEN"
+>Network 3ffe:406:5:1:5:a:2:1/96        
+        </PRE
+>
+        Ваш адрес IPv4 это 172.16.17.18, а маршрутизатор 6bone имеет адрес 172.22.23.24.
+        <PRE
+CLASS="SCREEN"
+>ip tunnel add sixbone mode sit remote 172.22.23.24 local 172.16.17.18 ttl 255
+ip link set sixbone up
+ip addr add 3ffe:406:5:1:5:a:2:1/96 dev sixbone
+ip route add 3ffe::/15 dev sixbone         
+        </PRE
+>
+        Рассмотрим детальнее эти команды. В первой строке мы создали тоннельное устройство с именем sixbone. 
+        Тоннелю задан режим sit (что значит тоннелирование IPv6 в IPv4), целевой адрес и адрес источника. 
+        TTL установлен в максимальное значение, 255. Далее, мы активируем устройство. После этого задаем 
+        наш сетевой адрес и определяем маршрут для 3ffe::/15 (что есть вся сеть 6bone) через тоннель. 
+      </P
+><P
+>        Тоннели GRE на сегодняшний день являются самыми предпочтительными. Это стандарт, который широко 
+        применяется за пределами сообщества Linux, а потому представляет собой 
+        <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+><B
+CLASS="COMMAND"
+>Хороший выбор</B
+></I
+></SPAN
+>.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x401.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x452.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Тоннелирование IP в IP.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c392.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Тоннели неядерного уровня.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

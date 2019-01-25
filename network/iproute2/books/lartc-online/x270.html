@@ -1,0 +1,431 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>ARP</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Введение в iproute2"
+HREF="c177.html"><LINK
+REL="PREVIOUS"
+TITLE="Текущая конфигурация"
+HREF="x213.html"><LINK
+REL="NEXT"
+TITLE="Правила - база политик маршрутизации"
+HREF="c322.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x213.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 3. Введение в <B
+CLASS="COMMAND"
+>iproute2</B
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c322.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="ARP"
+></A
+>3.5. ARP</H1
+><P
+>      ARP -- Address Resolution Protocol (Протокол Определения Адреса) описан в
+      <A
+HREF="http://www.faqs.org/rfcs/rfc826.html"
+TARGET="_top"
+>RFC 826</A
+>. 
+      Он используется для определения ethernet-адреса по IP-адресу. Машины в Интернет более известны 
+      под именами, которые преобразуются в IP-адреса, благодаря чему узел сети, скажем с именем foo.com,
+      имеет возможность связаться с другой машиной, например с именем bar.net. 
+      Но в ethernet-сетях для адресации используется не IP-адрес, а ethernet-адрес 
+      и здесь на сцену выходит протокол ARP.
+    </P
+><P
+>      Рассмотрим простой пример. Предположим, что имеется сеть из нескольких компьютеров. В ней находятся
+      компьютеры <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>foo</I
+></SPAN
+>, с адресом 10.0.0.1 и <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bar</I
+></SPAN
+>, с адресом 10.0.0.2. 
+      Пусть <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>foo</I
+></SPAN
+> хочет послать пакет <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>ICMP Echo Request</I
+></SPAN
+> 
+      (<B
+CLASS="COMMAND"
+>ping</B
+>) компьютеру <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bar</I
+></SPAN
+>, чтобы проверить -- работает ли он, 
+      но увы, <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>foo</I
+></SPAN
+> не знает ethernet-адрес компьютера <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bar</I
+></SPAN
+>. 
+      Таким образом, прежде чем <B
+CLASS="COMMAND"
+>ping</B
+>-ануть <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bar</I
+></SPAN
+>, 
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>foo</I
+></SPAN
+> должен отослать ARP-запрос. Этот запрос очень похож на то, что обычно кричит 
+      человек, пытаясь отыскать в толпе своего товарища: <SPAN
+CLASS="QUOTE"
+>"Bar (10.0.0.2)! Ты где?"</SPAN
+>.
+      В результате все машины в сети услышат <SPAN
+CLASS="QUOTE"
+>"крик"</SPAN
+> <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>foo</I
+></SPAN
+>, 
+      но только <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bar</I
+></SPAN
+> (10.0.0.2) откликнется на него, послав обратно
+      ARP-ответ, который можно трактовать как: <SPAN
+CLASS="QUOTE"
+>"Foo (10.0.0.1)! Я - здесь! Мой адрес 
+      00:60:94:E9:08:12."</SPAN
+>. После этой <SPAN
+CLASS="QUOTE"
+>"переклички"</SPAN
+> <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>foo</I
+></SPAN
+> будет
+      знать ethernet-адрес компьютера <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bar</I
+></SPAN
+> и сможет связаться с ним, пока опять не
+      <SPAN
+CLASS="QUOTE"
+>"забудет"</SPAN
+> (в кэше ARP) адрес компьютера <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>bar</I
+></SPAN
+> 
+      (обычно записи в ARP-кэше удаляются через 15 минут).
+    </P
+><P
+>      Содержимое ARP-кэша можно просмотреть так:
+    </P
+><PRE
+CLASS="PROGRAMLISTING"
+>[root@espa041 /home/src/iputils]# ip neigh show
+9.3.76.42 dev eth0 lladdr 00:60:08:3f:e9:f9 nud reachable
+9.3.76.1 dev eth0 lladdr 00:06:29:21:73:c8 nud reachable      
+    </PRE
+><P
+>      Как видите, мой компьютер <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa041</I
+></SPAN
+> (9.3.76.41) <SPAN
+CLASS="QUOTE"
+>"знает"</SPAN
+>, как
+      найти компьютер <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espagate</I
+></SPAN
+> (9.3.76.1). А теперь добавим еще один
+      адрес в наш кэш:
+    </P
+><PRE
+CLASS="PROGRAMLISTING"
+>[root@espa041 /home/paulsch/.gnome-desktop]# ping -c 1 espa043
+PING espa043.austin.ibm.com (9.3.76.43) from 9.3.76.41 : 56(84) bytes of data.
+64 bytes from 9.3.76.43: icmp_seq=0 ttl=255 time=0.9 ms
+
+--- espa043.austin.ibm.com ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.9/0.9/0.9 ms
+
+[root@espa041 /home/src/iputils]# ip neigh show
+9.3.76.43 dev eth0 lladdr 00:06:29:21:80:20 nud reachable
+9.3.76.42 dev eth0 lladdr 00:60:08:3f:e9:f9 nud reachable
+9.3.76.1 dev eth0 lladdr 00:06:29:21:73:c8 nud reachable
+    </PRE
+><P
+>      В результате попытки взаимодействия компьютера <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa041</I
+></SPAN
+> с 
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa043</I
+></SPAN
+>, ethernet-адрес последнего был добавлен в кэш.
+      По истечении некоторого тайм аута (если между этими двумя компьютерами больше не было передано
+      ни одного пакета), <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa041</I
+></SPAN
+> <SPAN
+CLASS="QUOTE"
+>"забудет"</SPAN
+> адрес компьютера
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa043</I
+></SPAN
+> и для того чтобы что-то сообщить ему, опять потребуется
+      послать ARP-запрос.
+    </P
+><P
+>      Удалим адрес компьютера <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa043</I
+></SPAN
+> из кэша:
+    </P
+><PRE
+CLASS="PROGRAMLISTING"
+>[root@espa041 /home/src/iputils]# ip neigh delete 9.3.76.43 dev eth0
+[root@espa041 /home/src/iputils]# ip neigh show
+9.3.76.43 dev eth0  nud failed
+9.3.76.42 dev eth0 lladdr 00:60:08:3f:e9:f9 nud reachable
+9.3.76.1 dev eth0 lladdr 00:06:29:21:73:c8 nud stale    
+    </PRE
+><P
+>      Теперь <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa041</I
+></SPAN
+> <SPAN
+CLASS="QUOTE"
+>"забыл"</SPAN
+> адрес компьютера
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa043</I
+></SPAN
+>. Если <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa041</I
+></SPAN
+> опять <SPAN
+CLASS="QUOTE"
+>"захочет"</SPAN
+> 
+      что-то сообщить
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espa043</I
+></SPAN
+>, он будет вынужден вновь послать ARP-запрос.
+      В этом листинге также видно, что в записи для <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>espagate</I
+></SPAN
+> (9.3.76.1),
+      состояние <TT
+CLASS="COMPUTEROUTPUT"
+>reachable</TT
+> (доступно) изменилось на 
+      <TT
+CLASS="COMPUTEROUTPUT"
+>stale</TT
+> (устарело). Это означает, что ethernet-адрес
+      все еще является допустимым, но он должен быть подтвержден при первой же попытке обмена.
+
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x213.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c322.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Текущая конфигурация</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c177.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Правила - база политик маршрутизации</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

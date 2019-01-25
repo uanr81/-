@@ -39,7 +39,7 @@
   )
 
 (defun zamenaOtmetok()
-  "Заменить все пометки на obj и сохранить непереводимый текст в ассоциативный список"
+  "Заменить все пометки на obzx и сохранить непереводимый текст в ассоциативный список"
   (setq nach 0)
   (setq numobj 0)
   (setq assspisobj (list))
@@ -47,7 +47,7 @@
     (setq nach (- (point) 3))
     (if (search-forward "@##" nil t 1)
 	(progn
-	  (setq nameobj (concat "obj" (number-to-string numobj)))
+	  (setq nameobj (concat "obzx" (number-to-string numobj)))
 	  (setq assspisobj (cons
 			    (cons nameobj
 				  (buffer-substring-no-properties (+ nach 3) (- (point) 3))) assspisobj))
@@ -78,7 +78,7 @@
     (replace-match " "))
   )
 (defun zamenaOBJ()
-  "Зменить obj оригиналом"
+  "Зменить obzx оригиналом"
   (goto-char 1)  
-  (while (re-search-forward "obj\\([[:digit:]]\\)+" nil t 1)
+  (while (re-search-forward "obzx\\([[:digit:]]\\)+" nil t 1)
     (replace-match (cdr (assoc (match-string 0) assspisobj)))))

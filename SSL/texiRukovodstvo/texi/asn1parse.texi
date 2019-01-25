@@ -1,0 +1,177 @@
+@node ASN1PARSE, , req, Top
+@chapter ASN1PARSE
+@table @asis
+@item NAME
+       openssl-asn1parse, asn1parse - ASN.1 инструмент разбора
+
+@item SYNOPSIS
+       openssl asn1parse [@ref{asn1parse -help,, -help}] [@ref{asn1parse -inform DER|PEM,, -inform DER|PEM}] [@ref{asn1parse -in filename,, -in filename}] [@ref{asn1parse -out filename,, -out filename}] [@ref{asn1parse -noout,, -noout}] [@ref{asn1parse -offset number,, -offset number}] [@ref{asn1parse -length number,, -length number}] [@ref{asn1parse -i,, -i}] [@ref{asn1parse -oid filename,, -oid filename}] [@ref{asn1parse -dump,, -dump}] [@ref{asn1parse -dlimit num,, -dlimit num}] [@ref{asn1parse -strparse offset,, -strparse offset}] [@ref{asn1parse -genstr string, -genconf file,, -genstr string, -genconf file}] [@ref{asn1parse -strictpem,, -strictpem}] [@ref{asn1parse -item name,, -item name}]
+
+@item DESCRIPTION
+       Команда asn1parse - это диагностическая утилита, которая может анализировать
+       структуры ASN.1. Его также можно использовать для извлечения данных из данных
+       в формате ASN.1.
+
+@item OPTIONS
+@table @asis
+@item       -help @anchor{asn1parse -help}
+           Распечатайте сообщение об использовании.
+
+@item       -inform DER|PEM @anchor{asn1parse -inform DER|PEM}
+           Формат ввода. DER - это двоичный формат, а PEM (по умолчанию) кодируется
+           в base64.
+
+@item       -in filename @anchor{asn1parse -in filename}
+           Входной файл, по умолчанию это стандартный ввод.
+
+@item       -out filename @anchor{asn1parse -out filename}
+           Выходной файл для размещения данных в формате DER. Если этот параметр
+           отсутствует, данные не будут выводиться. Это наиболее полезно в
+           сочетании с опцией -strparse.
+
+@item       -noout @anchor{asn1parse -noout}
+           Не выводить проанализированную версию входного файла.
+
+@item       -offset number @anchor{asn1parse -offset number}
+           Начальное смещение для начала разбора, по умолчанию - начало файла.
+
+@item       -length number @anchor{asn1parse -length number}
+           Количество байтов для анализа, по умолчанию - до конца файла.
+
+@item       -i @anchor{asn1parse -i}
+           Отступы выводятся в соответствии с "depth" структур.
+
+@item       -oid filename @anchor{asn1parse -oid filename}
+           Файл, содержащий дополнительный объект OBJECT IDENTIFIERs (OIDs).
+           Формат этого файла описан в разделе NOTES ниже.
+
+@item       -dump @anchor{asn1parse -dump}
+           Дамп неизвестных данных в шестнадцатеричном формате.
+
+@item       -dlimit num @anchor{asn1parse -dlimit num}
+           Подобно -dump, но выводятся только первые num байтов.
+
+@item       -strparse offset @anchor{asn1parse -strparse offset}
+           Проанализируйте содержимое октетов объекта ASN.1, начиная со
+           смещения. Эта опция может быть использована несколько раз для
+           "drill down" во вложенных структурах.
+
+@item       -genstr string, -genconf file @anchor{asn1parse -genstr string, -genconf file}
+           Генерируйте закодированные данные на основе строки, файла или
+           обоих, используя формат ASN1_generate_nconf. Если присутствует
+           только файл, то строка получается из секции по умолчанию с
+           именем asn1. Закодированные данные передаются через
+           синтаксический анализатор ASN1 и распечатываются так, как если
+           бы они были получены из файла, поэтому содержимое может быть
+           проверено и записано в файл с использованием опции out.
+@item       -strictpem @anchor{asn1parse -strictpem}
+           Если эта опция используется, то -inform будет игнорироваться.
+           Без этой опции любые данные во входном файле формата PEM будут
+           обрабатываться как закодированные в base64 и обработанные
+           независимо от того, имеют ли они нормальные маркеры PEM BEGIN
+           и END или нет. Эта опция игнорирует любые данные до начала
+           маркера BEGIN или после маркера END в файле PEM.
+@item       -item name @anchor{asn1parse -item name}
+           Попытайтесь декодировать и распечатать данные как имя ASN1_ITEM.
+           Это может быть использовано для распечатки полей любой
+           поддерживаемой структуры ASN.1, если тип известен.
+@end table
+@item   Output
+@display
+         Вывод, как правило, будет содержать такие строки:
+
+         0:d=0  hl=4 l= 681 cons: SEQUENCE
+
+       .....
+
+         229:d=3  hl=3 l= 141 prim: BIT STRING
+         373:d=2  hl=3 l= 162 cons: cont [ 3 ]
+         376:d=3  hl=3 l= 159 cons: SEQUENCE
+         379:d=4  hl=2 l=  29 cons: SEQUENCE
+         381:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Subject Key Identifier
+         386:d=5  hl=2 l=  22 prim: OCTET STRING
+         410:d=4  hl=2 l= 112 cons: SEQUENCE
+         412:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Authority Key Identifier
+         417:d=5  hl=2 l= 105 prim: OCTET STRING
+         524:d=4  hl=2 l=  12 cons: SEQUENCE
+
+       .....
+
+       Этот пример является частью самозаверяющего сертификата. Каждая
+       строка начинается со смещения в десятичном формате.
+       d=XX указывает текущую глубину. Глубина увеличивается в рамках
+       любого объекта SET или SEQUENCE.
+       hl=XX дает длину заголовка (тег и длина октетов) текущего типа.
+       l=XX дает длину содержимого октетов.
+
+       Опцию -i можно использовать, чтобы сделать вывод более читабельным.
+
+       Некоторое знание структуры ASN.1 необходимо для интерпретации вывода.
+
+       В этом примере BIT STRING со смещением 229 является открытым
+       ключом сертификата. Содержимое этого октета будет содержать
+       информацию открытого ключа. Это можно проверить, используя
+       опцию -strparse 229, чтобы получить:
+
+           0:d=0  hl=3 l= 137 cons: SEQUENCE
+           3:d=1  hl=3 l= 129 prim: INTEGER           :E5D21E1F5C8D208EA7A2166C7FAF9F6BDF2059669C60876DDB70840F1A5AAFA59699FE471F379F1DD6A487E7D5409AB6A88D4A9746E24B91D8CF55DB3521015460C8EDE44EE8A4189F7A7BE77D6CD3A9AF2696F486855CF58BF0EDF2B4068058C7A947F52548DDF7E15E96B385F86422BEA9064A3EE9E1158A56E4A6F47E5897
+         135:d=1  hl=2 l=   3 prim: INTEGER           :010001
+@end display
+@item NOTES
+       Если OID не является частью внутренней таблицы OpenSSL's, она будет
+       представлена ​​в числовой форме (например, 1.2.3.4). Файл, переданный
+       параметру -oid, позволяет включить дополнительный OIDs. Каждая строка
+       состоит из трех столбцов, первый столбец - это OID в числовом формате,
+       за которым следует пробел. Второй столбец - это "short name",
+       представляющий собой одно слово, за которым следует пробел. Последний
+       столбец - это остальная часть строки, это "long name".
+       Вывод asn1parse long name. Пример:
+@display
+       "1.2.3.4       shortName       A long name"
+@end display
+@item EXAMPLES
+@display
+       Разобрать файл:
+
+        openssl asn1parse -in file.pem
+
+       Разобрать файл DER:
+
+        openssl asn1parse -inform DER -in file.der
+
+       Генерация простого UTF8String:
+
+        openssl asn1parse -genstr 'UTF8:Hello World'
+
+       Создайте и запишите UTF8String, не печатайте проанализированный вывод:
+
+        openssl asn1parse -genstr 'UTF8:Hello World' -noout -out utf8.der
+
+       Создайте, используя файл конфигурации:
+
+        openssl asn1parse -genconf asn1.cnf -noout -out asn1.der
+
+       Пример файла конфигурации:
+
+        asn1=SEQUENCE:seq_sect
+
+        [seq_sect]
+
+        field1=BOOL:TRUE
+        field2=EXP:0, UTF8:some random string
+@end display
+@item BUGS
+       Должны быть варианты изменения формата выходных строк. Вывод некоторых
+       типов ASN.1 плохо обрабатывается (если вообще обрабатывается).
+
+@item SEE ALSO
+       ASN1_generate_nconf(3)
+
+@item COPYRIGHT
+       Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use this file except in
+       compliance with the License.  You can obtain a copy in the file LICENSE in the source
+       distribution or at <https://www.openssl.org/source/license.html>.
+@end table
+1.1.1a                                        2018-11-20                                  ASN1PARSE(1)

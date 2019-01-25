@@ -1,0 +1,570 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Прозрачное проксирование с помощью netfilter, iproute2, ipchains и squid.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Решебник."
+HREF="c2475.html"><LINK
+REL="PREVIOUS"
+TITLE="Управление приоритетами для трафика различных типов."
+HREF="x2517.html"><LINK
+REL="NEXT"
+TITLE="Решение проблемы с Path MTU Discovery путем настройки MTU."
+HREF="x2627.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2517.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 15. Решебник.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2627.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="TRANSPARENTWEBCACHINGUSINGNETFILTERIPROUTE2I"
+></A
+>15.5. Прозрачное проксирование с помощью netfilter, iproute2, ipchains и squid.</H1
+><P
+>      Этот раздел написал Рэм Нарул (Ram Narula), из <SPAN
+CLASS="QUOTE"
+>"Internet for Education"</SPAN
+> (Таиланд).
+    </P
+><P
+>      Прозрачное проксирование -- это обычное перенаправление серверу <B
+CLASS="COMMAND"
+>squid</B
+>
+      трафика, отправляемого на порт 80 (web).
+    </P
+><P
+>      Существует 3 общеизвестных способа такого перенаправления:
+          <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Шлюз.</DT
+><DD
+><P
+>                  Вы можете настроить шлюз таким образом, что он будет перенапрвлять все пакеты,
+                  адресованные на порт 80, сереверу <B
+CLASS="COMMAND"
+>squid</B
+>
+                </P
+><P
+>                  <B
+CLASS="COMMAND"
+>НО</B
+>
+                </P
+><P
+>                  Это увеличит нагрузку на шлюз. Кроме того, некоторые коммерческие роутеры
+                  не поддерживают такую возможность.
+                </P
+></DD
+><DT
+>Layer 4 switch</DT
+><DD
+><P
+>                  Свичи выполняют такое перенаправление без особых проблем.
+                </P
+><P
+>                  <B
+CLASS="COMMAND"
+>НО</B
+>
+                </P
+><P
+>                  Стоимость этого оборудования очень высока и может быть сопоставима с ценой связки
+                  <SPAN
+CLASS="QUOTE"
+>"обычный роутер"</SPAN
+> + <SPAN
+CLASS="QUOTE"
+>"Linux-сервер"</SPAN
+>
+                </P
+></DD
+><DT
+>Использовать кэш-сервер в качестве шлюза.</DT
+><DD
+><P
+>                  Вы можете отправить ВЕСЬ трафик через кэш-сервер.
+                </P
+><P
+>                  <B
+CLASS="COMMAND"
+>НО</B
+>
+                </P
+><P
+>                  Это довольно рисковано, поскольку <B
+CLASS="COMMAND"
+>squid</B
+> довольно значительно нагружает
+                  CPU, что может привести к снижению производительности сети. Кроме того, 
+                  <B
+CLASS="COMMAND"
+>squid</B
+> может <SPAN
+CLASS="QUOTE"
+>"рухнуть"</SPAN
+> и тогда никто из сети не сможет
+                  выйти в Интернет.
+                </P
+></DD
+></DL
+></DIV
+>
+          Мы предлагаем 4-й вариант:
+          <P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>Linux+NetFilter.</DT
+><DD
+><P
+>                  Эта методика предполагает установку меток на пакеты, с портом назначения равным 
+                  числу 80, и дальнейшая маршрутизация помеченных пакетов, с помощью
+                  <B
+CLASS="COMMAND"
+>iproute2</B
+>, на <B
+CLASS="COMMAND"
+>squid</B
+>.
+                </P
+></DD
+></DL
+></DIV
+>
+    </P
+><P
+>      <PRE
+CLASS="SCREEN"
+>|----------------|
+|   Реализация   |
+|----------------|
+
+ Используемые адреса
+ 10.0.0.1 naret (NetFilter)
+ 10.0.0.2 silom (Squid)
+ 10.0.0.3 donmuang (Router, соединенный с Интернет)
+ 10.0.0.4 kaosarn (некий сервер в сети)
+ 10.0.0.5 RAS
+ 10.0.0.0/24 main network
+ 10.0.0.0/19 total network
+
+|---------------|
+|Структура сети |
+|---------------|
+
+Internet
+|
+donmuang
+|
+------------hub/switch----------
+|        |             |       |
+naret   silom        kaosarn  RAS etc.      
+      </PRE
+>
+      Прежде всего -- весь трафик должен идти через <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>naret</I
+></SPAN
+>, для этого на всех
+      компьютерах пропишем его в качестве шлюза по-умолчанию. Исключение составляет <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>silom</I
+></SPAN
+>,
+      для которого шлюз по-умолчанию -- <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>donmuang</I
+></SPAN
+> (в противном случае web-трафик
+      зациклится).
+    </P
+><P
+>      (на всех компьютерах в моей сети был прописан шлюз по-умолчанию -- 10.0.0.1, 
+      который ранее принадлежал <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>donmuang</I
+></SPAN
+>, поэтому я изменил IP-адрес у 
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>donmuang</I
+></SPAN
+> на 10.0.0.3, а серверу <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>naret</I
+></SPAN
+> присвоил адрес 10.0.0.1)
+      <PRE
+CLASS="SCREEN"
+>Silom
+-----
+-настройка squid и ipchains       
+      </PRE
+>
+      Настройте прокси-сервер <B
+CLASS="COMMAND"
+>squid</B
+> на <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>silom</I
+></SPAN
+>. Убедитесь, что он 
+      поддерживает прозрачное проксирование. Обычно прокси-серверу, для приема запросов от пользователей, 
+      назначают порт 3128, поэтому весь трафик, отправляемый на порт 80 будет перенаправлен на порт 3128.
+      С помощью <B
+CLASS="COMMAND"
+>ipchains</B
+> это делают следующие правила:
+      <PRE
+CLASS="SCREEN"
+>silom# ipchains -N allow1
+silom# ipchains -A allow1 -p TCP -s 10.0.0.0/19 -d 0/0 80 -j REDIRECT 3128
+silom# ipchains -I input -j allow1      
+      </PRE
+>
+      <B
+CLASS="COMMAND"
+>iptables</B
+>:
+      <PRE
+CLASS="SCREEN"
+>silom# iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3128      
+      </PRE
+>
+      За информацией по настройке сервера <B
+CLASS="COMMAND"
+>squid</B
+>, обращайтесь на
+      <A
+HREF="http://squid.nlanr.net/"
+TARGET="_top"
+>http://squid.nlanr.net/</A
+>.
+    </P
+><P
+>      Убедитесь, что на этом сервере разрешен форвардинг, и заданный по умолчанию шлюз для него -- 
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>donmuang</I
+></SPAN
+> (НЕ <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>naret</I
+></SPAN
+>!). 
+      <PRE
+CLASS="SCREEN"
+>Naret
+-----
+-настройка iptables и iproute2
+-запрет ICMP-сообщений о перенаправлении (если необходимо)      
+      </PRE
+>
+      <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>            Пометить пакеты, с портом назначения 80, числовой меткой 2.
+            <PRE
+CLASS="SCREEN"
+>naret# iptables -A PREROUTING -i eth0 -t mangle -p tcp --dport 80 \
+ -j MARK --set-mark 2            
+            </PRE
+>
+          </P
+></LI
+><LI
+><P
+>            Настроить маршрутизацию так, чтобы помеченные пакеты отправлялись на <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>silom</I
+></SPAN
+>
+            <PRE
+CLASS="SCREEN"
+>naret# echo 202 www.out &#62;&#62; /etc/iproute2/rt_tables
+naret# ip rule add fwmark 2 table www.out
+naret# ip route add default via 10.0.0.2 dev eth0 table www.out
+naret# ip route flush cache            
+            </PRE
+>
+            Если <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>donmuang</I
+></SPAN
+> и <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>naret</I
+></SPAN
+> находятся в одной подсети,
+            то <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>naret</I
+></SPAN
+> не должен выдавать ICMP-сообщения о перенаправлении.
+            Запрет можно наложить так:
+            <PRE
+CLASS="SCREEN"
+>naret# echo 0 &#62; /proc/sys/net/ipv4/conf/all/send_redirects
+naret# echo 0 &#62; /proc/sys/net/ipv4/conf/default/send_redirects
+naret# echo 0 &#62; /proc/sys/net/ipv4/conf/eth0/send_redirects            
+            </PRE
+>
+          </P
+></LI
+></OL
+>
+    </P
+><P
+>      На этом настройку можно считать завершенной. Проверим конфигурацию
+      <PRE
+CLASS="SCREEN"
+>Для naret:
+
+naret# iptables -t mangle -L
+Chain PREROUTING (policy ACCEPT)
+target     prot opt source               destination         
+MARK       tcp  --  anywhere             anywhere           tcp dpt:www MARK set 0x2 
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+naret# ip rule ls
+0:      from all lookup local 
+32765:  from all fwmark        2 lookup www.out 
+32766:  from all lookup main 
+32767:  from all lookup default 
+
+naret# ip route list table www.out
+default via 203.114.224.8 dev eth0 
+
+naret# ip route   
+10.0.0.1 dev eth0  scope link 
+10.0.0.0/24 dev eth0  proto kernel  scope link  src 10.0.0.1
+127.0.0.0/8 dev lo  scope link 
+default via 10.0.0.3 dev eth0 
+
+|-------|
+|-КОНЕЦ-|
+|-------|
+      </PRE
+>
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AEN2618"
+></A
+>15.5.1. Схема движения пакетов после настройки.</H2
+><P
+>        <PRE
+CLASS="SCREEN"
+>|-----------------------------------------|
+|         Схема движения пакетов          |
+|-----------------------------------------|
+
+ИНТЕРНЕТ
+/\
+||
+\/
+---------------------donmuang------------------------
+/\                                      /\         ||
+||                                      ||         ||
+||                                      \/         ||
+naret                                  silom       ||
+*destination port 80 ================&#62;(cache)      ||
+/\                                      ||         ||
+||                                      \/         \/
+\\===================================kaosarn, RAS, и пр.        
+        </PRE
+>
+        Обратите внимание, в данном случае сеть получилась асимметричной, т.е. добавился один лишний
+        переход для исходящих пакетов.
+      </P
+><P
+>        Ниже приводится путь, проделываемый пакетами в/из Интернет для компьютера 
+        <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>kaosarn</I
+></SPAN
+>.
+      </P
+><P
+>        Для web/http трафика:
+        <PRE
+CLASS="SCREEN"
+>kaosarn http request-&#62;naret-&#62;silom-&#62;donmuang-&#62;internet
+http replies from Internet-&#62;donmuang-&#62;silom-&#62;kaosarn        
+        </PRE
+>
+        Для прочего трафика:
+        <PRE
+CLASS="SCREEN"
+>kaosarn outgoing data-&#62;naret-&#62;donmuang-&#62;internet
+incoming data from Internet-&#62;donmuang-&#62;kaosarn        
+        </PRE
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2517.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2627.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Управление приоритетами для трафика различных типов.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2475.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Решение проблемы с Path MTU Discovery путем настройки MTU.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>GRE и другие тоннели.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Маршрутизация через несколько каналов/провайдеров."
+HREF="x348.html"><LINK
+REL="NEXT"
+TITLE="Тоннелирование IP в IP."
+HREF="x401.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x348.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x401.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER5"
+></A
+>Глава 5. GRE и другие тоннели.</H1
+><P
+>      В ОС Linux поддерживаются 3 типа тоннелей. Это тоннелирование IP в IP, GRE тоннелирование и тоннели 
+      не-ядерного уровня (как, например, PPTP). 
+    </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="AFEWGENERALREMARKSABOUTTUNNELS"
+></A
+>5.1. Несколько общих замечаний о тоннелях:</H1
+><P
+>      Тоннели могут использоваться для очень необычных и интересных вещей. Также они могут усугубить ситуацию, если
+      они сконфигурированы неправильно. Не задавайте маршрут по умолчанию через тоннель, если только вы 
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>ТОЧНО</I
+></SPAN
+> не 
+      уверены в том, что делаете :-). Далее, тоннелирование увеличивает нагрузку на систему и сеть, потому что 
+      добовляются дополнительные IP-заголовки. Обычно, это 20 байт на пакет. Таким образом, если обычный размер 
+      пакета (MTU) в сети равен 1500 байтам, то при пересылке по тоннелю, пакет может содержать только 1480 байт.
+      Это не обязательно становится проблемой, но помните о необходимости правильной настройки фрагментации 
+      пакетов, если вы соединяете большие сети. Ах да, и конечно самый быстрый способ <SPAN
+CLASS="QUOTE"
+>"прорыть"</SPAN
+>
+      тоннель -- это <SPAN
+CLASS="QUOTE"
+>"рыть"</SPAN
+> с обоих сторон.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x348.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x401.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Маршрутизация через несколько каналов/провайдеров.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Тоннелирование IP в IP.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

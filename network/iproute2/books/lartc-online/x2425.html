@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Ingress qdisc.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Специализированные дисциплины управления очередями."
+HREF="c2289.html"><LINK
+REL="PREVIOUS"
+TITLE="DSMARK."
+HREF="x2327.html"><LINK
+REL="NEXT"
+TITLE="Random Early Detection (RED)"
+HREF="x2435.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2327.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 14. Специализированные дисциплины управления очередями.</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2435.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="INGRESSQDISC"
+></A
+>14.4. Ingress qdisc.</H1
+><P
+>      До сих пор, все дисциплины, которые обсуждались, были исходящими (egress) дисциплинами. Однако, каждый
+      из интерфейсов может иметь и входящие (ingress) дисциплины. Они не применяются к исходящему трафику,
+      но они позволяют устанавливать tc-фильтры для входящих пакетов, вне зависимости от того, предназначены
+      ли они для данного хоста или должны быть перенаправлены дальше.
+    </P
+><P
+>      Поскольку tc-фильтры имеют полную реализацию Token Bucket Filter, то они так же могут ограничивать
+      входящий трафик на основе "функций оценки" (estimators). Это позволяет выстраивать эффективную политику 
+      обслуживания входящего трафика, до того как он попадет "в руки" стека протоколов IP.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PARAMETERSUSAGE2"
+></A
+>14.4.1. Параметры и порядок использования.</H2
+><P
+>        Входные дисциплины, сами по себе не требуют каких-либо параметров. Пример создания входной
+        дисциплины:
+        <PRE
+CLASS="SCREEN"
+># tc qdisc add dev eth0 ingress        
+        </PRE
+>
+        Кроме входящей дисциплины вы можете добавлять к устройству и исходящие дисциплины.
+      </P
+><P
+>        Примеры использования входящей дисциплины вы найдете в главе <A
+HREF="c2475.html"
+>Решебник</A
+>.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2327.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2435.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>DSMARK.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2289.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Random Early Detection (RED)</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

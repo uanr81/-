@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Взаимодействие с другими операционными системами через IPSEC.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="IPSEC: безопасная передача данных протоколами IP через Интернет"
+HREF="c518.html"><LINK
+REL="PREVIOUS"
+TITLE="Другое программное обеспечение для работы с IPSEC"
+HREF="x762.html"><LINK
+REL="NEXT"
+TITLE="Маршрутизация групповых сообщений."
+HREF="c791.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x762.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 7. IPSEC: безопасная передача данных протоколами IP через Интернет</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c791.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="IPSECINTEROPERATIONWITHOTHERSYSTEMS"
+></A
+>7.5. Взаимодействие с другими операционными системами через IPSEC.</H1
+><P
+>      FIXME: Этот раздел ждет своего писателя!
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="WINDOWS"
+></A
+>7.5.1. Windows.</H2
+><P
+>         Андреас Йеллингаус (Andreas Jellinghaus) <TT
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:aj@dungeon.inka.de"
+>aj@dungeon.inka.de</A
+>&#62;</TT
+> 
+         утверждает: "win2k: работает для случая с предопределенными ключами и IP-адресом в качестве 
+         идентификатора (не думаю, что Windows поддерживает FQDN или строки USERFQDN). 
+         Сертификаты также должны работать, но я их не пробовал. ". 
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="CHECKPOINTVPN1NG"
+></A
+>7.5.2. Check Point VPN-1 NG</H2
+><P
+>         Питер Биринджер ( Peter Bieringer) сообщает: 
+         <PRE
+CLASS="SCREEN"
+>Ниже приводятся некоторые результаты (тестировался только туннельный режим, auth=SHA1):
+
+DES:     ok 
+3DES:    ok 
+AES-128: ok 
+AES-192: not supported by CP VPN-1
+AES-256: ok 
+CAST* :  not supported by used Linux kernel
+
+Tested version: FP4 aka R54 aka w/AI         
+         </PRE
+>
+         Дополнительная информация -- по адресу:
+         <A
+HREF="http://www.fw-1.de/aerasec/ng/vpn-racoon/CP-VPN1-NG-Linux-racoon.html"
+TARGET="_top"
+>         http://www.fw-1.de/aerasec/ng/vpn-racoon/CP-VPN1-NG-Linux-racoon.html</A
+>.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x762.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c791.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Другое программное обеспечение для работы с IPSEC</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c518.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Маршрутизация групповых сообщений.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

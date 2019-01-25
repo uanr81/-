@@ -1,0 +1,870 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Пример автоматического конфигурирования безопасного соединения между двумя хостами.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="IPSEC: безопасная передача данных протоколами IP через Интернет"
+HREF="c518.html"><LINK
+REL="PREVIOUS"
+TITLE="IPSEC: безопасная передача данных протоколами IP через Интернет"
+HREF="c518.html"><LINK
+REL="NEXT"
+TITLE="Туннели IPSEC"
+HREF="x743.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c518.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 7. IPSEC: безопасная передача данных протоколами IP через Интернет</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x743.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="AUTOMATICKEYING"
+></A
+>7.2. Пример автоматического конфигурирования безопасного соединения между двумя хостами.</H1
+><P
+>       В предыдущем разделе, шифрование было сконфигурировано с применением простых ключей. По идее, 
+       чтобы обеспечить необходимый уровень безопасности, мы должны бы передавать сведения о конфигурации
+       по надежным каналам. Если бы нам пришлось настраивать удаленный хост через <B
+CLASS="COMMAND"
+>telnet</B
+>, 
+       то любое третье лицо запросто могло бы получить секретные сведения, и такая конфигурация
+       будет далеко не безопасна. 
+    </P
+><P
+>       Кроме того, как только секретная информация становится известной кому-либо, она перестает быть
+       секретной. Знание секретных сведений даст не так много удаленному пользователю, но мы должны
+       быть абсолютно уверены в том, что каналы связи с нашими партнерами действительно надежно защищены.
+       Эта уверенность требует большого количества ключей, если у нас есть 10 партнеров, то необходимо
+       иметь не менее 50 различных ключей. 
+    </P
+><P
+>       Помимо проблемы, связанной с необходимостью согласования ключей, существует также необходимость 
+       в периодическом их изменении. Если третья сторона сможет перехватить наш трафик, то рано или поздно
+       она будет в состоянии <SPAN
+CLASS="QUOTE"
+>"расколоть"</SPAN
+> ключ. Это может быть предотвращено за счет
+       периодического изменения ключей, но этот процесс уже требует автоматизации. 
+    </P
+><P
+>       Другая проблема состоит в том, что при работе с ключевой информацией <SPAN
+CLASS="QUOTE"
+>"вручную"</SPAN
+>,
+       как это описано выше, мы заранее точно определяем алгоритмы и используемую длину ключа, что 
+       в свою очередь требует тесной координации с удаленной стороной. Желательно было бы иметь 
+       возможность определения более широкой политики назначения ключей, например так:
+       <SPAN
+CLASS="QUOTE"
+>"Мы можем использовать алгоритмы 3DES и Blowfish, с длиной ключа не менее, чем..."</SPAN
+>. 
+    </P
+><P
+>      Решение этих проблем  берет на себя Протокол Обмена Ключами -- IKE (Internet Key Exchange), 
+      позволяющий обмениваться сгенерированными, автоматически и случайным образом, ключами.
+      Передача ключей осуществляется с помощью асимметричной технологии кодирования, в соответствии
+      с предопределенными алгоритмами. 
+    </P
+><P
+>      В Linux IPSEC 2.5, реализация этих возможностей выполнена в виде демона KAME 'racoon' IKE. 
+      Начиная с 9 ноября 2003 года, доступны исходные тексты <B
+CLASS="COMMAND"
+>racoon</B
+>, в пакете 
+      <B
+CLASS="COMMAND"
+>iptools</B
+>, распространяемом Алексеем, хотя, возможно, вам придется удалить 
+      строки <TT
+CLASS="COMPUTEROUTPUT"
+>#include &lt;net/route.h&gt;</TT
+> в двух файлах. 
+      В качестве альтернативы я могу предложить 
+      <A
+HREF="http://ds9a.nl/ipsec/racoon.bz2"
+TARGET="_top"
+>откомпилированную версию</A
+>. 
+    </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/note.gif"
+HSPACE="5"
+ALT="Примечание:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>        Протокол IKE работает через UDP порт 500, предоставьте ему такую возможность, внеся соответствующие
+        изменения в ваш набор правил для <B
+CLASS="COMMAND"
+>iptables</B
+>.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="THEORY"
+></A
+>7.2.1. Теория.</H2
+><P
+>         Как уже говорилось ранее, в случае автоматической настройки, обновление и обмен ключевой информацией 
+         выполняется без нашего участия. Очевидно, что при этом <SPAN
+CLASS="QUOTE"
+>"на лету"</SPAN
+> создаются защищенные 
+         каналы (SA), которые, как это ни странно, не обеспечиваются какой-либо политикой безопасности.
+      </P
+><P
+>        Таким образом, чтобы воспользоваться преимуществами IKE, необходимо установить для него политику 
+        безопасности. Для этого создается такая политика, которая не связана с каким-либо конкретным 
+        защищенным каналом (SA). Когда ядро обнаружит такую политику, то оно передаст ее демону IKE, который 
+        в свою очередь будет использовать ее в своей работе.
+      </P
+><P
+>        Повторюсь еще раз: Политика Безопасности определяет -- ЧТО следует предпринять
+        в том или ином случае, а Контекст Безопасности (защищенный канал) определяет -- КАК 
+        производить обмен данными.
+        Автоматическое управление ключевой информацией позволяет нам избежать неприятностей только с
+        определением <SPAN
+CLASS="QUOTE"
+>"ЧТО предпринять"</SPAN
+>. 
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="EXAMPLE"
+></A
+>7.2.2. Пример.</H2
+><P
+>        <B
+CLASS="COMMAND"
+>Kame racoon</B
+> имеет достаточно неплохие настройки по-умолчанию, так что мы не будем 
+        их касаться. Как уже говорилось выше, мы должны определить только политику безопасности, оставив 
+        право на создание защищенных каналов за демоном IKE.
+      </P
+><P
+>        В этом примере, мы опять вернемся к нашим хостам 10.0.0.11 и 10.0.0.216, и еще раз попробуем
+        установить защищенное соединение между ними, но на сей раз с помощью <B
+CLASS="COMMAND"
+>racoon</B
+>. 
+        Для упрощения конфигурации будем использовать предопределенные ключи, сертификаты 
+        X.509 будут обсуждаться в отдельном разделе (см. раздел 
+        <A
+HREF="x616.html#AUTOMATICKEYINGUSINGX.509CERTIFICATES"
+>Автоматизация с использованием сертификатов X.509</A
+>).
+      </P
+><P
+>         Мы будем придерживаться конфигурации, заданной практически по-умолчанию и идентичной для обоих хостов: 
+      </P
+><PRE
+CLASS="PROGRAMLISTING"
+>    
+path pre_shared_key "/usr/local/etc/racoon/psk.txt";
+
+remote anonymous
+{
+ 	exchange_mode aggressive,main;
+ 	doi ipsec_doi;
+ 	situation identity_only;
+
+	my_identifier address;
+
+	lifetime time 2 min;   # sec,min,hour
+	initial_contact on;
+	proposal_check obey;	# obey -- повиноваться, требованиям и ограничениям
+
+	proposal {
+	        encryption_algorithm 3des;
+	        hash_algorithm sha1;
+	        authentication_method pre_shared_key;
+	        dh_group 2 ;
+	}
+}
+ 
+sainfo anonymous
+{
+ 	pfs_group 1;
+ 	lifetime time 2 min;
+ 	encryption_algorithm 3des ;
+ 	authentication_algorithm hmac_sha1;
+		compression_algorithm deflate ;
+}      
+      </PRE
+><P
+>         Многие из параметров настройки, на мой взгляд, могут быть удалены, поскольку они достаточно
+         близки к заданным по-умолчанию. Здесь приведены два анонимных параметра,
+         которые применяются ко всем удаленным хостам, за счет чего достигается простота конфигурации. 
+         На данный момент пока нет особой потребности в создании настроек для каждого конкретного хоста.
+      </P
+><P
+>         Кроме того, в настройках задана самоидентификация на основе собственного IP-адреса 
+         (<TT
+CLASS="COMPUTEROUTPUT"
+>my_identifier address</TT
+>). Затем объявляются используемые
+         алгоритмы шифрования -- 3des и sha1 и указывается, что будут использоваться предопределенные
+         ключи, расположенные в файле <TT
+CLASS="FILENAME"
+>psk.txt</TT
+>. 
+      </P
+><P
+>        Содержимое файлов <TT
+CLASS="FILENAME"
+>psk.txt</TT
+> с ключами приводится ниже. Для разных хостов они различны.
+        Для хоста 10.0.0.11:
+        <PRE
+CLASS="SCREEN"
+>10.0.0.216	password2</PRE
+>
+        Для хоста 10.0.0.216:
+        <PRE
+CLASS="SCREEN"
+>10.0.0.11	password2</PRE
+>
+      </P
+><P
+>        Назначте владельцем файла суперпользователя (root), и установите права доступа 0600, в противном
+        случае <B
+CLASS="COMMAND"
+>racoon</B
+> откажется доверять их содержимому.
+      </P
+><P
+>        Теперь можно приступить к формированию политик безопасности, которые в данной ситуации
+        достаточно просты и незамысловаты. На хосте 10.0.0.216: 
+        <PRE
+CLASS="PROGRAMLISTING"
+>#!/sbin/setkey -f
+flush;
+spdflush;
+
+spdadd 10.0.0.216 10.0.0.11 any -P out ipsec
+	esp/transport//require;
+
+spdadd 10.0.0.11 10.0.0.216 any -P in ipsec
+	esp/transport//require;
+        </PRE
+>
+        На хосте 10.0.0.11:
+        <PRE
+CLASS="PROGRAMLISTING"
+>#!/sbin/setkey -f
+flush;
+spdflush;
+
+spdadd 10.0.0.11 10.0.0.216 any -P out ipsec
+	esp/transport//require;
+
+spdadd 10.0.0.216 10.0.0.11 any -P in ipsec
+	esp/transport//require;        
+        </PRE
+>
+        Теперь все готово к запуску <B
+CLASS="COMMAND"
+>racoon</B
+>! После того, как он будет запущен, 
+        попробуем установить сеанс связи, через <B
+CLASS="COMMAND"
+>telnet</B
+>, с хоста 10.0.0.11 на
+        хост 10.0.0.216, впрочем можно и наоборот. <B
+CLASS="COMMAND"
+>racoon</B
+> тут же начнет 
+        <SPAN
+CLASS="QUOTE"
+>"переговоры"</SPAN
+> с удаленным хостом: 
+        <PRE
+CLASS="SCREEN"
+>12:18:44: INFO: isakmp.c:1689:isakmp_post_acquire(): IPsec-SA
+  request for 10.0.0.11 queued due to no phase1 found.
+12:18:44: INFO: isakmp.c:794:isakmp_ph1begin_i(): initiate new
+  phase 1 negotiation: 10.0.0.216[500]&#60;=&#62;10.0.0.11[500]
+12:18:44: INFO: isakmp.c:799:isakmp_ph1begin_i(): begin Aggressive mode.
+12:18:44: INFO: vendorid.c:128:check_vendorid(): received Vendor ID: 
+  KAME/racoon
+12:18:44: NOTIFY: oakley.c:2037:oakley_skeyid(): couldn't find
+  the proper pskey, try to get one by the peer's address.
+12:18:44: INFO: isakmp.c:2417:log_ph1established(): ISAKMP-SA
+  established 10.0.0.216[500]-10.0.0.11[500] spi:044d25dede78a4d1:ff01e5b4804f0680
+12:18:45: INFO: isakmp.c:938:isakmp_ph2begin_i(): initiate new phase 2 
+  negotiation: 10.0.0.216[0]&#60;=&#62;10.0.0.11[0]
+12:18:45: INFO: pfkey.c:1106:pk_recvupdate(): IPsec-SA established: 
+  ESP/Transport 10.0.0.11-&#62;10.0.0.216 spi=44556347(0x2a7e03b)
+12:18:45: INFO: pfkey.c:1318:pk_recvadd(): IPsec-SA established:
+  ESP/Transport 10.0.0.216-&#62;10.0.0.11 spi=15863890(0xf21052)          
+        </PRE
+>
+        Если теперь дать команду <B
+CLASS="COMMAND"
+>setkey -D</B
+>, чтобы просмотреть список созданных
+        защищенных каналов, мы получим такой вывод:
+        <PRE
+CLASS="SCREEN"
+>10.0.0.216 10.0.0.11 
+	esp mode=transport spi=224162611(0x0d5c7333) reqid=0(0x00000000)
+	E: 3des-cbc  5d421c1b d33b2a9f 4e9055e3 857db9fc 211d9c95 ebaead04
+	A: hmac-sha1  c5537d66 f3c5d869 bd736ae2 08d22133 27f7aa99
+	seq=0x00000000 replay=4 flags=0x00000000 state=mature 
+	created: Nov 11 12:28:45 2002	current: Nov 11 12:29:16 2002
+	diff: 31(s)	hard: 600(s)	soft: 480(s)
+	last: Nov 11 12:29:12 2002	hard: 0(s)	soft: 0(s)
+	current: 304(bytes)	hard: 0(bytes)	soft: 0(bytes)
+	allocated: 3	hard: 0	soft: 0
+	sadb_seq=1 pid=17112 refcnt=0
+10.0.0.11 10.0.0.216 
+	esp mode=transport spi=165123736(0x09d79698) reqid=0(0x00000000)
+	E: 3des-cbc  d7af8466 acd4f14c 872c5443 ec45a719 d4b3fde1 8d239d6a
+	A: hmac-sha1  41ccc388 4568ac49 19e4e024 628e240c 141ffe2f
+	seq=0x00000000 replay=4 flags=0x00000000 state=mature 
+	created: Nov 11 12:28:45 2002	current: Nov 11 12:29:16 2002
+	diff: 31(s)	hard: 600(s)	soft: 480(s)
+	last:                     	hard: 0(s)	soft: 0(s)
+	current: 231(bytes)	hard: 0(bytes)	soft: 0(bytes)
+	allocated: 2	hard: 0	soft: 0
+	sadb_seq=0 pid=17112 refcnt=0          
+        </PRE
+>
+        А команда <B
+CLASS="COMMAND"
+>setkey -DP</B
+> -- список политик безопасности, даст такой результат:
+        <PRE
+CLASS="SCREEN"
+>10.0.0.11[any] 10.0.0.216[any] tcp
+	in ipsec
+	esp/transport//require
+	created:Nov 11 12:28:28 2002 lastused:Nov 11 12:29:12 2002
+	lifetime:0(s) validtime:0(s)
+	spid=3616 seq=5 pid=17134
+	refcnt=3
+10.0.0.216[any] 10.0.0.11[any] tcp
+	out ipsec
+	esp/transport//require
+	created:Nov 11 12:28:28 2002 lastused:Nov 11 12:28:44 2002
+	lifetime:0(s) validtime:0(s)
+	spid=3609 seq=4 pid=17134
+	refcnt=3        
+        </PRE
+>
+      </P
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="PROBLEMSANDKNOWNDEFECTS"
+></A
+>7.2.2.1. Известные проблемы и недостатки.</H3
+><P
+>           Если этот вариант у вас не работает, проверьте -- все ли файлы конфигурации принадлежат 
+           суперпользователю (root) и доступны на чтение только ему. Чтобы запустить 
+           <B
+CLASS="COMMAND"
+>racoon</B
+> в приоритетном режиме, используйте ключ '-F'. 
+           Чтобы указать ему местоположение файла конфигурации -- ключ '-f'. 
+           Для того, чтобы увеличить детальность, добавьте инструкцию 'log debug;' в 
+           <TT
+CLASS="FILENAME"
+>racoon.conf</TT
+>.
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AUTOMATICKEYINGUSINGX.509CERTIFICATES"
+></A
+>7.2.3. Автоматизация с использованием сертификатов X.509</H2
+><P
+>         Как уже говорилось, использование предопределенных ключей осложнено необходимостью тесной
+         координации с удаленной стороной, что не всегда бывает удобно. Кроме того, при согласовании
+         ключевой информации она становится известной нескольким лицам (по крайней мере 
+         двоим), а секрет, который знают несколько человек, перестает быть секретом. К счастью 
+         существуют асимметричные технологии кодирования, которые помогают снять эту проблему. 
+      </P
+><P
+>         Если каждая из сторон, использующих IPSEC, создаст открытый и секретный ключи, то 
+         обе стороны, обменявшись своими открытыми ключами и настроив политику безопасности, смогут 
+         установить защищенное соединение. 
+      </P
+><P
+>         Процедура создания ключей относительно проста, хотя и требует выполнения некоторых
+         дополнительных действий. Ниже рассматривается пример использования, для этих целей,
+         утилиты <B
+CLASS="COMMAND"
+>openssl</B
+>. 
+      </P
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="BUILDINGANX509CERTIFICATEFORYOURHOST"
+></A
+>7.2.3.1. Создание собственного сертификата X.509.</H3
+><P
+>           OpenSSL обладает разветвленной инфраструктурой поддержки ключей, используемых для подтверждения 
+           сертификатов подлинности. Прямо сейчас, мы с вами пройдем всю процедуру создания сертификатов
+           и настройки защищенного соединения.
+        </P
+><P
+>          Для начала создадим сертификат для нашего хоста, с именем laptop. Начнем с генерации
+          <SPAN
+CLASS="QUOTE"
+>"запроса на сертификат"</SPAN
+>:
+          <PRE
+CLASS="SCREEN"
+>$ openssl req -new -nodes -newkey rsa:1024 -sha1 -keyform PEM -keyout \
+  laptop.private -outform PEM -out request.pem          
+          </PRE
+>
+          Здесь будет предложено ответить на ряд вопросов:
+          <PRE
+CLASS="SCREEN"
+>Country Name (2 letter code) [AU]:NL
+State or Province Name (full name) [Some-State]:.
+Locality Name (eg, city) []:Delft
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Linux Advanced
+Routing &#38; Traffic Control
+Organizational Unit Name (eg, section) []:laptop
+Common Name (eg, YOUR name) []:bert hubert
+Email Address []:ahu@ds9a.nl
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:          
+          </PRE
+>
+          Заполните поля запроса по своему усмотрению. 
+        </P
+><P
+>          Теперь создадим собственно сертификат, подписанный самим собой:
+          <PRE
+CLASS="SCREEN"
+>$ openssl x509 -req -in request.pem -signkey laptop.private -out \
+  laptop.public
+Signature ok
+subject=/C=NL/L=Delft/O=Linux Advanced Routing &#38; Traffic \
+  Control/OU=laptop/CN=bert hubert/Email=ahu@ds9a.nl
+Getting Private key          
+          </PRE
+>
+          После этого файл <TT
+CLASS="FILENAME"
+>request.pem</TT
+> можно удалить.
+        </P
+><P
+>           Повторите эту процедуру для всех ваших компьютеров. Вы можете свободно передавать 
+           сгенерированные открытые ключи (файлы <TT
+CLASS="FILENAME"
+>.public</TT
+>), но сохраняйте
+           файлы <TT
+CLASS="FILENAME"
+>.private</TT
+> в секрете! 
+        </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="SETTINGUPANDLAUNCHING"
+></A
+>7.2.3.2. Настройка и запуск.</H3
+><P
+>          Теперь, после того как мы создали открытый и секретный ключи, мы можем передать их 
+          <B
+CLASS="COMMAND"
+>racoon</B
+>.
+        </P
+><P
+>          Вернемся к нашей предыдущей конфигурации хостов 10.0.0.11 ('upstairs') и 10.0.0.216 ('laptop').
+        </P
+><P
+>          В файл <TT
+CLASS="FILENAME"
+>racoon.conf</TT
+>, на 10.0.0.11, добавим:
+          <PRE
+CLASS="SCREEN"
+>path certificate "/usr/local/etc/racoon/certs";
+
+remote 10.0.0.216
+{
+ 	exchange_mode aggressive,main;
+	my_identifier asn1dn;
+	peers_identifier asn1dn;
+
+	certificate_type x509 "upstairs.public" "upstairs.private";
+
+	peers_certfile "laptop.public";
+	proposal {
+                encryption_algorithm 3des;
+		hash_algorithm sha1;
+		authentication_method rsasig;
+		dh_group 2 ;
+	}
+}          
+          </PRE
+>
+          Тем самым сообщив <B
+CLASS="COMMAND"
+>racoon</B
+>, что сертификаты находятся в каталоге
+          <TT
+CLASS="FILENAME"
+>/usr/local/etc/racoon/certs/</TT
+>. Кроме того, добавим раздел, описывающий
+          удаленный компьютер 10.0.0.216.
+        </P
+><P
+>           Строки <TT
+CLASS="PARAMETER"
+><I
+>asn1dn</I
+></TT
+> говорят о том, что локальный и удаленный идентификаторы 
+           следует извлекать из открытых ключей. Это -- 'subject=/C=NL/L=Delft/O=Linux Advanced Routing &#38;
+           Traffic Control/OU=laptop/CN=bert hubert/Email=ahu@ds9a.nl' из листинга, приведенного выше. 
+        </P
+><P
+>           Строка <B
+CLASS="COMMAND"
+>certificate_type</B
+> указывает имена файлов с локальными открытым и 
+           секретным ключами. <B
+CLASS="COMMAND"
+>peers_certfile</B
+> указывает, что открытый ключ удаленного 
+           узла следует взять из файла <TT
+CLASS="FILENAME"
+>laptop.public</TT
+>. 
+        </P
+><P
+>          Блок <B
+CLASS="COMMAND"
+>proposal</B
+> остается, по сравнению с предыдущей конфигурацией,
+          практически без изменений, за исключением <B
+CLASS="COMMAND"
+>authentication_method</B
+> 
+          для которого теперь указано <B
+CLASS="COMMAND"
+>rsasig</B
+>, что означает -- использовать
+          для аутентификации RSA открытый/секретный ключи.
+        </P
+><P
+>          Аналогичные изменения вносятся и в конфигурацию хоста 10.0.0.216:
+          <PRE
+CLASS="SCREEN"
+>path certificate "/usr/local/etc/racoon/certs";
+
+remote 10.0.0.11
+{
+ 	exchange_mode aggressive,main;
+	my_identifier asn1dn;
+        peers_identifier asn1dn;
+
+        certificate_type x509 "laptop.public" "laptop.private";
+ 
+ 	peers_certfile "upstairs.public";
+
+	proposal {
+                encryption_algorithm 3des;
+	        hash_algorithm sha1;
+		authentication_method rsasig;
+	        dh_group 2 ;
+	}
+}          
+          </PRE
+>
+          После внесения изменений в конфигурацию, нам необходимо разместить файлы ключей.
+          На машине 'upstairs', в каталоге <TT
+CLASS="FILENAME"
+>/usr/local/etc/racoon/certs</TT
+>, 
+          следует разместить файлы <TT
+CLASS="FILENAME"
+>upstairs.private</TT
+>, 
+          <TT
+CLASS="FILENAME"
+>upstairs.public</TT
+> 
+          и <TT
+CLASS="FILENAME"
+>laptop.public</TT
+>. 
+          <DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/note.gif"
+HSPACE="5"
+ALT="Примечание:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>              ВНИМАНИЕ! Владельцем этого каталога должен быть
+              суперпользователь (root) и ему должны быть назначены права доступа 0700, 
+              иначе <B
+CLASS="COMMAND"
+>racoon</B
+> откажется работать с ним!
+            </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+        </P
+><P
+>          А на машине 'laptop', опять же в каталоге <TT
+CLASS="FILENAME"
+>/usr/local/etc/racoon/certs</TT
+>,
+          нужно разместить файлы <TT
+CLASS="FILENAME"
+>laptop.private</TT
+>, <TT
+CLASS="FILENAME"
+>laptop.public</TT
+> 
+          и <TT
+CLASS="FILENAME"
+>upstairs.public</TT
+>. Короче говоря, на каждом хосте должны размещаться
+          его собственные открытый и секретный ключи, а так же открытые ключи удаленных систем.
+        </P
+><P
+>          Проверьте настройки политик безопасности (выполните строки <B
+CLASS="COMMAND"
+>spdadd</B
+>,
+          из раздела <A
+HREF="x616.html#EXAMPLE"
+>Пример</A
+>). Теперь запустите <B
+CLASS="COMMAND"
+>racoon</B
+> --
+          все должно работать.
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="HOWTOSETUPTUNNELSSECURELY"
+></A
+>7.2.4. Как сохранить настройки туннеля в безопасности.</H2
+><P
+>        Чтобы иметь возможность установить защищенное соединение с удаленной стороной, необходимо
+        обменяться открытыми ключами. Несмотря на то, что открытый ключ можно распространять свободно,
+        очень важно сохранить его целостность. Другими словами, всегда следует проверять --
+        не получили ли вы <SPAN
+CLASS="QUOTE"
+>"кота в мешке"</SPAN
+>.
+      </P
+><P
+>        Сделать это довольно просто, OpenSSL имеет команду <B
+CLASS="COMMAND"
+>digest</B
+>, которая
+        вычисляет контрольную сумму файла с ключом:
+        <PRE
+CLASS="SCREEN"
+>$ openssl dgst upstairs.public 
+MD5(upstairs.public)= 78a3bddafb4d681c1ca8ed4d23da4ff1        
+        </PRE
+>
+        После получения вашего ключа, удаленная сторона так же вычисляет его контрольную сумму и, если 
+        они совпали (сообщить свою контрольную сумму вы может при личной встрече или по телефону), 
+        то все в порядке!
+      </P
+><P
+>        Другой вариант -- воспользоваться услугами третьей доверенной стороны -- Certificate Authority,
+        которая может подписать созданные вами сертификаты.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c518.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x743.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>IPSEC: безопасная передача данных протоколами IP через Интернет</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c518.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Туннели IPSEC</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

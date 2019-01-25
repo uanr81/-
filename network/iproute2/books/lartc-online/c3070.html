@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Прочие возможности.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Настройка BGP4 с помощью Zebra."
+HREF="x3036.html"><LINK
+REL="NEXT"
+TITLE="Рекомендуемая литература."
+HREF="c3144.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3036.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c3144.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER18"
+></A
+>Глава 18. Прочие возможности.</H1
+><P
+>    В этой главе перечисляются известные нам проекты, которые так или иначе связаны с темой маршрутизации
+    и управления трафиком. Описание некоторых из них заслуживает отдельной главы, другие проекты сами
+    предоставляют настолько качественную документацию, что не нуждаются в дополнительных HOWTO.
+  </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><A
+HREF="http://scry.wanfear.com/%7Egreear/vlan.html"
+TARGET="_top"
+>    Реализация 802.1Q VLAN для Linux</A
+></DT
+><DD
+><P
+>          VLAN -- очень интересный способ организации нескольких виртуальных локальных сетей
+          в единой физической среде. Много полезной информации о виртуальных сетях вы найдете по адресу:
+          <A
+HREF="ftp://ftp.netlab.ohio-state.edu/pub/jain/courses/cis788-97/virtual_lans/index.htm"
+TARGET="_top"
+>          ftp://ftp.netlab.ohio-state.edu/pub/jain/courses/cis788-97/virtual_lans/index.htm</A
+>.
+          С помощью этой реализации вы сможете использовать Linux в качестве маршрутизатора, на манер
+          Cisco Catalyst, 3Com: [Corebuilder, Netbuilder II, SuperStack II switch 630], 
+          Extreme Ntwks Summit 48, Foundry: [ServerIronXL, FastIron].
+          
+        </P
+><P
+>          Отличный HOWTO по организации VLAN: 
+          <A
+HREF="http://scry.wanfear.com/%7Egreear/vlan/cisco_howto.html"
+TARGET="_top"
+>          http://scry.wanfear.com/~greear/vlan/cisco_howto.html</A
+>.
+        </P
+><P
+>          Включено в состав ядра, начиная с версии 2.4.14 (или может быть 13).
+        </P
+></DD
+><DT
+><A
+HREF="http://vlan.sourceforge.net/"
+TARGET="_top"
+>      Альтернативная реализация 802.1Q VLAN для Linux</A
+></DT
+><DD
+><P
+>          Этот проект был начат из-за разногласий, возникших в 'официальном' проекте VLAN, связанных
+          с архитектурными решениями и стилем кодирования. 
+        </P
+></DD
+><DT
+><A
+HREF="http://www.linuxvirtualserver.org/"
+TARGET="_top"
+>    Linux Virtual Server</A
+></DT
+><DD
+><P
+>          Команда блестящих разработчиков. Linux Virtual Server -- высоко масштабируемый и очень перспективный
+          сервер который основан на кластере из реальных серверов, с равномерным распределением нагрузки, под 
+          управлением операционной системы Linux. Архитектура кластера прозрачна для конечных пользователей, 
+          которые 'видят' только один-единственный виртуальный сервер.
+        </P
+><P
+>          Короче говоря, LVS предоставляет возможность равномерного распределения нагрузки при любом объеме
+          трафика. Некоторые из решений, реализованных этой командой, очень необычны! Например, они позволяют 
+          нескольким машинам иметь один и тот же IP-адрес, при этом протокол ARP на них отключается. 
+          ARP работает только на головной LVS-машине, которая решает какому из внутренних хостов должен 
+          быть передан тот или иной входящий пакет, и передает его по MAC-адресу внутреннего сервера. 
+          Исходящий трафик передается маршрутизатору напрямую, а не через головную LVS-машину, 
+          благодаря чему для нее нет нужды отслеживать весь исходящий трафик, который по своему объему может 
+          быть просто ужасающим!
+        </P
+><P
+>          LVS реализован в виде <SPAN
+CLASS="QUOTE"
+>"заплаты"</SPAN
+> на ядра версий 2.0 и 2.2. Для серий 2.4/2.5 -- в виде
+          модуля к Netfilter, т.е накладывать <SPAN
+CLASS="QUOTE"
+>"заплату"</SPAN
+> на ядра этих версий уже не требуется!
+        </P
+></DD
+><DT
+><A
+NAME="CBQINIT"
+></A
+><A
+HREF="ftp://ftp.equinox.gu.net/pub/linux/cbq/"
+TARGET="_top"
+>CBQ.init</A
+></DT
+><DD
+><P
+>          Конфигурирование CBQ можно немного упростить, особенно в том случае, если вам необходимо лишь
+          сформировать трафик для нескольких компьютеров, стоящих позади маршрутизатора. 
+          CBQ.init поможет вам в этом, благодаря упрощенному синтаксису.
+        </P
+><P
+>          Например, если необходимо ограничить скорость загрузки, величиной 28 Кбит/сек, для всех
+          компьютеров в локальной сети 192.168.1.0/24 (на 10 Мбитном eth1), поместите
+          эти строки в файл конфигурации CBQ.init:
+          <PRE
+CLASS="SCREEN"
+>DEVICE=eth1,10Mbit,1Mbit
+RATE=28Kbit
+WEIGHT=2Kbit
+PRIO=5
+RULE=192.168.1.0/24          
+          </PRE
+>
+          Мы рекомендуем эту программу тем, кого не интересуют вопросы <SPAN
+CLASS="QUOTE"
+>"как"</SPAN
+> и 
+          <SPAN
+CLASS="QUOTE"
+>"почему"</SPAN
+>. CBQ.init давно используется нами и зарекомендовал себя
+          с самой лучшей стороны. Здесь приведен очень простой пример конфигурирования CBQ.init, на самом 
+          деле он может много больше, например выполнять формирование трафика в зависимости от времени. 
+          Описание находится внутри сценария, по этой причине вы не найдете файл README.
+        </P
+></DD
+><DT
+><A
+HREF="http://www.chronox.de/"
+TARGET="_top"
+>Набор скриптов управления трафиком Chronox</A
+></DT
+><DD
+><P
+>          Стефан Мюллер (Stephan Mueller smueller@chronox.de) написал два сценария 
+          <TT
+CLASS="FILENAME"
+>limit.conn</TT
+> и <TT
+CLASS="FILENAME"
+>shaper</TT
+>, первый из которых позволяет
+          легко ограничить ширину канала для одиночной сессии, например так:
+          <PRE
+CLASS="SCREEN"
+># limit.conn -s SERVERIP -p SERVERPORT -l LIMIT          
+          </PRE
+>
+          Работают с ядрами 2.4/2.5.
+        </P
+><P
+>          Второй сценарий более сложен, и может использоваться для создания нескольких очередей, основываясь
+          на метках пакетов, устанавливаемых <B
+CLASS="COMMAND"
+>iptables</B
+>.
+        </P
+></DD
+><DT
+>Реализация протокола Virtual Router Redundancy Protocol
+    (<A
+HREF="http://off.net/~jme/vrrpd/"
+TARGET="_top"
+>ссылка 1</A
+>, <A
+HREF="http://www.imagestream.com/VRRP.html"
+TARGET="_top"
+>    ссылка 2</A
+>)</DT
+><DD
+><P
+>          FIXME: Эта ссылка <SPAN
+CLASS="QUOTE"
+>"битая"</SPAN
+>. Может кто подскажет -- куда переехал проект?
+        </P
+><P
+>          Применяется исключительно для <SPAN
+CLASS="QUOTE"
+>"горячего"</SPAN
+> резервирования. Две машины, имеющие
+          свои собственные IP и MAC адреса, образуют третий, виртуальный IP и MAC адрес. Изначально
+          этот протокол предназначался для <SPAN
+CLASS="QUOTE"
+>"горячего"</SPAN
+> резервирования маршрутизаторов,
+          которые требуют наличия постоянного MAC-адреса, но вполне подойдет и для серверов другого
+          типа.
+        </P
+><P
+>          Вся прелесть этой реализации заключается в простоте настройки и отсутствии необходимости
+          пересборки ядра.
+        </P
+><P
+>          Просто, на каждой из машин запускается команда, например такая:
+          <PRE
+CLASS="SCREEN"
+># vrrpd -i eth0 -v 50 10.0.0.22
+          </PRE
+>
+          и все! Теперь адрес 10.0.0.22 обслуживается одним из серверов, вероятнее всего тем, на котором 
+          команда <B
+CLASS="COMMAND"
+>vrrpd</B
+> была запущена первой. Теперь, если этот сервер отключить
+          от сети, то довольно быстро обслуживание виртуальных IP и MAC адресов возьмет на себя один 
+          из оставшихся компьютеров.
+        </P
+><P
+>          Я попытался смоделировать эту ситуацию. Правда по необъяснимой причине
+          у меня сбрасывался шлюз по-умолчанию, но флаг -n решил мои проблемы.
+        </P
+><P
+>          Ниже приводится временная диаграмма <SPAN
+CLASS="QUOTE"
+>"сбойной"</SPAN
+> ситуации:
+          <PRE
+CLASS="SCREEN"
+>64 bytes from 10.0.0.22: icmp_seq=3 ttl=255 time=0.2 ms
+64 bytes from 10.0.0.22: icmp_seq=4 ttl=255 time=0.2 ms
+64 bytes from 10.0.0.22: icmp_seq=5 ttl=255 time=16.8 ms
+64 bytes from 10.0.0.22: icmp_seq=6 ttl=255 time=1.8 ms
+64 bytes from 10.0.0.22: icmp_seq=7 ttl=255 time=1.7 ms          
+          </PRE
+>
+          НИ ОДИН ICMP-пакет не был потерян! После передачи 4-го пакета мой P200 был отключен от сети
+          и обслуживание виртуальных адресов тут же перехватил 486-й, это можно наблюдать по увеличившемуся 
+          времени отклика.
+        </P
+></DD
+><DT
+><A
+HREF="http://slava.local.nsys.by/projects/tc_config/"
+TARGET="_top"
+>tc-config</A
+></DT
+><DD
+><P
+>          <B
+CLASS="COMMAND"
+>tc-config</B
+> -- это набор сценариев для конфигурирования подсистемы
+          управления трафиком на Linux 2.4+ для Red Hat. В качестве корневой дисциплины используется
+          CBQ qdisc, в <SPAN
+CLASS="QUOTE"
+>"листьях"</SPAN
+> -- SFQ qdisc.
+        </P
+><P
+>          Включает утилиту <B
+CLASS="COMMAND"
+>snmp_pass</B
+>, которая получает статистику управления трафиком
+          через snmp. FIXME: Необходимо дополнить.
+        </P
+></DD
+></DL
+></DIV
+><P
+>  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3036.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c3144.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Настройка BGP4 с помощью Zebra.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Рекомендуемая литература.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

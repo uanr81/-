@@ -1,0 +1,387 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Маршрутизация через несколько каналов/провайдеров.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Правила - база политик маршрутизации"
+HREF="c322.html"><LINK
+REL="PREVIOUS"
+TITLE="Правила - база политик маршрутизации"
+HREF="c322.html"><LINK
+REL="NEXT"
+TITLE="GRE и другие тоннели."
+HREF="c392.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c322.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Глава 4. Правила - база политик маршрутизации</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c392.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="ROUTINGFORMULTIPLEUPLINKSPROVIDERS"
+></A
+>4.2. Маршрутизация через несколько каналов/провайдеров.</H1
+><P
+>       Ниже представлена обычная конфигурация, когда локальная сеть (или даже одна машина) 
+       подключена к Internet через двух провайдеров.
+       <PRE
+CLASS="SCREEN"
+>                                                                 ________
+                                          +------------+        /
+                                          |            |       |
+                            +-------------+ Провайдер 1+-------
+        __                  |             |            |     /
+    ___/  \_         +------+-------+     +------------+    |
+  _/        \__      |     if1      |                      /
+ /             \     |    Linux     |                      |
+| Локальная сеть-----+ маршрутизатор|                      |     Internet
+ \_           __/    |              |                      |
+   \__     __/       |     if2      |                      \
+      \___/          +------+-------+     +------------+    |
+                            |             |            |     \
+                            +-------------+ Провайдер 2+-------
+                                          |            |       |
+                                          +------------+        \________
+
+       
+       </PRE
+>
+        В этом случае обычно возникает два вопроса.
+    </P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="SPLITACCESS"
+></A
+>4.2.1. Раздельный доступ</H2
+><P
+>         Первый вопрос заключается в том, как организовать маршрутизацию таким образом, чтобы ответы 
+         на запросы, приходящие через определенного провайдера, скажем ровайдера 1, уходили через 
+         того же провайдера.      
+      </P
+><P
+>         Давайте определим некоторые переменные. Пусть <TT
+CLASS="VARNAME"
+>$IF1</TT
+>  будет именем 
+         первого интерфейса (if1 на рисунке), а <TT
+CLASS="VARNAME"
+>$IF2</TT
+>  -- именем второго. 
+         Тогда  <TT
+CLASS="VARNAME"
+>$IP1</TT
+>  будет IP адресом <TT
+CLASS="VARNAME"
+>$IF1</TT
+> , а 
+         <TT
+CLASS="VARNAME"
+>$IP2</TT
+>  -- IP адресом <TT
+CLASS="VARNAME"
+>$IF2</TT
+> . Далее, 
+         <TT
+CLASS="VARNAME"
+>$P1</TT
+>  это IP-адрес шлюза провайдера 1, а <TT
+CLASS="VARNAME"
+>$P2</TT
+>  -- 
+         IP адрес шлюза провайдера 2. Наконец, <TT
+CLASS="VARNAME"
+>$P1_NET</TT
+>  это IP сеть, к которой
+         принадлежит <TT
+CLASS="VARNAME"
+>$P1</TT
+> , а <TT
+CLASS="VARNAME"
+>$P2_NET</TT
+>  -- сеть, к 
+         которой принадлежит <TT
+CLASS="VARNAME"
+>$P2</TT
+> .
+      </P
+><P
+>        Создадим две дополнительные таблицы маршрутизации, скажем <TT
+CLASS="VARNAME"
+>T1</TT
+>  и 
+        <TT
+CLASS="VARNAME"
+>T2</TT
+>. Добавим их в файл <TT
+CLASS="FILENAME"
+>/etc/iproute2/rt_tables</TT
+>. 
+        Теперь можно настроить эти таблицы следующими командами:
+        <PRE
+CLASS="SCREEN"
+>ip route add $P1_NET dev $IF1 src $IP1 table T1
+ip route add default via $P1 table T1
+ip route add $P2_NET dev $IF2 src $IP2 table T2
+ip route add default via $P2 table T2
+        </PRE
+>
+         Ничего особо эффектного, маршрут к шлюзу и маршрут по-умолчанию через этот шлюз. Точно так же, 
+         как и в случае одного провайдера, но по таблице на каждого провайдера. Заметьте, что маршрута 
+         к сети, в которой находится шлюз достаточно, потому что он определяет как найти все хосты в 
+         этой сети, включая сам шлюз.
+      </P
+><P
+>         Теперь нужно настроить главную таблицу маршрутизации. Хорошо бы маршрутизировать пакеты для
+         сетей провайдеров через соответствующие интерфейсы. Обратите внимание на аргумент `src', 
+         который обеспечивает правильный выбор исходного IP-адреса.
+        <PRE
+CLASS="SCREEN"
+>ip route add $P1_NET dev $IF1 src $IP1
+ip route add $P2_NET dev $IF2 src $IP2        
+        </PRE
+>
+         Теперь задаем маршрут по умолчанию:
+        <PRE
+CLASS="SCREEN"
+>ip route add default via $P1       
+        </PRE
+>
+         Зададим правила маршрутизации. Они будут отвечать за то, какая таблица будет использоваться 
+         при маршрутизации. Вы хотите, чтобы пакет с определенным адресом источника маршрутизировался 
+         через соответствующий интерфейс:
+        <PRE
+CLASS="SCREEN"
+>ip rule add from $IP1 table T1
+ip rule add from $IP2 table T2        
+        </PRE
+>
+         Этот набор команд обеспечивает маршрутизацию ответов через интерфейс, на котором был получен 
+         запрос.
+         <DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/warning.gif"
+HSPACE="5"
+ALT="Внимание!"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>              Заметка читателя Рода Роака (Rod Roark): ' если <TT
+CLASS="VARNAME"
+>$P0_NET</TT
+> это 
+              локальная сеть, а <TT
+CLASS="VARNAME"
+>$IF0</TT
+> -- соответствующий ей интерфейс, 
+              желательно задать следующие команды:
+           </P
+><PRE
+CLASS="SCREEN"
+>ip route add $P0_NET     dev $IF0 table T1
+ip route add $P2_NET     dev $IF2 table T1
+ip route add 127.0.0.0/8 dev lo   table T1
+ip route add $P0_NET     dev $IF0 table T2
+ip route add $P1_NET     dev $IF1 table T2
+ip route add 127.0.0.0/8 dev lo   table T2
+           </PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+          Итак, мы рассмотрели очень простой пример. Он будет работать для всех процессов, 
+          выполняющихся на маршрутизаторе и для локальной сети, если настроено преобразование адресов 
+          (NAT/masquerading). В противном случае, вам будет необходим диапазон IP адресов обоих 
+          провайдеров, или выполнять маскирование для одного из провайдеров. В любом случае, вы 
+          можете задать правила выбора провайдера для каждого конкретного адреса вашей локальной сети.
+      </P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="LOADBALANCING"
+></A
+>4.2.2. Распределение нагрузки.</H2
+><P
+>           Второй вопрос заключается в балансировке нагрузки между двумя провайдерами. 
+           Это не сложно, если у вас уже настроен раздельный доступ, описанный в предыдущем разделе.
+        </P
+><P
+>           Вместо выбора одного из провайдеров в качестве маршрута по-умолчанию, вы настраиваете т.н. 
+           многолучевой (multipath) маршрут. В стандартном ядре это обеспечит балансировку нагрузки
+           между двумя провайдерами. Делается это следующим образом (повторюсь, мы основываемся на 
+           примере из раздела <A
+HREF="x348.html#SPLITACCESS"
+>Раздельный доступ</A
+>):
+           <PRE
+CLASS="SCREEN"
+>ip route add default scope global nexthop via $P1 dev $IF1 weight 1 \
+nexthop via $P2 dev $IF2 weight 1           
+           </PRE
+>
+
+           Результатом команды будет попеременный выбор маршрута по-умолчанию. Вы можете изменить 
+           параметр <TT
+CLASS="PARAMETER"
+><I
+>weight</I
+></TT
+>, так чтобы один из провайдеров 
+           получал большую нагрузку.
+        </P
+><P
+>           Обратите внимание, что балансировка не будет идеальной, так как она основывается 
+           на маршрутах, а маршруты кэшируются. Это означает, что маршруты к часто посещаемым 
+           сайтам не будут проходить через разных провайдеров.
+        </P
+><P
+>           Если вы действительно интересуетесь этим, вам стоит посмотреть на патчи Юлиана Анастасова 
+           (Julian Anastasov), расположеные по адресу 
+           <A
+HREF="http://www.ssi.bg/~ja/#routes"
+TARGET="_top"
+>http://www.ssi.bg/~ja/#routes</A
+>. 
+           Они могут вам помочь.
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c322.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c392.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Правила - база политик маршрутизации</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c322.html"
+ACCESSKEY="U"
+>К началу раздела</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>GRE и другие тоннели.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

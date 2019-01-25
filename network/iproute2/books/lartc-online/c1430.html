@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Netfilter и iproute -- маркировка пакетов.</TITLE
+><META http-equiv="Content-Type" content="text/html; charset=koi8-r"><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="Linux Advanced Routing &#38; Traffic Control HOWTO"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Другие возможности."
+HREF="x1425.html"><LINK
+REL="NEXT"
+TITLE="Расширенная фильтрация."
+HREF="c1452.html"><style type="text/css"> p {text-align:justify;} </style></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux Advanced Routing &#38; Traffic Control HOWTO</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1425.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c1452.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHAPTER11"
+></A
+>Глава 11. Netfilter и iproute -- маркировка пакетов.</H1
+><P
+>    До сих пор мы детально разбирались с работой <B
+CLASS="COMMAND"
+>iproute</B
+> и лишь вскользь упомянули
+    <B
+CLASS="COMMAND"
+>netfilter</B
+>. Теперь настало самое время поговорить о нем. Для начала рекомендую вам прочитать
+    <A
+HREF="http://netfilter.samba.org/unreliable-guides/"
+TARGET="_top"
+>Remarkably Unreliable Guides</A
+>.
+  </P
+><P
+>    Netfilter позволяет выполнять фильтрацию трафика и вносить изменения в заголовки пакетов. Одна из 
+    замечательных особенностей netfilter -- это возможность устанавливать числовые метки на пакеты.
+  </P
+><P
+>    Например, следующее правило пометит все пакеты, отправляемые на порт 25:
+    <PRE
+CLASS="SCREEN"
+># iptables -A PREROUTING -i eth0 -t mangle -p tcp --dport 25 \
+ -j MARK --set-mark 1
+    </PRE
+>
+    Допустим, что у нас имеется два подключения к Интернет -- одно быстрое, но дорогое, другое медленное, зато 
+    дешевое. Естественно, что мы предпочтем отправлять почту по дешевому маршруту. Командой выше, мы уже пометили 
+    все пакеты исходящей почты числовой меткой -- 1, теперь попробуем направить эти пакеты по дешевому маршруту:
+    <PRE
+CLASS="SCREEN"
+># echo 201 mail.out &#62;&#62; /etc/iproute2/rt_tables
+# ip rule add fwmark 1 table mail.out
+# ip rule ls
+0:	from all lookup local 
+32764:	from all fwmark        1 lookup mail.out 
+32766:	from all lookup main 
+32767:	from all lookup default 
+    </PRE
+>
+    и зададим пусть и медленный, зато недорогой маршрут в таблице mail.out:
+    <PRE
+CLASS="SCREEN"
+># /sbin/ip route add default via 195.96.98.253 dev ppp0 table mail.out
+    </PRE
+>
+    Это собственно все, что нам пришлось сделать! Если нужно сделать исключения для отдельных хостов, то можно 
+    несколько модифицировать набор правил для netfilter, пропуская пакеты с отдельных хостов без метки, или 
+    можно добавить правило с более низким приоритетом, которое отправляет отдельные хосты через таблицу main.
+  </P
+><P
+>    Можно так же использовать поле TOS, в заголовке пакета, задавая различный тип обслуживания для трафика
+    различного рода, и создавая правила, которые реагируют на это поле.
+  </P
+><P
+>    Само собой разумеется, все это прекрасно работает и на хостах, под NAT ('masquerading').
+  </P
+><P
+>    <DIV
+CLASS="WARNING"
+><P
+></P
+><TABLE
+CLASS="WARNING"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/warning.gif"
+HSPACE="5"
+ALT="Внимание!"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>    Некоторые наши читатели отмечают, что как минимум MASQ и SNAT конфликтуют с механизмом маркировки пакетов.
+    Расти Рассел (Rusty Russell) описал эту проблему 
+    (<A
+HREF="http://lists.samba.org/pipermail/netfilter/2000-November/006089.html"
+TARGET="_top"
+>    http://lists.samba.org/pipermail/netfilter/2000-November/006089.html</A
+>). Просто, отключите фильтр 
+    проверки обратного адреса (см. главу <A
+HREF="c1699.html"
+>Параметры настройки сети в ядре</A
+>) и все должно заработать.
+  </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+    <DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+src="images/note.gif"
+HSPACE="5"
+ALT="Примечание:"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>    Чтобы иметь возможность маркировать пакеты, вы должны собрать ядро с рядом включенных опций:
+    <PRE
+CLASS="SCREEN"
+>IP: advanced router (CONFIG_IP_ADVANCED_ROUTER) [Y/n/?]
+IP: policy routing (CONFIG_IP_MULTIPLE_TABLES) [Y/n/?]
+IP: use netfilter MARK value as routing key (CONFIG_IP_ROUTE_FWMARK) [Y/n/?]
+    </PRE
+>
+  </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+    См. так же раздел <A
+HREF="x2540.html"
+>Прозрачное проксирование с помощью netfilter, iproute2, ipchains и squid</A
+>
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1425.html"
+ACCESSKEY="P"
+>Назад</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>В начало документа</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c1452.html"
+ACCESSKEY="N"
+>Вперед</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Другие возможности.</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Расширенная фильтрация.</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
