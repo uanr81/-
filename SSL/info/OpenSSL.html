@@ -70,6 +70,20 @@ Next: <a href="#OpenSSL" accesskey="n" rel="next">OpenSSL</a>, Previous: <a href
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#ASN1PARSE" accesskey="8">ASN1PARSE</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#CIPHERS" accesskey="9">CIPHERS</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#CMS">CMS</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#CRL">CRL</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#CRL2PKCS7">CRL2PKCS7</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#STOREUTL">STOREUTL</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#SSL_005fCONNECT">SSL_CONNECT</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#g_t_0418_043d_0441_0442_0440_0443_043a_0446_0438_044f">Инструкция</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
 </table>
 
 <hr>
@@ -4344,7 +4358,7 @@ Next: <a href="#ASN1PARSE" accesskey="n" rel="next">ASN1PARSE</a>, Previous: <a 
 <a name="ASN1PARSE"></a>
 <div class="header">
 <p>
-Previous: <a href="#req" accesskey="p" rel="prev">req</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+Next: <a href="#CIPHERS" accesskey="n" rel="next">CIPHERS</a>, Previous: <a href="#req" accesskey="p" rel="prev">req</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
 </div>
 <a name="ASN1PARSE-1"></a>
 <h2 class="chapter">8 ASN1PARSE</h2>
@@ -4549,6 +4563,2619 @@ Previous: <a href="#req" accesskey="p" rel="prev">req</a>, Up: <a href="#Top" ac
 </dl>
 <p>1.1.1a                                        2018-11-20                                  ASN1PARSE(1)
 </p><hr>
+<a name="CIPHERS"></a>
+<div class="header">
+<p>
+Next: <a href="#CMS" accesskey="n" rel="next">CMS</a>, Previous: <a href="#ASN1PARSE" accesskey="p" rel="prev">ASN1PARSE</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="CIPHERS-1"></a>
+<h2 class="chapter">9 CIPHERS</h2>
+<dl compact="compact">
+<dt>NAME</dt>
+<dd><p>openssl-ciphers, ciphers - Инструмент отображения и шифрования SSL
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>openssl ciphers [<a href="#chiphers-_002dhelp">-help</a>] [<a href="#chiphers-_002ds">-s</a>] [<a href="#chiphers-_002dv">-v</a>] [<a href="#chiphers-_002dV">-V</a>] [<a href="#cms-_005b_002dtls1_005f3_005d-_005b_002dtls1_005f2_005d-_005b_002dtls1_005f1_005d-_005b_002dtls1_005d-_005b_002dssl3_005d">[-tls1_3] [-tls1_2] [-tls1_1] [-tls1] [-ssl3]</a>] [<a href="#chiphers-_002dpsk">-psk</a>] [<a href="#chiphers-_002dsrp">-srp</a>] [<a href="#chiphers-_002dstdname">-stdname</a>] [<a href="#chiphers-_002dconvert-name">-convert name</a>] [<a href="#chiphers-_002dciphersuites-val">-ciphersuites val</a>] [<a href="#chiphers-cipherlist">cipherlist</a>]
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Команда ciphers преобразует текстовые списки шифров OpenSSL в упорядоченные
+       списки предпочтений шифров SSL. Он может использоваться в качестве
+       инструмента тестирования для определения соответствующего списка шифров.
+</p>
+</dd>
+<dt>OPTIONS</dt>
+<dd><dl compact="compact">
+<dt>-help <a name="chiphers-_002dhelp"></a></dt>
+<dd><p>Распечатать сообщение об использовании.
+</p>
+</dd>
+<dt>-s <a name="chiphers-_002ds"></a></dt>
+<dd><p>Перечислять только поддерживаемые шифры: те, которые соответствуют уровню
+           безопасности, а также минимальной и максимальной версии протокола. Это ближе
+           к фактическому списку шифров, который будет поддерживать приложение.
+</p>
+<p>Шифры PSK и SRP не включены по умолчанию: для их включения требуется -psk
+           или -srp.
+</p>
+<p>Это также не меняет список поддерживаемых алгоритмов подписи по умолчанию.
+</p>
+<p>На сервере список поддерживаемых шифров может также исключать другие шифры
+           в зависимости от настроенных сертификатов и наличия параметров DH.
+</p>
+<p>Если этот параметр не используется, будут перечислены все шифры, которые
+           соответствуют списку шифров.
+</p>
+</dd>
+<dt>-psk <a name="chiphers-_002dpsk"></a></dt>
+<dd><p>В сочетании с -s включает в себя наборы шифров, которые требуют PSK.
+</p>
+</dd>
+<dt>-srp <a name="chiphers-_002dsrp"></a></dt>
+<dd><p>В сочетании с -s включает в себя наборы шифров, которые требуют SRP.
+</p>
+</dd>
+<dt>-v <a name="chiphers-_002dv"></a></dt>
+<dd><p>Подробный вывод: для каждого набора шифров перечислите подробности,
+           предоставленные SSL_CIPHER_description.
+</p>
+</dd>
+<dt>-V <a name="chiphers-_002dV"></a></dt>
+<dd><p>Подобно -v, но включите официальные значения набора шифров в
+           шестнадцатеричном виде.
+</p>
+</dd>
+<dt>[-tls1_3] [-tls1_2] [-tls1_1] [-tls1] [-ssl3] <a name="cms-_005b_002dtls1_005f3_005d-_005b_002dtls1_005f2_005d-_005b_002dtls1_005f1_005d-_005b_002dtls1_005d-_005b_002dssl3_005d"></a></dt>
+<dd><p>В сочетании с опцией -s, перечислите шифры, которые можно было бы
+           использовать, если был согласован указанный протокол. Обратите
+           внимание, что не все протоколы и флаги могут быть доступны, в
+           зависимости от того, как был построен OpenSSL.
+</p>
+</dd>
+<dt>-stdname <a name="chiphers-_002dstdname"></a></dt>
+<dd><p>Каждый набор шифров должен предшествовать стандартному названию.
+</p>
+</dd>
+<dt>-convert name <a name="chiphers-_002dconvert-name"></a></dt>
+<dd><p>Преобразуйте стандартное имя шифра в его имя OpenSSL.
+</p>
+</dd>
+<dt>-ciphersuites val <a name="chiphers-_002dciphersuites-val"></a></dt>
+<dd><p>Устанавливает список шифров TLSv1.3. Этот список будет объединен
+           с любыми настроенными наборами шифров TLSv1.2 и ниже. Формат этого
+           списка - это простой список разделенных двоеточиями (&quot;:&quot;) имен
+           шифровальных наборов TLSv1.3. По умолчанию это значение:
+</p>
+<p>TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+</p>
+</dd>
+<dt>cipherlist <a name="chiphers-cipherlist"></a></dt>
+<dd><p>Список зашифрованных наборов шифров TLSv1.2 и ниже для преобразования
+           в список предпочтений шифров. Этот список будет объединен с любыми
+           настроенными наборами шифров TLSv1.3. Если он не включен, то будет
+           использоваться список шифров по умолчанию. Формат описан ниже.
+</p></dd>
+</dl>
+</dd>
+<dt>CIPHER LIST FORMAT</dt>
+<dd><p>Список шифров состоит из одной или нескольких строк шифров, разделенных
+       двоеточиями. Запятые или пробелы также являются приемлемыми разделителями,
+       но обычно используются двоеточия.
+</p>
+<p>Фактическая строка шифра может принимать несколько различных форм.
+</p>
+<p>Он может состоять из одного набора шифров, такого как RC4-SHA.
+</p>
+<p>Он может представлять список наборов шифров, содержащих определенный
+       алгоритм, или наборов шифров определенного типа. Например, SHA1 представляет
+       все наборы шифров с использованием алгоритма дайджеста SHA1, а SSLv3
+       представляет все алгоритмы SSL v3.
+</p>
+<p>Списки наборов шифров могут быть объединены в одну строку шифра с
+       использованием символа +. Это используется как логическая операция. Например,
+       SHA1+DES представляет все наборы шифров, содержащие алгоритмы SHA1 и DES.
+</p>
+<p>Каждой строке шифра могут предшествовать символы !, - или +.
+</p>
+<p>Если используется !, то шифры навсегда удаляются из списка. Удаленные
+       шифры никогда не могут появиться в списке, даже если они указаны явно.
+</p>
+<p>Если используется -, то шифры удаляются из списка, но некоторые или все
+       шифры могут быть добавлены снова более поздними опциями.
+</p>
+<p>Если используется +, то шифры перемещаются в конец списка. Эта опция не
+       добавляет новые шифры, она просто перемещает соответствующие существующие.
+</p>
+<p>Если ни один из символов не присутствует, то строка просто интерпретируется
+       как список шифров, добавляемых в текущий список предпочтений. Если список
+       содержит какие-либо уже существующие шифры, они будут игнорироваться, то
+       есть они не будут перемещены в конец списка.
+</p>
+<p>Строка шифра @STRENGTH может использоваться в любой точке для сортировки
+       текущего списка шифров в порядке длины ключа алгоритма шифрования.
+</p>
+<p>Зашифрованная строка @SECLEVEL=n может использоваться в любой точке для
+       установки уровня безопасности n., должно быть числом от нуля до пяти
+       включительно.  SSL_CTX_set_security_level для описания того, что означает
+       каждый уровень.
+</p>
+<p>Список шифров может иметь префикс с ключевым словом DEFAULT, который
+       включает список шифров по умолчанию, как определено ниже. В отличие от
+       строк шифрования, этот префикс не может быть объединен с другими строками,
+       использующими символ +. Например, DEFAULT+DES недействителен.
+</p>
+<p>Содержимое списка по умолчанию определяется во время компиляции и обычно
+       соответствует ALL:!COMPLEMENTOFDEFAULT:!eNULL..
+</p>
+</dd>
+<dt>CIPHER STRINGS</dt>
+<dd><p>Ниже приведен список всех разрешенных строк шифра и их значения.
+</p><dl compact="compact">
+<dt>COMPLEMENTOFDEFAULT</dt>
+<dd><p>Шифры включены в ALL, но не включены по умолчанию. В настоящее время
+           это включает в себя все RC4 и анонимные шифры. Обратите внимание, что
+           это правило не распространяется на eNULL, который не включен в ALL (при
+           необходимости используйте COMPLEMENTOFALL). Обратите внимание, что
+           наборы шифров на основе RC4 не встроены в OpenSSL по умолчанию (см.
+           Параметр enable-weak-ssl-ciphers для Configure).
+</p>
+<p>Наборы шифров ALL All, кроме шифров eNULL (которые должны быть явно включены
+       при необходимости). Начиная с OpenSSL 1.0.0, наборы шифров ALL разумно
+       упорядочены по умолчанию.
+</p>
+</dd>
+<dt>COMPLEMENTOFALL</dt>
+<dd><p>Наборы шифров, не включенные ALL, в настоящее время eNULL.
+</p>
+</dd>
+<dt>HIGH</dt>
+<dd><p>Комплекты шифрования &quot;High&quot;. В настоящее время это означает, что ключи
+           с длиной ключа более 128 битов и некоторые наборы шифров с 128-битными
+           ключами.
+</p>
+</dd>
+<dt>MEDIUM</dt>
+<dd><p>Комплекты шифрования &quot;Medium&quot;, в настоящее время некоторые из них
+           используют 128-битное шифрование.
+</p>
+</dd>
+<dt>LOW</dt>
+<dd><p>Комплекты шифрования &quot;Low&quot;, в настоящее время использующие 64 или
+           56-битные алгоритмы шифрования, но исключающие комплекты шифров
+           экспорта Все эти наборы шифров были удалены с OpenSSL 1.1.0.
+</p>
+</dd>
+<dt>eNULL, NULL</dt>
+<dd><p>Шифры &quot;NULL&quot;, которые не предлагают шифрование. Поскольку они вообще
+           не обеспечивают шифрование и представляют угрозу безопасности, они
+           не включаются ни через строки шифрования DEFAULT, ни через ALL.
+           Будьте осторожны при построении списков шифров из примитивов
+           lower-level, таких как kRSA или aECDSA, поскольку они перекрываются
+           с шифрами eNULL. Если есть сомнения, включите !eNULL в свой список
+           шифров.
+</p>
+</dd>
+<dt>aNULL</dt>
+<dd><p>Наборы шифров, не предлагающие аутентификацию. В настоящее время это
+           анонимные алгоритмы DH и анонимные алгоритмы ECDH. Эти комплекты шифров
+           уязвимы для атак «человек посередине», поэтому их использование не
+           рекомендуется. Они исключены из шифров DEFAULT, но включены в шифры ALL.
+           Будьте осторожны при построении списков шифров из примитивов lower-level,
+           таких как kDHE или AES, поскольку они перекрываются с шифрами aNULL. Если
+           сомневаетесь, включите !aNULL в свой список шифров.
+</p>
+</dd>
+<dt>kRSA, aRSA, RSA</dt>
+<dd><p>Наборы шифров, использующие обмен ключами RSA или аутентификацию. RSA
+           является псевдонимом для kRSA.
+</p>
+</dd>
+<dt>kDHr, kDHd, kDH</dt>
+<dd><p>Наборы шифров, использующие статическое соглашение о ключах DH и
+           сертификаты DH, подписанные CAs ключами RSA и DSS или любым из них
+           соответственно. Все эти наборы шифров были удалены в OpenSSL 1.1.0.
+</p>
+</dd>
+<dt>kDHE, kEDH, DH</dt>
+<dd><p>Наборы шифров с использованием эфемерного ключевого соглашения DH,
+           включая анонимные наборы шифров.
+</p>
+</dd>
+<dt>DHE, EDH</dt>
+<dd><p>Наборы шифров с использованием аутентифицированного эфемерного
+           ключевого соглашения DH.
+</p>
+</dd>
+<dt>ADH</dt>
+<dd><p>Анонимные наборы шифров DH, обратите внимание, что они не включают
+           анонимные наборы шифров Elliptic Curve DH (ECDH).
+</p>
+</dd>
+<dt>kEECDH, kECDHE, ECDH</dt>
+<dd><p>Наборы шифров с использованием эфемерного ключевого соглашения ECDH,
+           включая анонимные наборы шифров.
+</p>
+</dd>
+<dt>ECDHE, EECDH</dt>
+<dd><p>Наборы шифров с использованием аутентифицированного эфемерного
+           ключевого соглашения ECDH.
+</p>
+</dd>
+<dt>AECDH</dt>
+<dd><p>Анонимный набор шифров Elliptic Curve Diffie-Hellman.
+</p>
+</dd>
+<dt>aDSS, DSS</dt>
+<dd><p>Наборы шифров, использующие аутентификацию DSS, то есть сертификаты
+           содержат ключи DSS.
+</p>
+</dd>
+<dt>aDH</dt>
+<dd><p>Наборы шифров эффективно используют аутентификацию DH, то есть
+           сертификаты содержат ключи DH. Все эти наборы шифров были удалены в
+           OpenSSL 1.1.0.
+</p>
+</dd>
+<dt>aECDSA, ECDSA</dt>
+<dd><p>Наборы шифров, использующие аутентификацию ECDSA, то есть сертификаты
+           содержат ключи ECDSA.
+</p>
+</dd>
+<dt>TLSv1.2, TLSv1.0, SSLv3</dt>
+<dd><p>Перечисляет наборы шифров, которые поддерживаются только по крайней мере
+           в TLS v1.2, TLS v1.0 или SSL v3.0 соответственно. Примечание: нет
+           никаких наборов шифров, специфичных для TLS v1.1. Поскольку это только
+           минимальная версия, если, например, согласован TLSv1.0, доступны оба
+           набора шифров: TLSv1.0 и SSLv3.0.
+</p>
+<p>Примечание: эти строки шифров не изменяют согласованную версию SSL или TLS,
+           они влияют только на список доступных наборов шифров.
+</p>
+</dd>
+<dt>AES128, AES256, AES</dt>
+<dd><p>наборы шифров, использующие 128-битный AES, 256-битный AES или 128 или
+           256-битный AES.
+</p>
+</dd>
+<dt>AESGCM</dt>
+<dd><p>AES в Galois Counter Mode (GCM): эти наборы шифров поддерживаются
+           только в TLS v1.2.
+</p>
+</dd>
+<dt>AESCCM, AESCCM8</dt>
+<dd><p>AES в Cipher Block Chaining - Message Authentication Mode (CCM): эти наборы
+           шифров поддерживаются только в TLS v1.2. AESCCM ссылается на наборы шифров
+           CCM с использованием 16 и 8-октетного Integrity Check Value (ICV), тогда
+           как AESCCM8 ссылается только на 8-октетный ICV.
+</p>
+</dd>
+<dt>ARIA128, ARIA256, ARIA</dt>
+<dd><p>Наборы шифров используют 128-битный ARIA, 256-битный ARIA или 128 или
+           256-битный ARIA.
+</p>
+</dd>
+<dt>CAMELLIA128, CAMELLIA256, CAMELLIA</dt>
+<dd><p>Наборы шифров используют 128-битный CAMELLIA, 256-битный CAMELLIA или 128
+           или 256-битный CAMELLIA.
+</p>
+</dd>
+<dt>CHACHA20</dt>
+<dd><p>Наборы шифров с использованием ChaCha20.
+</p>
+</dd>
+<dt>3DES</dt>
+<dd><p>Наборы шифров с использованием тройного DES.
+</p>
+</dd>
+<dt>DES</dt>
+<dd><p>Наборы шифров, использующие DES (не тройной DES). Все эти
+           наборы шифров были удалены в OpenSSL 1.1.0.
+</p>
+</dd>
+<dt>RC4</dt>
+<dd><p>Наборы шифров с использованием RC4.
+</p>
+</dd>
+<dt>RC2</dt>
+<dd><p>Наборы шифров с использованием RC2.
+</p>
+</dd>
+<dt>IDEA</dt>
+<dd><p>Наборы шифров с использованием IDEA.
+</p>
+</dd>
+<dt>SEED</dt>
+<dd><p>Наборы шифров с использованием SEED.
+</p>
+</dd>
+<dt>MD5</dt>
+<dd><p>Наборы шифров с использованием MD5.
+</p>
+</dd>
+<dt>SHA1, SHA</dt>
+<dd><p>Наборы шифров с использованием SHA1.
+</p>
+</dd>
+<dt>SHA256, SHA384</dt>
+<dd><p>Наборы шифров с использованием SHA256 или SHA384.
+</p>
+</dd>
+<dt>aGOST</dt>
+<dd><p>Наборы шифров, использующие для аутентификации GOST R 34.10
+           (2001 или 94) (требуется механизм, поддерживающий алгоритмы GOST).
+</p>
+</dd>
+<dt>aGOST01</dt>
+<dd><p>Наборы шифров с использованием аутентификации GOST R 34.10-2001.
+</p>
+</dd>
+<dt>kGOST</dt>
+<dd><p>Наборы шифров, использующие обмен ключами VKO 34.10, указанный в RFC 4357.
+</p>
+</dd>
+<dt>GOST94</dt>
+<dd><p>Наборы шифров, использующие HMAC на основе GOST R 34.11-94.
+</p>
+</dd>
+<dt>GOST89MAC</dt>
+<dd><p>Наборы шифров, использующие GOST 28147-89 MAC вместо HMAC.
+</p>
+</dd>
+<dt>PSK</dt>
+<dd><p>Все комплекты шифров используют общие ключи (PSK).
+</p>
+</dd>
+<dt>kPSK, kECDHEPSK, kDHEPSK, kRSAPSK</dt>
+<dd><p>Наборы шифров с использованием обмена ключами PSK, ECDHE_PSK, DHE_PSK
+           или RSA_PSK.
+</p>
+</dd>
+<dt>aPSK</dt>
+<dd><p>Наборы шифров, использующие аутентификацию PSK (в настоящее время все
+           режимы PSK, кроме RSA_PSK).
+</p>
+</dd>
+<dt>SUITEB128, SUITEB128ONLY, SUITEB192</dt>
+<dd><p>Включает режим работы набора B, используя 128 (разрешающий 192-битный
+           режим для однорангового узла) 128-битный (не допускающий 192-битный для
+           однорангового узла) или 192-битный уровень безопасности соответственно.
+           Если используются эти строки шифров, они должны появиться первыми в
+           списке шифров, а все, что после них, игнорируется. Настройка режима
+           Suite B имеет дополнительные последствия, необходимые для соблюдения
+           RFC6460. В частности, поддерживаемые алгоритмы подписи сокращены для
+           поддержки только ECDSA и SHA256 или SHA384, могут использоваться только
+           эллиптические кривые P-256 и P-384, и допустимы только два комплекта
+           шифров (ECDHE-ECDSA-AES128-GCM-SHA256 и ECDHE-ECDSA-AES256-GCM-SHA384),
+           соответствующих B.
+</p></dd>
+</dl>
+</dd>
+<dt>CIPHER SUITE NAMES</dt>
+<dd><p>В следующих списках приведены имена наборов шифров SSL или TLS из
+       соответствующей спецификации и их эквиваленты OpenSSL. Следует отметить,
+       что несколько имен наборов шифров не включают используемую аутентификацию,
+       например, DES-CBC3-SHA. В этих случаях используется аутентификация RSA.
+</p><dl compact="compact">
+<dt>SSL v3.0 наборы шифров</dt>
+<dd><p>SSL_RSA_WITH_NULL_MD5                   NULL-MD5
+        SSL_RSA_WITH_NULL_SHA                   NULL-SHA
+        SSL_RSA_WITH_RC4_128_MD5                RC4-MD5
+        SSL_RSA_WITH_RC4_128_SHA                RC4-SHA
+        SSL_RSA_WITH_IDEA_CBC_SHA               IDEA-CBC-SHA
+        SSL_RSA_WITH_3DES_EDE_CBC_SHA           DES-CBC3-SHA
+</p>
+<p>SSL_DH_DSS_WITH_3DES_EDE_CBC_SHA        DH-DSS-DES-CBC3-SHA
+        SSL_DH_RSA_WITH_3DES_EDE_CBC_SHA        DH-RSA-DES-CBC3-SHA
+        SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA       DHE-DSS-DES-CBC3-SHA
+        SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA       DHE-RSA-DES-CBC3-SHA
+</p>
+<p>SSL_DH_anon_WITH_RC4_128_MD5            ADH-RC4-MD5
+        SSL_DH_anon_WITH_3DES_EDE_CBC_SHA       ADH-DES-CBC3-SHA
+</p>
+<p>SSL_FORTEZZA_KEA_WITH_NULL_SHA          Not implemented.
+        SSL_FORTEZZA_KEA_WITH_FORTEZZA_CBC_SHA  Not implemented.
+        SSL_FORTEZZA_KEA_WITH_RC4_128_SHA       Not implemented.
+</p>
+</dd>
+<dt>TLS v1.0 наборы шифров</dt>
+<dd><p>TLS_RSA_WITH_NULL_MD5                   NULL-MD5
+        TLS_RSA_WITH_NULL_SHA                   NULL-SHA
+        TLS_RSA_WITH_RC4_128_MD5                RC4-MD5
+        TLS_RSA_WITH_RC4_128_SHA                RC4-SHA
+        TLS_RSA_WITH_IDEA_CBC_SHA               IDEA-CBC-SHA
+        TLS_RSA_WITH_3DES_EDE_CBC_SHA           DES-CBC3-SHA
+</p>
+<p>TLS_DH_DSS_WITH_3DES_EDE_CBC_SHA        Not implemented.
+        TLS_DH_RSA_WITH_3DES_EDE_CBC_SHA        Not implemented.
+        TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA       DHE-DSS-DES-CBC3-SHA
+        TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA       DHE-RSA-DES-CBC3-SHA
+</p>
+<p>TLS_DH_anon_WITH_RC4_128_MD5            ADH-RC4-MD5
+        TLS_DH_anon_WITH_3DES_EDE_CBC_SHA       ADH-DES-CBC3-SHA
+</p>
+</dd>
+<dt>AES наборы шифров от RFC3268, расширяющие TLS v1.0</dt>
+<dd><p>TLS_RSA_WITH_AES_128_CBC_SHA            AES128-SHA
+        TLS_RSA_WITH_AES_256_CBC_SHA            AES256-SHA
+</p>
+<p>TLS_DH_DSS_WITH_AES_128_CBC_SHA         DH-DSS-AES128-SHA
+        TLS_DH_DSS_WITH_AES_256_CBC_SHA         DH-DSS-AES256-SHA
+        TLS_DH_RSA_WITH_AES_128_CBC_SHA         DH-RSA-AES128-SHA
+        TLS_DH_RSA_WITH_AES_256_CBC_SHA         DH-RSA-AES256-SHA
+</p>
+<p>TLS_DHE_DSS_WITH_AES_128_CBC_SHA        DHE-DSS-AES128-SHA
+        TLS_DHE_DSS_WITH_AES_256_CBC_SHA        DHE-DSS-AES256-SHA
+        TLS_DHE_RSA_WITH_AES_128_CBC_SHA        DHE-RSA-AES128-SHA
+        TLS_DHE_RSA_WITH_AES_256_CBC_SHA        DHE-RSA-AES256-SHA
+</p>
+<p>TLS_DH_anon_WITH_AES_128_CBC_SHA        ADH-AES128-SHA
+        TLS_DH_anon_WITH_AES_256_CBC_SHA        ADH-AES256-SHA
+</p>
+</dd>
+<dt>Camellia наборы шифров от RFC4132, расширяющие TLS v1.0</dt>
+<dd><p>TLS_RSA_WITH_CAMELLIA_128_CBC_SHA      CAMELLIA128-SHA
+        TLS_RSA_WITH_CAMELLIA_256_CBC_SHA      CAMELLIA256-SHA
+</p>
+<p>TLS_DH_DSS_WITH_CAMELLIA_128_CBC_SHA   DH-DSS-CAMELLIA128-SHA
+        TLS_DH_DSS_WITH_CAMELLIA_256_CBC_SHA   DH-DSS-CAMELLIA256-SHA
+        TLS_DH_RSA_WITH_CAMELLIA_128_CBC_SHA   DH-RSA-CAMELLIA128-SHA
+        TLS_DH_RSA_WITH_CAMELLIA_256_CBC_SHA   DH-RSA-CAMELLIA256-SHA
+</p>
+<p>TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA  DHE-DSS-CAMELLIA128-SHA
+        TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA  DHE-DSS-CAMELLIA256-SHA
+        TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA  DHE-RSA-CAMELLIA128-SHA
+        TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA  DHE-RSA-CAMELLIA256-SHA
+</p>
+<p>TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA  ADH-CAMELLIA128-SHA
+        TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA  ADH-CAMELLIA256-SHA
+</p>
+</dd>
+<dt>SEED наборы шифров от RFC4162, расширяющие TLS v1.0</dt>
+<dd><p>TLS_RSA_WITH_SEED_CBC_SHA              SEED-SHA
+</p>
+<p>TLS_DH_DSS_WITH_SEED_CBC_SHA           DH-DSS-SEED-SHA
+        TLS_DH_RSA_WITH_SEED_CBC_SHA           DH-RSA-SEED-SHA
+</p>
+<p>TLS_DHE_DSS_WITH_SEED_CBC_SHA          DHE-DSS-SEED-SHA
+        TLS_DHE_RSA_WITH_SEED_CBC_SHA          DHE-RSA-SEED-SHA
+</p>
+<p>TLS_DH_anon_WITH_SEED_CBC_SHA          ADH-SEED-SHA
+</p>
+</dd>
+<dt>GOST наборы шифров от draft-chudov-cryptopro-cptls, расширяющие TLS v1.0</dt>
+<dd><p>Примечание: эти шифры требуют механизма, который включает в себя
+       криптографические алгоритмы GOST, такие как механизм ccgost,
+       включенный в дистрибутив OpenSSL.
+</p>
+<p>TLS_GOSTR341094_WITH_28147_CNT_IMIT GOST94-GOST89-GOST89
+        TLS_GOSTR341001_WITH_28147_CNT_IMIT GOST2001-GOST89-GOST89
+        TLS_GOSTR341094_WITH_NULL_GOSTR3411 GOST94-NULL-GOST94
+        TLS_GOSTR341001_WITH_NULL_GOSTR3411 GOST2001-NULL-GOST94
+</p>
+</dd>
+<dt>Дополнительный Экспорт 1024 и другие комплекты шифров</dt>
+<dd><p>Примечание: эти шифры также можно использовать в SSL v3.
+</p>
+<p>TLS_DHE_DSS_WITH_RC4_128_SHA            DHE-DSS-RC4-SHA
+</p>
+</dd>
+<dt>Наборы шифров эллиптической кривой.</dt>
+<dd><p>TLS_ECDHE_RSA_WITH_NULL_SHA             ECDHE-RSA-NULL-SHA
+        TLS_ECDHE_RSA_WITH_RC4_128_SHA          ECDHE-RSA-RC4-SHA
+        TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA     ECDHE-RSA-DES-CBC3-SHA
+        TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA      ECDHE-RSA-AES128-SHA
+        TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA      ECDHE-RSA-AES256-SHA
+</p>
+<p>TLS_ECDHE_ECDSA_WITH_NULL_SHA           ECDHE-ECDSA-NULL-SHA
+        TLS_ECDHE_ECDSA_WITH_RC4_128_SHA        ECDHE-ECDSA-RC4-SHA
+        TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA   ECDHE-ECDSA-DES-CBC3-SHA
+        TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA    ECDHE-ECDSA-AES128-SHA
+        TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA    ECDHE-ECDSA-AES256-SHA
+</p>
+<p>TLS_ECDH_anon_WITH_NULL_SHA             AECDH-NULL-SHA
+        TLS_ECDH_anon_WITH_RC4_128_SHA          AECDH-RC4-SHA
+        TLS_ECDH_anon_WITH_3DES_EDE_CBC_SHA     AECDH-DES-CBC3-SHA
+        TLS_ECDH_anon_WITH_AES_128_CBC_SHA      AECDH-AES128-SHA
+        TLS_ECDH_anon_WITH_AES_256_CBC_SHA      AECDH-AES256-SHA
+</p>
+</dd>
+<dt>TLS v1.2 наборы шифров</dt>
+<dd><p>TLS_RSA_WITH_NULL_SHA256                  NULL-SHA256
+</p>
+<p>TLS_RSA_WITH_AES_128_CBC_SHA256           AES128-SHA256
+        TLS_RSA_WITH_AES_256_CBC_SHA256           AES256-SHA256
+        TLS_RSA_WITH_AES_128_GCM_SHA256           AES128-GCM-SHA256
+        TLS_RSA_WITH_AES_256_GCM_SHA384           AES256-GCM-SHA384
+</p>
+<p>TLS_DH_RSA_WITH_AES_128_CBC_SHA256        DH-RSA-AES128-SHA256
+        TLS_DH_RSA_WITH_AES_256_CBC_SHA256        DH-RSA-AES256-SHA256
+        TLS_DH_RSA_WITH_AES_128_GCM_SHA256        DH-RSA-AES128-GCM-SHA256
+        TLS_DH_RSA_WITH_AES_256_GCM_SHA384        DH-RSA-AES256-GCM-SHA384
+</p>
+<p>TLS_DH_DSS_WITH_AES_128_CBC_SHA256        DH-DSS-AES128-SHA256
+        TLS_DH_DSS_WITH_AES_256_CBC_SHA256        DH-DSS-AES256-SHA256
+        TLS_DH_DSS_WITH_AES_128_GCM_SHA256        DH-DSS-AES128-GCM-SHA256
+        TLS_DH_DSS_WITH_AES_256_GCM_SHA384        DH-DSS-AES256-GCM-SHA384
+</p>
+<p>TLS_DHE_RSA_WITH_AES_128_CBC_SHA256       DHE-RSA-AES128-SHA256
+        TLS_DHE_RSA_WITH_AES_256_CBC_SHA256       DHE-RSA-AES256-SHA256
+        TLS_DHE_RSA_WITH_AES_128_GCM_SHA256       DHE-RSA-AES128-GCM-SHA256
+        TLS_DHE_RSA_WITH_AES_256_GCM_SHA384       DHE-RSA-AES256-GCM-SHA384
+</p>
+<p>TLS_DHE_DSS_WITH_AES_128_CBC_SHA256       DHE-DSS-AES128-SHA256
+        TLS_DHE_DSS_WITH_AES_256_CBC_SHA256       DHE-DSS-AES256-SHA256
+        TLS_DHE_DSS_WITH_AES_128_GCM_SHA256       DHE-DSS-AES128-GCM-SHA256
+        TLS_DHE_DSS_WITH_AES_256_GCM_SHA384       DHE-DSS-AES256-GCM-SHA384
+</p>
+<p>TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256     ECDHE-RSA-AES128-SHA256
+        TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384     ECDHE-RSA-AES256-SHA384
+        TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256     ECDHE-RSA-AES128-GCM-SHA256
+        TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384     ECDHE-RSA-AES256-GCM-SHA384
+</p>
+<p>TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256   ECDHE-ECDSA-AES128-SHA256
+        TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384   ECDHE-ECDSA-AES256-SHA384
+        TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256   ECDHE-ECDSA-AES128-GCM-SHA256
+        TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384   ECDHE-ECDSA-AES256-GCM-SHA384
+</p>
+<p>TLS_DH_anon_WITH_AES_128_CBC_SHA256       ADH-AES128-SHA256
+        TLS_DH_anon_WITH_AES_256_CBC_SHA256       ADH-AES256-SHA256
+        TLS_DH_anon_WITH_AES_128_GCM_SHA256       ADH-AES128-GCM-SHA256
+        TLS_DH_anon_WITH_AES_256_GCM_SHA384       ADH-AES256-GCM-SHA384
+</p>
+<p>RSA_WITH_AES_128_CCM                      AES128-CCM
+        RSA_WITH_AES_256_CCM                      AES256-CCM
+        DHE_RSA_WITH_AES_128_CCM                  DHE-RSA-AES128-CCM
+        DHE_RSA_WITH_AES_256_CCM                  DHE-RSA-AES256-CCM
+        RSA_WITH_AES_128_CCM_8                    AES128-CCM8
+        RSA_WITH_AES_256_CCM_8                    AES256-CCM8
+        DHE_RSA_WITH_AES_128_CCM_8                DHE-RSA-AES128-CCM8
+        DHE_RSA_WITH_AES_256_CCM_8                DHE-RSA-AES256-CCM8
+        ECDHE_ECDSA_WITH_AES_128_CCM              ECDHE-ECDSA-AES128-CCM
+        ECDHE_ECDSA_WITH_AES_256_CCM              ECDHE-ECDSA-AES256-CCM
+        ECDHE_ECDSA_WITH_AES_128_CCM_8            ECDHE-ECDSA-AES128-CCM8
+        ECDHE_ECDSA_WITH_AES_256_CCM_8            ECDHE-ECDSA-AES256-CCM8
+</p>
+</dd>
+<dt>ARIA наборы шифров от RFC6209, расширяющие TLS v1.2</dt>
+<dd><p>Примечание: режимы CBC, упомянутые в этом RFC, не поддерживаются.
+</p>
+<p>TLS_RSA_WITH_ARIA_128_GCM_SHA256          ARIA128-GCM-SHA256
+        TLS_RSA_WITH_ARIA_256_GCM_SHA384          ARIA256-GCM-SHA384
+        TLS_DHE_RSA_WITH_ARIA_128_GCM_SHA256      DHE-RSA-ARIA128-GCM-SHA256
+        TLS_DHE_RSA_WITH_ARIA_256_GCM_SHA384      DHE-RSA-ARIA256-GCM-SHA384
+        TLS_DHE_DSS_WITH_ARIA_128_GCM_SHA256      DHE-DSS-ARIA128-GCM-SHA256
+        TLS_DHE_DSS_WITH_ARIA_256_GCM_SHA384      DHE-DSS-ARIA256-GCM-SHA384
+        TLS_ECDHE_ECDSA_WITH_ARIA_128_GCM_SHA256  ECDHE-ECDSA-ARIA128-GCM-SHA256
+        TLS_ECDHE_ECDSA_WITH_ARIA_256_GCM_SHA384  ECDHE-ECDSA-ARIA256-GCM-SHA384
+        TLS_ECDHE_RSA_WITH_ARIA_128_GCM_SHA256    ECDHE-ARIA128-GCM-SHA256
+        TLS_ECDHE_RSA_WITH_ARIA_256_GCM_SHA384    ECDHE-ARIA256-GCM-SHA384
+        TLS_PSK_WITH_ARIA_128_GCM_SHA256          PSK-ARIA128-GCM-SHA256
+        TLS_PSK_WITH_ARIA_256_GCM_SHA384          PSK-ARIA256-GCM-SHA384
+        TLS_DHE_PSK_WITH_ARIA_128_GCM_SHA256      DHE-PSK-ARIA128-GCM-SHA256
+        TLS_DHE_PSK_WITH_ARIA_256_GCM_SHA384      DHE-PSK-ARIA256-GCM-SHA384
+        TLS_RSA_PSK_WITH_ARIA_128_GCM_SHA256      RSA-PSK-ARIA128-GCM-SHA256
+        TLS_RSA_PSK_WITH_ARIA_256_GCM_SHA384      RSA-PSK-ARIA256-GCM-SHA384
+</p>
+</dd>
+<dt>Camellia HMAC-Based наборы шифров от RFC6367, расширяющие TLS v1.2</dt>
+<dd><p>TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_CBC_SHA256 ECDHE-ECDSA-CAMELLIA128-SHA256
+        TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_CBC_SHA384 ECDHE-ECDSA-CAMELLIA256-SHA384
+        TLS_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256   ECDHE-RSA-CAMELLIA128-SHA256
+        TLS_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384   ECDHE-RSA-CAMELLIA256-SHA384
+</p>
+</dd>
+<dt>Набор ключей с предварительным общим ключом (PSK)</dt>
+<dd><p>PSK_WITH_NULL_SHA                         PSK-NULL-SHA
+        DHE_PSK_WITH_NULL_SHA                     DHE-PSK-NULL-SHA
+        RSA_PSK_WITH_NULL_SHA                     RSA-PSK-NULL-SHA
+</p>
+<p>PSK_WITH_RC4_128_SHA                      PSK-RC4-SHA
+        PSK_WITH_3DES_EDE_CBC_SHA                 PSK-3DES-EDE-CBC-SHA
+        PSK_WITH_AES_128_CBC_SHA                  PSK-AES128-CBC-SHA
+        PSK_WITH_AES_256_CBC_SHA                  PSK-AES256-CBC-SHA
+</p>
+<p>DHE_PSK_WITH_RC4_128_SHA                  DHE-PSK-RC4-SHA
+        DHE_PSK_WITH_3DES_EDE_CBC_SHA             DHE-PSK-3DES-EDE-CBC-SHA
+        DHE_PSK_WITH_AES_128_CBC_SHA              DHE-PSK-AES128-CBC-SHA
+        DHE_PSK_WITH_AES_256_CBC_SHA              DHE-PSK-AES256-CBC-SHA
+</p>
+<p>RSA_PSK_WITH_RC4_128_SHA                  RSA-PSK-RC4-SHA
+        RSA_PSK_WITH_3DES_EDE_CBC_SHA             RSA-PSK-3DES-EDE-CBC-SHA
+        RSA_PSK_WITH_AES_128_CBC_SHA              RSA-PSK-AES128-CBC-SHA
+        RSA_PSK_WITH_AES_256_CBC_SHA              RSA-PSK-AES256-CBC-SHA
+</p>
+<p>PSK_WITH_AES_128_GCM_SHA256               PSK-AES128-GCM-SHA256
+        PSK_WITH_AES_256_GCM_SHA384               PSK-AES256-GCM-SHA384
+        DHE_PSK_WITH_AES_128_GCM_SHA256           DHE-PSK-AES128-GCM-SHA256
+        DHE_PSK_WITH_AES_256_GCM_SHA384           DHE-PSK-AES256-GCM-SHA384
+        RSA_PSK_WITH_AES_128_GCM_SHA256           RSA-PSK-AES128-GCM-SHA256
+        RSA_PSK_WITH_AES_256_GCM_SHA384           RSA-PSK-AES256-GCM-SHA384
+</p>
+<p>PSK_WITH_AES_128_CBC_SHA256               PSK-AES128-CBC-SHA256
+        PSK_WITH_AES_256_CBC_SHA384               PSK-AES256-CBC-SHA384
+        PSK_WITH_NULL_SHA256                      PSK-NULL-SHA256
+        PSK_WITH_NULL_SHA384                      PSK-NULL-SHA384
+        DHE_PSK_WITH_AES_128_CBC_SHA256           DHE-PSK-AES128-CBC-SHA256
+        DHE_PSK_WITH_AES_256_CBC_SHA384           DHE-PSK-AES256-CBC-SHA384
+        DHE_PSK_WITH_NULL_SHA256                  DHE-PSK-NULL-SHA256
+        DHE_PSK_WITH_NULL_SHA384                  DHE-PSK-NULL-SHA384
+        RSA_PSK_WITH_AES_128_CBC_SHA256           RSA-PSK-AES128-CBC-SHA256
+        RSA_PSK_WITH_AES_256_CBC_SHA384           RSA-PSK-AES256-CBC-SHA384
+        RSA_PSK_WITH_NULL_SHA256                  RSA-PSK-NULL-SHA256
+        RSA_PSK_WITH_NULL_SHA384                  RSA-PSK-NULL-SHA384
+        PSK_WITH_AES_128_GCM_SHA256               PSK-AES128-GCM-SHA256
+        PSK_WITH_AES_256_GCM_SHA384               PSK-AES256-GCM-SHA384
+</p>
+<p>ECDHE_PSK_WITH_RC4_128_SHA                ECDHE-PSK-RC4-SHA
+        ECDHE_PSK_WITH_3DES_EDE_CBC_SHA           ECDHE-PSK-3DES-EDE-CBC-SHA
+        ECDHE_PSK_WITH_AES_128_CBC_SHA            ECDHE-PSK-AES128-CBC-SHA
+        ECDHE_PSK_WITH_AES_256_CBC_SHA            ECDHE-PSK-AES256-CBC-SHA
+        ECDHE_PSK_WITH_AES_128_CBC_SHA256         ECDHE-PSK-AES128-CBC-SHA256
+        ECDHE_PSK_WITH_AES_256_CBC_SHA384         ECDHE-PSK-AES256-CBC-SHA384
+        ECDHE_PSK_WITH_NULL_SHA                   ECDHE-PSK-NULL-SHA
+        ECDHE_PSK_WITH_NULL_SHA256                ECDHE-PSK-NULL-SHA256
+        ECDHE_PSK_WITH_NULL_SHA384                ECDHE-PSK-NULL-SHA384
+</p>
+<p>PSK_WITH_CAMELLIA_128_CBC_SHA256          PSK-CAMELLIA128-SHA256
+        PSK_WITH_CAMELLIA_256_CBC_SHA384          PSK-CAMELLIA256-SHA384
+</p>
+<p>DHE_PSK_WITH_CAMELLIA_128_CBC_SHA256      DHE-PSK-CAMELLIA128-SHA256
+        DHE_PSK_WITH_CAMELLIA_256_CBC_SHA384      DHE-PSK-CAMELLIA256-SHA384
+</p>
+<p>RSA_PSK_WITH_CAMELLIA_128_CBC_SHA256      RSA-PSK-CAMELLIA128-SHA256
+        RSA_PSK_WITH_CAMELLIA_256_CBC_SHA384      RSA-PSK-CAMELLIA256-SHA384
+</p>
+<p>ECDHE_PSK_WITH_CAMELLIA_128_CBC_SHA256    ECDHE-PSK-CAMELLIA128-SHA256
+        ECDHE_PSK_WITH_CAMELLIA_256_CBC_SHA384    ECDHE-PSK-CAMELLIA256-SHA384
+</p>
+<p>PSK_WITH_AES_128_CCM                      PSK-AES128-CCM
+        PSK_WITH_AES_256_CCM                      PSK-AES256-CCM
+        DHE_PSK_WITH_AES_128_CCM                  DHE-PSK-AES128-CCM
+        DHE_PSK_WITH_AES_256_CCM                  DHE-PSK-AES256-CCM
+        PSK_WITH_AES_128_CCM_8                    PSK-AES128-CCM8
+        PSK_WITH_AES_256_CCM_8                    PSK-AES256-CCM8
+        DHE_PSK_WITH_AES_128_CCM_8                DHE-PSK-AES128-CCM8
+        DHE_PSK_WITH_AES_256_CCM_8                DHE-PSK-AES256-CCM8
+</p>
+</dd>
+<dt>ChaCha20-Poly1305 наборы шифров, расширяющие TLS v1.2</dt>
+<dd><p>TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256      ECDHE-RSA-CHACHA20-POLY1305
+        TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256    ECDHE-ECDSA-CHACHA20-POLY1305
+        TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256        DHE-RSA-CHACHA20-POLY1305
+        TLS_PSK_WITH_CHACHA20_POLY1305_SHA256            PSK-CHACHA20-POLY1305
+        TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256      ECDHE-PSK-CHACHA20-POLY1305
+        TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256        DHE-PSK-CHACHA20-POLY1305
+        TLS_RSA_PSK_WITH_CHACHA20_POLY1305_SHA256        RSA-PSK-CHACHA20-POLY1305
+</p>
+</dd>
+<dt>TLS v1.3 наборы шифров</dt>
+<dd><p>TLS_AES_128_GCM_SHA256                     TLS_AES_128_GCM_SHA256
+        TLS_AES_256_GCM_SHA384                     TLS_AES_256_GCM_SHA384
+        TLS_CHACHA20_POLY1305_SHA256               TLS_CHACHA20_POLY1305_SHA256
+        TLS_AES_128_CCM_SHA256                     TLS_AES_128_CCM_SHA256
+        TLS_AES_128_CCM_8_SHA256                   TLS_AES_128_CCM_8_SHA256
+</p>
+</dd>
+<dt>Старые имена, используемые OpenSSL</dt>
+<dd><p>Следующие имена принимаются старыми версиями:
+</p>
+<p>SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA    EDH-RSA-DES-CBC3-SHA (DHE-RSA-DES-CBC3-SHA)
+        SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA    EDH-DSS-DES-CBC3-SHA (DHE-DSS-DES-CBC3-SHA)
+</p></dd>
+</dl>
+</dd>
+<dt>NOTES</dt>
+<dd><p>Некоторые скомпилированные версии OpenSSL могут не включать все перечисленные
+       здесь шифры, потому что некоторые шифры были исключены во время компиляции.
+</p>
+</dd>
+<dt>EXAMPLES</dt>
+<dd><div class="display">
+<pre class="display">       Подробный список всех шифров OpenSSL, включая шифры NULL:
+
+        openssl ciphers -v &rsquo;ALL:eNULL&rsquo;
+
+       Включите все шифры, кроме NULL и anonymous DH, затем отсортируйте по силе:
+
+        openssl ciphers -v &rsquo;ALL:!ADH:@STRENGTH&rsquo;
+
+       Включите все шифры, кроме шифрования без шифрования (eNULL) или без
+       аутентификации (aNULL):
+
+        openssl ciphers -v &rsquo;ALL:!aNULL&rsquo;
+
+       Включайте только шифры 3DES, а затем ставьте последние шифры RSA:
+
+        openssl ciphers -v &rsquo;3DES:+RSA&rsquo;
+
+       Включите все шифры RC4, но оставьте их без аутентификации:
+
+        openssl ciphers -v &rsquo;RC4:!COMPLEMENTOFDEFAULT&rsquo;
+
+       Включите все шифры с аутентификацией RSA, но оставьте шифры без шифрования.
+
+        openssl ciphers -v &rsquo;RSA:!COMPLEMENTOFALL&rsquo;
+
+       Установите уровень безопасности 2 и отобразите все шифры в
+       соответствии с уровнем 2:
+
+        openssl ciphers -s -v &rsquo;ALL:@SECLEVEL=2&rsquo;
+</pre></div>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>s_client(1), s_server(1), ssl(7)
+</p>
+</dd>
+<dt>HISTORY</dt>
+<dd><p>Параметр -V для команды шифров был добавлен в OpenSSL 1.0.0.
+</p>
+<p>-stdname доступно только если OpenSSL построен с включенной трассировкой
+       (enable-ssl-trace аргумент в Configur)e до OpenSSL 1.1.1.
+</p>
+<p>-convert был добавлен в OpenSSL 1.1.1 .
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use this
+       file except in compliance with the License.  You can obtain a copy in the
+       file LICENSE in the source distribution or at
+       &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                                      2018-11-20                                  CIPHERS(1)
+</p><hr>
+<a name="CMS"></a>
+<div class="header">
+<p>
+Next: <a href="#CRL" accesskey="n" rel="next">CRL</a>, Previous: <a href="#CIPHERS" accesskey="p" rel="prev">CIPHERS</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="CMS-1"></a>
+<h2 class="chapter">10 CMS</h2>
+<dl compact="compact">
+<dt>NAME</dt>
+<dd><p>openssl-cms, cms - CMS утилита
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>openssl cms [<a href="#cms-_002dhelp">-help</a>] [<a href="#cms-_002dencrypt">-encrypt</a>] [<a href="#cms-_002ddecrypt">-decrypt</a>] [<a href="#cms-_002dsign">-sign</a>] [<a href="#cms-_002dverify">-verify</a>] [<a href="#cms-_002dcmsout">-cmsout</a>] [<a href="#cms-_002dresign">-resign</a>] [<a href="#cms-_002ddata_005fcreate">-data_create</a>] [<a href="#cms-_002ddata_005fout">-data_out</a>] [<a href="#cms-_002ddigest_005fcreate">-digest_create</a>] [<a href="#cms-_002ddigest_005fverify">-digest_verify</a>] [<a href="#cms-_002dcompress">-compress</a>] [<a href="#cms-_002duncompress">-uncompress</a>] [<a href="#cms-_002dEncryptedData_005fencrypt">-EncryptedData_encrypt</a>] [<a href="#cms-_002dsign_005freceipt">-sign_receipt</a>] [<a href="#cms-_002dverify_005freceipt-receipt">-verify_receipt receipt</a>] [<a href="#cms-_002din-filename">-in filename</a>] [<a href="#cms-_002dinform-SMIME_007cPEM_007cDER">-inform SMIME|PEM|DER</a>] [<a href="#cms-_002drctform-SMIME_007cPEM_007cDER">-rctform SMIME|PEM|DER</a>] [<a href="#cms-_002dout-filename">-out filename</a>] [<a href="#cms-_002doutform-SMIME_007cPEM_007cDER">-outform SMIME|PEM|DER</a>] [<a href="#cms-_002dstream-_002dindef-_002dnoindef">-stream -indef -noindef</a>] [<a href="#cms-_002dnoindef">-noindef</a>] [<a href="#cms-_002dcontent-filename">-content filename</a>] [<a href="#cms-_002dtext">-text</a>] [<a href="#cms-_002dnoout">-noout</a>] [<a href="#cms-_002dprint">-print</a>] [<a href="#cms-_002dCAfile-file">-CAfile file</a>] [<a href="#cms-_002dCApath-dir">-CApath dir</a>] [<a href="#cms-_002dno_002dCAfile">-no-CAfile</a>] [<a href="#cms-_002dno_002dCApath">-no-CApath</a>] [<a href="#cms-_005b_002dattime_005d-_005b_002dcheck_005fss_005fsig_005d-_005b_002dcrl_005fcheck_005d-_005b_002dcrl_005fcheck_005fall_005d-_005b_002dexplicit_005fpolicy_005d-_005b_002dextended_005fcrl_005d-_005b_002dignore_005fcritical_005d-_005b_002dinhibit_005fany_005d-_005b_002dinhibit_005fmap_005d-_005b_002dno_005falt_005fchains_005d-_005b_002dno_005fcheck_005ftime_005d-_005b_002dpartial_005fchain_005d-_005b_002dpolicy_005d-_005b_002dpolicy_005fcheck_005d-_005b_002dpolicy_005fprint_005d-_005b_002dpurpose_005d-_005b_002dsuiteB_005f128_005d-_005b_002dsuiteB_005f128_005fonly_005d-_005b_002dsuiteB_005f192_005d-_005b_002dtrusted_005ffirst_005d-_005b_002duse_005fdeltas_005d-_005b_002dauth_005flevel_005d-_005b_002dverify_005fdepth_005d-_005b_002dverify_005femail_005d-_005b_002dverify_005fhostname_005d-_005b_002dverify_005fip_005d-_005b_002dverify_005fname_005d-_005b_002dx509_005fstrict_005d">[-attime] [-check_ss_sig] [-crl_check] [-crl_check_all] [-explicit_policy] [-extended_crl] [-ignore_critical] [-inhibit_any] [-inhibit_map] [-no_alt_chains] [-no_check_time] [-partial_chain] [-policy] [-policy_check] [-policy_print] [-purpose] [-suiteB_128] [-suiteB_128_only] [-suiteB_192] [-trusted_first] [-use_deltas] [-auth_level] [-verify_depth] [-verify_email] [-verify_hostname] [-verify_ip] [-verify_name] [-x509_strict]</a>] [<a href="#cms-_002dmd-digest">-md digest</a>] [<a href="#cms-_002dcipher">-cipher</a>] [<a href="#cms-_002dnointern">-nointern</a>] [<a href="#cms-_002dnoverify">-noverify</a>] [<a href="#cms-_002dnocerts">-nocerts</a>] [<a href="#cms-_002dnoattr">-noattr</a>] [<a href="#cms-_002dnosmimecap">-nosmimecap</a>] [<a href="#cms-_002dbinary">-binary</a>] [<a href="#cms-_002dcrlfeol">-crlfeol</a>] [<a href="#cms-_002dasciicrlf">-asciicrlf</a>] [<a href="#cms-_002dnodetach">-nodetach</a>] [<a href="#cms-_002dcertfile-file">-certfile file</a>] [<a href="#cms-_002dcertsout-file">-certsout file</a>] [<a href="#cms-_002dsigner-file">-signer file</a>] [<a href="#cms-_002drecip-file">-recip file</a>] [<a href="#cms-_002dkeyid">-keyid</a>] [<a href="#cms-_005b_002dreceipt_005frequest_005fall_005d-_005b_002dreceipt_005frequest_005ffirst_005d">[-receipt_request_all] [-receipt_request_first]</a>] [<a href="#cms-_002dreceipt_005frequest_005ffrom-emailaddress">-receipt_request_from emailaddress</a>] [<a href="#cms-_002dreceipt_005frequest_005fto-emailaddress">-receipt_request_to emailaddress</a>] [<a href="#cms-_002dreceipt_005frequest_005fprint">-receipt_request_print</a>] [<a href="#cms-_002dsecretkey-key">-secretkey key</a>] [<a href="#cms-_002dsecretkeyid-id">-secretkeyid id</a>] [<a href="#cms-_002decontent_005ftype-type">-econtent_type type</a>] [<a href="#cms-_002dinkey-file">-inkey file</a>] [<a href="#cms-_002dkeyopt-name_003aopt">-keyopt name:opt</a>] [<a href="#cms-_002dpassin-arg">-passin arg</a>] [<a href="#cms-_002drand-file_002e_002e_002e">-rand file...</a>] [<a href="#cms-_005b_002dwriterand-file_005d">[-writerand file]</a>] [<a href="#cms-cert_002epem_002e_002e_002e">cert.pem...</a>] [&lsquo;-subject&rsquo; in <cite>-to, -from, -subject</cite>]...
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Команда cms обрабатывает почту S/MIME v3.1. Может шифровать, расшифровывать,
+       подписывать и проверять, сжимать и распаковывать сообщения S/MIME.
+</p>
+</dd>
+<dt>OPTIONS</dt>
+<dd><p>Существует четырнадцать опций операций, которые устанавливают тип выполняемой
+       операции. Значение других параметров зависит от типа операции.
+</p><dl compact="compact">
+<dt>-help <a name="cms-_002dhelp"></a></dt>
+<dd><p>Распечатайте сообщение об использовании.
+</p>
+</dd>
+<dt>-encrypt <a name="cms-_002dencrypt"></a></dt>
+<dd><p>Шифровать почту для заданных сертификатов получателей. Входной файл - это
+           сообщение, которое необходимо зашифровать. Выходной файл - это зашифрованная
+           почта в формате MIME. Фактический тип CMS - это &lt;B&gt;EnvelopedData&lt;B&gt;.
+</p>
+<p>Обратите внимание, что для сертификата получателя не выполняется проверка отзыва,
+           поэтому, если этот ключ был скомпрометирован, другие могут иметь возможность
+           расшифровать текст.
+</p>
+</dd>
+<dt>-decrypt <a name="cms-_002ddecrypt"></a></dt>
+<dd><p>Расшифруйте почту, используя предоставленный сертификат и закрытый ключ. Ожидает
+           зашифрованное почтовое сообщение в формате MIME для входного файла. Расшифрованное
+           письмо записывается в выходной файл.
+</p>
+</dd>
+<dt>-debug_decrypt</dt>
+<dd><p>Эта опция устанавливает флаг CMS_DEBUG_DECRYPT. Эту опцию следует использовать с
+           осторожностью: Раздел примечаний ниже.
+</p>
+</dd>
+<dt>-sign <a name="cms-_002dsign"></a></dt>
+<dd><p>Подпишите почту используя предоставленный сертификат и закрытый ключ. Входной файл -
+           это сообщение, которое нужно подписать. Подписанное сообщение в формате MIME
+           записывается в выходной файл.
+</p>
+</dd>
+<dt>-verify <a name="cms-_002dverify"></a></dt>
+<dd><p>Проверьте подписанную почту. Ожидает подписанное почтовое сообщение на входе и
+           выводит подписанные данные. Поддерживается как открытый текст, так и
+           непрозрачная подпись.
+</p>
+</dd>
+<dt>-cmsout <a name="cms-_002dcmsout"></a></dt>
+<dd><p>Принимает входное сообщение и записывает структуру CMS в кодировке PEM.
+</p>
+</dd>
+<dt>-resign <a name="cms-_002dresign"></a></dt>
+<dd><p>Отказаться от сообщения: принять существующее сообщение и одного или
+           нескольких новых подписантов.
+</p>
+</dd>
+<dt>-data_create <a name="cms-_002ddata_005fcreate"></a></dt>
+<dd><p>Создайте тип данных CMS.
+</p>
+</dd>
+<dt>-data_out <a name="cms-_002ddata_005fout"></a></dt>
+<dd><p>Тип данных и вывод содержимого.
+</p>
+</dd>
+<dt>-digest_create <a name="cms-_002ddigest_005fcreate"></a></dt>
+<dd><p>Создайте тип DigestedData CMS.
+</p>
+</dd>
+<dt>-digest_verify <a name="cms-_002ddigest_005fverify"></a></dt>
+<dd><p>Проверьте тип CMS DigestedData и выведите содержимое.
+</p>
+</dd>
+<dt>-compress <a name="cms-_002dcompress"></a></dt>
+<dd><p>Создайте тип CMS CompressedData. Чтобы эта опция работала, OpenSSL должен быть
+           скомпилирован с поддержкой zlib, иначе он выдаст ошибку.
+</p>
+</dd>
+<dt>-uncompress <a name="cms-_002duncompress"></a></dt>
+<dd><p>Распакуйте тип CMS CompressedData и выведите содержимое. Чтобы эта опция
+           работала, OpenSSL должен быть скомпилирован с поддержкой zlib, иначе он
+           выдаст ошибку.
+</p>
+</dd>
+<dt>-EncryptedData_encrypt <a name="cms-_002dEncryptedData_005fencrypt"></a></dt>
+<dd><p>Зашифруйте содержимое, используя предоставленный симметричный ключ и алгоритм,
+           используя тип CMS EncryptedData, и выведите содержимое.
+</p>
+</dd>
+<dt>-sign_receipt <a name="cms-_002dsign_005freceipt"></a></dt>
+<dd><p>Генерация и вывод подписанной квитанции за предоставленное сообщение. Входное
+           сообщение должно содержать подписанный запрос на получение. В остальном
+           функциональность аналогична операции -sign.
+</p>
+</dd>
+<dt>-verify_receipt receipt <a name="cms-_002dverify_005freceipt-receipt"></a></dt>
+<dd><p>Проверьте подписанную квитанцию ​​в квитанции имени файла. Входное сообщение
+           должно содержать исходный запрос на получение. В остальном функциональность
+           аналогична операции -verify.
+</p>
+</dd>
+<dt>-in filename <a name="cms-_002din-filename"></a></dt>
+<dd><p>Входное сообщение должно быть зашифровано или подписано или сообщение
+           должно быть расшифровано или проверено.
+</p>
+</dd>
+<dt>-inform SMIME|PEM|DER <a name="cms-_002dinform-SMIME_007cPEM_007cDER"></a></dt>
+<dd><p>Это определяет формат ввода для структуры CMS. По умолчанию используется
+           SMIME, который читает сообщение в формате S/MIME. PEM и формат DER изменяют
+           это, ожидая вместо структуры CMS формата PEM и DER. В настоящее время это
+           влияет только на формат ввода структуры CMS, если структура CMS не вводится
+           (например, с помощью -encrypt или -sign), эта опция не действует.
+</p>
+</dd>
+<dt>-rctform SMIME|PEM|DER <a name="cms-_002drctform-SMIME_007cPEM_007cDER"></a></dt>
+<dd><p>Укажите формат для подписанной квитанции для использования с
+           операцией -receipt_verify.
+</p>
+</dd>
+<dt>-out filename <a name="cms-_002dout-filename"></a></dt>
+<dd><p>Текст сообщения, который был расшифрован или проверен, или выходное сообщение
+           формата MIME, которое было подписано или проверено.
+</p>
+</dd>
+<dt>-outform SMIME|PEM|DER <a name="cms-_002doutform-SMIME_007cPEM_007cDER"></a></dt>
+<dd><p>Это определяет выходной формат для структуры CMS. По умолчанию используется SMIME,
+           который записывает сообщение в формате S/MIME. Формат PEM и DER измените это,
+           чтобы вместо этого записать структуры CMS формата PEM и DER. В настоящее время
+           это влияет только на формат вывода структуры CMS, если структура CMS не выводится
+           (например, с помощью -verify или -decrypt), эта опция не действует.
+</p>
+</dd>
+<dt>-stream -indef -noindef <a name="cms-_002dstream-_002dindef-_002dnoindef"></a></dt>
+<dd><p>Параметры -stream и -indef эквивалентны и позволяют потоковую передачу I/O для
+           операций кодирования. Это позволяет обрабатывать данные за один проход без
+           необходимости хранить все содержимое в памяти, потенциально поддерживая очень
+           большие файлы. Потоковая передача автоматически устанавливается для подписи
+           S/MIME с отсоединенными данными, если выходной формат - SMIME, в настоящее
+           время он отключен по умолчанию для всех других операций.
+</p>
+</dd>
+<dt>-noindef <a name="cms-_002dnoindef"></a></dt>
+<dd><p>Отключите потоковую передачу I/O, где она будет производить кодирование
+           неопределенной длины. Эта опция в настоящее время не имеет никакого эффекта.
+           В будущем потоковая передача будет включена по умолчанию для всех
+           соответствующих операций, и эта опция отключит ее.
+</p>
+</dd>
+<dt>-content filename <a name="cms-_002dcontent-filename"></a></dt>
+<dd><p>Это указывает файл, содержащий отсоединенное содержимое, это полезно только
+           с командой -verify. Это возможно только в том случае, если структура CMS
+           использует отдельную форму подписи, в которую не входит содержимое. Эта опция
+           переопределит любой контент, если формат ввода - S/MIME, и он использует тип
+           контента multipart/signed MIME.
+</p>
+</dd>
+<dt>-text <a name="cms-_002dtext"></a></dt>
+<dd><p>Эта опция добавляет текстовые заголовки (text/plain) MIME к предоставленному
+           сообщению при шифровании или подписании. При расшифровке или проверке он
+           удаляет заголовки текста: если дешифрованное или проверенное сообщение не
+           относится к типу MIME text/plain, то возникает ошибка.
+</p>
+</dd>
+<dt>-noout <a name="cms-_002dnoout"></a></dt>
+<dd><p>Для операции -cmsout не выводите проанализированную структуру CMS. Это полезно
+           в сочетании с опцией -print или если проверяется синтаксис структуры CMS.
+</p>
+</dd>
+<dt>-print <a name="cms-_002dprint"></a></dt>
+<dd><p>Для операции -cmsout распечатайте все поля структуры CMS. Это в основном полезно
+           для тестирования.
+</p>
+</dd>
+<dt>-CAfile file <a name="cms-_002dCAfile-file"></a></dt>
+<dd><p>Файл, содержащий доверенные сертификаты CA, используемый только с -verify.
+</p>
+</dd>
+<dt>-CApath dir <a name="cms-_002dCApath-dir"></a></dt>
+<dd><p>Каталог, содержащий доверенные сертификаты CA, используется только с -verify.
+           Этот каталог должен быть стандартным каталогом сертификатов: то есть хеш
+           каждого имени субъекта (используя x509 -hash) должен быть связан с
+           каждым сертификатом.
+</p>
+</dd>
+<dt>-no-CAfile <a name="cms-_002dno_002dCAfile"></a></dt>
+<dd><p>Не загружайте доверенные сертификаты CA из расположения файла по умолчанию
+</p>
+</dd>
+<dt>-no-CApath <a name="cms-_002dno_002dCApath"></a></dt>
+<dd><p>Не загружайте доверенные сертификаты CA из каталога по умолчанию
+</p>
+</dd>
+<dt>-md digest <a name="cms-_002dmd-digest"></a></dt>
+<dd><p>Дайджест алгоритм для использования при подписании или отставке.
+           Если он отсутствует, будет использован алгоритм дайджеста по
+           умолчанию для ключа подписи (обычно SHA1).
+</p>
+</dd>
+<dt>-cipher <a name="cms-_002dcipher"></a></dt>
+<dd><p>Алгоритм шифрования для использования. Например тройной DES (168 bits)
+           - -des3 или 256 bit AES - -aes256. Любое стандартное имя алгоритма
+           (как используется функцией EVP_get_cipherbyname()) также может быть
+           использовано перед чертой, например, -aes-128-cbc. Смотрите в enc(1)
+           список шифров, поддерживаемых вашей версией OpenSSL.
+</p>
+<p>Если не указано, используется тройной DES. Используется только с
+           командами -encrypt и -EncryptedData_create.
+</p>
+</dd>
+<dt>-nointern <a name="cms-_002dnointern"></a></dt>
+<dd><p>При проверке сообщения обычно проверяются сертификаты (если таковые
+           имеются), включенные в сообщение, для сертификата подписи. С этой
+           опцией используются только сертификаты, указанные в опции -certfile.
+           Однако предоставленные сертификаты могут использоваться как
+           ненадежные CAs.
+</p>
+</dd>
+<dt>-noverify <a name="cms-_002dnoverify"></a></dt>
+<dd><p>Не проверяйте сертификат подписавшего подписанного сообщения.
+</p>
+</dd>
+<dt>-nocerts <a name="cms-_002dnocerts"></a></dt>
+<dd><p>При подписании сообщения сертификат подписывающего лица обычно включается
+           в эту опцию и исключается. Это уменьшит размер подписанного сообщения, но
+           у верификатора должна быть локально доступная копия сертификата подписавшего
+           (например, переданная с использованием опции -certfile).
+</p>
+</dd>
+<dt>-noattr <a name="cms-_002dnoattr"></a></dt>
+<dd><p>Обычно, когда сообщение подписано, включается набор атрибутов, которые
+           включают время подписания и поддерживаемые симметричные алгоритмы. С этой
+           опцией они не включены.
+</p>
+</dd>
+<dt>-nosmimecap <a name="cms-_002dnosmimecap"></a></dt>
+<dd><p>Исключите список поддерживаемых алгоритмов из подписанных атрибутов,
+           другие опции, такие как время подписания и тип контента, все еще включены.
+</p>
+</dd>
+<dt>-binary <a name="cms-_002dbinary"></a></dt>
+<dd><p>Обычно входное сообщение преобразуется в формат &quot;canonical&quot;, который
+           эффективно использует CR и LF в качестве конца строки: как того требует
+           спецификация S/MIME. Когда эта опция присутствует, перевод не происходит.
+           Это полезно при обработке двоичных данных, которые могут быть не в
+           формате MIME.
+</p>
+</dd>
+<dt>-crlfeol <a name="cms-_002dcrlfeol"></a></dt>
+<dd><p>Обычно выходной файл использует один LF в качестве конца строки. Когда
+           эта опция присутствует, вместо нее используется CRLF.
+</p>
+</dd>
+<dt>-asciicrlf <a name="cms-_002dasciicrlf"></a></dt>
+<dd><p>При подписании используйте формат канонизации ASCII CRLF. Это удаляет
+           конечные пробелы из всех строк, удаляет конечные пустые строки в EOF и
+           устанавливает тип инкапсулированного содержимого. Эта опция обычно
+           используется с отдельным контентом и выходным форматом подписи DER. Этот
+           параметр обычно не требуется при проверке, поскольку он включается
+           автоматически, если обнаружен формат инкапсулированного содержимого.
+</p>
+</dd>
+<dt>-nodetach <a name="cms-_002dnodetach"></a></dt>
+<dd><p>При подписании сообщения используйте непрозрачную подпись: эта форма более
+           устойчива к переводу почтовыми ретрансляторами, но не может быть прочитана
+           почтовыми агентами, которые не поддерживают S/MIME. Без этой опции
+           используется подписание открытого текста с типом MIME multipart/signed.
+</p>
+</dd>
+<dt>-certfile file <a name="cms-_002dcertfile-file"></a></dt>
+<dd><p>Позволяет указать дополнительные сертификаты. При подписании они будут
+           включены в сообщение. При проверке их будут искать сертификаты подписавшихся.
+           Сертификаты должны быть в формате PEM.
+</p>
+</dd>
+<dt>-certsout file <a name="cms-_002dcertsout-file"></a></dt>
+<dd><p>Все сертификаты, содержащиеся в сообщении, записываются в файл.
+</p>
+</dd>
+<dt>-signer file <a name="cms-_002dsigner-file"></a></dt>
+<dd><p>Сертификат подписи при подписании или отставке сообщения, этот параметр можно
+           использовать несколько раз, если требуется более одного подписывающего лица.
+           Если сообщение проверяется, сертификаты подписывающих будут записаны в этот файл,
+           если проверка прошла успешно.
+</p>
+</dd>
+<dt>-recip file <a name="cms-_002drecip-file"></a></dt>
+<dd><p>При расшифровке сообщения указывается сертификат получателя. Сертификат должен
+           соответствовать одному из получателей сообщения, иначе возникает ошибка.
+</p>
+<p>При шифровании сообщения эта опция может использоваться несколько раз для
+           указания каждого получателя. Эта форма должна использоваться, если требуются
+           настраиваемые параметры (например, для указания RSA-OAEP).
+</p>
+<p>Эта опция поддерживает только сертификаты, содержащие ключи RSA, Diffie-Hellman или EC.
+</p>
+</dd>
+<dt>-keyid <a name="cms-_002dkeyid"></a></dt>
+<dd><p>Используйте идентификатор ключа субъекта для идентификации сертификатов
+           вместо имени эмитента и серийного номера. Поставляемый сертификат
+           должен включать расширение идентификатора ключа субъекта.
+           Поддерживается опциями -sign и -encrypt.
+</p>
+</dd>
+<dt>[-receipt_request_all] [-receipt_request_first] <a name="cms-_005b_002dreceipt_005frequest_005fall_005d-_005b_002dreceipt_005frequest_005ffirst_005d"></a></dt>
+<dd><p>Для опции -sign включите подписанный запрос на получение. Укажите, что
+           запросы должны предоставляться всеми получателями или получателями
+           первого уровня (теми, которые отправлены по почте напрямую, а не из
+           списка рассылки). Проигнорировать это, включить-receipt_request_from.
+</p>
+</dd>
+<dt>-receipt_request_from emailaddress <a name="cms-_002dreceipt_005frequest_005ffrom-emailaddress"></a></dt>
+<dd><p>Для опции -sign включите подписанный запрос на получение. Добавьте явный
+           адрес электронной почты, где должны быть предоставлены квитанции.
+</p>
+</dd>
+<dt>-receipt_request_to emailaddress <a name="cms-_002dreceipt_005frequest_005fto-emailaddress"></a></dt>
+<dd><p>Добавьте явный адрес электронной почты, на который должны быть
+           отправлены подписанные квитанции. Эта опция должна, но предоставляется, если
+           подписанный чек запрашивается.
+</p>
+</dd>
+<dt>-receipt_request_print <a name="cms-_002dreceipt_005frequest_005fprint"></a></dt>
+<dd><p>Для операции -verify распечатайте содержимое любых подписанных запросов
+           на получение.
+</p>
+</dd>
+<dt>-secretkey key <a name="cms-_002dsecretkey-key"></a></dt>
+<dd><p>Укажите симметричный ключ для использования. Ключ должен быть предоставлен
+           в шестнадцатеричном формате и соответствовать используемому алгоритму.
+           Поддерживается параметрами -EncryptedData_encrypt -EncryptedData_decrypt,
+           -encrypt и -decrypt. При использовании с -encrypt или -decrypt предоставленный
+           ключ используется для упаковки или разворачивания ключа шифрования содержимого
+           с использованием ключа AES типа KEKRecipientInfo.
+</p>
+</dd>
+<dt>-secretkeyid id <a name="cms-_002dsecretkeyid-id"></a></dt>
+<dd><p>Идентификатор ключа для предоставленного симметричного ключа для типа
+           KEKRecipientInfo. Эта опция должна присутствовать, если опция -secretkey
+           используется с -encrypt. В операциях -decrypt идентификатор используется
+           для определения местоположения соответствующего ключа, если он не указан,
+           тогда делается попытка расшифровать любые структуры KEKRecipientInfo.
+</p>
+</dd>
+<dt>-econtent_type type <a name="cms-_002decontent_005ftype-type"></a></dt>
+<dd><p>Установите тип инкапсулированного содержимого, если он не указан, используется
+           тип данных. Аргументом типа может быть любое допустимое имя OID в текстовом или
+           числовом формате.
+</p>
+</dd>
+<dt>-inkey file <a name="cms-_002dinkey-file"></a></dt>
+<dd><p>Закрытый ключ для использования при подписании или расшифровке. Это должно
+           соответствовать соответствующему сертификату. Если эта опция не указана, то
+           закрытый ключ должен быть включен в файл сертификата, указанный в файле -recip
+           или -signer. При подписании эту опцию можно использовать несколько раз для
+           указания последовательных ключей.
+</p>
+</dd>
+<dt>-keyopt name:opt <a name="cms-_002dkeyopt-name_003aopt"></a></dt>
+<dd><p>Для подписи и шифрования эту опцию можно использовать несколько раз,
+           чтобы установить индивидуальные параметры для предыдущего ключа или
+           сертификата. В настоящее время его можно использовать для установки
+           RSA-PSS для подписи, RSA-OAEP для шифрования или для изменения
+           параметров по умолчанию для ECDH.
+</p>
+</dd>
+<dt>-passin arg <a name="cms-_002dpassin-arg"></a></dt>
+<dd><p>Источник пароля закрытого ключа. Для получения дополнительной
+           информации о формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl.
+</p>
+</dd>
+<dt>-rand file... <a name="cms-_002drand-file_002e_002e_002e"></a></dt>
+<dd><p>Файл или файлы, содержащие случайные данные, используемые для заполнения
+           генератора случайных чисел. Можно указать несколько файлов, разделенных
+           символом, зависящим от ОС.  Разделитель &rsquo;;&rsquo; для MS-Windows, &rsquo;,&rsquo; для
+           OpenVMS, и &rsquo;:&rsquo; для остальных.
+</p>
+</dd>
+<dt>[-writerand file] <a name="cms-_005b_002dwriterand-file_005d"></a></dt>
+<dd><p>Записывает случайные данные в указанный файл при выходе. Это может быть
+           использовано с последующим -rand флагом.
+</p>
+</dd>
+<dt>cert.pem... <a name="cms-cert_002epem_002e_002e_002e"></a></dt>
+<dd><p>Один или несколько сертификатов получателей сообщения:
+           используется при шифровании сообщения.
+</p>
+</dd>
+<dt>-to, -from, -subject <a name="cms-_002dto_002c-_002dfrom_002c-_002dsubject"></a></dt>
+<dd><p>Соответствующие заголовки почты. Они включены за пределы подписанной
+           части сообщения, поэтому они могут быть включены вручную. При
+           подписании многие почтовые клиенты S/MIME проверяют, совпадают
+           ли адреса электронной почты сертификата подписчиков с адресом From :.
+</p>
+<p>[-attime] [-check_ss_sig] [-crl_check] [-crl_check_all] [-explicit_policy] [-extended_crl] [-ignore_critical] [-inhibit_any] [-inhibit_map] [-no_alt_chains] [-no_check_time] [-partial_chain] [-policy] [-policy_check] [-policy_print] [-purpose] [-suiteB_128] [-suiteB_128_only] [-suiteB_192] [-trusted_first] [-use_deltas] [-auth_level] [-verify_depth] [-verify_email] [-verify_hostname] [-verify_ip] [-verify_name] [-x509_strict] <a name="cms-_005b_002dattime_005d-_005b_002dcheck_005fss_005fsig_005d-_005b_002dcrl_005fcheck_005d-_005b_002dcrl_005fcheck_005fall_005d-_005b_002dexplicit_005fpolicy_005d-_005b_002dextended_005fcrl_005d-_005b_002dignore_005fcritical_005d-_005b_002dinhibit_005fany_005d-_005b_002dinhibit_005fmap_005d-_005b_002dno_005falt_005fchains_005d-_005b_002dno_005fcheck_005ftime_005d-_005b_002dpartial_005fchain_005d-_005b_002dpolicy_005d-_005b_002dpolicy_005fcheck_005d-_005b_002dpolicy_005fprint_005d-_005b_002dpurpose_005d-_005b_002dsuiteB_005f128_005d-_005b_002dsuiteB_005f128_005fonly_005d-_005b_002dsuiteB_005f192_005d-_005b_002dtrusted_005ffirst_005d-_005b_002duse_005fdeltas_005d-_005b_002dauth_005flevel_005d-_005b_002dverify_005fdepth_005d-_005b_002dverify_005femail_005d-_005b_002dverify_005fhostname_005d-_005b_002dverify_005fip_005d-_005b_002dverify_005fname_005d-_005b_002dx509_005fstrict_005d"></a>           Установите различные параметры проверки цепочки сертификатов. Смотрите
+           страницу руководства verify(1) для подробностей.
+</p></dd>
+</dl>
+</dd>
+<dt>NOTES</dt>
+<dd><p>Сообщение MIME должно быть отправлено без каких-либо пустых строк
+       между заголовками и выходными данными. Некоторые почтовые программы
+       автоматически добавляют пустую строку. Отправка почты напрямую в
+       sendmail - один из способов достижения правильного формата.
+</p>
+<p>Поставляемое сообщение, которое должно быть подписано или зашифровано,
+       должно включать необходимые заголовки MIME, иначе многие клиенты S/MIME
+       не будут отображать его должным образом (если вообще будут). Вы можете
+       использовать опцию -text для автоматического добавления заголовков
+       простого текста.
+</p>
+<p>Сообщение &quot;signed and encrypted&quot; - это сообщение, в котором подписанное
+       сообщение затем шифруется. Это может быть сделано путем шифрования уже
+       подписанного сообщения: см. Раздел примеров.
+</p>
+<p>Эта версия программы позволяет только одного подписавшего на сообщение,
+       но она будет проверять нескольких подписчиков на полученных сообщениях.
+       Некоторые клиенты S/MIME задыхаются, если сообщение содержит несколько
+       подписчиков. Можно подписывать сообщения &quot;in parallel&quot;, подписав
+       уже подписанное сообщение.
+</p>
+<p>Параметры -encrypt и -decrypt отражают обычное использование в клиентах
+       S/MIME. Строго говоря, они обрабатывают данные в оболочке CMS:
+       зашифрованные данные CMS используются для других целей.
+</p>
+<p>Опция -resign использует существующий дайджест сообщения при добавлении
+       нового подписавшего. Это означает, что атрибуты должны присутствовать по
+       крайней мере в одном существующем подписывающем лице, использующем тот
+       же дайджест сообщения, иначе эта операция завершится неудачно.
+</p>
+<p>Параметры -stream и -indef включают потоковую поддержку I/O. В
+       результате кодирование происходит в BER с использованием созданного
+       кодирования неопределенной длины, а не в DER. Потоковая передача
+       поддерживается для операции -encrypt и операции -sign, если
+       содержимое не отсоединено.
+</p>
+<p>Потоковая передача всегда используется для операции -sign с
+       отсоединенными данными, но, поскольку контент больше не является
+       частью структуры CMS, кодировка остается DER.
+</p>
+<p>Если опция -decrypt используется без сертификата получателя, то
+       делается попытка определить местонахождение получателя, попробовав
+       каждого потенциального получателя по очереди, используя
+       предоставленный закрытый ключ. Чтобы предотвратить атаку MMA (атака
+       Блейхенбахера на заполнение PKCS #1 v1.5 RSA), все получатели
+       проверяются, и если ни один из получателей не соответствует
+       сообщению, это &quot;decrypted&quot; с использованием случайного ключа,
+       который обычно выводит мусор. Опцию -debug_decrypt можно использовать
+       для отключения защиты от атаки MMA и возврата ошибки, если не
+       удается найти получателя: эту опцию следует использовать с
+       осторожностью. Для более полного
+       описания см. CMS_decrypt).
+</p>
+</dd>
+<dt>EXIT CODES</dt>
+<dd><div class="display">
+<pre class="display">       0   Операция прошла полностью успешно.
+
+       1   Произошла ошибка при разборе параметров команды.
+
+       2   Один из входных файлов не может быть прочитан.
+
+       3   Произошла ошибка при создании файла CMS или при чтении сообщения MIME.
+
+       4   Произошла ошибка при расшифровке или проверке сообщения.
+
+       5   Сообщение было проверено правильно, но при записи сертификатов
+       подписавших произошла ошибка.
+</pre></div>
+</dd>
+<dt>COMPATIBILITY WITH PKCS#7 format.</dt>
+<dd><p>Утилита smime может обрабатывать только старый формат PKCS#7. Утилита cms
+       поддерживает формат синтаксиса криптографических сообщений. Использование
+       некоторых функций приведет к сообщениям, которые не могут быть обработаны
+       приложениями, которые поддерживают только старый формат. Это подробно
+       описано ниже.
+</p>
+<p>Использование опции -keyid с -sign или -encrypt.
+</p>
+<p>Опция -outform PEM использует разные заголовки.
+</p>
+<p>Опция -compress.
+</p>
+<p>Опция -secretkey при использовании с -encrypt.
+</p>
+<p>Использование PSS с -sign.
+</p>
+<p>Использование ключей OAEP или non-RSA с помощью -encrypt.
+</p>
+<p>Кроме того, тип -EncryptedData_create и -data_create не может
+       быть обработан более старой командой smime.
+</p>
+</dd>
+<dt>EXAMPLES</dt>
+<dd><div class="display">
+<pre class="display">       Создать текстовое подписанное сообщение:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem
+
+       Создать непрозрачное подписанное сообщение
+
+        openssl cms -sign -in message.txt -text -out mail.msg -nodetach \
+               -signer mycert.pem
+
+       Создайте подписанное сообщение, добавьте несколько дополнительных
+       сертификатов и прочитайте закрытый ключ из другого файла:
+
+        openssl cms -sign -in in.txt -text -out mail.msg \
+               -signer mycert.pem -inkey mykey.pem -certfile mycerts.pem
+
+       Создайте подписанное сообщение с двумя подписавшими, используйте
+       идентификатор ключа:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem -signer othercert.pem -keyid
+
+       Отправьте подписанное сообщение под Unix напрямую в sendmail,
+       включая заголовки:
+
+        openssl cms -sign -in in.txt -text -signer mycert.pem \
+               -from steve@openssl.org -to someone@somewhere \
+               -subject &quot;Signed message&quot; | sendmail someone@somewhere
+
+       Проверьте сообщение и извлеките сертификат подписавшего в
+       случае успеха:
+
+        openssl cms -verify -in mail.msg -signer user.pem -out signedtext.txt
+
+       Отправить зашифрованную почту, используя тройной DES:
+
+        openssl cms -encrypt -in in.txt -from steve@openssl.org \
+               -to someone@somewhere -subject &quot;Encrypted message&quot; \
+               -des3 user.pem -out mail.msg
+
+       Подпишите и зашифруйте почту:
+
+        openssl cms -sign -in ml.txt -signer my.pem -text \
+               | openssl cms -encrypt -out mail.msg \
+               -from steve@openssl.org -to someone@somewhere \
+               -subject &quot;Signed and Encrypted message&quot; -des3 user.pem
+
+       Примечание. Команда шифрования не включает параметр -text, поскольку
+       зашифрованное сообщение уже имеет заголовки MIME.
+
+       Расшифровать почту:
+
+        openssl cms -decrypt -in mail.msg -recip mycert.pem -inkey key.pem
+
+       Вывод из подписи формы Netscape представляет собой структуру PKCS#7
+       с отдельным форматом подписи. Вы можете использовать эту программу
+       для проверки подписи строкой, оборачивая закодированную структуру
+       base64 и окружая ее:
+
+        &mdash;&ndash;BEGIN PKCS7&mdash;&ndash;
+        &mdash;&ndash;END PKCS7&mdash;&ndash;
+
+       и с помощью команды,
+
+        openssl cms -verify -inform PEM -in signature.pem -content content.txt
+
+       в качестве альтернативы вы можете base64 декодировать подпись и использовать
+
+        openssl cms -verify -inform DER -in signature.der -content content.txt
+
+       Создайте зашифрованное сообщение, используя 128-битный Camellia:
+
+        openssl cms -encrypt -in plain.txt -camellia128 -out mail.msg cert.pem
+
+       Добавить подписанта в существующее сообщение:
+
+        openssl cms -resign -in mail.msg -signer newsign.pem -out mail2.msg
+
+       Подпишите почту используя RSA-PSS:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem -keyopt rsa_padding_mode:pss
+
+       Создать зашифрованную почту, используя RSA-OAEP:
+
+        openssl cms -encrypt -in plain.txt -out mail.msg \
+               -recip cert.pem -keyopt rsa_padding_mode:oaep
+
+       Используйте SHA256 KDF с сертификатом ECDH:
+
+        openssl cms -encrypt -in plain.txt -out mail.msg \
+               -recip ecdhcert.pem -keyopt ecdh_kdf_md:sha256
+</pre></div>
+</dd>
+<dt>BUGS</dt>
+<dd><p>Синтаксический анализатор MIME не очень умен: он, кажется,
+       обрабатывает большинство сообщений, которые я на него
+       бросил, но может задушить другие.
+</p>
+<p>В настоящее время код будет записывать только сертификат
+       подписавшего в файл: если подписчик имеет отдельный
+       сертификат шифрования, его необходимо извлечь вручную.
+       Должна быть какая-то эвристика, которая определяет
+       правильный сертификат шифрования.
+</p>
+<p>В идеале должна поддерживаться база данных сертификатов для
+       каждого адреса электронной почты.
+</p>
+<p>В настоящее время в коде не учитываются разрешенные алгоритмы
+       симметричного шифрования, указанные в подписанном атрибуте
+       SMIMECapabilities. это означает, что пользователь должен
+       вручную включить правильный алгоритм шифрования. Он должен
+       хранить список разрешенных шифров в базе данных и
+       использовать только их.
+</p>
+<p>Проверка сертификата подписи не производится.
+</p>
+</dd>
+<dt>HISTORY</dt>
+<dd><div class="display">
+<pre class="display">       Использование нескольких параметров -signer и команды -resign
+       были впервые добавлены в OpenSSL 1.0.0.
+
+       Опция keyopt была впервые добавлена ​​в OpenSSL 1.0.2.
+
+       Поддержка RSA-OAEP и RSA-PSS была впервые добавлена ​​в OpenSSL 1.0.2.
+
+       Использование ключей non-RSA с -encrypt и -decrypt было впервые
+       добавлено в OpenSSL 1.0.2.
+
+       Параметры -no_alt_chains были впервые добавлены в OpenSSL 1.0.2b.
+</pre></div>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2008-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use this file except in
+       compliance with the License.  You can obtain a copy in the file LICENSE in the source
+       distribution or at &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                                      2018-11-20                                      CMS(1)
+</p><hr>
+<a name="CRL"></a>
+<div class="header">
+<p>
+Next: <a href="#CRL2PKCS7" accesskey="n" rel="next">CRL2PKCS7</a>, Previous: <a href="#CMS" accesskey="p" rel="prev">CMS</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="CRL-1"></a>
+<h2 class="chapter">11 CRL</h2>
+<dl compact="compact">
+<dt>NAME</dt>
+<dd><p>openssl-crl, crl - CRL утилита
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>openssl crl [<a href="#crl-_002dhelp">-help</a>] [<a href="#crl-_002dinform-DER_007cPEM">-inform DER|PEM</a>] [<a href="#crl-_002doutform-DER_007cPEM">-outform DER|PEM</a>] [<a href="#crl-_002dtext">-text</a>] [<a href="#crl-_002din-filename">-in filename</a>] [<a href="#crl-_002dout-filename">-out filename</a>] [<a href="#crl-_002dnameopt-option">-nameopt option</a>] [<a href="#crl-_002dnoout">-noout</a>] [<a href="#crl-_002dhash">-hash</a>] [<a href="#crl-_002dhash_005fold">-hash_old</a>] [<a href="#crl-_002dissuer">-issuer</a>] [<a href="#crl-_002dlastupdate">-lastupdate</a>] [<a href="#crl-_002dnextupdate">-nextupdate</a>] [<a href="#crl-_002dCAfile-file">-CAfile file</a>] [<a href="#crl-_002dCApath-dir">-CApath dir</a>]
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Команда crl обрабатывает файлы CRL в формате DER или PEM.
+</p>
+</dd>
+<dt>OPTIONS</dt>
+<dd><dl compact="compact">
+<dt>-help <a name="crl-_002dhelp"></a></dt>
+<dd><p>Распечатайте сообщение об использовании.
+</p>
+</dd>
+<dt>-inform DER|PEM <a name="crl-_002dinform-DER_007cPEM"></a></dt>
+<dd><p>Это определяет формат ввода. Формат DER является структурой DER в кодировке CRL. PEM
+           (по умолчанию) - это кодированная в base64 версия формы DER с верхним и нижним
+           колонтитулами.
+</p>
+</dd>
+<dt>-outform DER|PEM <a name="crl-_002doutform-DER_007cPEM"></a></dt>
+<dd><p>Это определяет формат вывода, параметры имеют то же значение и значение по умолчанию,
+           что и опция -inform.
+</p>
+</dd>
+<dt>-in filename <a name="crl-_002din-filename"></a></dt>
+<dd><p>Здесь указывается имя файла для чтения или стандартный ввод, если эта опция
+           не указана.
+</p>
+</dd>
+<dt>-out filename <a name="crl-_002dout-filename"></a></dt>
+<dd><p>Задает имя выходного файла для записи или стандартный вывод по умолчанию.
+</p>
+</dd>
+<dt>-text <a name="crl-_002dtext"></a></dt>
+<dd><p>Распечатайте CRL в текстовом виде.
+</p>
+</dd>
+<dt>-nameopt option <a name="crl-_002dnameopt-option"></a></dt>
+<dd><p>Опция, которая определяет, как отображаются имена субъекта или эмитента. Смотрите
+           описание -nameopt в x509.
+</p>
+</dd>
+<dt>-noout <a name="crl-_002dnoout"></a></dt>
+<dd><p>Не выводите закодированную версию CRL.
+</p>
+</dd>
+<dt>-hash <a name="crl-_002dhash"></a></dt>
+<dd><p>Выведите хеш имени эмитента. Это можно использовать для поиска CRL в каталоге
+           по имени эмитента.
+</p>
+</dd>
+<dt>-hash_old <a name="crl-_002dhash_005fold"></a></dt>
+<dd><p>Выводит &quot;hash&quot; имени эмитента CRL, используя более старый алгоритм, который
+           использовался OpenSSL до версии 1.0.0.
+</p>
+</dd>
+<dt>-issuer <a name="crl-_002dissuer"></a></dt>
+<dd><p>Выведите имя эмитента.
+</p>
+</dd>
+<dt>-lastupdate <a name="crl-_002dlastupdate"></a></dt>
+<dd><p>Выведите поле lastUpdate.
+</p>
+</dd>
+<dt>-nextupdate <a name="crl-_002dnextupdate"></a></dt>
+<dd><p>Выведите поле nextUpdate.
+</p>
+</dd>
+<dt>-CAfile file <a name="crl-_002dCAfile-file"></a></dt>
+<dd><p>Проверьте подпись на CRL, просмотрев сертификат выдачи в файле.
+</p>
+</dd>
+<dt>-CApath dir <a name="crl-_002dCApath-dir"></a></dt>
+<dd><p>Проверьте подпись на CRL, просмотрев сертификат выдачи в dir. Этот каталог
+           должен быть стандартным каталогом сертификатов: то есть хэш каждого имени
+           субъекта (с использованием x509 -hash) должен быть связан с каждым
+           сертификатом.
+</p></dd>
+</dl>
+</dd>
+<dt>NOTES</dt>
+<dd><p>Формат PEM CRL использует строки верхнего и нижнего колонтитула:
+</p>
+<p>&mdash;&ndash;BEGIN X509 CRL&mdash;&ndash;
+        &mdash;&ndash;END X509 CRL&mdash;&ndash;
+</p>
+</dd>
+<dt>EXAMPLES</dt>
+<dd><p>Преобразуйте файл CRL из PEM в DER:
+</p>
+<p>openssl crl -in crl.pem -outform DER -out crl.der
+</p>
+<p>Выведите текстовую форму сертификата в кодировке DER:
+</p>
+<p>openssl crl -in crl.der -inform DER -text -noout
+</p>
+</dd>
+<dt>BUGS</dt>
+<dd><p>В идеале должно быть возможно создать CRL, используя
+       соответствующие параметры и файлы.
+</p>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>crl2pkcs7(1), ca(1), x509(1)
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use this file except in
+       compliance with the License.  You can obtain a copy in the file LICENSE in the source
+       distribution or at &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                                        2018-11-20                                        CRL(1)
+</p><hr>
+<a name="CRL2PKCS7"></a>
+<div class="header">
+<p>
+Next: <a href="#STOREUTL" accesskey="n" rel="next">STOREUTL</a>, Previous: <a href="#CRL" accesskey="p" rel="prev">CRL</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="CRL2PKCS7-1"></a>
+<h2 class="chapter">12 CRL2PKCS7</h2>
+<dl compact="compact">
+<dt>NAME</dt>
+<dd><p>openssl-crl2pkcs7, crl2pkcs7 - Создайте структуру PKCS#7 из CRL и сертификатов
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>openssl crl2pkcs7 [<a href="#manCrl2pkcs7-_002dhelp">-help</a>] [<a href="#manCrl2pkcs7-_002dinform-DER_007cPEM">-inform DER|PEM</a>] [<a href="#manCrl2pkcs7-_002doutform-DER_007cPEM">-outform DER|PEM</a>] [<a href="#manCrl2pkcs7-_002din-filename">-in filename</a>] [<a href="#manCrl2pkcs7-_002dout-filename">-out filename</a>] [<a href="#manCrl2pkcs7-_002dcertfile-filename">-certfile filename</a>] [<a href="#manCrl2pkcs7-_002dnocrl">-nocrl</a>]
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Команда crl2pkcs7 принимает необязательные сертификаты CRL и один или несколько
+       сертификатов и преобразует их в вырожденную структуру PKCS#7 &quot;certificates only&quot;.
+</p>
+</dd>
+<dt>OPTIONS</dt>
+<dd><dl compact="compact">
+<dt>-help <a name="manCrl2pkcs7-_002dhelp"></a></dt>
+<dd><p>Распечатайте сообщение об использовании.
+</p>
+</dd>
+<dt>-inform DER|PEM <a name="manCrl2pkcs7-_002dinform-DER_007cPEM"></a></dt>
+<dd><p>Это определяет формат ввода CRL. Формат DER - в кодировке DER Структура CRL .
+           PEM (по умолчанию) - это кодированная в base64 версия формы DER со строками
+           верхнего и нижнего колонтитула. Формат по умолчанию - PEM.
+</p>
+</dd>
+<dt>-outform DER|PEM <a name="manCrl2pkcs7-_002doutform-DER_007cPEM"></a></dt>
+<dd><p>Это определяет формат вывода структуры PKCS#7. Формат DER в кодировке DER PKCS#7
+           structure.PEM (по умолчанию) - это кодированная в формате base64 версия формы
+           DER с линиями верхнего и нижнего колонтитула. Формат по умолчанию - PEM.
+</p>
+</dd>
+<dt>-in filename <a name="manCrl2pkcs7-_002din-filename"></a></dt>
+<dd><p>Здесь указывается имя входного файла для чтения CRL или стандартного ввода,
+           если эта опция не указана.
+</p>
+</dd>
+<dt>-out filename <a name="manCrl2pkcs7-_002dout-filename"></a></dt>
+<dd><p>Указывает имя выходного файла для записи структуры PKCS#7 или стандартного
+           вывода по умолчанию.
+</p>
+</dd>
+<dt>-certfile filename <a name="manCrl2pkcs7-_002dcertfile-filename"></a></dt>
+<dd><p>Указывает имя файла, содержащее один или несколько сертификатов в формате PEM.
+           Все сертификаты в файле будут добавлены в структуру PKCS#7. Эта опция может
+           использоваться более одного раза для чтения сертификатов из нескольких файлов.
+</p>
+</dd>
+<dt>-nocrl <a name="manCrl2pkcs7-_002dnocrl"></a></dt>
+<dd><p>Обычно CRL включается в выходной файл. С этой опцией CRL не включается в выходной
+           файл, а CRL не читается из входного файла.
+</p></dd>
+</dl>
+
+</dd>
+<dt>EXAMPLES</dt>
+<dd><div class="display">
+<pre class="display">       Создайте структуру PKCS#7 из сертификата и CRL:
+
+        openssl crl2pkcs7 -in crl.pem -certfile cert.pem -out p7.pem
+
+       Создает структуру PKCS#7 в формате DER без CRL из нескольких разных сертификатов:
+
+        openssl crl2pkcs7 -nocrl -certfile newcert.pem
+               -certfile demoCA/cacert.pem -outform DER -out p7.der
+</pre></div>
+</dd>
+<dt>NOTES</dt>
+<dd>
+<p>Выходной файл представляет собой подписанную PKCS#7 структуру данных, не содержащую
+       подписчиков, а только сертификаты и необязательный CRL.
+</p>
+<p>Эта утилита может использоваться для отправки сертификатов и CAs в Netscape как часть
+       процесса регистрации сертификатов. Это включает в себя отправку кодированного вывода
+       DER как MIME типа application/x-x509-user-cert.
+</p>
+<p>Форма в кодировке PEM с удаленными линиями верхнего и нижнего колонтитула может
+       использоваться для установки пользовательских сертификатов и CA в MSIE с
+       использованием элемента управления Xenroll.
+</p>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>pkcs7(1)
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use this file except in
+       compliance with the License.  You can obtain a copy in the file LICENSE in the source
+       distribution or at &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                                        2018-11-20                                  CRL2PKCS7(1)
+</p><hr>
+<a name="STOREUTL"></a>
+<div class="header">
+<p>
+Next: <a href="#SSL_005fCONNECT" accesskey="n" rel="next">SSL_CONNECT</a>, Previous: <a href="#CRL2PKCS7" accesskey="p" rel="prev">CRL2PKCS7</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="STOREUTL-1"></a>
+<h2 class="chapter">13 STOREUTL</h2>
+<dl compact="compact">
+<dt>NAME</dt>
+<dd><p>openssl-storeutl, storeutl - STORE утилита
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>openssl storeutl [<a href="#manSTOREUTL-_002dhelp">-help</a>] [<a href="#manSTOREUTL-_002dout-filename">-out filename</a>] [<a href="#manSTOREUTL-_002dnoout">-noout</a>] [<a href="#manSTOREUTL-_002dpassin-arg">-passin arg</a>] [<a href="#manSTOREUTL-_002dtext">-text</a>] [<a href="#manSTOREUTL-_002dengine-id">-engine id</a>] [<a href="#manSTOREUTL-_002dr">-r</a>] [<a href="#manSTOREUTL-_005b_002dcerts_005d-_005b_002dkeys_005d-_005b_002dcrls_005d">[-certs] [-keys] [-crls]</a>] [<a href="#manSTOREUTL-_002dsubject-arg">-subject arg</a>] [<a href="#manSTOREUTL-_005b_002dissuer-arg_005d-_005b_002dserial-arg_005d">[-issuer arg] [-serial arg]</a>] [<a href="#manSTOREUTL-_002dalias-arg">-alias arg</a>] [<a href="#manSTOREUTL-_002dfingerprint-arg">-fingerprint arg</a>] [<a href="#manSTOREUTL-_002ddigest">-digest</a>] uri ...
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>Команда storeutl может использоваться для отображения содержимого
+       (после дешифрования, в зависимости от случая), извлеченного из
+       заданного URI.
+</p>
+</dd>
+<dt>OPTIONS</dt>
+<dd><dl compact="compact">
+<dt>-help <a name="manSTOREUTL-_002dhelp"></a></dt>
+<dd><p>Распечатайте сообщение об использовании.
+</p>
+</dd>
+<dt>-out filename <a name="manSTOREUTL-_002dout-filename"></a></dt>
+<dd><p>задает имя выходного файла для записи или стандартный вывод
+           по умолчанию.
+</p>
+</dd>
+<dt>-noout <a name="manSTOREUTL-_002dnoout"></a></dt>
+<dd><p>эта опция предотвращает вывод данных PEM.
+</p>
+</dd>
+<dt>-passin arg <a name="manSTOREUTL-_002dpassin-arg"></a></dt>
+<dd><p>ключевой источник пароля. Для получения дополнительной информации
+           о формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl(1).
+</p>
+</dd>
+<dt>-text <a name="manSTOREUTL-_002dtext"></a></dt>
+<dd><p>Распечатывает объекты в текстовой форме, аналогично выводу -text
+           из openssl x509, openssl pkey, и т.п.
+</p>
+</dd>
+<dt>-engine id <a name="manSTOREUTL-_002dengine-id"></a></dt>
+<dd><p>указание механизма (по его уникальной строке идентификатора) приведет
+           к тому, что storeutl попытается получить функциональную ссылку на
+           указанный механизм, тем самым инициализируя его при необходимости.
+           Движок будет установлен по умолчанию для всех доступных алгоритмов.
+</p>
+</dd>
+<dt>-r <a name="manSTOREUTL-_002dr"></a></dt>
+<dd><p>Получить объекты рекурсивно, когда это возможно.
+</p>
+</dd>
+<dt>[-certs] [-keys] [-crls] <a name="manSTOREUTL-_005b_002dcerts_005d-_005b_002dkeys_005d-_005b_002dcrls_005d"></a></dt>
+<dd><p>Выбирайте только сертификаты, ключи или CRLs из данного URI. Однако,
+           если этот URI вернет набор имен (URIs), они всегда будут возвращены.
+</p>
+</dd>
+<dt>-subject arg <a name="manSTOREUTL-_002dsubject-arg"></a></dt>
+<dd><p>Поиск объекта с именем субъекта arg. Аргумент должен быть отформатирован
+           как /type0=value0/type1=value1/type2=.... Символы ключевых слов могут
+           быть экранированы \ (обратный флеш), и пробел сохраняется. Пустые
+           значения разрешены, но игнорируются при поиске. То есть поиск с пустым
+           значением будет иметь тот же эффект, что и отсутствие указания типа вообще.
+</p>
+</dd>
+<dt>[-issuer arg] [-serial arg] <a name="manSTOREUTL-_005b_002dissuer-arg_005d-_005b_002dserial-arg_005d"></a></dt>
+<dd><p>Поиск объекта с указанным именем эмитента и серийным номером. Эти два
+           варианта должны использоваться вместе. Аргумент издателя должен быть
+           отформатирован как /type0=value0/type1=value1/type2=..., символы могут
+           быть экранированы \ (обратная косая черта), пробелы не пропускаются.
+           Серийный аргумент может быть указан как десятичное или шестнадцатеричное
+           значение, если ему предшествует 0x.
+</p>
+</dd>
+<dt>-alias arg <a name="manSTOREUTL-_002dalias-arg"></a></dt>
+<dd><p>Поиск объекта с указанным псевдонимом.
+</p>
+</dd>
+<dt>-fingerprint arg <a name="manSTOREUTL-_002dfingerprint-arg"></a></dt>
+<dd><p>Поиск объекта, имеющего данный отпечаток.
+</p>
+</dd>
+<dt>-digest <a name="manSTOREUTL-_002ddigest"></a></dt>
+<dd><p>Дайджест, который использовался для вычисления 
+           -fingerprint.
+</p></dd>
+</dl>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>openssl(1)
+</p>
+</dd>
+<dt>HISTORY</dt>
+<dd><p>openssl storeutl was added to OpenSSL 1.1.1.
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2016-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                            2018-11-20                       STOREUTL(1)
+</p><hr>
+<a name="SSL_005fCONNECT"></a>
+<div class="header">
+<p>
+Next: <a href="#g_t_0418_043d_0441_0442_0440_0443_043a_0446_0438_044f" accesskey="n" rel="next">Инструкция</a>, Previous: <a href="#STOREUTL" accesskey="p" rel="prev">STOREUTL</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="SSL_005fCONNECT-1"></a>
+<h2 class="chapter">14 SSL_CONNECT</h2>
+<dl compact="compact">
+<dt>NAME</dt>
+<dd><p>SSL_connect - инициировать рукопожатие TLS/SSL с сервером TLS/SSL
+</p>
+</dd>
+<dt>SYNOPSIS</dt>
+<dd><p>#include &lt;openssl/ssl.h&gt;
+</p>
+<p>int SSL_connect(SSL *ssl);
+</p>
+</dd>
+<dt>DESCRIPTION</dt>
+<dd><p>SSL_connect() инициирует рукопожатие TLS/SSL с сервером. Канал связи уже
+       должен быть установлен и назначен для ssl путем установки базового BIO.
+</p>
+</dd>
+<dt>NOTES</dt>
+<dd><p>Поведение SSL_connect() зависит от лежащего в основе BIO.
+</p>
+<p>Если лежащий в основе BIO является блокирующим, SSL_connect()
+       вернется только после того, как рукопожатие закончено или
+       произошла ошибка.
+</p>
+<p>Если базовый BIO является неблокирующим, SSL_connect() также
+       вернется, когда базовый BIO не сможет удовлетворить потребности
+       SSL_connect() в продолжении рукопожатия, что указывает на
+       проблему с помощью возвращаемого значения -1. В этом случае
+       вызов SSL_get_error() с возвращаемым значением SSL_connect()
+       приведет к SSL_ERROR_WANT_READ или SSL_ERROR_WANT_WRITE. Затем
+       вызывающий процесс должен повторить вызов после принятия
+       соответствующих действий для удовлетворения потребностей
+       SSL_connect(). Действие зависит от лежащего в основе BIO. При
+       использовании гнезда non-blocking ничего не нужно делать, но
+       можно использовать select() для проверки требуемого условия.
+       При использовании буферизации BIO, например пары BIO, данные
+       должны быть записаны или извлечены из BIO, прежде чем можно
+       будет продолжить.
+</p>
+<p>Многие системы реализуют алгоритм Nagle по умолчанию, что
+       означает, что он будет буферизовать исходящие данные TCP,
+       если пакет TCP уже был отправлен, для которого еще не было
+       получено никакого соответствующего ACK от партнера. Это
+       может повлиять на производительность после успешного
+       рукопожатия TLSv1.3 или успешного возобновления рукопожатия
+       TLSv1.2 (или ниже), потому что последним партнером, который
+       будет общаться в рукопожатии, является клиент. Если клиент
+       также первым отправляет данные приложения (что типично для
+       многих протоколов), то эти данные могут быть помещены в
+       буфер, пока не будет получено ACK для окончательного
+       сообщения о рукопожатии.
+</p>
+<p>Опция сокета TCP_NODELAY часто доступна для отключения
+       алгоритма Nagle. Если приложение решает отключить
+       алгоритм Nagle, следует рассмотреть возможность его
+       повторного включения позже, если это необходимо.
+       Вспомогательная функция BIO_set_tcp_ndelay() может
+       использоваться для включения или выключения опции
+       TCP_NODELAY.
+</p>
+</dd>
+<dt>RETURN VALUES</dt>
+<dd><p>Могут возникнуть следующие возвращаемые значения:
+</p><div class="display">
+<pre class="display">       0   Рукопожатие TLS/SSL не было успешным, но было
+           отключено и контролировалось спецификациями протокола
+           TLS/SSL. Вызовите SSL_get_error() с возвращаемым
+           значением ret, чтобы выяснить причину.
+
+       1   Рукопожатие TLS/SSL было успешно завершено, соединение
+           TLS/SSL установлено.
+
+       &lt;0  Рукопожатие TLS/SSL не было успешным, поскольку
+           произошла фатальная ошибка на уровне протокола
+           или произошла ошибка соединения. Выключение не
+           было чистым. Также может возникнуть действие,
+           необходимо продолжить операцию для неблокирующего
+           BIOs. Вызовите SSL_get_error() с возвращаемым
+           значением ret, чтобы выяснить причину.
+</pre></div>
+</dd>
+<dt>SEE ALSO</dt>
+<dd><p>SSL_get_error(3), SSL_accept(3), SSL_shutdown(3), ssl(7), bio(7),
+       SSL_set_connect_state(3), SSL_do_handshake(3), SSL_CTX_new(3)
+</p>
+</dd>
+<dt>COPYRIGHT</dt>
+<dd><p>Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
+</p>
+<p>Licensed under the OpenSSL license (the &quot;License&quot;).  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       &lt;https://www.openssl.org/source/license.html&gt;.
+</p></dd>
+</dl>
+<p>1.1.1a                            2018-11-20                    SSL_CONNECT(3)
+</p><hr>
+<a name="g_t_0418_043d_0441_0442_0440_0443_043a_0446_0438_044f"></a>
+<div class="header">
+<p>
+Previous: <a href="#SSL_005fCONNECT" accesskey="p" rel="prev">SSL_CONNECT</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; </p>
+</div>
+<a name="Instrukciya"></a>
+<h2 class="chapter">15 Инструкция</h2>
+<p>Эта инструкция демонстрирует, как работает собственный центр сертификации (CA – Certificate Authority), используя набор инструментов командной строки OpenSSL. Это полезно в ряде случаев, таких как выдача сертификата сервера для защиты вебсайта в интранете, или для выдачи сертификатов для клиентов, чтобы позволить им проверить подлинность сервера.
+</p><dl compact="compact">
+<dt>Вступление</dt>
+<dd>
+<p>OpenSSL — это криптографическая библиотека со свободным и открытым исходным кодом, которая предоставляет несколько инструментов командной строки для работы с цифровыми сертификатами. Некоторые из этих инструментов могут быть использованы в качестве центра сертификации.
+</p>
+<p>Центр сертификации (CA) является объектом, который подписывает цифровые сертификаты. Многие веб-сайты нуждаются в том, чтобы их клиенты знали, что соединение является безопасным, поэтому они платят международным доверенным центрам сертификации (например, VeriSign, DigiCert) за подпись сертификата для своего домена.
+</p>
+<p>В некоторых случаях имеет больше смысла выступать в качестве вашего собственного центра сертифкации, чем платить центрам сертификации, таким как DigiCert. Например, обеспечение безопасности вебсайта в интранете или для выдачи собственных сертификатов клиентам, чтобы позволить им проверять подлинность сервера (Apache, OpenVPN).
+Создание корневой пары ключей
+</p>
+<p>Выступая в качестве центра сертификации (CA) означает иметь дело с криптографическими парами приватных (частных) ключей и публичными сертификатами. Самой первой криптографической парой создадим корневую пару. Она состоит из корневого ключа (ca.key.pem) и корневого сертификата (ca.cert.pem). Эта пара образует идентичность нашего центра сертификации.
+</p>
+<p>Как правило, корневой центр сертификации не подписывает напрямую серверные или клиентские сертификаты. Корневой центр сертификации используется только для создания одного или нескольких промежуточных центров сертификации, которые являются доверенными корневому центру сертификации чтоб подписывать сертификаты от их имени. Это является лучшей практикой. Таким образом, корневой ключ может хранится «оффлайн» и по-максимому не использоваться, так как любая компрометация губительна для ключа. В качестве примера лучшей практики является создание корневой пары в максимально защищенной среде. В идеале это будет полностью зашифрованный, физически изолированный компьютер, который постоянно отключен от интернета. Следует вынуть беспроводную сетевую карту, а порт обычной сетевой карты залить клеем.
+</p></dd>
+<dt>Подготовка каталогов</dt>
+<dd>
+<p>Выберите каталог для хранения всех ключей и сертификатов. К примеру, /root/ca (все производится на Ubuntu 14.04.3 LTS)
+</p>
+<p>mkdir /root/ca
+</p>
+<p>Создадим структуру каталогов. Файлы index.txt и serial будут выступать в качестве плоской базы для отслеживания подписанных сертификатов.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# mkdir certs crl newcerts private
+# chmod 700 private
+# touch index.txt
+# echo 1000 &gt; serial
+</pre></div>
+</dd>
+<dt>Подготовка конфигурационных файлов</dt>
+<dd>
+<p>Необходимо создать конфигурационный файл для OpenSSL. Создадим файл /root/ca/openssl.cnf, скопируем в него следующее содержимое root-config.txt.
+</p><div class="display">
+<pre class="display">Раздел [ca] является обязательным. Здесь мы говорим OpenSSL использовать параметры из раздела [CA_default]:
+
+[ ca ]
+#man ca
+default_ca = CA_default
+
+Раздел [CA_default] содержит ряд значений по умолчанию:
+
+[ CA_default ]
+# Каталог и расположение файлов.
+dir               = /root/ca
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database          = $dir/index.txt
+serial            = $dir/serial
+RANDFILE          = $dir/private/.rand
+
+# Корневой ключ и сертификат.  
+ private_key       = $dir/private/ca.key.pem  
+ certificate       = $dir/certs/ca.cert.pem
+
+# Для списков отзыва сертификатов.  
+ crlnumber         = $dir/crlnumber  
+ crl               = $dir/crl/ca.crl.pem  
+ crl_extensions    = crl_ext  
+ default_crl_days  = 30
+
+# SHA-1 устарела, поэтому используйте SHA-2.  
+ default_md        = sha256
+
+name_opt          = ca_default  
+ cert_opt          = ca_default  
+ default_days      = 375  
+ preserve          = no  
+ policy            = policy_strict
+</pre></div>
+<p>Policy_strict будет применяться для всех подписей корневого центра сертификации, и корневой центр сертификации будет использоваться только для создания промежуточных центров сертификации.
+</p><div class="display">
+<pre class="display">[ policy_strict ]
+# Корень CA должен подписывать только те промежуточные сертификаты, которые совпадают.
+# Смотрите раздел POLICY FORMAT в man ca.
+countryName             = match
+stateOrProvinceName     = match
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+</pre></div>
+<p>Применим policy_loose для всех подписей промежуточных центров серфтификации, так как промежуточные центры сертификации это подписывающие серверы, и клиентские сертификаты могут приходить от различных третьих лиц.
+</p><div class="display">
+<pre class="display">[ policy_loose ]
+# Разрешить промежуточному CA подписывать более разнообразные сертификаты.
+# Смотрите раздел POLICY FORMAT в &lsquo;ca&lsquo; man page.
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+</pre></div>
+<p>Параметры из секции [ req ] применяются когда создаются сертификаты или запросы на подписывание сертификатов.
+</p><div class="display">
+<pre class="display">[ req ]
+# Опции инструмента &lsquo;req&lsquo; (&lsquo;man req&lsquo;).
+default_bits        = 2048
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+
+# SHA-1 устарела, поэтому используйте SHA-2.  
+default_md          = sha256
+
+# Расширение, добавляемое при использовании опции -x509.  
+x509_extensions     = v3_ca
+</pre></div>
+<p>Секция [ req_distinguished_name ] определяет информацию, которая обычно требуется при запросе на подписывание сертификата. Можно указать некоторые значения по умолчанию.
+</p><div class="display">
+<pre class="display">[ req_distinguished_name ]
+# Смотри https://en.wikipedia.org/wiki/Certificate_signing_request.
+countryName                     = Country Name (2 letter code)
+stateOrProvinceName             = State or Province Name
+localityName                    = Locality Name
+organizationName                = Organization Name
+organizationalUnitName          = Organizational Unit Name
+commonName                      = Common Name
+emailAddress                    = Email Address
+
+# При желании укажите некоторые значения по умолчанию.  
+countryName_default             = GB  
+stateOrProvinceName_default     = England  
+localityName_default            = England  
+organizationName_default       = Alice Ltd  
+#organizationalUnitName_default  =  
+#emailAddress_default            =
+</pre></div>
+<p>Следующие несколько секций являются расширениями, которые могут применять при подписывании сертификатов. Например, при указании аргумента командной строки -extensions v3_ca будут применены расширения из секции [ v3_ca ]. Эти расширения будут применяться при создании корневого сертификата.
+</p><div class="display">
+<pre class="display">[ v3_ca ]
+# Расширения для типичного CA (&lsquo;man x509v3_config&lsquo;).
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+</pre></div>
+<p>При создании сертификата промежуточного центра сертификации будут применяться расширения из v3_ca_intermediate. Параметр pathlen:0 указывает, что не может быть никаких дальнейших центров сертификации ниже промежуточного центра сертификации.
+</p><div class="display">
+<pre class="display">[ v3_intermediate_ca ]
+# Расширения для типичного промежуточного CA (&lsquo;man x509v3_config&lsquo;).
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+</pre></div>
+<p>Расширение usr_cert будет применяться при подписывании клиентских сертификатов, таких, которые используются для аутентификации удаленных пользователей.
+</p><div class="display">
+<pre class="display">[ usr_cert ]
+# Расширения для клиентских сертификатов (&lsquo;man x509v3_config&lsquo;).
+basicConstraints = CA:FALSE
+nsCertType = client, email
+nsComment = &quot;OpenSSL Generated Client Certificate&quot;
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth, emailProtection
+</pre></div>
+<p>Расширение server_cert будет применяться при подписывании серверных сертификатов, таких, которые используются для веб-серверов.
+</p><div class="display">
+<pre class="display">[ server_cert ]
+# Расширения для серверных сертификатов (&lsquo;man x509v3_config&lsquo;).
+basicConstraints = CA:FALSE
+nsCertType = server
+nsComment = &quot;OpenSSL Generated Server Certificate&quot;
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+</pre></div>
+<p>Расширение crl_ext будет автоматически применяться при создании списков отзыва сертификатов (CRL — certificate revocation lists).
+</p><div class="display">
+<pre class="display">[ crl_ext ]
+# Расширение для CRLs (&lsquo;man x509v3_config&lsquo;).
+authorityKeyIdentifier=keyid:always
+</pre></div>
+<p>Расширение ocsp будет применяться при подписывании сертификата OCSP (Online Certificate Status Protocol, онлайн протокол статуса сертификатов).
+</p><div class="display">
+<pre class="display">[ ocsp ]
+# Расширение для подписи сертификатов OCSP (&lsquo;man ocsp&lsquo;).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, digitalSignature
+extendedKeyUsage = critical, OCSPSigning
+</pre></div>
+</dd>
+<dt>Создание корневого ключа</dt>
+<dd>
+<p>Создадим корневой ключ (ca.key.pem), который следует хранить защищенно. Любой,  владеющий корневым ключом, может выдавать доверенные сертификаты. Зашифруем ключ стойким алгоритмом AES-256 и надежным паролем. Следует использовать 4096 битное шифрование для ключей корневого и промежуточных центров сертификации. Серверные и клиентские сертификаты возможно подписывать шифрованием с меньшей битностью.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl genrsa -aes256 -out private/ca.key.pem 4096
+Enter pass phrase for ca.key.pem: secretpassword
+Verifying - Enter pass phrase for ca.key.pem: secretpassword
+# chmod 400 private/ca.key.pem
+</pre></div>
+</dd>
+<dt>Создание корневого сертификата</dt>
+<dd>
+<p>Для создания корневого сертификата (ca.cert.pem) используется корневой ключ (ca.key.pem). Следует указать длинный срок годности сертификата, например, 20 лет. После того, как истечет корневой сертификат, все сертификаты, подписанные центром сертификации становятся недействительными. Всякий раз при использовании утилиты req следует указывать файл конфигурации для использования с опцией –config, в противном случае OpenSSL будет использовать по умолчанию конфигурационный файл /etc/pki/tls/openssl.cnf!
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl req -config openssl.cnf \
+-key private/ca.key.pem \
+-new -x509 -days 7300 -sha256 -extensions v3_ca \
+-out certs/ca.cert.pem
+Enter pass phrase for ca.key.pem: secretpassword
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+&mdash;&ndash;
+Country Name (2 letter code) [XX]:GB
+State or Province Name []:England
+Locality Name []:
+Organization Name []:Alice Ltd
+Organizational Unit Name []:Alice Ltd Certificate Authority
+Common Name []:Alice Ltd Root CA
+Email Address []:
+# chmod 444 certs/ca.cert.pem
+</pre></div>
+</dd>
+<dt>Проверка корневого сертификата</dt>
+<dd><div class="display">
+<pre class="display"># openssl x509 -noout -text -in certs/ca.cert.pem
+
+Вывод показывает:
+
+    Используемый алгоритм Signature Algorithm
+    Даты периода действия сертификата Validity
+    Длину публичного ключа Public-Key
+    Эмитент сертификата Issuer, который является объектом, который подписал сертификат
+    Предмет Subject, который относится к самому сертификату.
+</pre></div>
+<p>Эмитент (Issuer) и предмет (Subject) идентичны для самоподписанных сертификатов. Все корневые сертификаты являются самоподписанными.
+</p><div class="display">
+<pre class="display">Signature Algorithm: sha256WithRSAEncryption
+Issuer: C=GB, ST=England,
+O=Alice Ltd, OU=Alice Ltd Certificate Authority,
+CN=Alice Ltd Root CA
+Validity
+Not Before: Apr 11 12:22:58 2015 GMT
+Not After : Apr  6 12:22:58 2035 GMT
+Subject: C=GB, ST=England,
+O=Alice Ltd, OU=Alice Ltd Certificate Authority,
+CN=Alice Ltd Root CA
+Subject Public Key Info:
+Public Key Algorithm: rsaEncryption
+Public-Key: (4096 bit)
+</pre></div>
+<p>Вывод также показывает расширения X509v3, т.к. было применено расширение v3_ca, и опции из секции [ v3_ca ] отражены в выводе.
+</p><div class="display">
+<pre class="display">X509v3 extensions:
+X509v3 Subject Key Identifier:
+38:58:29:2F:6B:57:79:4F:39:FD:32:35:60:74:92:60:6E:E8:2A:31
+X509v3 Authority Key Identifier:
+keyid:38:58:29:2F:6B:57:79:4F:39:FD:32:35:60:74:92:60:6E:E8:2A:31
+X509v3 Basic Constraints: critical
+CA:TRUE
+X509v3 Key Usage: critical
+Digital Signature, Certificate Sign, CRL Sign
+</pre></div>
+</dd>
+<dt>Создание промежуточной пары ключей</dt>
+<dd>
+<p>Промежуточным центром сертификации является объект, который может подписывать сертификаты от имени корневого центра сертификации. Корневой центр сертификации подписывает промежуточный сертификат, образуя цепочку доверия.
+</p>
+<p>Цель использования промежуточного центра сертификации, прежде всего, для обеспечения безопасности. Корневой ключ должен храниться «оффлайн» и использоваться как можно реже. Если промежуточный ключ будет скомпрометирован, корневой центр сертификации может отозвать промежуточный сертификат  и создать новую промежуточную криптографическую пару.
+</p><dl compact="compact">
+<dt>Подготовка каталогов</dt>
+<dd>
+<p>Файлы корневого центра сертификации хранятся в /root/ca. Выберем каталог (/root/ca/intermediate) для хранения файлов промежуточного центра сертификации.
+</p><div class="display">
+<pre class="display"># mkdir /root/ca/intermediate
+</pre></div>
+<p>Создадим точно такую же структуру каталогов, которая используется для корневого центра сертификации. Также удобно создать каталог csr для хранения запросов на подпись сертификатов.
+</p><div class="display">
+<pre class="display"># cd /root/ca/intermediate
+# mkdir certs crl csr newcerts private
+# chmod 700 private
+# touch index.txt
+# echo 1000 &gt; serial
+</pre></div>
+<p>Добавим файл crlnumber к дереву каталогов промежуточного центра сертификации. Crlnumber будет использоваться для отслеживания списков отзывов сертификатов.
+</p><div class="display">
+<pre class="display"># echo 1000 &gt; /root/ca/intermediate/crlnumber
+</pre></div>
+<p>Создадим конфигурационный файл /root/ca/intermediate/openssl.cnf, скопируем в него следующее содержимое intermediate-config.txt. В нем изменены пять опций, по сравнению с конфигурационным файлов корневого центра сертификации:
+</p><div class="display">
+<pre class="display">[ CA_default ]
+dir             = /root/ca/intermediate
+private_key     = $dir/private/intermediate.key.pem
+certificate     = $dir/certs/intermediate.cert.pem
+crl             = $dir/crl/intermediate.crl.pem
+policy          = policy_loose
+</pre></div>
+</dd>
+</dl>
+</dd>
+<dt>Создание промежуточного ключа</dt>
+<dd>
+<p>Создадим промежуточный ключ (intermediate.key.pem). Зашифруем ключ стойким алгоритмом AES-256 и надежным паролем.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl genrsa -aes256 \
+-out intermediate/private/intermediate.key.pem 4096
+Enter pass phrase for intermediate.key.pem: secretpassword
+Verifying - Enter pass phrase for intermediate.key.pem: secretpassword
+# chmod 400 intermediate/private/intermediate.key.pem
+</pre></div>
+</dd>
+<dt>Создание промежуточного сертификата</dt>
+<dd>
+<p>Используя промежуточный ключ создадим запрос на подписывание сертификата (CSR — certificate signing request). Сведения должны, как правило, соответствовать корневому центру сертификации. Общие имена (Common Name), однако, должны быть разными. И убедитесь, что используете конфигурационный файл промежуточного центра сертификаци (intermediate/openssl.cnf).
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl req -config intermediate/openssl.cnf -new -sha256 \
+-key intermediate/private/intermediate.key.pem \
+-out intermediate/csr/intermediate.csr.pem
+Enter pass phrase for intermediate.key.pem: secretpassword
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+&mdash;&ndash;
+Country Name (2 letter code) [XX]:GB
+State or Province Name []:England
+Locality Name []:
+Organization Name []:Alice Ltd
+Organizational Unit Name []:Alice Ltd Certificate Authority
+Common Name []:Alice Ltd Intermediate CA
+Email Address []:
+</pre></div>
+<p>Чтобы создать промежуточный сертификат используем корневой центр сертификации с расширением v3_intermediate_ca для подписывания промежуточного запроса. Промежуточный сертификат должен быть действителен на меньший период, чем корневой. К примеру, на 10 лет. В этот раз следует использовать конфигурационный файл корневого центра сертификации (/root/ca/openssl.cnf).
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl ca -config openssl.cnf -extensions v3_intermediate_ca \
+-days 3650 -notext -md sha256 \
+-in intermediate/csr/intermediate.csr.pem \
+-out intermediate/certs/intermediate.cert.pem
+Enter pass phrase for ca.key.pem: secretpassword
+Sign the certificate? [y/n]: y
+# chmod 444 intermediate/certs/intermediate.cert.pem
+</pre></div>
+<p>Для хранения базы данных сертификатов, выданных утилитой ca OpenSSL, используется файл index.txt. Не следует удалять или править вручную этот файл. Сейчас он должен содержать одну строку, которая относится к промежуточному сертификату.
+</p><div class="display">
+<pre class="display">V 250408122707Z 1000 unknown ... /CN=Alice Ltd Intermediate CA
+Проверка промежуточного сертификата
+</pre></div>
+<p>Как мы делали с корневым сертификатом, убедимся, что детали промежуточного сертификата корректны.
+</p><div class="display">
+<pre class="display"># openssl x509 -noout -text \
+-in intermediate/certs/intermediate.cert.pem
+</pre></div>
+<p>Сверим промежуточный сертификат с корневым сертификатом. ОК показывает, что цепочка доверия не повреждена.
+</p><div class="display">
+<pre class="display"># openssl verify -CAfile certs/ca.cert.pem \
+intermediate/certs/intermediate.cert.pem
+intermediate.cert.pem: OK
+</pre></div>
+</dd>
+<dt>Создание файла цепочки сертификатов</dt>
+<dd>
+<p>Когда приложение (например, веб-браузер) пытается проверить сертификат, подписанный промежуточным центром сертификации, оно также должно проверить промежуточный сертификат от корневого центра сертификации. Для выполнения проверки цепочки доверия создадим цепочку сертификатов центра сертификации для предоставления приложениям.
+</p>
+<p>Чтобы создать цепочку сертификатов требуется объеденить промежуточные и корневые сертификаты вмете. Позже мы будем использовать этот файл для проверки сертификатов подписанных промежуточным центром сертификации.
+</p><div class="display">
+<pre class="display"># cat intermediate/certs/intermediate.cert.pem \
+certs/ca.cert.pem &gt; intermediate/certs/ca-chain.cert.pem
+# chmod 444 intermediate/certs/ca-chain.cert.pem
+</pre></div>
+<p>Наш файл цепочки сертификатов должен содержать корневой сертификат, потому что клиентские приложения ничего не знают о нем. Лучшим вариантом, особенно, если вы администратор сети, является установка корневого сертификата на каждом клиенте, которому требуется подключаться к приложению.
+Подписывание серверного и клиентского сертификатов
+</p>
+<p>Подпишем сертификаты используя наш промежуточный центр сертификации. Эти подписанные сертификаты можно использовать в различных ситуациях, таких как защищать соединения к веб серверу или аутентифицировать клиентов, присоединяющихся к сервису.
+</p>
+<p>Указанные ниже шаги с вашей точки сзрения, где вы выступаете в качестве центра сертификации. Стороннее лицо, однако, вместо этого может создать свой собственный частный ключ и запрос на подпись сертификата (CSR) без раскрытия вам своего частного ключа. Они дают вам собственный CSR, а вы отдаете им подписанный сертификат. В этом случае, пропустите команды genrsa и req.
+Создание ключа
+</p>
+<p>Наши корневая и промежуточная пары 4096 бит. Серверный и клиентский сертификат обычно истекают после одного года, поэтому мы можем безопасно использовать 2048 бит.
+</p>
+<p>Хотя 4096 бит немного больше безопаснее, чем 2048 бит, он замедляет TLS хэндшейки и значительно увеличивает нагрузку на процессор во время хэндшейков. По этой причине, большинство веб-сайтов используют 2048-битные пары ключей.
+</p>
+<p>Если вы создаете криптографическую пару для использования веб-сервером (к примеру, Apache), вам потребуется вводить пароль каждый раз, когда вы перезапускаете веб-сервер. Вы можете указать опцию –aes256 для создания ключа без пароля.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl genrsa -aes256 \
+-out intermediate/private/www.example.com.key.pem 2048
+# chmod 400 intermediate/private/www.example.com.key.pem
+</pre></div>
+</dd>
+<dt>Создание сертификата</dt>
+<dd>
+<p>Используем частный ключ для создания запроса на подписывание сертификата (CSR). Детали в CSR не обязательно должны совпадать с промежуточным центром сертификации. Для серверных сертификатов, Общее Имя (Common Name) должно быть полным доменным именем (fully qualified domain name — FQDN) (к примеру, www.example.com), в то время как для клиентского сертификата оно должно быть любым уникальным идентификатором (к примеру, e-mail адресом). Common Name не может быть таким же, как любой корневой или промежуточный сертификат.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl req -config intermediate/openssl.cnf \
+-key intermediate/private/www.example.com.key.pem \
+-new -sha256 -out intermediate/csr/www.example.com.csr.pem
+Enter pass phrase for www.example.com.key.pem: secretpassword
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+&mdash;&ndash;
+Country Name (2 letter code) [XX]:US
+State or Province Name []:California
+Locality Name []:Mountain View
+Organization Name []:Alice Ltd
+Organizational Unit Name []:Alice Ltd Web Services
+Common Name []:www.example.com
+Email Address []:
+</pre></div>
+<p>Для создания сертификата воспользуемся промежуточным центром сертификации для подписи CSR. Если сертификат будет использоваться на сервере, используйте расширение server_cert. Если сертификат будет использоваться для аутентификации клиентов, то используйте расширение usr_cert. Сертификаты обычно даются сроком на один год, на центре сертификации обычно дают несколько дней для удобства.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl ca -config intermediate/openssl.cnf \
+-extensions server_cert -days 375 -notext -md sha256 \
+-in intermediate/csr/www.example.com.csr.pem \
+-out intermediate/certs/www.example.com.cert.pem
+# chmod 444 intermediate/certs/www.example.com.cert.pem
+</pre></div>
+<p>Файл intermediate/index.txt должен содержать строку, которая относится к этому сертификату
+</p><div class="display">
+<pre class="display">V 160420124233Z 1000 unknown ... /CN=www.example.com
+</pre></div>
+</dd>
+<dt>Проверка сертификата</dt>
+<dd><div class="display">
+<pre class="display"># openssl x509 -noout -text \
+-in intermediate/certs/www.example.com.cert.pem
+</pre></div>
+<p>Issuer сертификата наш промежуточный центр сертификации. Subject относится к самому сертификату.
+</p><div class="display">
+<pre class="display">Signature Algorithm: sha256WithRSAEncryption
+Issuer: C=GB, ST=England,
+O=Alice Ltd, OU=Alice Ltd Certificate Authority,
+CN=Alice Ltd Intermediate CA
+Validity
+Not Before: Apr 11 12:42:33 2015 GMT
+Not After : Apr 20 12:42:33 2016 GMT
+Subject: C=US, ST=California, L=Mountain View,
+O=Alice Ltd, OU=Alice Ltd Web Services,
+CN=www.example.com
+Subject Public Key Info:
+Public Key Algorithm: rsaEncryption
+Public-Key: (2048 bit)
+</pre></div>
+<p>Вывод также покажет расширения X509V3. При создании сертификата можно использовать расширения server_cert или usr_cert. Варианты о соответствующем разделе конфигурации будут отражаться в выводе.
+</p><div class="display">
+<pre class="display">X509v3 extensions:
+X509v3 Basic Constraints:
+CA:FALSE
+Netscape Cert Type:
+SSL Server
+Netscape Comment:
+OpenSSL Generated Server Certificate
+X509v3 Subject Key Identifier:
+B1:B8:88:48:64:B7:45:52:21:CC:35:37:9E:24:50:EE:AD:58:02:B5
+X509v3 Authority Key Identifier:
+keyid:69:E8:EC:54:7F:25:23:60:E5:B6:E7:72:61:F1:D4:B9:21:D4:45:E9
+DirName:/C=GB/ST=England/O=Alice Ltd/OU=Alice Ltd Certificate Authority/CN=Alice Ltd Root CA
+serial:10:00
+X509v3 Key Usage: critical
+Digital Signature, Key Encipherment
+X509v3 Extended Key Usage:
+TLS Web Server Authentication
+</pre></div>
+<p>Используя файл цепочки сертификатов центра сертификации, который мы создали ранее (ca-chain.cert.pem) для проверки того, что новый сертификат имеет действительную цепочку доверия.
+</p><div class="display">
+<pre class="display"># openssl verify -CAfile intermediate/certs/ca-chain.cert.pem \
+intermediate/certs/www.example.com.cert.pem
+www.example.com.cert.pem: OK
+</pre></div>
+</dd>
+<dt>Установка сертификата</dt>
+<dd>
+<p>Теперь можно установить новый сертификат на сервере, или распространить сертификат на клиентов. При установке на серверное приложение (к примеру, Apache), понадобятся следующие файлы:
+</p><div class="display">
+<pre class="display">    ca-chain.cert.pem
+    example.com.key.pem
+    example.com.cert.pem
+</pre></div>
+<p>Если вы подписывали CSR от стороннего лица, у вас нет доступа до их частного ключа, и вы должны им дать только файл цепочки ca-chain.cert.pem и сертификат www.example.com.cert.pem.
+</p></dd>
+<dt>Списки отзывов сертификатов</dt>
+<dd>
+<p>Списки отзывов сертификатов (CRL) предоставляют список сертификатов, которые были отозваны. Клиентское приложение, к примеру, веб-браузер, может использовать CRL для проверки подлинности сервера. Серверные приложения, такие как Apache или OpenVPN, могут использовать CRL для запрета доступа клиентам, которые больше не являются доверенными.
+</p>
+<p>Публикация CRL в публично доступном месте (к примеру, http://example.com/intermediate.crl.pem) позволит треьтим сторонам получать CRL из этого места, чтобы проверить, нет ли в нем сертификатов, которые могут быть отозваны. Некоторые разработчики приложений вместо устаревшего CRL используют Онлайн Протокол Статуса Сертификата (Online Certificate Status Protocol — OCSP).
+Подготовка файла конфигурации
+</p>
+<p>Когда центр сертификации подписывает сертификат, он обычно зашифровывает расположение CRL в сертификат. Добавляется crlDistributionPoints в подходящие секции. В нашем случае, добавляет к секции server_cert.
+</p><div class="display">
+<pre class="display">[ server_cert ]
+# ... snipped ...
+crlDistributionPoints = URI:http://example.com/intermediate.crl.pem
+</pre></div>
+</dd>
+<dt>Создание CRL</dt>
+<dd><div class="display">
+<pre class="display"># cd /root/ca
+# openssl ca -config intermediate/openssl.cnf \
+-gencrl -out intermediate/crl/intermediate.crl.pem
+</pre></div>
+<p>Секция CRL OPTIONS в man ca содержит больше информации о том, как создавать CRL.
+</p>
+<p>Можно проверить содержимое CRL с помощтю утилиты crl.
+</p><div class="display">
+<pre class="display"># openssl crl -in intermediate/crl/intermediate.crl.pem -noout –text
+</pre></div>
+<p>Пока еще не было отозванных сертификатов, поэтому в выводе указано:
+</p><div class="display">
+<pre class="display">No Revoked Certificates.
+</pre></div>
+<p>Необходимо пересоздавать CRL на регулярной основе. По умолчанию, CRL истекает через 30 дней. Это настраивается опцией default_crl_days в секции CA_default.
+</p></dd>
+<dt>Отзыв сертификата</dt>
+<dd>
+<p>Давайте разберем пример. Алиса запустила веб-сервер Apache и имеет личную папку с сердцу трогательными милыми картинками котят. Алиса хочет предоставить своему другу, Бобу, доступ к этой коллекции.
+</p>
+<p>Боб создает запрос частного ключа и запрос на подпись сертификата (CSR).
+</p><div class="display">
+<pre class="display">$ cd /home/bob
+$ openssl genrsa -out bob@example.com.key.pem 2048
+$ openssl req -new -key bob@example.com.key.pem \
+-out bob@example.com.csr.pem
+Вам будет предложено ввести информацию, которая будет
+включена в ваш запрос на сертификат.
+&mdash;&ndash;
+Country Name [XX]:US
+State or Province Name []:California
+Locality Name []:San Francisco
+Organization Name []:Bob Ltd
+Organizational Unit Name []:
+Common Name []:bob@example.com
+Email Address []:
+</pre></div>
+<p>Боб посылает свой CSR Алисе которая затем подписывает его.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl ca -config intermediate/openssl.cnf \
+-extensions usr_cert -notext -md sha256 \
+-in intermediate/csr/bob@example.com.csr.pem \
+-out intermediate/certs/bob@example.com.cert.pem
+Подписать сертификат? [y/n]: y
+1 из 1 запросов на сертификат сертифицирован,
+зафиксировать? [y/n]: y
+</pre></div>
+<p>Алиса проверяет, что сертификат действителен:
+</p><div class="display">
+<pre class="display"># openssl verify -CAfile intermediate/certs/ca-chain.cert.pem \
+intermediate/certs/bob@example.com.cert.pem
+bob@example.com.cert.pem: OK
+</pre></div>
+<p>Файл index.txt должен содержать новую запись.
+</p><div class="display">
+<pre class="display">V 160420124740Z 1001 unknown ... /CN=bob@example.com
+</pre></div>
+<p>Алиса посылает Бобу подписанный сертификат. Боб устанавливает сертификат в своем веб-браузере и теперь у него есть доступ к фотографиям котят Алисы. Ура!
+</p>
+<p>К сожалению, выясняется, что Боб себя плохо вел. Боб отправил фотографии котят Алисы в Hacker News, заявляя, что они его и теперь набирает огромную популярность. Алиса это узнает и нуждается в немедленном отзыве его доступа.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl ca -config intermediate/openssl.cnf \
+-revoke intermediate/certs/bob@example.com.cert.pem
+Введите пароль для intermediate.key.pem: secretpassword
+Отзыв сертификата 1001.
+База данных обновлена
+</pre></div>
+<p>Строка в index.txt, которая относится к сертификату Боба теперь начинается с буквы R. Это означает, что он был отозван (Revoked).
+</p><div class="display">
+<pre class="display">R 160420124740Z 150411125310Z 1001 unknown ... /CN=bob@example.com
+</pre></div>
+<p>После отзыва сертификата Боба, Алисе необходимо пересоздать CRL.
+</p></dd>
+<dt>Ипользование CRL на сервере</dt>
+<dd>
+<p>Обычно серверное приложение (к примеру, Apache) делает проверку для клиентских сертификатов.Это приложение должно иметь локальный доступ до CRL.
+</p>
+<p>В случае Алисы, она может добавить директиву SSLCARevocationPath в ее конфигурацию Apache и скопировать CRL на свой сервер. В следующий раз, когда Боб подключится к веб-серверу, Apache проверит его клиентский сертификат в CRL и запретит доступ. По аналогии, OpenVPN имеет директиву crl-verify, и можно блокировать клиентов, чьи сертификаты были отозваны.
+</p></dd>
+<dt>Использование CRL клиентами</dt>
+<dd>
+<p>Для серверных сертификатов, обычно клиентское приложение (к примеру, веб-браузер) выполняет проверку. Это приложение должно иметь удаленный доступ к CRL.
+</p>
+<p>Если сертификат был подписан с расширением, которое включает crlDistributionPoints, клиентское приложение может прочитать эту информацию и получить CRL из указанного места.
+</p>
+<p>Точки распространения CRL видны в спецификациях X509v3 сертификата.
+</p><div class="display">
+<pre class="display"># openssl x509 -in cute-kitten-pictures.example.com.cert.pem -noout -text
+X509v3 CRL Distribution Points:
+Full Name:
+URI:http://example.com/intermediate.crl.pem
+
+Online Certificate Status Protocol
+</pre></div>
+<p>Online Certificate Status Protocol (OCSP) был создан в качестве альтернативы CRL. Как и CRL, OCSP позволяет запрашивающей стороне (к примеру, веб-браузеру) определять статус отзыва сертификата.
+</p>
+<p>Когда центр сертификации подписывает сертификат, он обычно включает адрес сервера OCSP (к примеру, http://ocsp.example.com) в в сертификат. Это похоже на функцию crlDistributionPoints, используемой для CRL.
+</p>
+<p>Например, когда веб-браузеру предоставлен сертификат сервера, он посылает запрос на адрес сервера OCSP, указанном в сертификате. По этому адресу OCSP слушает запросы и отвечает статусом отзыва сертификата.
+</p>
+<p>Рекомендуется использовать OCSP вместо CRL, где это возможно, хотя реально,  как правило, OCSP нужен только для сертификатов веб-сайтов. Некоторыми веб-браузерами поддержка CRL считается устаревшей, или вообще убрана.
+Подготовка конфигурационного файлы
+</p>
+<p>Для использования OCSP центр сертификации должен закодировать расположение сервера OCSP в сертификат, который он подписывает. Используем опцию authorityInfoAccess в соответствующей секции, в нашем случае в секции server_cert.
+</p><div class="display">
+<pre class="display">[ server_cert ]
+# ... snipped ...
+authorityInfoAccess = OCSP;URI:http://ocsp.example.com
+</pre></div>
+</dd>
+<dt>Создание пары OCSP</dt>
+<dd>
+<p>Ответчик OCSP нуждается в криптографической паре для подписывания ответа, который посылается запрашивающей стороне. Криптографическая пара OCSP должна быть подписана на том же центре сертификации, на котором проверяется подписанный сертификат.
+</p>
+</dd>
+<dt>Создадим частный ключ и зашифруем его алгоритмом AES-256.</dt>
+<dd><div class="display">
+<pre class="display"># cd /root/ca
+# openssl genrsa -aes256 \
+-out intermediate/private/ocsp.example.com.key.pem 4096
+</pre></div>
+<p>Создадим запрос на создание сертификата (CSR). Детали должны, как правило, совпадать с подписывающим центром сертификации. Common Name, однако, должен быть полным доменным именем.
+</p><div class="display">
+<pre class="display"># cd /root/ca
+# openssl req -config intermediate/openssl.cnf -new -sha256 \
+-key intermediate/private/ocsp.example.com.key.pem \
+-out intermediate/csr/ocsp.example.com.csr.pem
+Enter pass phrase for intermediate.key.pem: secretpassword
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+&mdash;&ndash;
+Country Name (2 letter code) [XX]:GB
+State or Province Name []:England
+Locality Name []:
+Organization Name []:Alice Ltd
+Organizational Unit Name []:Alice Ltd Certificate Authority
+Common Name []:ocsp.example.com
+Email Address []:
+</pre></div>
+</dd>
+<dt>Подпишем CSR промежуточным центром сертификации.</dt>
+<dd><div class="display">
+<pre class="display"># openssl ca -config intermediate/openssl.cnf \
+-extensions ocsp -days 375 -notext -md sha256 \
+-in intermediate/csr/ocsp.example.com.csr.pem \
+-out intermediate/certs/ocsp.example.com.cert.pem
+</pre></div>
+</dd>
+<dt>Проверим, что сертификат содержит коррестные расширения X509v3.</dt>
+<dd><div class="display">
+<pre class="display"># openssl x509 -noout -text \
+-in intermediate/certs/ocsp.example.com.cert.pem
+X509v3 Key Usage: critical
+Digital Signature
+X509v3 Extended Key Usage: critical
+OCSP Signing
+</pre></div>
+</dd>
+<dt>Отзыв сертификата</dt>
+<dd>
+<p>Утилита OpenSSL ocsp может выступать в качестве ответчика OCSP, но она предназначена только для тестирования. Для производственной среды OCSP ответчики тоже существуют, но они выходят за рамки данной статьи.
+</p><dl compact="compact">
+<dt>Создадим серверный сертификат для тестирования.</dt>
+<dd><div class="display">
+<pre class="display"># cd /root/ca
+# openssl genrsa -out intermediate/private/test.example.com.key.pem 2048
+# openssl req -config intermediate/openssl.cnf \
+-key intermediate/private/test.example.com.key.pem \
+-new -sha256 -out intermediate/csr/test.example.com.csr.pem
+# openssl ca -config intermediate/openssl.cnf \
+-extensions server_cert -days 375 -notext -md sha256 \
+-in intermediate/csr/test.example.com.csr.pem \
+-out intermediate/certs/test.example.com.cert.pem
+</pre></div>
+</dd>
+</dl>
+<p>Запустим ответчик OCSP на локальной машине. Вместо того, чтобы хранить статус отзыва в отдельном CRL файле ответчик OCSP напрямую читает файл index.txt. Ответ подписывается криптографической парой OCSP (используя опции –rkey и –rsigner).
+</p><div class="display">
+<pre class="display"># openssl ocsp -port 127.0.0.1:2560 -text -sha256 \
+-index intermediate/index.txt \
+-CA intermediate/certs/ca-chain.cert.pem \
+-rkey intermediate/private/ocsp.example.com.key.pem \
+-rsigner intermediate/certs/ocsp.example.com.cert.pem \
+-nrequest 1
+Enter pass phrase for ocsp.example.com.key.pem: secretpassword
+</pre></div>
+<p>В другом терминале пошлем запрос к OCSP ответчику. Опция –cert указывает сертификат для запроса.
+</p><div class="display">
+<pre class="display"># openssl ocsp -CAfile intermediate/certs/ca-chain.cert.pem \
+-url http://127.0.0.1:2560 -resp_text \
+-issuer intermediate/certs/intermediate.cert.pem \
+-cert intermediate/certs/test.example.com.cert.pem
+
+Начало вывода показывает следующее:
+
+    был ли получен положительный ответ (OCSP Response Status)
+    идентичность ответчика (Responder Id)
+    статус отзыва сертификата (Cert Status)
+
+OCSP Response Data:
+OCSP Response Status: successful (0x0)
+Response Type: Basic OCSP Response
+Version: 1 (0x0)
+Responder Id: ... CN = ocsp.example.com
+Produced At: Apr 11 12:59:51 2015 GMT
+Responses:
+Certificate ID:
+Hash Algorithm: sha1
+Issuer Name Hash: E35979B6D0A973EBE8AEDED75D8C27D67D2A0334
+Issuer Key Hash: 69E8EC547F252360E5B6E77261F1D4B921D445E9
+Serial Number: 1003
+Cert Status: good
+This Update: Apr 11 12:59:51 2015 GMT
+</pre></div>
+</dd>
+<dt>Отзыв сертификата.</dt>
+<dd><div class="display">
+<pre class="display"># openssl ca -config intermediate/openssl.cnf \
+-revoke intermediate/certs/test.example.com.cert.pem
+Enter pass phrase for intermediate.key.pem: secretpassword
+Revoking Certificate 1003.
+Data Base Updated
+</pre></div>
+<p>Как и раньше, запускаем ответчик OCSP в другом терминале и шлем запрос. В этот раз вывод показывает &quot;Cert Status: revoked&quot; и &quot;Revocation Time&quot;.
+</p><div class="display">
+<pre class="display">OCSP Response Data:
+OCSP Response Status: successful (0x0)
+Response Type: Basic OCSP Response
+Version: 1 (0x0)
+Responder Id: ... CN = ocsp.example.com
+Produced At: Apr 11 13:03:00 2015 GMT
+Responses:
+Certificate ID:
+Hash Algorithm: sha1
+Issuer Name Hash: E35979B6D0A973EBE8AEDED75D8C27D67D2A0334
+Issuer Key Hash: 69E8EC547F252360E5B6E77261F1D4B921D445E9
+Serial Number: 1003
+Cert Status: revoked
+Revocation Time: Apr 11 13:01:09 2015 GMT
+This Update: Apr 11 13:03:00 2015 GMT
+</pre></div>
+</dd>
+</dl>
+<hr>
 
 
 

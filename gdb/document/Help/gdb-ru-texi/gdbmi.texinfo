@@ -1,0 +1,3941 @@
+@c  \input texinfo   @c -*-texinfo-*-, Редактирование командной строки, \input texinfo   @c -*-texinfo-*-, Top
+@c  @c %**start of header
+@c  @setfilename gdbmi.info
+@c  @settitle GDB/MI Machine Interface
+@c  @setchapternewpage off
+@c  @c %**end of header
+
+@c  @ifinfo
+@c  This file documents GDB/MI, a Machine Interface to GDB.
+
+@c  Copyright (C) 2000, Free Software Foundation, Inc.
+@c  Contributed by Cygnus Solutions.
+
+@c  Permission is granted to make and distribute verbatim copies of this
+@c  manual provided the copyright notice and this permission notice are
+@c  preserved on all copies.
+
+@c  @ignore
+@c  Permission is granted to process this file through TeX and print the
+@c  results, provided the printed document carries copying permission notice
+@c  identical to this one except for the removal of this paragraph (this
+@c  paragraph not being relevant to the printed manual).
+
+@c  @end ignore
+@c  Permission is granted to copy and distribute modified versions of this
+@c  manual under the conditions for verbatim copying, provided also that the
+@c  entire resulting derived work is distributed under the terms of a
+@c  permission notice identical to this one.
+
+@c  Permission is granted to copy and distribute translations of this manual
+@c  into another language, under the above conditions for modified versions.
+@c  @end ifinfo
+
+@c  @c  This title page illustrates only one of the
+@c  @c  two methods of forming a title page.
+
+@c  @titlepage
+@c  @title GDB/MI
+@c  @subtitle Version 0.2
+@c  @subtitle Feb 2000
+@c  @author Andrew Cagney, Fernando Nasser and Elena Zannoni
+
+@c  @c  The following two commands
+@c  @c  start the copyright page.
+@c  @page
+@c  @vskip 0pt plus 1filll
+@c  Permission is granted to make and distribute verbatim copies of this
+@c  manual provided the copyright notice and this permission notice are
+@c  preserved on all copies.
+
+@c  Copyright @copyright{} 2000, Free Software Foundation, Inc.
+@c  @end titlepage
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node GDB/MI
+@chapter Интерфейс @sc{gdb/mi}
+
+@unnumberedsec Назначение и цель
+
+@cindex @sc{gdb/mi}, его назначение
+@sc{gdb/mi} является построчным, машинно-ориентированным текстовым
+интерфейсом к @value{GDBN}.  Он предназначен специально для поддержки
+разработки систем, которые используют отладчик лишь как одну маленькую
+компоненту большой системы.
+
+Эта глава является спецификацией интерфейса @sc{gdb/mi}.  Она написана в
+форме справочного руководства.
+
+Заметьте, что @sc{gdb/mi} все еще находится в стадии разработки, так что
+некоторые описанные ниже возможности являются неполными и могут быть изменены.
+
+@unnumberedsec Система обозначений и терминология
+
+@cindex соглашения, используемые в системе обозначений, для @sc{gdb/mi}
+Эта глава использует следующую систему обозначений:
+
+@itemize @bullet
+@item
+@code{|} разделяет две альтернативы.
+
+@item
+@code{[ @var{нечто} ]} указывает, что @var{нечто} является
+необязательным: оно может быть задано, а может и нет.
+
+@item
+@code{( @var{группа} )*} означает, что @var{группа} в скобках может
+повторяться ноль и более раз.
+
+@item
+@code{( @var{группа} )+} означает, что @var{группа} в скобках может 
+повторяться один и более раз.
+
+@item
+@code{"@var{строка}"} обозначает текст @var{строка}.
+@end itemize
+
+@ignore
+@heading Dependencies
+@end ignore
+
+@heading Выражения признательности
+
+В алфавитном порядке: Елена Заннони, Эндрю Кагни, Фернандо Нассер и
+Стан Шебс.
+
+@menu
+* Синтаксис команд GDB/MI::
+* Совместимость GDB/MI с CLI::
+* Выходные записи GDB/MI::
+* Формат описания команд GDB/MI::
+* Команды GDB/MI для таблицы точек останова::
+* Управление данными GDB/MI::
+* Управление программой GDB/MI::
+* Разные команды GDB/MI::
+* Управление стеком GDB/MI::
+* Запросы GDB/MI о символах::
+* Управление целью GDB/MI::
+* Команды GDB/MI для нитей::
+* Команды GDB/MI для точек трассировки::
+* Изменяемые объекты GDB/MI::
+* Черновик изменений к выходному синтаксису GDB/MI::
+@end menu
+
+@c When these are implemented, they should be moved to be between Misc and
+@c Stack Manipulation in the above menu.  They are now outside the menu
+@c because makeinfo 3.12 barfs if it sees @ignore or @comments in the
+@c middle of a menu.
+@ignore
+* GDB/MI Kod Commands::
+* GDB/MI Memory Overlay Commands::
+* GDB/MI Signal Handling Commands::
+@end ignore
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Синтаксис команд GDB/MI
+@section Синтаксис команд @sc{gdb/mi}
+
+@menu
+* Входной синтаксис GDB/MI::
+* Выходной синтаксис GDB/MI::
+* Простые примеры GDB/MI::
+@end menu
+
+@node Входной синтаксис GDB/MI
+@subsection Входной синтаксис @sc{gdb/mi}
+
+@cindex входной синтаксис для @sc{gdb/mi}
+@cindex @sc{gdb/mi}, входной синтаксис
+@table @code
+@item @var{команда} @expansion{}
+@code{@var{команда-cli} | @var{команда-mi}}
+
+@item @var{команда-cli} @expansion{}
+@code{[ @var{лексема} ] @var{команда-cli} @var{nl}}, где
+@var{команда-cli} есть любая существующая команда @value{GDBN} CLI.
+
+@item @var{команда-mi} @expansion{}
+@code{[ @var{лексема} ] "-" @var{действие} ( " " @var{ключ} )*
+@code{[} " --" @code{]} ( " " @var{параметр} )* @var{nl}}
+
+@item @var{лексема} @expansion{}
+"любая последовательность цифр"
+
+@item @var{ключ} @expansion{}
+@code{"-" @var{параметр} [ " " @var{параметр} ]}
+
+@item @var{параметр} @expansion{}
+@code{@var{непустая-последовательность} | @var{строка-си}}
+
+@item @var{действие} @expansion{}
+@emph{любое из действий, описанных в этой главе}
+
+@item @var{непустая-последовательность} @expansion{}
+@emph{все что угодно, не содержащее специальных знаков, таких как
+"-", @var{nl}, """ и, конечно, " "}
+
+@item @var{строка-си} @expansion{}
+@code{""" @var{содержимое-семибитной-строки-iso-си} """}
+
+@item @var{nl} @expansion{}
+@code{CR | CR-LF}
+@end table
+
+@noindent
+Замечания:
+
+@itemize @bullet
+@item
+Команды CLI все еще обрабатываются интерпретатором @sc{mi}; их вывод
+описан ниже.
+
+@item
+@code{@var{Лексема}}, если присутствует, передается назад, когда
+выполнение команды завершается.
+
+@item
+Некоторые команды @sc{mi} допускают необязательные аргументы как часть
+списка параметров.  Каждый ключ идентифицируется предшествующей ему
+чертой @samp{-}, и за ним может следовать в качестве параметра
+необязательный аргумент.  Ключи появляются в начале списка параметров и
+могут быть отделены от обычных параметров при помощи @samp{--} (это
+полезно, когда некоторые параметры начинаются с черты).
+@end itemize
+
+Прагматические соображения:
+
+@itemize @bullet
+@item
+Мы хотим получить простой доступ к существующему синтаксису CLI (для отладки).
+
+@item
+Мы хотим, чтобы работа @sc{mi} была легко заметна.
+@end itemize
+
+@node Выходной синтаксис GDB/MI
+@subsection Выходной синтаксис @sc{gdb/mi}
+
+@cindex выходной синтаксис @sc{gdb/mi}
+@cindex @sc{gdb/mi}, выходной синтаксис
+Вывод @sc{gdb/mi} состоит из нуля или более внеочередных
+записей, за которыми может следовать одна результирующая запись.  Эта
+запись относится к самой последней команде.  Последовательность
+выводимых записей завершается @samp{(@value{GDBP})}.
+
+Если входная команда начиналась с префикса @code{@var{лексема}}, то
+соответствующий вывод для этой команды также будет начинаться с того же
+префикса @var{лексема}.
+
+@table @code
+@item @var{вывод} @expansion{}
+@code{( @var{внеочередная-запись} )* [ @var{результирующая-запись} ] "(gdb)" @var{nl}}
+
+@item @var{результирующая-запись} @expansion{}
+@code{ [ @var{лексема} ] "^" @var{результирующий-класс} ( "," @var{результат} )* @var{nl}}
+
+@item @var{внеочередная-запись} @expansion{}
+@code{@var{асинхр-запись} | @var{поточн-запись}}
+
+@item @var{асинхр-запись} @expansion{}
+@code{@var{асинхр-вывод-выполн} | @var{асинхр-вывод-статуса} | @var{асинхр-вывод-уведомл}}
+
+@item @var{асинхр-вывод-выполн} @expansion{}
+@code{[ @var{лексема} ] "*" @var{асинхр-вывод}}
+
+@item @var{асинхр-вывод-статуса} @expansion{}
+@code{[ @var{лексема} ] "+" @var{асинхр-вывод}}
+
+@item @var{асинхр-вывод-уведомл} @expansion{}
+@code{[ @var{лексема} ] "=" @var{асинхр-вывод}}
+
+@item @var{асинхр-вывод} @expansion{}
+@code{@var{асинхр-класс} ( "," @var{результат} )* @var{nl}}
+
+@item @var{результ-класс} @expansion{}
+@code{"done" | "running" | "connected" | "error" | "exit"}
+
+@item @var{асинхр-класс} @expansion{}
+@code{"stopped" | @var{другое}} (где @var{другое} будет добавлено
+по необходимости---это все еще находится в стадии разработки).
+
+@item @var{результат} @expansion{}
+@code{[ @var{строка} "=" ] @var{значение}}
+
+@item @var{значение} @expansion{}
+@code{@var{константа} | "@{" @var{результат} ( "," @var{результат} )* "@}"}
+
+@item @var{константа} @expansion{}
+@code{@var{строка-си}}
+
+@item @var{поточн-запись} @expansion{}
+@code{@var{консольн-поточн-вывод} | @var{целев-поточн-вывод} | @var{журн-поточн-вывод}}
+
+@item @var{консольн-поточн-вывод} @expansion{}
+@code{"~" @var{строка-си}}
+
+@item @var{целев-поточн-вывод} @expansion{}
+@code{"@@" @var{строка-си}}
+
+@item @var{журн-поточн-вывод} @expansion{}
+@code{"&" @var{строка-си}}
+
+@item @var{nl} @expansion{}
+@code{CR | CR-LF}
+
+@item @var{лексема} @expansion{}
+@emph{любая последовательность цифр}.
+@end table
+
+@noindent
+Кроме того, следующее все еще находится в стадии разработки:
+
+@table @code
+@item @var{запрос}
+Это действие пока не определено.
+@end table
+
+Замечания:
+
+@noindent
+@itemize @bullet
+@item
+Все выходные последовательности заканчиваются одной строкой, содержащей
+точку.
+
+@item
+@code{@var{Лексема}} берется из соответствующего запроса.  Если
+выполнение команды прерывается командой @samp{-exec-interrupt},
+@var{лексема}, ассоциированная с сообщением @samp{*stopped}, является
+лексемой исходной выполняемой команды, а не лексемой
+команды прерывания.
+
+@item
+@cindex вывод состояния в @sc{gdb/mi}
+@var{Асинхр-вывод-статуса} содержит последующую информацию состояния о
+выполнении медленной операции.  Она может быть отброшена.  Весь вывод
+состояния начинается с префикса @samp{+}.
+
+@item
+@cindex асинхронный вывод в @sc{gdb/mi}
+@var{Асинхр-вывод-выполн} содержит асинхронное изменения состояния на цели
+(остановлена, запущена, исчезла).  Весь асинхронный вывод начинается с
+префикса @samp{*}.
+
+@item
+@cindex уведомительный вывод в @sc{gdb/mi}
+@var{Асинхр-вывод-уведомл} содержит сопровождающую информацию, которую
+должен обработать клиент (например, информацию о новой точке останова).
+Весь уведомительный вывод начинается с префикса @samp{=}.
+
+@item
+@cindex консольный вывод в @sc{gdb/mi}
+@var{Консольн-поточн-вывод} является выводом, который должен быть
+отображен на консоли без изменений.  Он является текстовым
+ответом на команду CLI.  Весь консольный вывод начинается с префикса
+@samp{~}.
+
+@item
+@cindex целевой вывод в @sc{gdb/mi}
+@var{Целев-поточн-вывод} является выводом, произведенным целевой
+программой.  Весь целевой вывод начинается с префикса @samp{@@}.
+
+@item
+@cindex журнальный вывод в @sc{gdb/mi}
+@var{Журн-поточн-вывод} является выходным текстом, происходящим от
+внутренней реализации @value{GDBN}, например, сообщения, которые должны
+быть отображены как часть журнала ошибок.  Весь журнальный вывод
+начинается с префикса @samp{&}.
+@end itemize
+
+@xref{Поточные записи GDB/MI, ,Поточные записи @sc{gdb/mi}}, для
+более подробной информации о различных выводимых записях.
+
+@xref{Черновик изменений к выходному синтаксису GDB/MI, ,Черновик
+изменений к выходному синтаксису @sc{gdb/mi}}, для предлагаемых изменений
+к выходному синтаксису.
+
+@node Простые примеры GDB/MI
+@subsection Простые примеры взаимодействия с @sc{gdb/mi}
+@cindex @sc{gdb/mi}, простые примеры
+
+Этот подраздел представляет несколько простых примеров взаимодействия с
+использованием интерфейса @sc{gdb/mi}.  В этих примерах, @samp{->}
+означает, что следующая строка передается @sc{gdb/mi} в качестве ввода,
+а @samp{<-} означает вывод, полученный от @sc{gdb/mi}.
+
+@subsubheading Останов цели
+
+Вот пример останова подчиненного процесса:
+
+@example
+-> -stop
+<- (@value{GDBP})
+@end example
+
+@noindent
+и затем:
+
+@example
+<- *stop,reason="stop",address="0x123",source="a.c:123"
+<- (@value{GDBP})
+@end example
+
+@subsubheading Простая команда CLI
+
+Вот пример простой команды CLI, передаваемой ему через @sc{gdb/mi}.
+
+@example
+-> print 1+2
+<- ~3\n
+<- (@value{GDBP})
+@end example
+
+@subsubheading Команда с побочными эффектами
+
+@example
+-> -symbol-file xyz.exe
+<- *breakpoint,nr="3",address="0x123",source="a.c:123"
+<- (@value{GDBP})
+@end example
+
+@subsubheading Плохая команда
+
+Вот что происходит, если вы передаете несуществующую команду:
+
+@example
+-> -rubbish
+<- error,"Rubbish not found"
+<- (@value{GDBP})
+@end example
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Совместимость GDB/MI с CLI
+@section Совместимость @sc{gdb/mi} с CLI
+
+@cindex совместимость, @sc{gdb/mi} и CLI
+@cindex @sc{gdb/mi}, совместимость с CLI
+Чтобы помочь пользователям, знакомым с существующим в @value{GDBN}
+интерфейсом CLI, @sc{gdb/mi} принимает существующие команды CLI.
+Как определено синтаксисом, такие команды могут быть непосредственно
+введены в интерфейс @sc{gdb/mi}, и @value{GDBN} будет отвечать.
+
+Этот механизм предоставляется для помощи разработчикам клиентов
+@sc{gdb/mi}, а не как надежный интерфейс к CLI.  Так как команда
+интерпретируется в среде, которая подразумевает поведение @sc{gdb/mi},
+точные результаты таких команд в конечном итоге скорее всего
+станут неудобоваримой смесью вывода @sc{gdb/mi} и CLI.
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Выходные записи GDB/MI
+@section Выходные записи @sc{gdb/mi}
+
+@menu
+* Результирующие записи GDB/MI::
+* Поточные записи GDB/MI::
+* Внеочередные записи GDB/MI::
+@end menu
+
+@node Результирующие записи GDB/MI
+@subsection Результирующие записи @sc{gdb/mi}
+
+@cindex результирующие записи в @sc{gdb/mi}
+@cindex @sc{gdb/mi}, результирующие записи
+В дополнение к множеству внеочередных уведомлений, ответ на команду
+@sc{gdb/mi} включает один из следующих указателей результата:
+
+@table @code
+@findex ^done
+@item "^done" [ "," @var{результаты} ]
+Синхронная операция прошла успешно, возвращаемыми значениями являются
+@code{@var{результаты}}.
+
+@item "^running"
+@findex ^running
+@c Is this one correct?  Should it be an out-of-band notification?
+Асинхронная операция была успешно начата.  Цель выполняется.
+
+@item "^error" "," @var{строка-си}
+@findex ^error
+Операция завершилась с ошибкой.  @code{@var{Строка-си}} содержит
+соответствующее сообщение об ошибке.
+@end table
+
+@node Поточные записи GDB/MI
+@subsection Поточные записи @sc{gdb/mi}
+
+@cindex @sc{gdb/mi}, поточные записи
+@cindex поточные записи в @sc{gdb/mi}
+@value{GDBN} хранит число выходных потоков: консоль, цель и журнал.
+Вывод, предназначенный для этих потоков, пропускается через интерфейс
+@sc{gdb/mi} при помощи @dfn{поточных записей}.
+
+Каждая поточная запись начинается с уникального @dfn{префиксного
+символа}, который идентифицирует свой поток (@pxref{Выходной синтаксис
+GDB/MI, ,Выходной синтаксис @sc{gdb/mi}}).  Помимо префикса, каждая
+поточная запись содержит @code{@var{строку-вывод}}.  Это либо простой
+текст (с подразумеваемым знаком новой строки), или Си-строка в кавычках
+(которая не содержит подразумеваемого знака новой строки).
+
+@table @code
+@item "~" @var{строка-вывод}
+Консольный поток вывода содержит текст, который должен быть отображен в
+консольном окне CLI.  Он содержит текстовые ответы на команды CLI.
+
+@item "@@" @var{строка-вывод}
+Целевой поток вывода содержит произвольный текстовый вывод от
+выполняемой цели.
+
+@item "&" @var{строка-вывод}
+Журнальный поток содержит отладочные сообщения, которые создает сам
+@value{GDBN}.
+@end table
+
+@node Внеочередные записи GDB/MI
+@subsection Внеочередные записи @sc{gdb/mi}
+
+@cindex внеочередные записи в @sc{gdb/mi}
+@cindex @sc{gdb/mi}, внеочередные записи
+@dfn{Внеочередные} записи используются для уведомления клиента @sc{gdb/mi}
+о произошедших дополнительных изменениях.  Эти изменения могут либо
+исходить от @sc{gdb/mi} (например, измененная точка останова), либо быть
+результатом действий цели (например, цель остановилась).
+
+Ниже приведен предварительный список возможных внеочередных записей.
+
+@table @code
+@item "*" "stop"
+@end table
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Формат описания команд GDB/MI
+@section Формат описания команд @sc{gdb/mi}
+
+Оставшиеся разделы описывают блоки команд.  Каждый блок команд
+схематично аналогичен этому разделу.
+
+Заметьте, что разбиения строк в примерах присутствуют только для
+удобства чтения.  Они не появляются в реальном выводе.  Учтите также,
+что команды с недоступными примерами (Н.П.@:) еще не реализованы.
+
+@subheading Мотивация
+
+Мотивация для этого набора команд.
+
+@subheading Введение
+
+Краткое введение в этот набор команд в целом.
+
+@subheading Команды
+
+Для каждой команды в блоке, описано следующее:
+
+@subsubheading Краткое описание
+
+@example
+ -command @var{арг}@dots{}
+@end example
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующая команда CLI @value{GDBN}.
+
+@subsubheading Результат
+
+@subsubheading Внеочередные сообщения
+
+@subsubheading Примечания
+
+@subsubheading Пример
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Команды GDB/MI для таблицы точек останова
+@section Команды @sc{gdb/mi} для таблицы точек останова
+
+@cindex команды точки останова для @sc{gdb/mi}
+@cindex @sc{gdb/mi}, команды точки останова
+Этот раздел описывает команды @sc{gdb/mi} для управления точками
+останова.
+
+@subheading Команда @code{-break-after}
+@findex -break-after
+
+@subsubheading Краткое описание
+
+@example
+ -break-after @var{номер} @var{число}
+@end example
+
+Точка останова с номером @var{номер} не срабатывает, пока она не будет
+достигнута @var{число} раз.  Чтобы увидеть, как это отражается на выводе
+команды @samp{-break-list}, смотрите ниже описание команды
+@samp{-break-list}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{ignore}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-break-insert main
+^done,bkpt=@{number="1",addr="0x000100d0",file="hello.c",line="5"@}
+(@value{GDBP})
+-break-after 1 3
+~
+^done
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="1",type="breakpoint",disp="keep",enabled="y",
+addr="0x000100d0",func="main",file="hello.c",line="5",times="0",
+ignore="3"@}@}
+(@value{GDBP})
+@end smallexample
+
+@ignore
+@subheading The @code{-break-catch} Command
+@findex -break-catch
+
+@subheading The @code{-break-commands} Command
+@findex -break-commands
+@end ignore
+
+
+@subheading Команда @code{-break-condition}
+@findex -break-condition
+
+@subsubheading Краткое описание
+
+@example
+ -break-condition @var{номер} @var{выраж}
+@end example
+
+Точка останова @var{номер} остановит программу, только если условие
+@var{выраж} истино.  Условие становится частью вывода @samp{-break-list}
+(смотрите ниже описание команды @samp{-break-list}).
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{condition}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-break-condition 1 1
+^done
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="1",type="breakpoint",disp="keep",enabled="y",
+addr="0x000100d0",func="main",file="hello.c",line="5",cond="1",
+times="0",ignore="3"@}@}
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-break-delete}
+@findex -break-delete
+
+@subsubheading Краткое описание
+
+@example
+ -break-delete ( @var{точка-останова} )+
+@end example
+
+Удалить точки останова, чьи номера указаны в списке аргументов.  Это,
+очевидно, отражается на списке точек останова.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{delete}.
+
+@subsubheading Пример
+
+@example
+(@value{GDBP})
+-break-delete 1
+^done
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{@}
+(@value{GDBP})
+@end example
+
+@subheading Команда @code{-break-disable}
+@findex -break-disable
+
+@subsubheading Краткое описание
+
+@example
+ -break-disable ( @var{точка-останова} )+
+@end example
+
+Отключить упомянутые @var{точки-останова}.  Для указанных
+@var{точек-останова} поле @samp{enabled} в списке точек останова
+теперь установлено в @samp{n}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{disable}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-break-disable 2
+^done
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="2",type="breakpoint",disp="keep",enabled="n",
+addr="0x000100d0",func="main",file="hello.c",line="5",times="0"@}@}
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-break-enable}
+@findex -break-enable
+
+@subsubheading Краткое описание
+
+@example
+ -break-enable ( @var{точка-останова} )+
+@end example
+
+Включить (ранее отключенные) @var{точки-останова}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{enable}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-break-enable 2
+^done
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="2",type="breakpoint",disp="keep",enabled="y",
+addr="0x000100d0",func="main",file="hello.c",line="5",times="0"@}@}
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-break-info}
+@findex -break-info
+
+@subsubheading Краткое описание
+
+@example
+ -break-info @var{точка-останова}
+@end example
+
+@c REDUNDANT???
+Получить информацию об одной точке останова.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info break
+@var{точка-останова}}.
+
+@subsubheading Пример
+Н.П.
+
+@subheading Команда @code{-break-insert}
+@findex -break-insert
+
+@subsubheading Краткое описание
+
+@example
+ -break-insert [ -t ] [ -h ] [ -r ]
+    [ -c @var{условие} ] [ -i @var{счетчик-игнорирований} ]
+    [ -p @var{нить} ] [ @var{строка} | @var{адрес} ]
+@end example
+
+@noindent
+@var{Строка}, если указана, может быть одной из:
+
+@itemize @bullet
+@item функция
+@c @item +offset
+@c @item -offset
+@c @item linenum
+@item имя-файла:номер-строки
+@item имя-файла:функция
+@item *адрес
+@end itemize
+
+Вот возможные необязательные параметры этой команды:
+
+@table @samp
+@item -t
+Вставить временную точку останова.
+@item -h
+Вставить аппаратную точку останова.
+@item -c @var{условие}
+Сделать точку останова условной с заданным @var{условием}.
+@item -i @var{счетчик-игнорирований}
+Инициализировать @var{счетчик-игнорирований}.
+@item -r
+Вставить обычную точку останова во всех функциях, чьи имена
+удовлетворяют данному регулярному выражению.  Другие флаги к регулярному
+выражению неприменимы.
+@end table
+
+@subsubheading Результат
+
+Результат имеет форму:
+
+@example
+ ^done,bkptno="@var{номер}",func="@var{имя-функции}",
+  file="@var{имя-файла}",line="@var{ном-строки}"
+@end example
+
+@noindent
+где @var{номер} является номером этой точки останова в @value{GDBN},
+@var{имя-функции}---имя функции, в которой была вставлена точка
+останова, @var{имя-файла}---имя исходного файла, в котором находится эта
+функция, а @var{ном-строки} является номером строки исходного текста в
+этом файле.
+
+Замечание: этот формат может изменяться.
+@c An out-of-band breakpoint instead of part of the result?
+
+@subsubheading Команда @value{GDBN}
+
+Соответстующими командами @value{GDBN} являются @samp{break},
+@samp{tbreak}, @samp{hbreak}, @samp{thbreak} и @samp{rbreak}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-break-insert main
+^done,bkpt=@{number="1",addr="0x0001072c",file="recursive2.c",line="4"@}
+(@value{GDBP})
+-break-insert -t foo
+^done,bkpt=@{number="2",addr="0x00010774",file="recursive2.c",line="11"@}
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="1",type="breakpoint",disp="keep",enabled="y",
+addr="0x0001072c", func="main",file="recursive2.c",line="4",times="0"@},
+bkpt=@{number="2",type="breakpoint",disp="del",enabled="y",
+addr="0x00010774",func="foo",file="recursive2.c",line="11",times="0"@}@}
+(@value{GDBP})
+-break-insert -r foo.*
+~int foo(int, int);
+^done,bkpt=@{number="3",addr="0x00010774",file="recursive2.c",line="11"@}
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-break-list}
+@findex -break-list
+
+@subsubheading Краткое описание
+
+@example
+ -break-list
+@end example
+
+Отображает список установленных точек останова, показывая следующие
+поля:
+
+@table @samp
+@item Number
+номер точки останова
+@item Type
+тип точки останова: @samp{breakpoint} или @samp{watchpoint}
+@item Disposition
+эта точка останова должна быть удалена или отключена при срабатывании:
+@samp{keep} или @samp{nokeep}
+@item Enabled
+включена точка останова или нет: @samp{y} или @samp{n}
+@item Address
+местоположение в памяти, где установлена точка останова
+@item What
+логическое положение точки останова, выраженное именем функции, именем
+файла, номером строки
+@item Times
+Число раз, которое точка останова срабатывала
+@end table
+
+Если точек останова или наблюдения нет, поле @code{BreakpointTable} является
+пустым списком.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info break}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="1",type="breakpoint",disp="keep",enabled="y",
+addr="0x000100d0",func="main",file="hello.c",line="5",times="0"@},
+bkpt=@{number="2",type="breakpoint",disp="keep",enabled="y",
+addr="0x00010114",func="foo",file="hello.c",line="13",times="0"@}@}
+(@value{GDBP})
+@end smallexample
+
+Вот пример результата, когда точек останова нет:
+
+@smallexample
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{@}
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-break-watch}
+@findex -break-watch
+
+@subsubheading Краткое описание
+
+@example
+ -break-watch [ -a | -r ]
+@end example
+
+Создать точку наблюдения.  С ключем @samp{-a} будет создана точка
+наблюдения за @dfn{доступом}, то есть такая точка наблюдения, которая
+срабатывает либо при чтении, либо при записи в определенное
+местоположение в памяти.  С ключем @samp{-r} созданная точка наблюдения
+будет точкой наблюдения за @dfn{чтением}, то есть она будет срабатывать
+только когда к определенному местоположению в памяти осуществляется доступ на
+чтение.  Без этих ключей будет создана обычная точка наблюдения, то есть
+она будет срабатывать, когда к местоположению в памяти осуществляется
+доступ для записи.
+@xref{Установка точек наблюдения, ,Установка точек наблюдения}.
+
+Заметьте, что @samp{-break-list} выдаст единый список установленных
+точек наблюдения и останова.
+
+@subsubheading Комада @value{GDBN}
+
+Соответствующими командами @value{GDBN} являются @samp{watch},
+@samp{awatch} и @samp{rwatch}.
+
+@subsubheading Пример
+
+Установка точки наблюдения за переменной в функции @code{main}:
+
+@smallexample
+(@value{GDBP})
+-break-watch x
+^done,wpt=@{number="2",exp="x"@}
+(@value{GDBP})
+-exec-continue
+^running
+^done,reason="watchpoint-trigger",wpt=@{number="2",exp="x"@},
+value=@{old="-268439212",new="55"@},
+frame=@{func="main",args=@{@},file="recursive2.c",line="5"@}
+(@value{GDBP})
+@end smallexample
+
+Установка точки наблюдения за локальной переменной функции.
+@value{GDBN} дважды остановит выполнение программы: сначала при
+изменении значения переменной, затем при выходе точки наблюдения из
+области видимости.
+
+@smallexample
+(@value{GDBP})
+-break-watch C
+^done,wpt=@{number="5",exp="C"@}
+(@value{GDBP})
+-exec-continue
+^running
+^done,reason="watchpoint-trigger",
+wpt=@{number="5",exp="C"@},value=@{old="-276895068",new="3"@},
+frame=@{func="callee4",args=@{@},
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="13"@}
+(@value{GDBP})
+-exec-continue
+^running
+^done,reason="watchpoint-scope",wpnum="5",
+frame=@{func="callee3",args=@{@{name="strarg",
+value="0x11940 \"A string argument.\""@}@},
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="18"@}
+(@value{GDBP})
+@end smallexample
+
+Список точек останова и наблюдения, в разных местах выполнения
+программы.  Заметьте, что как только точка наблюдения выходит из области
+видимости, она удаляется.
+
+@smallexample
+(@value{GDBP})
+-break-watch C
+^done,wpt=@{number="2",exp="C"@}
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="1",type="breakpoint",disp="keep",enabled="y",
+addr="0x00010734",func="callee4",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="8",times="1"@},
+bkpt=@{number="2",type="watchpoint",disp="keep",
+enabled="y",addr="",what="C",times="0"@}@}
+(@value{GDBP})
+-exec-continue
+^running
+^done,reason="watchpoint-trigger",wpt=@{number="2",exp="C"@},
+value=@{old="-276895068",new="3"@},
+frame=@{func="callee4",args=@{@},
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="13"@}
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="1",type="breakpoint",disp="keep",enabled="y",
+addr="0x00010734",func="callee4",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="8",times="1"@},
+bkpt=@{number="2",type="watchpoint",disp="keep",
+enabled="y",addr="",what="C",times="-5"@}@}
+(@value{GDBP})
+-exec-continue
+^running
+^done,reason="watchpoint-scope",wpnum="2",
+frame=@{func="callee3",args=@{@{name="strarg",
+value="0x11940 \"A string argument.\""@}@},
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="18"@}
+(@value{GDBP})
+-break-list
+^done,BreakpointTable=@{hdr=@{"Num","Type","Disp","Enb","Address","What"@},
+bkpt=@{number="1",type="breakpoint",disp="keep",enabled="y",
+addr="0x00010734",func="callee4",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="8",times="1"@}@}
+(@value{GDBP})
+@end smallexample
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Управление данными GDB/MI
+@section Управление данными @sc{gdb/mi}
+
+@cindex управление данными, в @sc{gdb/mi}
+@cindex @sc{gdb/mi}, управление данными
+Этот раздел описывает команды @sc{gdb/mi} для управления данными:
+исследование памяти и регистров, вычисление выражений, и так далее.
+
+@c REMOVED FROM THE INTERFACE.
+@c @subheading -data-assign
+@c Change the value of a program variable. Plenty of side effects.
+@c @subsubheading GDB command
+@c set variable
+@c @subsubheading Example
+@c N.A.
+
+@subheading Команда @code{-data-disassemble}
+@findex -data-disassemble
+
+@subsubheading Краткое описание
+
+@example
+ -data-disassemble
+    [ -s @var{нач-адр} -e @var{кон-адр} ]
+  | [ -f @var{имя-файла} -l @var{ном-строки} [ -n @var{ст} ] ]
+  -- @var{режим}
+@end example
+
+@noindent
+Где:
+
+@table @samp
+@item @var{нач-адр}
+начальный адрес (или @code{$pc})
+@item @var{кон-адр}
+конечный адрес
+@item @var{имя-файла}
+имя файла для дисассемблирования
+@item @var{ном-строки}
+номер строки, в районе которой проводить дисассемблирование
+@item @var{ст}
+число строк дисассемблирования, которое необходимо произвести.  Если
+равно -1 и @var{кон-адр} не указан, то будет дисассемблирована целая
+функция.  Если @var{кон-адр} указан и не равен нулю, и
+@var{ст} меньше, чем количество строк дисассемблирования между
+@var{нач-адр} и @var{кон-адр}, отображаются только @var{ст} строк.
+Если @var{ст} больше, чем число строк между @var{нач-адр} и
+@var{кон-адр}, отображаются только строки до @var{кон-адр}.
+@item @var{режим}
+либо 0 (означает только результат дисассемблирования), либо 1 (означает
+смесь исходного текста и результата дисассемблирования).
+@end table
+
+@subsubheading Результат
+
+Вывод для каждой инструкции состоит из четырех полей:
+
+@itemize @bullet
+@item Адрес
+@item Имя-Функции
+@item Смещение
+@item Инструкция
+@end itemize
+
+Заметьте, что то, что включено в поле инструкции, не обрабатывается
+непосредственно @sc{gdb/mi}, то есть изменить его формат невозможно.
+
+@subsubheading Команда @value{GDBN}
+
+Непосредственного отображения этой команды в CLI нет.
+
+@subsubheading Пример
+
+Дисассемблирование от текущего значения @code{$pc} до @code{$pc + 20}:
+
+@smallexample
+(@value{GDBP})
+-data-disassemble -s $pc -e "$pc + 20" -- 0
+^done,
+asm_insns=@{
+@{address="0x000107c0",func-name="main",offset="4",
+inst="mov  2, %o0"@},
+@{address="0x000107c4",func-name="main",offset="8",
+inst="sethi  %hi(0x11800), %o2"@},
+@{address="0x000107c8",func-name="main",offset="12",
+inst="or  %o2, 0x140, %o1\t! 0x11940 <_lib_version+8>"@},
+@{address="0x000107cc",func-name="main",offset="16",
+inst="sethi  %hi(0x11800), %o2"@},
+@{address="0x000107d0",func-name="main",offset="20",
+inst="or  %o2, 0x168, %o4\t! 0x11968 <_lib_version+48>"@}@}
+(@value{GDBP})
+@end smallexample
+
+Дисассемблирование всей функции @code{main}.  Строка 32 является частью
+@code{main}.
+
+@smallexample
+-data-disassemble -f basics.c -l 32 -- 0
+^done,asm_insns=@{
+@{address="0x000107bc",func-name="main",offset="0",
+inst="save  %sp, -112, %sp"@},
+@{address="0x000107c0",func-name="main",offset="4",
+inst="mov   2, %o0"@},
+@{address="0x000107c4",func-name="main",offset="8",
+inst="sethi %hi(0x11800), %o2"@},
+[...]
+@{address="0x0001081c",func-name="main",offset="96",inst="ret "@},
+@{address="0x00010820",func-name="main",offset="100",inst="restore "@}@}
+(@value{GDBP})
+@end smallexample
+
+Дисассемблирование 3 инструкций от начала @code{main}:
+
+@smallexample
+(@value{GDBP})
+-data-disassemble -f basics.c -l 32 -n 3 -- 0
+^done,asm_insns=@{
+@{address="0x000107bc",func-name="main",offset="0",
+inst="save  %sp, -112, %sp"@},
+@{address="0x000107c0",func-name="main",offset="4",
+inst="mov  2, %o0"@},
+@{address="0x000107c4",func-name="main",offset="8",
+inst="sethi  %hi(0x11800), %o2"@}@}
+(@value{GDBP})
+@end smallexample
+
+Дисассемблирование 3 инструкций от начала @code{main} в смешаном режиме:
+
+@smallexample
+(@value{GDBP})
+-data-disassemble -f basics.c -l 32 -n 3 -- 1
+^done,asm_insns=@{
+src_and_asm_line=@{line="31",
+file="/kwikemart/marge/ezannoni/flathead-dev/devo/gdb/ \
+  testsuite/gdb.mi/basics.c",line_asm_insn=@{
+@{address="0x000107bc",func-name="main",offset="0",
+inst="save  %sp, -112, %sp"@}@}@},
+
+src_and_asm_line=@{line="32",
+file="/kwikemart/marge/ezannoni/flathead-dev/devo/gdb/ \
+  testsuite/gdb.mi/basics.c",line_asm_insn=@{
+@{address="0x000107c0",func-name="main",offset="4",
+inst="mov  2, %o0"@},
+@{address="0x000107c4",func-name="main",offset="8",
+inst="sethi  %hi(0x11800), %o2"@}@}@}@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-data-evaluate-expression}
+@findex -data-evaluate-expression
+
+@subsubheading Краткое описание
+
+@example
+ -data-evaluate-expression @var{выраж}
+@end example
+
+Вычислить выражение @var{выраж}.  Выражение может содержать подчиненный
+вызов функции.  Вызов функции быдет выполнен синхронно.  Если выражение
+содержит пробелы, оно должно быть заключено в двойные кавычки.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующими командами @value{GDBN} являются @samp{print},
+@samp{output} и @samp{call}.  В @code{gdbtk} есть
+соответствующая команда @samp{gdb_eval}.
+
+@subsubheading Пример
+
+В следующем примере числа, предшествующие командам, суть @dfn{лексемы}.
+Для их описания, см. @ref{Синтаксис команд GDB/MI, ,Синтаксис команд
+@sc{gdb/mi}}.  Обратите внимание на то, как @sc{gdb/mi} возвращает
+те же лексемы в своем выводе.
+
+@smallexample
+211-data-evaluate-expression A
+211^done,value="1"
+(@value{GDBP})
+311-data-evaluate-expression &A
+311^done,value="0xefffeb7c"
+(@value{GDBP})
+411-data-evaluate-expression A+3
+411^done,value="4"
+(@value{GDBP})
+511-data-evaluate-expression "A + 3"
+511^done,value="4"
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-data-list-changed-registers}
+@findex -data-list-changed-registers
+
+@subsubheading Краткое описание
+
+@example
+ -data-list-changed-registers
+@end example
+
+Выводит список регистров, которые изменились.
+
+@subsubheading Команда @value{GDBN}
+
+@value{GDBN} не имеет прямого аналога этой команды; соответствующей
+командой @code{gdbtk} является @samp{gdb_changed_register_list}.
+
+@subsubheading Пример
+
+На плате PPC MBX:
+
+@smallexample
+(@value{GDBP})
+-exec-continue
+^running
+
+(@value{GDBP})
+*stopped,reason="breakpoint-hit",bkptno="1",frame=@{func="main",
+args=@{@},file="try.c",line="5"@}
+(@value{GDBP})
+-data-list-changed-registers
+^done,changed-registers=@{"0","1","2","4","5","6","7","8","9",
+"10","11","13","14","15","16","17","18","19","20","21","22","23",
+"24","25","26","27","28","30","31","64","65","66","67","69"@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-data-list-register-names}
+@findex -data-list-register-names
+
+@subsubheading Краткое описание
+
+@example
+ -data-list-register-names [ ( @var{ном-рег} )+ ]
+@end example
+
+Показать список имен регистров текущей цели.  Если аргументы не заданы,
+показывается список имен всех регистров.  Если в качестве аргументов
+заданы целые числа, команда напечатает список имен регистров,
+соответствующих аргументам.
+
+@subsubheading Команда @value{GDBN}
+
+В @value{GDBN} нет команды, которая соответствует
+@samp{-data-list-register-names}.  В @code{gdbtk} соответствующей
+командой является @samp{gdb_regnames}.
+
+@subsubheading Пример
+
+Для платы PPC MBX:
+@smallexample
+(@value{GDBP})
+-data-list-register-names
+^done,register-names=@{"r0","r1","r2","r3","r4","r5","r6","r7",
+"r8","r9","r10","r11","r12","r13","r14","r15","r16","r17","r18",
+"r19","r20","r21","r22","r23","r24","r25","r26","r27","r28","r29",
+"r30","r31","f0","f1","f2","f3","f4","f5","f6","f7","f8","f9",
+"f10","f11","f12","f13","f14","f15","f16","f17","f18","f19","f20",
+"f21","f22","f23","f24","f25","f26","f27","f28","f29","f30","f31",
+"pc","ps","cr","lr","ctr","xer"@}
+(@value{GDBP})
+-data-list-register-names 1 2 3
+^done,register-names=@{"r1","r2","r3"@}
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-data-list-register-values}
+@findex -data-list-register-values
+
+@subsubheading Краткое описание
+
+@example
+ -data-list-register-values @var{фмт} [ ( @var{ном-рег} )*]
+@end example
+
+Отобразить содержимое регистров.  @var{Фмт} является форматом, в
+соответствии с которым должно быть возвращено содержимое регистров, за
+которым следует необязательный список чисел, указывающих регистры,
+подлежащие отображению.  Отсутствие списка чисел означает, что должно быть
+возвращено содержимое всех регистров.
+
+Вот допустимые форматы для @var{фмт}:
+
+@table @code
+@item x
+Шестнадцатеричный
+@item o
+Восьмеричный
+@item t
+Двоичный
+@item d
+Десятичный
+@item r
+Без преобразования
+@item N
+Натуральный
+@end table
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующими командами @value{GDBN} являются @samp{info reg},
+@samp{info all-reg} и (в @code{gdbtk}) @samp{gdb_fetch_registers}.
+
+@subsubheading Пример
+
+Для платы PPC MBX (имейте ввиду: переносы строк даны только для удобства
+чтения, они не появляются в реальном выводе):
+
+@smallexample
+(@value{GDBP})
+-data-list-register-values r 64 65
+^done,register-values=@{@{number="64",value="0xfe00a300"@},
+@{number="65",value="0x00029002"@}@}
+(@value{GDBP})
+-data-list-register-values x
+^done,register-values=@{@{number="0",value="0xfe0043c8"@},
+@{number="1",value="0x3fff88"@},@{number="2",value="0xfffffffe"@},
+@{number="3",value="0x0"@},@{number="4",value="0xa"@},
+@{number="5",value="0x3fff68"@},@{number="6",value="0x3fff58"@},
+@{number="7",value="0xfe011e98"@},@{number="8",value="0x2"@},
+@{number="9",value="0xfa202820"@},@{number="10",value="0xfa202808"@},
+@{number="11",value="0x1"@},@{number="12",value="0x0"@},
+@{number="13",value="0x4544"@},@{number="14",value="0xffdfffff"@},
+@{number="15",value="0xffffffff"@},@{number="16",value="0xfffffeff"@},
+@{number="17",value="0xefffffed"@},@{number="18",value="0xfffffffe"@},
+@{number="19",value="0xffffffff"@},@{number="20",value="0xffffffff"@},
+@{number="21",value="0xffffffff"@},@{number="22",value="0xfffffff7"@},
+@{number="23",value="0xffffffff"@},@{number="24",value="0xffffffff"@},
+@{number="25",value="0xffffffff"@},@{number="26",value="0xfffffffb"@},
+@{number="27",value="0xffffffff"@},@{number="28",value="0xf7bfffff"@},
+@{number="29",value="0x0"@},@{number="30",value="0xfe010000"@},
+@{number="31",value="0x0"@},@{number="32",value="0x0"@},
+@{number="33",value="0x0"@},@{number="34",value="0x0"@},
+@{number="35",value="0x0"@},@{number="36",value="0x0"@},
+@{number="37",value="0x0"@},@{number="38",value="0x0"@},
+@{number="39",value="0x0"@},@{number="40",value="0x0"@},
+@{number="41",value="0x0"@},@{number="42",value="0x0"@},
+@{number="43",value="0x0"@},@{number="44",value="0x0"@},
+@{number="45",value="0x0"@},@{number="46",value="0x0"@},
+@{number="47",value="0x0"@},@{number="48",value="0x0"@},
+@{number="49",value="0x0"@},@{number="50",value="0x0"@},
+@{number="51",value="0x0"@},@{number="52",value="0x0"@},
+@{number="53",value="0x0"@},@{number="54",value="0x0"@},
+@{number="55",value="0x0"@},@{number="56",value="0x0"@},
+@{number="57",value="0x0"@},@{number="58",value="0x0"@},
+@{number="59",value="0x0"@},@{number="60",value="0x0"@},
+@{number="61",value="0x0"@},@{number="62",value="0x0"@},
+@{number="63",value="0x0"@},@{number="64",value="0xfe00a300"@},
+@{number="65",value="0x29002"@},@{number="66",value="0x202f04b5"@},
+@{number="67",value="0xfe0043b0"@},@{number="68",value="0xfe00b3e4"@},
+@{number="69",value="0x20002b03"@}@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-data-read-memory}
+@findex -data-read-memory
+
+@subsubheading Краткое описание
+
+@example
+ -data-read-memory [ -o @var{смещение} ]
+   @var{адрес} @var{формат-слова} @var{размер-слова}
+   @var{число-строк} @var{число-колонок} [ @var{asсимв} ]
+@end example
+
+@noindent
+где:
+
+@table @samp
+@item @var{адрес}
+Выражение, определяющее адрес в памяти первого слова, которое надо
+прочитать.  Сложные выражения, содержащие пробельные символы, должны
+заключаться в кавычки с использованием соглашений Си.
+
+@item @var{формат-слова}
+Формат, который должен быть использован для печати слов памяти.
+Обозначения те же, что и для команды @value{GDBN} @code{print}
+(@pxref{Форматы вывода, ,Форматы вывода}).
+
+@item @var{размер-слова}
+Размер в байтах каждого слова в памяти.
+
+@item @var{число-строк}
+Число строк в выходной таблице.
+
+@item @var{число-колонок}
+Число колонок в выходной таблице.
+
+@item @var{asсимв}
+В настоящее время означает, что каждая строка должна включать
+@sc{ascii}-дамп.  Значение @var{asсимв} используется в качестве
+заполняющего символа, когда байт не является элементом набора печатных
+знаков @sc{ascii} (печатные знаки @sc{ascii} это те знаки, чьи коды
+находятся между 32 и 126 включительно).
+
+@item @var{смещение}
+Смещение, которое надо добавить к @var{адресу} перед тем, как начать
+извлечение из памяти.
+@end table
+
+Эта команда отображает содержимое памяти в виде таблицы из
+@var{число-строк} на @var{число-колонок} слов, причем каждое слово
+занимает @var{размер-слова} байт.  В общей сложности считывается
+@code{@var{число-строк} * @var{число-колонок} * @var{размер-слова}}
+байт (возвращается как @samp{total-bytes}).  Если цель должна возвратить
+меньше запрошенного числа байт, отсутствующие слова идентифицируются при
+помощи @samp{N/A}.  Число байт, прочитанное с цели, возвращается в
+@samp{nr-bytes}, а начальный адрес, использованный для чтении памяти, в
+@samp{addr}.
+
+Адрес следующей/предыдущей строки или страницы доступен в
+@samp{next-row} и @samp{prev-row}, @samp{next-page} и @samp{prev-page}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{x}.  @code{gdbtk}
+имеет команду чтения памяти @samp{gdb_get_mem}.
+
+@subsubheading Пример
+
+Прочитать шесть байт памяти, начиная с @code{bytes+6}, но сместиться на
+@code{-6} байт.  Форматировать в три ряда по две колонки.  Один байт на
+слово.  Отображать каждое слово в шестнадцатеричном виде.
+
+@smallexample
+(@value{GDBP})
+9-data-read-memory -o -6 -- bytes+6 x 1 3 2
+9^done,addr="0x00001390",nr-bytes="6",total-bytes="6",
+next-row="0x00001396",prev-row="0x0000138e",next-page="0x00001396",
+prev-page="0x0000138a",memory=@{
+@{addr="0x00001390",data=@{"0x00","0x01"@}@},
+@{addr="0x00001392",data=@{"0x02","0x03"@}@},
+@{addr="0x00001394",data=@{"0x04","0x05"@}@}@}
+(@value{GDBP})
+@end smallexample
+
+Прочитать два байта памяти, начиная с адреса @code{shorts + 64} и
+отобразить в виде одного слова в десятичном виде.
+
+@smallexample
+(@value{GDBP})
+5-data-read-memory shorts+64 d 2 1 1
+5^done,addr="0x00001510",nr-bytes="2",total-bytes="2",
+next-row="0x00001512",prev-row="0x0000150e",
+next-page="0x00001512",prev-page="0x0000150e",memory=@{
+@{addr="0x00001510",data=@{"128"@}@}@}
+(@value{GDBP})
+@end smallexample
+
+Прочитать тридцать два байта памяти, начиная с @code{bytes+16}, и
+форматировать на восемь рядов по четыре колонки.  Включить строку,
+закодированную с использованием @samp{x} в качестве непечатного символа.
+
+@smallexample
+(@value{GDBP})
+4-data-read-memory bytes+16 x 1 8 4 x
+4^done,addr="0x000013a0",nr-bytes="32",total-bytes="32",
+next-row="0x000013c0",prev-row="0x0000139c",
+next-page="0x000013c0",prev-page="0x00001380",memory=@{
+@{addr="0x000013a0",data=@{"0x10","0x11","0x12","0x13"@},ascii="xxxx"@},
+@{addr="0x000013a4",data=@{"0x14","0x15","0x16","0x17"@},ascii="xxxx"@},
+@{addr="0x000013a8",data=@{"0x18","0x19","0x1a","0x1b"@},ascii="xxxx"@},
+@{addr="0x000013ac",data=@{"0x1c","0x1d","0x1e","0x1f"@},ascii="xxxx"@},
+@{addr="0x000013b0",data=@{"0x20","0x21","0x22","0x23"@},ascii=" !\"#"@},
+@{addr="0x000013b4",data=@{"0x24","0x25","0x26","0x27"@},ascii="$%&'"@},
+@{addr="0x000013b8",data=@{"0x28","0x29","0x2a","0x2b"@},ascii="()*+"@},
+@{addr="0x000013bc",data=@{"0x2c","0x2d","0x2e","0x2f"@},ascii=",-./"@}@}
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-display-delete}
+@findex -display-delete
+
+@subsubheading Краткое описание
+
+@example
+ -display-delete @var{число}
+@end example
+
+Удалить элемент @var{номер} из списка выражений, подлежащих
+отображению.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{delete display}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-display-disable}
+@findex -display-disable
+
+@subsubheading Краткое описание
+
+@example
+ -display-disable @var{номер}
+@end example
+
+Отключить элемент @var{номер} списка выражений, подлежащих
+отображению.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{disable display}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-display-enable}
+@findex -display-enable
+
+@subsubheading Краткое описание
+
+@example
+ -display-enable @var{номер}
+@end example
+
+Включить элемент @var{номер} списка выражений, подлежащих
+отображению.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{enable display}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-display-insert}
+@findex -display-insert
+
+@subsubheading Краткое описание
+
+@example
+ -display-insert @var{выражение}
+@end example
+
+Отображать @var{выражение} всякий раз, когда программа останавливается.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{display}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-display-list}
+@findex -display-list
+
+@subsubheading Краткое описание
+
+@example
+ -display-list
+@end example
+
+Перечислить элементы списка выражений, подлежащих автоматическому
+отображению.  Текущие значения не показывать.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info display}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-environment-cd}
+@findex -environment-cd
+
+@subsubheading Краткое описание
+
+@example
+ -environment-cd @var{кат}
+@end example
+
+Установить рабочий каталог @value{GDBN}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{cd}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-environment-cd /kwikemart/marge/ezannoni/flathead-dev/devo/gdb
+^done
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-environment-directory}
+@findex -environment-directory
+
+@subsubheading Краткое описание
+
+@example
+ -environment-directory @var{кат}
+@end example
+
+Добавить каталог @var{кат} в начало пути поиска исходных файлов.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{dir}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-environment-directory /kwikemart/marge/ezannoni/flathead-dev/devo/gdb
+^done
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-environment-path}
+@findex -environment-path
+
+@subsubheading Краткое описание
+
+@example
+ -environment-path ( @var{кат} )+
+@end example
+
+Добавить каталоги @var{кат} в начало пути поиска объектных файлов.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{path}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-environment-path /kwikemart/marge/ezannoni/flathead-dev/ppc-eabi/gdb
+^done
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-environment-pwd}
+@findex -environment-pwd
+
+@subsubheading Краткое описание
+
+@example
+ -environment-pwd
+@end example
+
+Показать текущий рабочий каталог.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{pwd}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-environment-pwd
+~Working directory /kwikemart/marge/ezannoni/flathead-dev/devo/gdb.
+^done
+(@value{GDBP})
+@end smallexample
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Управление программой GDB/MI
+@section Управление программой @sc{gdb/mi}
+
+@subsubheading Завершение программы
+
+В процессе выполнения, подчиненная программа может достигнуть конца,
+если она не встретит ни одной точки останова.  В этом случае вывод будет
+включать код завершения, если программа завершилась ненормально.
+
+@subsubheading Примеры
+
+@noindent
+Программа завершилась нормально:
+
+@smallexample
+(@value{GDBP})
+-exec-run
+^running
+(@value{GDBP})
+x = 55
+*stopped,reason="exited-normally"
+(@value{GDBP})
+@end smallexample
+
+@noindent
+Программа завершилась ненормально:
+
+@smallexample
+(@value{GDBP})
+-exec-run
+^running
+(@value{GDBP})
+x = 55
+*stopped,reason="exited",exit-code="01"
+(@value{GDBP})
+@end smallexample
+
+Кроме того, программа может завершиться так, как если бы она получила
+сигнал, например @code{SIGINT}.  В этом случае, @sc{gdb/mi} отображает
+следующее:
+
+@smallexample
+(@value{GDBP})
+*stopped,reason="exited-signalled",signal-name="SIGINT",
+signal-meaning="Interrupt"
+@end smallexample
+
+
+@subheading Команда @code{-exec-abort}
+@findex -exec-abort
+
+@subsubheading Краткое описание
+
+@example
+ -exec-abort
+@end example
+
+Убить выполняющуюся подчиненную программу.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{kill}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-exec-arguments}
+@findex -exec-arguments
+
+@subsubheading Краткое описание
+
+@example
+ -exec-arguments @var{арг}
+@end example
+
+Установить аргументы подчиненной программы, которые должны быть
+использованы при следующем @samp{-exec-run}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{set args}.
+
+@subsubheading Пример
+
+@c FIXME!
+Пока нет.
+
+
+@subheading Команда @code{-exec-continue}
+@findex -exec-continue
+
+@subsubheading Краткое описание
+
+@example
+ -exec-continue
+@end example
+
+Асинхронная команда.  Возобновляет выполнение подчиненной программы до
+тех пор, пока не будет встречена точка останова, или пока подчиненная
+программа не завершится.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{continue}.
+
+@subsubheading Пример
+
+@smallexample
+-exec-continue
+^running
+(@value{GDBP})
+@@Hello world
+*stopped,reason="breakpoint-hit",bkptno="2",frame=@{func="foo",args=@{@},
+file="hello.c",line="13"@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-finish}
+@findex -exec-finish
+
+@subsubheading Краткое описание
+
+@example
+ -exec-finish
+@end example
+
+Асинхронная команда.  Возобновляет выполнение подчиненной программы до
+тех пор, пока не завершится текущая функция.  Отображает результаты,
+возвращенные функцией.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{finish}.
+
+@subsubheading Пример
+
+Функция, возвращающая @code{void}.
+
+@smallexample
+-exec-finish
+^running
+(@value{GDBP})
+@@hello from foo
+*stopped,reason="function-finished",frame=@{func="main",args=@{@},
+file="hello.c",line="7"@}
+(@value{GDBP})
+@end smallexample
+
+Функция, возвращающая что-либо отличное от @code{void}.  Печатается имя
+внутренней переменной @value{GDBN}, хранящей результат, а также и сам
+результат.
+
+@smallexample
+-exec-finish
+^running
+(@value{GDBP})
+*stopped,reason="function-finished",frame=@{addr="0x000107b0",func="foo",
+args=@{@{name="a",value="1"@},@{name="b",value="9"@}@},
+file="recursive2.c",line="14"@},
+gdb-result-var="$1",return-value="0"
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-interrupt}
+@findex -exec-interrupt
+
+@subsubheading Краткое описание
+
+@example
+ -exec-interrupt
+@end example
+
+Асинхронная команда.  Прерывает фоновое исполнение цели.  Заметьте, что
+лексема, ассоциированная с сообщением об останове, совпадает с лексемой
+для выполнения команды, которая была прервана.  Лексема для самого
+прерывания появляется только в выводе @samp{^done}.  Если пользователь
+пытается прервать невыполняющуюся программу, будет выведено сообщение об
+ошибке.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{interrupt}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+111-exec-continue
+111^running
+
+(@value{GDBP})
+222-exec-interrupt
+222^done
+(@value{GDBP})
+111*stopped,signal-name="SIGINT",signal-meaning="Interrupt",
+frame=@{addr="0x00010140",func="foo",args=@{@},file="try.c",line="13"@}
+(@value{GDBP})
+
+(@value{GDBP})
+-exec-interrupt
+^error,msg="mi_cmd_exec_interrupt: Inferior not executing."
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-next}
+@findex -exec-next
+
+@subsubheading Краткое описание
+
+@example
+ -exec-next
+@end example
+
+Асинхронная команда.  Возобновляет выполнение подчиненной программы,
+останавливая ее, когда достигается начало следующей строки исходного
+текста.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{next}.
+
+@subsubheading Пример
+
+@smallexample
+-exec-next
+^running
+(@value{GDBP})
+*stopped,reason="end-stepping-range",line="8",file="hello.c"
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-next-instruction}
+@findex -exec-next-instruction
+
+@subsubheading Краткое описание
+
+@example
+ -exec-next-instruction
+@end example
+
+Асинхронная команда.  Выполняет одну машинную инструкцию.  Если
+инструкция является вызовом функции, выполнение продолжается до возврата
+из функции.  Если программа останавливается на инструкции в середине
+строки исходного текста, печатается также адрес.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{nexti}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-exec-next-instruction
+^running
+
+(@value{GDBP})
+*stopped,reason="end-stepping-range",
+addr="0x000100d4",line="5",file="hello.c"
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-return}
+@findex -exec-return
+
+@subsubheading Краткое описание
+
+@example
+ -exec-return
+@end example
+
+Велит текущей функции немедленно вернуться.  Не выполняет подчиненную
+программу.  Отображает новый текущий кадр.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{return}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+200-break-insert callee4
+200^done,bkpt=@{number="1",addr="0x00010734",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="8"@}
+(@value{GDBP})
+000-exec-run
+000^running
+(@value{GDBP})
+000*stopped,reason="breakpoint-hit",bkptno="1",
+frame=@{func="callee4",args=@{@},
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="8"@}
+(@value{GDBP})
+205-break-delete
+205^done
+(@value{GDBP})
+111-exec-return
+111^done,frame=@{level="0 ",func="callee3",
+args=@{@{name="strarg",
+value="0x11940 \"A string argument.\""@}@},
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="18"@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-run}
+@findex -exec-run
+
+@subsubheading Краткое описание
+
+@example
+ -exec-run
+@end example
+
+Асинхронная команда.  Начинает выполнение подчиненной программы с начала.
+Она выполняется до тех пор, пока либо не встретится точка останова, либо
+программа не завершится.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{run}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-break-insert main
+^done,bkpt=@{number="1",addr="0x0001072c",file="recursive2.c",line="4"@}
+(@value{GDBP})
+-exec-run
+^running
+(@value{GDBP})
+*stopped,reason="breakpoint-hit",bkptno="1",
+frame=@{func="main",args=@{@},file="recursive2.c",line="4"@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-show-arguments}
+@findex -exec-show-arguments
+
+@subsubheading Краткое описание
+
+@example
+ -exec-show-arguments
+@end example
+
+Печатает аргументы программы.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{show args}.
+
+@subsubheading Пример
+Н.П.
+
+@c @subheading -exec-signal
+
+@subheading Команда @code{-exec-step}
+@findex -exec-step
+
+@subsubheading Краткое описание
+
+@example
+ -exec-step
+@end example
+
+Асинхронная команда.  Возобновляет выполнение подчиненной программы,
+останавливая ее, когда будет достигнуто начало следующей строки исходного
+файла, при условии, что она не является вызовом функции.  Если же
+следующая строка является вызовом функции, программа останавливается на
+первой инструкции этой функции.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{step}.
+
+@subsubheading Пример
+
+Пошаговый вход в функцию:
+
+@smallexample
+-exec-step
+^running
+(@value{GDBP})
+*stopped,reason="end-stepping-range",
+frame=@{func="foo",args=@{@{name="a",value="10"@},
+@{name="b",value="0"@}@},file="recursive2.c",line="11"@}
+(@value{GDBP})
+@end smallexample
+
+Обычное пошаговое выполнение:
+
+@smallexample
+-exec-step
+^running
+(@value{GDBP})
+*stopped,reason="end-stepping-range",line="14",file="recursive2.c"
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-step-instruction}
+@findex -exec-step-instruction
+
+@subsubheading Краткое описание
+
+@example
+ -exec-step-instruction
+@end example
+
+Асинхронная команда.  Возобновляет выполнение подчиненной программы,
+выполняя одну машинную инструкцию.  Вывод, когда @value{GDBN}
+остановится, будет различаться в зависимости от того, остановились мы в
+середине исходной строки или нет.  В первом случае, адрес, по которому
+программа остановлена, также будет напечатан.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{stepi}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-exec-step-instruction
+^running
+
+(@value{GDBP})
+*stopped,reason="end-stepping-range",
+frame=@{func="foo",args=@{@},file="try.c",line="10"@}
+(@value{GDBP})
+-exec-step-instruction
+^running
+
+(@value{GDBP})
+*stopped,reason="end-stepping-range",
+frame=@{addr="0x000100f4",func="foo",args=@{@},file="try.c",line="10"@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-exec-until}
+@findex -exec-until
+
+@subsubheading Краткое описание
+
+@example
+ -exec-until [ @var{местоположение} ]
+@end example
+
+Асинхронная команда.  Выполняет подчиненную программу до тех пор, пока
+не будет достигнуто указанное в аргументе @var{местоположение}.  Если
+аргумента нет, подчиненная программа выполняется, пока не будет
+достигнута строка исходного текста, превышающая текущую.  В этом случае,
+причиной остановки будет @samp{location-reached}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{until}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-exec-until recursive2.c:6
+^running
+(@value{GDBP})
+x = 55
+*stopped,reason="location-reached",frame=@{func="main",args=@{@},
+file="recursive2.c",line="6"@}
+(@value{GDBP})
+@end smallexample
+
+@ignore
+@subheading -file-clear
+Is this going away????
+@end ignore
+
+
+@subheading Команда @code{-file-exec-and-symbols}
+@findex -file-exec-and-symbols
+
+@subsubheading Краткое описание
+
+@example
+ -file-exec-and-symbols @var{файл}
+@end example
+
+Указать выполняемый файл для отладки.  Это тот файл, из которого также
+читается таблица символов.  Если файл не указан, команда очищает
+информацию о выполняемом файле и символах.  Если при использовании этой
+команды без аргументов установлены точки останова, @value{GDBN} выдаст
+сообщение об ошибке.  В противном случае, никакого вывода не будет, за
+исключением уведомления о завершении.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{file}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-file-exec-file /kwikemart/marge/ezannoni/TRUNK/mbx/hello.mbx
+^done
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-file-exec-file}
+@findex -file-exec-file
+
+@subsubheading Краткое описание
+
+@example
+ -file-exec-file @var{файл}
+@end example
+
+Указать выполняемый файл для отладки.  В отличие от
+@samp{-file-exec-and-symbols}, таблица символов @emph{не} считывается из
+этого файла.  При использовании без аргумента, @value{GDBN} очищает
+информацию о выполняемом файле.  Никакого вывода не производится, за
+исключением уведомления о завершении.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{exec-file}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-file-exec-file /kwikemart/marge/ezannoni/TRUNK/mbx/hello.mbx
+^done
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-file-list-exec-sections}
+@findex -file-list-exec-sections
+
+@subsubheading Краткое описание
+
+@example
+ -file-list-exec-sections
+@end example
+
+Перечисляет разделы текущего выполняемого файла.
+
+@subsubheading Команда @value{GDBN}
+
+Команда @value{GDBN} @samp{info file} показывает, помимо всего прочего,
+ту же информацию, что и эта команда.  @code{gdbtk} имеет соответствующую
+команду @samp{gdb_load_info}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-file-list-exec-source-files}
+@findex -file-list-exec-source-files
+
+@subsubheading Краткое описание
+
+@example
+ -file-list-exec-source-files
+@end example
+
+Перечисляет исходные файлы для текущего выполняемого файла.
+
+@subsubheading Команда @value{GDBN}
+
+В @value{GDBN} нет команды, непосредственно соответсвующей этой.
+@code{gdbtk} имеет аналогичную команду @samp{gdb_listfiles}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-file-list-shared-libraries}
+@findex -file-list-shared-libraries
+
+@subsubheading Краткое описание
+
+@example
+ -file-list-shared-libraries
+@end example
+
+Перечисляет используемые программой разделяемые библиотеки.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info shared}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-file-list-symbol-files}
+@findex -file-list-symbol-files
+
+@subsubheading Краткое описание
+
+@example
+ -file-list-symbol-files
+@end example
+
+Перечисляет файлы символов.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info file} (ее
+часть).
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-file-symbol-file}
+@findex -file-symbol-file
+
+@subsubheading Краткое описание
+
+@example
+ -file-symbol-file @var{файл}
+@end example
+
+Прочитать информацию символьной таблицы из указанного в аргументе
+@var{файла}.  Будучи использованной без аргументов, очищиет таблицу
+символьной информации @value{GDBN}.  Никакого вывода не производится,
+кроме уведомления о завершении.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{symbol-file}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-file-symbol-file /kwikemart/marge/ezannoni/TRUNK/mbx/hello.mbx
+^done
+(@value{GDBP})
+@end smallexample
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Разные команды GDB/MI
+@section Разные команды @value{GDBN} в @sc{gdb/mi}
+
+@c @subheading -gdb-complete
+
+@subheading Команда @code{-gdb-exit}
+@findex -gdb-exit
+
+@subsubheading Краткое описание
+
+@example
+ -gdb-exit
+@end example
+
+Немедленно выйти из @value{GDBN}.
+
+@subsubheading Команда @value{GDBN}
+
+Примерно соответствует команде @samp{quit}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-gdb-exit
+@end smallexample
+
+@subheading Команда @code{-gdb-set}
+@findex -gdb-set
+
+@subsubheading Краткое описание
+
+@example
+ -gdb-set
+@end example
+
+Установить внутреннюю переменную @value{GDBN}.
+@c IS THIS A DOLLAR VARIABLE? OR SOMETHING LIKE ANNOTATE ?????
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{set}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-gdb-set $foo=3
+^done
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-gdb-show}
+@findex -gdb-show
+
+@subsubheading Краткое описание
+
+@example
+ -gdb-show
+@end example
+
+Показать текущее значение переменной @value{GDBN}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{show}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-gdb-show annotate
+^done,value="0"
+(@value{GDBP})
+@end smallexample
+
+@c @subheading -gdb-source
+
+
+@subheading Команда @code{-gdb-version}
+@findex -gdb-version
+
+@subsubheading Краткое описание
+
+@example
+ -gdb-version
+@end example
+
+Вывести информацию о версии @value{GDBN}.  Используется преимущественно
+при тестировании.
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалентной команды @value{GDBN} нет.  По умолчанию, @value{GDBN}
+показывает эту информацию, когда вы вызываете интерактивный сеанс.
+
+@subsubheading Пример
+
+@c This example modifies the actual output from GDB to avoid overfull
+@c box in TeX.
+@smallexample
+(@value{GDBP})
+-gdb-version
+~GNU gdb 5.2.1
+~Copyright 2000 Free Software Foundation, Inc.
+~GDB is free software, covered by the GNU General Public License, and
+~you are welcome to change it and/or distribute copies of it under
+~ certain conditions.
+~Type "show copying" to see the conditions.
+~There is absolutely no warranty for GDB.  Type "show warranty" for
+~ details.
+~This GDB was configured as 
+ "--host=sparc-sun-solaris2.5.1 --target=ppc-eabi".
+^done
+(@value{GDBP})
+@end smallexample
+
+@ignore
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node GDB/MI Kod Commands
+@section @sc{gdb/mi} Kod Commands
+
+The Kod commands are not implemented.
+
+@c @subheading -kod-info
+
+@c @subheading -kod-list
+
+@c @subheading -kod-list-object-types
+
+@c @subheading -kod-show
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node GDB/MI Memory Overlay Commands
+@section @sc{gdb/mi} Memory Overlay Commands
+
+The memory overlay commands are not implemented.
+
+@c @subheading -overlay-auto
+
+@c @subheading -overlay-list-mapping-state
+
+@c @subheading -overlay-list-overlays
+
+@c @subheading -overlay-map
+
+@c @subheading -overlay-off
+
+@c @subheading -overlay-on
+
+@c @subheading -overlay-unmap
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node GDB/MI Signal Handling Commands
+@section @sc{gdb/mi} Signal Handling Commands
+
+Signal handling commands are not implemented.
+
+@c @subheading -signal-handle
+
+@c @subheading -signal-list-handle-actions
+
+@c @subheading -signal-list-signal-types
+@end ignore
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Управление стеком GDB/MI
+@section Команды управления стеком в @sc{gdb/mi}
+
+
+@subheading Команда @code{-stack-info-frame}
+@findex -stack-info-frame
+
+@subsubheading Краткое описание
+
+@example
+ -stack-info-frame
+@end example
+
+Получить информацию о текущем кадре.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info frame} или
+@samp{frame} (без аргументов).
+
+@subsubheading Пример
+Н.П.
+
+@subheading Команда @code{-stack-info-depth}
+@findex -stack-info-depth
+
+@subsubheading Краткое описание
+
+@example
+ -stack-info-depth [ @var{макс-глуб} ]
+@end example
+
+Возвращает глубину стека.  Если указан целочисленный аргумент
+@var{макс-глуб}, не считать более @var{макс-глуб} кадров.
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалентной команды @value{GDBN} нет.
+
+@subsubheading Пример
+
+Для стека с уровнями кадров от 0 до 11:
+
+@smallexample
+(@value{GDBP})
+-stack-info-depth
+^done,depth="12"
+(@value{GDBP})
+-stack-info-depth 4
+^done,depth="4"
+(@value{GDBP})
+-stack-info-depth 12
+^done,depth="12"
+(@value{GDBP})
+-stack-info-depth 11
+^done,depth="11"
+(@value{GDBP})
+-stack-info-depth 13
+^done,depth="12"
+(@value{GDBP})
+@end smallexample
+
+@subheading Команда @code{-stack-list-arguments}
+@findex -stack-list-arguments
+
+@subsubheading Краткое описание
+
+@example
+ -stack-list-arguments @var{показ-знач}
+    [ @var{нижн-кадр} @var{верхн-кадр} ]
+@end example
+
+Отобразить список аргументов для кадров от @var{нижн-кадр} до
+@var{верхн-кадр} (включительно).  Если @var{нижн-кадр} и
+@var{верхн-кадр} не указаны, перечислить аргументы для всего стека
+вызовов.
+
+Аргумент @var{показ-знач} должен иметь значение 0 или 1.  Значение 0
+означает, что выводятся только имена аргументов, а 1,---что
+печатаются как имена, так и значения аргументов.
+
+@subsubheading Команда @value{GDBN}
+
+@value{GDBN} не имеет эквивалентной команды.  В @code{gdbtk} есть
+команда @samp{gdb_get_args}, которая частично перекрывается с действием
+@samp{-stack-list-arguments}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-stack-list-frames
+^done,
+stack=@{
+frame=@{level="0 ",addr="0x00010734",func="callee4",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="8"@},
+frame=@{level="1 ",addr="0x0001076c",func="callee3",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="17"@},
+frame=@{level="2 ",addr="0x0001078c",func="callee2",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="22"@},
+frame=@{level="3 ",addr="0x000107b4",func="callee1",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="27"@},
+frame=@{level="4 ",addr="0x000107e0",func="main",
+file="../../../devo/gdb/testsuite/gdb.mi/basics.c",line="32"@}@}
+(@value{GDBP})
+-stack-list-arguments 0
+^done,
+stack-args=@{
+frame=@{level="0",args=@{@}@},
+frame=@{level="1",args=@{name="strarg"@}@},
+frame=@{level="2",args=@{name="intarg",name="strarg"@}@},
+frame=@{level="3",args=@{name="intarg",name="strarg",name="fltarg"@}@},
+frame=@{level="4",args=@{@}@}@}
+(@value{GDBP})
+-stack-list-arguments 1
+^done,
+stack-args=@{
+frame=@{level="0",args=@{@}@},
+frame=@{level="1",
+ args=@{@{name="strarg",value="0x11940 \"Строковый аргумент.\""@}@}@},
+frame=@{level="2",args=@{
+@{name="intarg",value="2"@},
+@{name="strarg",value="0x11940 \"Строковый аргумент.\""@}@}@},
+@{frame=@{level="3",args=@{
+@{name="intarg",value="2"@},
+@{name="strarg",value="0x11940 \"Строковый аргумент.\""@},
+@{name="fltarg",value="3.5"@}@}@},
+frame=@{level="4",args=@{@}@}@}
+(@value{GDBP})
+-stack-list-arguments 0 2 2
+^done,stack-args=@{frame=@{level="2",args=@{name="intarg",name="strarg"@}@}@}
+(@value{GDBP})
+-stack-list-arguments 1 2 2
+^done,stack-args=@{frame=@{level="2",
+args=@{@{name="intarg",value="2"@},
+@{name="strarg",value="0x11940 \"Строковый аргумент.\""@}@}@}@}
+(@value{GDBP})
+@end smallexample
+
+@c @subheading -stack-list-exception-handlers
+
+
+@subheading Команда @code{-stack-list-frames}
+@findex -stack-list-frames
+
+@subsubheading Краткое описание
+
+@example
+ -stack-list-frames [ @var{нижн-кадр} @var{верхн-кадр} ]
+@end example
+
+Перечисляет кадры, находящиеся в данный момент в стеке.  Для каждого
+кадра, команда отображает следующую информацию:
+
+@table @samp
+@item @var{level}
+Номер кадра, 0 для самого верхнего, то есть для самой внутренней
+функции.
+@item @var{addr}
+Значение @code{$pc} для этого кадра.
+@item @var{func}
+Имя функции.
+@item @var{file}
+Имя исходного файла, где находится функция.
+@item @var{line}
+Номер строки, соответствующий @code{$pc}.
+@end table
+
+Будучи вызванной без аргументов, эта команда печатает цепочку вызовов
+для всего стека.  Если задано два целочисленных аргумента, она
+показывает кадры с уровнями между этими аргументами (включительно).
+Если аргументы равны, она показывает один единственный кадр
+соответствующего уровня.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующими командами @value{GDBN} являются @samp{backtrace} и
+@samp{where}.
+
+@subsubheading Пример
+
+Цепочка вызовов стека целиком:
+
+@smallexample
+(@value{GDBP})
+-stack-list-frames
+^done,stack=
+@{frame=@{level="0 ",addr="0x0001076c",func="foo",
+  file="recursive2.c",line="11"@},
+frame=@{level="1 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="2 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="3 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="4 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="5 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="6 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="7 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="8 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="9 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="10",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="11",addr="0x00010738",func="main",
+  file="recursive2.c",line="4"@}@}
+(@value{GDBP})
+@end smallexample
+
+Показать кадры между @var{нижн-кадр} и @var{верхн-кадр}:
+
+@smallexample
+(@value{GDBP})
+-stack-list-frames 3 5
+^done,stack=
+@{frame=@{level="3 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="4 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@},
+frame=@{level="5 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@}@}
+(@value{GDBP})
+@end smallexample
+
+Показать один кадр:
+
+@smallexample
+(@value{GDBP})
+-stack-list-frames 3 3
+^done,stack=
+@{frame=@{level="3 ",addr="0x000107a4",func="foo",
+  file="recursive2.c",line="14"@}@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-stack-list-locals}
+@findex -stack-list-locals
+
+@subsubheading Краткое описание
+
+@example
+ -stack-list-locals @var{печатать-значения}
+@end example
+
+Вывести имена локальных переменных для текущего кадра.  С параметром 0
+выводит только имена переменных, с параметром 1 выводит также их
+значения.
+
+@subsubheading Команда @value{GDBN}
+
+@samp{info locals} в @value{GDBN}, @samp{gdb_get_locals} в @code{gdbtk}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-stack-list-locals 0
+^done,locals=@{name="A",name="B",name="C"@}
+(@value{GDBP})
+-stack-list-locals 1
+^done,locals=@{@{name="A",value="1"@},@{name="B",value="2"@},
+  @{name="C",value="3"@}@}
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-stack-select-frame}
+@findex -stack-select-frame
+
+@subsubheading Краткое описание
+
+@example
+ -stack-select-frame @var{ном-кадра}
+@end example
+
+Изменить текущий кадр.  Выбрать другой кадр @var{ном-кадра} в стеке.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующими командами @value{GDBN} являются @samp{frame},
+@samp{up}, @samp{down}, @samp{select-frame}, @samp{up-silent} и
+@samp{down-silent}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-stack-select-frame 2
+^done
+(@value{GDBP})
+@end smallexample
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Запросы GDB/MI о символах
+@section Команды @sc{gdb/mi} запросов о символах
+
+
+@subheading Команда @code{-symbol-info-address}
+@findex -symbol-info-address
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-info-address @var{символ}
+@end example
+
+Описать, где хранится @var{символ}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info address}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-info-file}
+@findex -symbol-info-file
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-info-file
+@end example
+
+Показать файл для символа.
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалентной команды @value{GDBN} нет.  В @code{gdbtk} есть команда
+@samp{gdb_find_file}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-info-function}
+@findex -symbol-info-function
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-info-function
+@end example
+
+Показать, в какой функции находится символ.
+
+@subsubheading Команда @value{GDBN}
+
+@samp{gdb_get_function} в @code{gdbtk}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-info-line}
+@findex -symbol-info-line
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-info-line
+@end example
+
+Показать адреса памяти кода для текущей строки.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info line}.  В
+@code{gdbtk} есть команды @samp{gdb_get_line} и @samp{gdb_get_file}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-info-symbol}
+@findex -symbol-info-symbol
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-info-symbol @var{адрес}
+@end example
+
+Описать, какой символ находится в местоположении @var{адрес}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{info symbol}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-list-functions}
+@findex -symbol-list-functions
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-list-functions
+@end example
+
+Перечислить функции, находящиеся в выполняемом файле.
+
+@subsubheading Команда @value{GDBN}
+
+@samp{info functions} в @value{GDBN}, @samp{gdb_listfunc} и
+@samp{gdb_search} в @code{gdbtk}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-list-types}
+@findex -symbol-list-types
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-list-types
+@end example
+
+Перечислить все имена типов.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующими командами являются @samp{info types} в @value{GDBN} и
+@samp{gdb_search} в @code{gdbtk}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-list-variables}
+@findex -symbol-list-variables
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-list-variables
+@end example
+
+Перечислить имена всех глобальных и статических переменных.
+
+@subsubheading Команда @value{GDBN}
+
+@samp{info variables} в @value{GDBN}, @samp{gdb_search} в @code{gdbtk}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-locate}
+@findex -symbol-locate
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-locate
+@end example
+
+@subsubheading Команда @value{GDBN}
+
+@samp{gdb_loc} в @code{gdbtk}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-symbol-type}
+@findex -symbol-type
+
+@subsubheading Краткое описание
+
+@example
+ -symbol-type @var{переменная}
+@end example
+
+Показать тип @var{переменной}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{ptype}, в
+@code{gdbtk} есть команда @samp{gdb_obj_variable}.
+
+@subsubheading Пример
+Н.П.
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Управление целью GDB/MI
+@section Команды @sc{gdb/mi} управления целью
+
+
+@subheading Команда @code{-target-attach}
+@findex -target-attach
+
+@subsubheading Краткое описание
+
+@example
+ -target-attach @var{ид-проц} | @var{файл}
+@end example
+
+Присоединиться к процессу @var{ид-проц} или файлу @var{файл} вне
+@value{GDBN}.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{attach}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-target-compare-sections}
+@findex -target-compare-sections
+
+@subsubheading Краткое описание
+
+@example
+ -target-compare-sections [ @var{раздел} ]
+@end example
+
+Сравнить данные раздела @var{раздел} на цели с выполняемым файлом.  Без
+аргумента сравниваются все разделы.
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалентной командой в @value{GDBN} является @samp{compare-sections}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-target-detach}
+@findex -target-detach
+
+@subsubheading Краткое описание
+
+@example
+ -target-detach
+@end example
+
+Отсоединиться от удаленной цели.  Никакого вывода не производится.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{detach}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-target-detach
+^done
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-target-download}
+@findex -target-download
+
+@subsubheading Краткое описание
+
+@example
+ -target-download
+@end example
+
+Загружает выполняемый файл на удаленную цель.  Команда два раза в
+секунду обновляет сообщение, которое включает поля:
+
+@table @samp
+@item section
+Имя раздела.
+@item section-sent
+Размер переданного на данный момент участка для этого раздела.
+@item section-size
+Размер раздела.
+@item total-sent
+Общий размер переданной на данный момент информации (текущий и
+предыдущие разделы).
+@item total-size
+Размер всего выполняемого файла, подлежащего загрузке.
+@end table
+
+@noindent
+Каждое сообщение посылается в виде сообщения статуса (@pxref{Выходной
+синтаксис GDB/MI, ,Выходной синтаксис @sc{gdb/mi}}).
+
+Кроме того, команда печатает имена и размеры разделов, по мере их
+загрузки.  Эти сообщения включают следующие поля:
+
+@table @samp
+@item section
+Имя раздела.
+@item section-size
+Размер раздела.
+@item total-size
+Размер всего выполняемого файла, подлежащего загрузке.
+@end table
+
+@noindent
+В конце печатается суммарная информация.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{load}.
+
+@subsubheading Пример
+
+Замечание: каждое сообщение статуса появляется на одной строке.  Здесь
+сообщения были разбиты на несколько строк, чтобы они могли влезть на страницу.
+
+@smallexample
+(@value{GDBP})
+-target-download
++download,@{section=".text",section-size="6668",total-size="9880"@}
++download,@{section=".text",section-sent="512",section-size="6668",
+total-sent="512",total-size="9880"@}
++download,@{section=".text",section-sent="1024",section-size="6668",
+total-sent="1024",total-size="9880"@}
++download,@{section=".text",section-sent="1536",section-size="6668",
+total-sent="1536",total-size="9880"@}
++download,@{section=".text",section-sent="2048",section-size="6668",
+total-sent="2048",total-size="9880"@}
++download,@{section=".text",section-sent="2560",section-size="6668",
+total-sent="2560",total-size="9880"@}
++download,@{section=".text",section-sent="3072",section-size="6668",
+total-sent="3072",total-size="9880"@}
++download,@{section=".text",section-sent="3584",section-size="6668",
+total-sent="3584",total-size="9880"@}
++download,@{section=".text",section-sent="4096",section-size="6668",
+total-sent="4096",total-size="9880"@}
++download,@{section=".text",section-sent="4608",section-size="6668",
+total-sent="4608",total-size="9880"@}
++download,@{section=".text",section-sent="5120",section-size="6668",
+total-sent="5120",total-size="9880"@}
++download,@{section=".text",section-sent="5632",section-size="6668",
+total-sent="5632",total-size="9880"@}
++download,@{section=".text",section-sent="6144",section-size="6668",
+total-sent="6144",total-size="9880"@}
++download,@{section=".text",section-sent="6656",section-size="6668",
+total-sent="6656",total-size="9880"@}
++download,@{section=".init",section-size="28",total-size="9880"@}
++download,@{section=".fini",section-size="28",total-size="9880"@}
++download,@{section=".data",section-size="3156",total-size="9880"@}
++download,@{section=".data",section-sent="512",section-size="3156",
+total-sent="7236",total-size="9880"@}
++download,@{section=".data",section-sent="1024",section-size="3156",
+total-sent="7748",total-size="9880"@}
++download,@{section=".data",section-sent="1536",section-size="3156",
+total-sent="8260",total-size="9880"@}
++download,@{section=".data",section-sent="2048",section-size="3156",
+total-sent="8772",total-size="9880"@}
++download,@{section=".data",section-sent="2560",section-size="3156",
+total-sent="9284",total-size="9880"@}
++download,@{section=".data",section-sent="3072",section-size="3156",
+total-sent="9796",total-size="9880"@}
+^done,address="0x10004",load-size="9880",transfer-rate="6586",
+write-rate="429"
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-target-exec-status}
+@findex -target-exec-status
+
+@subsubheading Краткое описание
+
+@example
+ -target-exec-status
+@end example
+
+Предоставить информацию о состоянии цели (например, выполняется она или
+нет).
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалентной команды @value{GDBN} нет.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-target-list-available-targets}
+@findex -target-list-available-targets
+
+@subsubheading Краткое описание
+
+@example
+ -target-list-available-targets
+@end example
+
+Перечислить цели, к которым можно установить соединение.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{help target}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-target-list-current-targets}
+@findex -target-list-current-targets
+
+@subsubheading Краткое описание
+
+@example
+ -target-list-current-targets
+@end example
+
+Описать текущую цель.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующая информация (вместе с другой) печатается командой
+@samp{info file}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-target-list-parameters}
+@findex -target-list-parameters
+
+@subsubheading Краткое описание
+
+@example
+ -target-list-parameters
+@end example
+
+@c ????
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалента нет.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-target-select}
+@findex -target-select
+
+@subsubheading Краткое описание
+
+@example
+ -target-select @var{тип} @var{параметры @dots{}}
+@end example
+
+Соединить @value{GDBN} с удаленной целью.  Эта команда допускает два
+аргумента:
+
+@table @samp
+@item @var{тип}
+Тип цели, например, @samp{async}, @samp{remote}, и т.д.
+@item @var{параметры}
+Имена устройств, названия машин и тому подобное.  @xref{Команды для целей,
+,Команды для управления целями}, для более полной информации.
+@end table
+
+Результатом является уведомление о соединении, за которым следует адрес,
+по которому находится целевая программа, в следующей форме:
+
+@smallexample
+^connected,addr="@var{адрес}",func="@var{имя функции}",
+  args=@{@var{список аргументов}@}
+@end smallexample
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{target}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-target-select async /dev/ttya
+^connected,addr="0xfe00a300",func="??",args=@{@}
+(@value{GDBP})
+@end smallexample
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Команды GDB/MI для нитей
+@section Команды @sc{gdb/mi} для нитей
+
+
+@subheading Команда @code{-thread-info}
+@findex -thread-info
+
+@subsubheading Краткое описание
+
+@example
+ -thread-info
+@end example
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалента нет.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-thread-list-all-threads}
+@findex -thread-list-all-threads
+
+@subsubheading Краткое описание
+
+@example
+ -thread-list-all-threads
+@end example
+
+@subsubheading Команда @value{GDBN}
+
+Эквивалентной командой @value{GDBN} является @samp{info threads}.
+
+@subsubheading Пример
+Н.П.
+
+
+@subheading Команда @code{-thread-list-ids}
+@findex -thread-list-ids
+
+@subsubheading Краткое описание
+
+@example
+ -thread-list-ids
+@end example
+
+Выводит список известных @value{GDBN} в данный момент идентификаторов
+нитей.  В конце списка также выводится общее число таких нитей.
+
+@subsubheading Команда @value{GDBN}
+
+Часть @samp{info threads} предоставляет ту же информацию.
+
+@subsubheading Пример
+
+Кроме основного процесса нет ни одной нити:
+
+@smallexample
+(@value{GDBP})
+-thread-list-ids
+^done,thread-ids=@{@},number-of-threads="0"
+(@value{GDBP})
+@end smallexample
+
+
+Несколько нитей:
+
+@smallexample
+(@value{GDBP})
+-thread-list-ids
+^done,thread-ids=@{thread-id="3",thread-id="2",thread-id="1"@},
+number-of-threads="3"
+(@value{GDBP})
+@end smallexample
+
+
+@subheading Команда @code{-thread-select}
+@findex -thread-select
+
+@subsubheading Краткое описание
+
+@example
+ -thread-select @var{номер-нити}
+@end example
+
+Сделать нить @var{номер-нити} текущей.  Команда выводит номер новой
+текущей нити и самый верхний кадр для нее.
+
+@subsubheading Команда @value{GDBN}
+
+Соответствующей командой @value{GDBN} является @samp{thread}.
+
+@subsubheading Пример
+
+@smallexample
+(@value{GDBP})
+-exec-next
+^running
+(@value{GDBP})
+*stopped,reason="end-stepping-range",thread-id="2",line="187",
+file="../../../devo/gdb/testsuite/gdb.threads/linux-dp.c"
+(@value{GDBP})
+-thread-list-ids
+^done,
+thread-ids=@{thread-id="3",thread-id="2",thread-id="1"@},
+number-of-threads="3"
+(@value{GDBP})
+-thread-select 3
+^done,new-thread-id="3",
+frame=@{level="0 ",func="vprintf",
+args=@{@{name="format",value="0x8048e9c \"%*s%c %d %c\\n\""@},
+@{name="arg",value="0x2"@}@},file="vprintf.c",line="31"@}
+(@value{GDBP})
+@end smallexample
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Команды GDB/MI для точек трассировки
+@section Команды @sc{gdb/mi} для точек трассировки
+
+Команды для точек трассировки еще не реализованы.
+
+@c @subheading -trace-actions
+
+@c @subheading -trace-delete
+
+@c @subheading -trace-disable
+
+@c @subheading -trace-dump
+
+@c @subheading -trace-enable
+
+@c @subheading -trace-exists
+
+@c @subheading -trace-find
+
+@c @subheading -trace-frame-number
+
+@c @subheading -trace-info
+
+@c @subheading -trace-insert
+
+@c @subheading -trace-list
+
+@c @subheading -trace-pass-count
+
+@c @subheading -trace-save
+
+@c @subheading -trace-start
+
+@c @subheading -trace-stop
+
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Изменяемые объекты GDB/MI
+@section Изменяемые объекты @sc{gdb/mi}
+
+
+@subheading Обоснование для изменяемых объектов в @sc{gdb/mi}
+
+Для реализации изменяемого отладочного окна (локальные переменные,
+наблюдаемые выражения, и т.д.), мы предлагаем модификацию существующего
+кода, используемого в @code{Insight}.
+
+Вот две основные причины для этого:
+
+@enumerate 1
+@item
+Он был проверен на практике (это уже его второе поколение).
+
+@item
+Это сократит время разработки (не стоит говорить, как это сейчас важно).
+@end enumerate
+
+Первоначальный интерейс был разработан для использование кодом Tcl, так
+что он был немного изменен, чтобы его можно было использовать через
+@sc{gdb/mi}.  Этот раздел описывает операции @sc{gdb/mi}, которые будут
+доступны, и дает некоторые советы по их использованию.
+
+@emph{Замечание}: В дополнение к описанному здесь набору операций, мы
+ожидаем, что @sc{gui}-реализация изменяемого окна будет требовать, как
+минимум, следующие операции:
+
+@itemize @bullet
+@item @code{-gdb-show} @code{output-radix}
+@item @code{-stack-list-arguments}
+@item @code{-stack-list-locals}
+@item @code{-stack-select-frame}
+@end itemize
+
+@subheading Введение в изменяемые объекты в @sc{gdb/mi}
+
+@cindex изменяемые объекты в @sc{gdb/mi}
+Основной идеей изменяемых объектов является создание именованного
+объекта для представления переменной, выражения, местоположения в памяти
+или даже регистра ЦП.  Для каждого созданного объекта существует набор
+операций для изучения или изменения его свойств.
+
+Более того, сложные типы данных, такие как структуры Си, представлены в
+древовидном формате.  Например, переменная типа @code{struct} является
+корнем, а потомки будут представлять элементы этой структуры.  Если
+потомок сам является сложным типом, он также будет иметь своих потомков.
+Соответствующие различия языков учитываются для Си, Си@t{++} и Java.
+
+При возврате реальных значений объектов, эта возможность позволяет
+отдельно выбирать формат отображения, используемый при создании
+результата.  Он может быть выбран из: двоичный, десятичный,
+шестнадцатеричный, восьмеричный и обычный.  Обычный ссылается на формат
+по умолчанию, выбираемый автоматически в зависимости от типа переменной
+(например, десятичный для @code{int}, шестнадцатеричный для указателей,
+и т.д.).
+
+Далее следует полный набор операций @sc{gdb/mi}, определенный для
+доступа к этим возможностям:
+
+@multitable @columnfractions .3 .6
+@item @strong{Операция}
+@tab @strong{Описание}
+
+@item @code{-var-create}
+@tab создать изменяемый объект
+@item @code{-var-delete}
+@tab удалить изменяемый объект и его потомков
+@item @code{-var-set-format}
+@tab установить формат отображения для этой переменной
+@item @code{-var-show-format}
+@tab показать формат отображения для этой переменной
+@item @code{-var-info-num-children}
+@tab сообщает, сколько потомков имеет данный объект
+@item @code{-var-list-children}
+@tab возвращает список потомков объекта
+@item @code{-var-info-type}
+@tab показать тип этого изменяемого объекта
+@item @code{-var-info-expression}
+@tab напечатать, что представляет этот изменяемый объект
+@item @code{-var-show-attributes}
+@tab является ли эта переменная редактируемой? она здесь существует?
+@item @code{-var-evaluate-expression}
+@tab получить значение этой переменной
+@item @code{-var-assign}
+@tab установить значение этой переменной
+@item @code{-var-update}
+@tab скорректировать переменную и ее потомков
+@end multitable
+
+В следующем подразделе мы подробно описываем каждую операцию и
+предлагаем возможный способ ее использования.
+
+@subheading Описание и использование операций для изменяемых объектов
+
+@subheading Команда @code{-var-create}
+@findex -var-create
+
+@subsubheading Краткое описание
+
+@example
+ -var-create @{@var{имя} | "-"@}
+    @{@var{адрес-кадра} | "*"@} @var{выражение}
+@end example
+
+Данная операция создает изменяемый объект.  Это позволяет наблюдать за
+переменной, результатом выражения, ячейкой памяти или регистром ЦП.
+
+Параметр @var{имя} является строкой, по которой можно ссылаться на
+объект.  Она должен быть уникальной.  Если указан @samp{-}, система
+изменяемых объектов автоматически сгенерирует строку ``varNNNNNN''.  Она
+будет уникальной, при условии, что @var{имя} не будет указано в этом
+формате.  Команда завершается ошибкой, если найдено повторяющееся имя.
+
+В @var{адресе-кадра} может быть задан кадр, в котором должно быть
+вычислено выражение.  @samp{*} указывает, что должен использоваться
+текущий кадр.
+
+@var{Выражение}---это произвольное выражение, правильное в текущем
+наборе языков (не должно начинаться со @samp{*}), или одно из
+следующего:
+
+@itemize @bullet
+@item
+@samp{*@var{адрес}}, где @var{адрес} есть адрес ячейки памяти
+
+@item
+@samp{*@var{адрес}-@var{адрес}} --- диапазон адресов памяти (TBD)
+@c ????????? (TBD)
+
+@item
+@samp{$@var{имя-рег}} --- имя регистра ЦП
+@end itemize
+
+@subsubheading Результат
+
+Эта операция возвращает имя, число потомков и тип созданного объекта.
+Тип возвращается как строка, как будто она создана @value{GDBN} CLI:
+
+@example
+ name="@var{имя}",numchild="N",type="@var{тип}"
+@end example
+
+
+@subheading Команда @code{-var-delete}
+@findex -var-delete
+
+@subsubheading Краткое описание
+
+@example
+ -var-delete @var{имя}
+@end example
+
+Удаляет созданный ранее изменяемый объект и всех его потомков.
+
+Возвращает ошибку, если объект с именем @var{имя} не найден.
+
+
+@subheading Команда @code{-var-set-format}
+@findex -var-set-format
+
+@subsubheading Краткое описание
+
+@example
+ -var-set-format @var{имя} @var{специф-формата}
+@end example
+
+Устанавливает формат вывода в @var{специф-формата} для значения объекта
+@var{имя}.
+
+Синтаксис @var{специф-формата} следующий:
+
+@example
+ @var{специф-формата} @expansion{}
+ @{binary | decimal | hexadecimal | octal | natural@}
+@end example
+
+
+@subheading Команда @code{-var-show-format}
+@findex -var-show-format
+
+@subsubheading Краткое описание
+
+@example
+ -var-show-format @var{имя}
+@end example
+
+Возвращает формат, используемый для отображения значений объекта @var{имя}.
+
+@example
+ @var{формат} @expansion{}
+ @var{специф-формата}
+@end example
+
+
+@subheading Команда @code{-var-info-num-children}
+@findex -var-info-num-children
+
+@subsubheading Краткое описание
+
+@example
+ -var-info-num-children @var{имя}
+@end example
+
+Возвращает число потомков изменяемого объекта с именем @var{имя}:
+
+@example
+ numchild=@var{n}
+@end example
+
+
+@subheading Команда @code{-var-list-children}
+@findex -var-list-children
+
+@subsubheading Краткое описание
+
+@example
+ -var-list-children @var{имя}
+@end example
+
+Возвращает список потомков указанного изменяемого объекта:
+
+@example
+ numchild=@var{n},children=@{@{name=@var{имя},
+ numchild=@var{n},type=@var{тип}@},@r{(повторяется N раз)}@}
+@end example
+
+
+@subheading Команда @code{-var-info-type}
+@findex -var-info-type
+
+@subsubheading Краткое описание
+
+@example
+ -var-info-type @var{имя}
+@end example
+
+Возвращает тип указанного изменяемого объекта @var{имя}.  Тип
+возвращается как строка в том же формате, в котором она выдается
+@value{GDBN} CLI:
+
+@example
+ type=@var{имя-типа}
+@end example
+
+
+@subheading Команда @code{-var-info-expression}
+@findex -var-info-expression
+
+@subsubheading Краткое описание
+
+@example
+ -var-info-expression @var{имя}
+@end example
+
+Возвращает то, что представляет изменяемый объект с именем @var{имя}:
+
+@example
+ lang=@var{специф-языка},exp=@var{выражение}
+@end example
+
+@noindent
+где @var{специф-языка} есть @code{@{"C" | "C++" | "Java"@}}.
+
+@subheading Команда @code{-var-show-attributes}
+@findex -var-show-attributes
+
+@subsubheading Краткое описание
+
+@example
+ -var-show-attributes @var{имя}
+@end example
+
+Перечисляет атрибуты заданного изменяемого объекта @var{имя}:
+
+@example
+ status=@var{атр} [ ( ,@var{атр} )* ]
+@end example
+
+@noindent
+где @var{атр} есть @code{@{ @{ editable | noneditable @} | TBD @}}.
+
+@subheading Команда @code{-var-evaluate-expression}
+@findex -var-evaluate-expression
+
+@subsubheading Краткое описание
+
+@example
+ -var-evaluate-expression @var{имя}
+@end example
+
+Вычисляет выражение, которое представлено указанным изменяемым объектом
+и возвращает его значение в виде строки в текущем формате, определенном
+для объекта:
+
+@example
+ value=@var{значение}
+@end example
+
+@subheading Команда @code{-var-assign}
+@findex -var-assign
+
+@subsubheading Краткое описание
+
+@example
+ -var-assign @var{имя} @var{выражение}
+@end example
+
+Присваивает значение @var{выражения} изменяемому объекту, заданному
+@var{именем}.  Объект должен быть в состоянии @samp{editable}.
+
+@subheading Команда @code{-var-update}
+@findex -var-update
+
+@subsubheading Краткое описание
+
+@example
+ -var-update @{@var{имя} | "*"@}
+@end example
+
+Обновить значение изменяемого объекта с именем @var{имя} путем
+вычисления его выражения, после получения всех новых значений из памяти
+или регистров.  @samp{*} приводит к обновлению всех существующих
+изменяемых объектов.
+
+@c %%%%%%%%%%%%%%%%%%%%%%%%%%%% SECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@node Черновик изменений к выходному синтаксису GDB/MI
+@section Черновик изменений к выходному синтаксису @sc{gdb/mi}
+
+@cindex черновик изменений к выходному синтаксису @sc{gdb/mi}
+@cindex @sc{gdb/mi}, черновик изменений к выходному синтаксису
+
+Одной проблемой, обнаруженной в существующем синтаксисе вывода
+@sc{gdb/mi}, была трудность в нахождении отличий между наборами вроде
+этого:
+
+@example
+@{number="1",type="breakpoint",disp="keep",enabled="y"@}
+@end example
+
+где каждое значение имеет уникальную метку, и таким списком:
+
+@example
+@{"1","2","4"@}
+@{bp="1",bp="2",bp="4"@}
+@end example
+
+где значения не имеют меток, или метки повторяются.
+
+Далее представлен черновик изменений к спецификации вывода, который
+решает эту проблему.
+
+Вывод @sc{gdb/mi} состоит из нуля или более внеочередных
+записей, за которыми может следовать одна результирующая запись, причем
+она относится к самой последней введенной команде.  Последовательность
+завершается @samp{@value{GDBP}}.
+
+Асинхронный вывод @sc{gdb/mi} такой же.
+
+Каждая выходная запись, непосредственно связанная с входной командой, 
+начинается с префикса @code{@var{лексема}} входной команды.
+
+@table @code
+@item @var{вывод} @expansion{}
+@{ @var{внеочередная-запись} @} @code{[} @var{рез-запись} @code{]} "@code{(@value{GDBP})}" @var{nl}
+
+@item @var{рез-запись} @expansion{}
+@code{[} @var{лексема} @code{]} "^" @var{рез-класс} @{ "," @var{результат} @} @var{nl}
+
+@item @var{внеочередная-запись} @expansion{}
+@var{асинхр-запись} @code{|} @var{поточн-запись}
+
+@item @var{асинхр-запись} @expansion{}
+@var{асинхр-вывод-выполн} @code{|} @var{асинхр-вывод-статуса} @code{|} @var{асинхр-вывод-уведомл}
+
+@item @var{асинхр-вывод-выполн} @expansion{}
+@code{[} @var{лексема} @code{]} "*" @var{асинхр-вывод}
+
+@item @var{асинхр-вывод-статуса} @expansion{}
+@code{[} @var{лексема} @code{]} "+" @var{асинхр-вывод}
+
+@item @var{асинхр-вывод-уведомл} @expansion{}
+@code{[} @var{лексема} @code{]} "=" @var{асинхр-вывод}
+
+@item @var{асинхр-вывод} @expansion{}
+@var{асинхр-класс} @{ "," @var{результат} @} @var{nl}
+
+@item @var{результ-класс} @expansion{}
+"done" @code{|} "running" @code{|} "connected" @code{|} "error" @code{|} "exit"
+
+@item @var{асинхр-класс} @expansion{}
+"stopped" @code{|} @emph{другое по необходимости, т.к. находится в
+стадии разработки}
+
+@item @var{результат} @expansion{}
+@var{строка} "=" @var{значение}
+
+@item @var{значение} @expansion{}
+@var{строка-си} @code{|} @var{набор} @code{|} @var{список}
+
+@item @var{набор} @expansion{}
+"@{@}" @code{|} "@{" @var{результат} @{ "," @var{результат} @} "@}"
+
+@item @var{список} @expansion{}
+"@code{[]}" @code{|} "@code{[}" @var{значение} @{ "," @var{значение} @} "@code{]}"
+
+@item @var{строка} @expansion{}
+@emph{[-A-Za-z\.0-9_]*}
+
+@item @var{строка-си} @expansion{}
+@emph{Смотри спецификацию ввода}
+
+@item @var{поточн-запись} @expansion{}
+@var{консольн-поточн-вывод} @code{|} @var{целев-поточн-вывод} @code{|} @var{журн-поточн-вывод}
+
+@item @var{консольн-поточн-вывод} @expansion{}
+"~" @var{строка-си}
+
+@item @var{целев-поточн-вывод} @expansion{}
+"@@" @var{строка-си}
+
+@item @var{журн-поточн-вывод} @expansion{}
+"&" @var{строка-си}
+
+@item @var{nl} @expansion{}
+CR @code{|} CR-LF
+
+@item @var{лексема} @expansion{}
+"любая последовательность цифр"
+
+@end table
+
+Кроме того, следующее находится в стадии разработки.
+
+@table @code
+
+@item @var{запрос}
+Это действие пока не определено.
+
+@end table
+
+Замечания:
+
+@itemize @bullet
+
+@item
+Все выходные последовательности заканчиваются строкой, содержащей точку.
+
+@item
+@code{@var{Лексема}} берется из соответствующего запроса.  Если
+выполняющаяся команда прерывается командой @code{-exec-interrupt},
+лексема, ассоциированная с сообщением `*stopped', берется из исходной
+выполнявшейся команды, а не из команды прерывания.
+
+@item
+@var{Асинхр-вывод-статуса} содержит информацию о статусе выполнения
+медленной операции.  Она может быть отброшена.  Вся информация о статусе
+начинается с префикса @samp{+}.
+
+@item
+@var{Асинхр-вывод-выполн} содержит изменения асинхронного состояния на
+цели (остановлена, запущена, исчезла).  Весь асинхронный вывод
+начинается с префикса @samp{*}.
+
+@item
+@var{Асинхр-вывод-уведомл} содержит дополнительную информацию, которую
+должен обработать клиент (информация о новой точке останова).  Весь
+уведомительный вывод начинается с префикса @samp{=}.
+
+@item
+@var{Консольн-поточн-вывод} является выводом, который должен быть
+отображен на консоли без изменений.  Это текстовая реакция на команду
+CLI.  Весь консольный вывод начинается с префикса @samp{~}.
+
+@item
+@var{Целев-поточн-вывод} является выводом, произведенным целевой
+программой.  Весь целевой вывод начинается с префикса @samp{@@}.
+
+@item
+@var{Журн-поточн-вывод} является текстом, исходящим изнутри
+@value{GDBN}, например, сообщения, которые должны быть выведены как
+часть журнала ошибок.  Весь журнальный вывод начинается с префикса
+@samp{&}.
+
+@end itemize
+
+@c Local variables:
+@c change-log-default-name: "ChangeLog-mi"
+@c End:

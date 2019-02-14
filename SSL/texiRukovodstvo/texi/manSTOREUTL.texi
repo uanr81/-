@@ -1,0 +1,87 @@
+@node STOREUTL, SSL_CONNECT, CRL2PKCS7, Top
+@chapter STOREUTL 
+@table @asis
+@item NAME
+       openssl-storeutl, storeutl - STORE утилита
+
+@item SYNOPSIS
+       openssl storeutl [@ref{manSTOREUTL -help,, -help}] [@ref{manSTOREUTL -out filename,, -out filename}] [@ref{manSTOREUTL -noout,, -noout}] [@ref{manSTOREUTL -passin arg,, -passin arg}] [@ref{manSTOREUTL -text,, -text}] [@ref{manSTOREUTL -engine id,, -engine id}] [@ref{manSTOREUTL -r,, -r}] [@ref{manSTOREUTL [-certs] [-keys] [-crls],, [-certs] [-keys] [-crls]}] [@ref{manSTOREUTL -subject arg,, -subject arg}] [@ref{manSTOREUTL [-issuer arg] [-serial arg],, [-issuer arg] [-serial arg]}] [@ref{manSTOREUTL -alias arg,, -alias arg}] [@ref{manSTOREUTL -fingerprint arg,, -fingerprint arg}] [@ref{manSTOREUTL -digest,, -digest}] uri ...
+
+@item DESCRIPTION
+       Команда storeutl может использоваться для отображения содержимого
+       (после дешифрования, в зависимости от случая), извлеченного из
+       заданного URI.
+
+@item OPTIONS
+@table @asis
+@item -help @anchor{manSTOREUTL -help}
+           Распечатайте сообщение об использовании.
+
+@item       -out filename @anchor{manSTOREUTL -out filename}
+           задает имя выходного файла для записи или стандартный вывод
+           по умолчанию.
+
+@item       -noout @anchor{manSTOREUTL -noout}
+           эта опция предотвращает вывод данных PEM.
+
+@item       -passin arg @anchor{manSTOREUTL -passin arg}
+           ключевой источник пароля. Для получения дополнительной информации
+           о формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl(1).
+
+@item       -text @anchor{manSTOREUTL -text}
+           Распечатывает объекты в текстовой форме, аналогично выводу -text
+           из openssl x509, openssl pkey, и т.п.
+
+@item       -engine id @anchor{manSTOREUTL -engine id}
+           указание механизма (по его уникальной строке идентификатора) приведет
+           к тому, что storeutl попытается получить функциональную ссылку на
+           указанный механизм, тем самым инициализируя его при необходимости.
+           Движок будет установлен по умолчанию для всех доступных алгоритмов.
+
+@item       -r @anchor{manSTOREUTL -r}
+            Получить объекты рекурсивно, когда это возможно.
+
+@item       [-certs] [-keys] [-crls] @anchor{manSTOREUTL [-certs] [-keys] [-crls]}
+           Выбирайте только сертификаты, ключи или CRLs из данного URI. Однако,
+           если этот URI вернет набор имен (URIs), они всегда будут возвращены.
+
+@item       -subject arg @anchor{manSTOREUTL -subject arg}
+           Поиск объекта с именем субъекта arg. Аргумент должен быть отформатирован
+           как /type0=value0/type1=value1/type2=.... Символы ключевых слов могут
+           быть экранированы \ (обратный флеш), и пробел сохраняется. Пустые
+           значения разрешены, но игнорируются при поиске. То есть поиск с пустым
+           значением будет иметь тот же эффект, что и отсутствие указания типа вообще.
+
+@item      [-issuer arg] [-serial arg] @anchor{manSTOREUTL [-issuer arg] [-serial arg]}
+           Поиск объекта с указанным именем эмитента и серийным номером. Эти два
+           варианта должны использоваться вместе. Аргумент издателя должен быть
+           отформатирован как /type0=value0/type1=value1/type2=..., символы могут
+           быть экранированы \ (обратная косая черта), пробелы не пропускаются.
+           Серийный аргумент может быть указан как десятичное или шестнадцатеричное
+           значение, если ему предшествует 0x.
+
+@item      -alias arg @anchor{manSTOREUTL -alias arg}
+           Поиск объекта с указанным псевдонимом.
+
+@item      -fingerprint arg @anchor{manSTOREUTL -fingerprint arg}
+           Поиск объекта, имеющего данный отпечаток.
+
+@item       -digest @anchor{manSTOREUTL -digest}
+           Дайджест, который использовался для вычисления 
+           -fingerprint.
+@end table
+@item SEE ALSO
+       openssl(1)
+
+@item HISTORY
+       openssl storeutl was added to OpenSSL 1.1.1.
+
+@item COPYRIGHT
+       Copyright 2016-2018 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use
+       this file except in compliance with the License.  You can obtain a copy
+       in the file LICENSE in the source distribution or at
+       <https://www.openssl.org/source/license.html>.
+@end table
+1.1.1a                            2018-11-20                       STOREUTL(1)

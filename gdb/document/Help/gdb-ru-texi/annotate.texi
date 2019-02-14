@@ -1,0 +1,755 @@
+@c  \input texinfo   @c -*-texinfo-*-, GDB/MI, Top, Top
+@c  @c %**start of header
+@c  @setfilename annotate.info
+@c  @settitle GDB Annotations
+@c  @setchapternewpage off
+@c  @c %**end of header
+
+@c  @set EDITION 0.5
+@c  @set DATE May 1994
+
+@c  @ifinfo
+@c  This file documents GDB annotations.
+
+@c  This is Edition @value{EDITION}, @value{DATE}, of @cite{GDB
+@c  Annotations}.  Copyright 1994 Free Software Foundation
+
+@c  Permission is granted to make and distribute verbatim copies of
+@c  this manual provided the copyright notice and this permission notice
+@c  are preserved on all copies.
+@c  @end ignore
+
+@c  @ignore
+@c  Permission is granted to process this file through TeX and print the
+@c  results, provided the printed document carries copying permission
+@c  notice identical to this one except for the removal of this paragraph
+@c  (this paragraph not being relevant to the printed manual).
+
+@c  @end ignore
+@c  Permission is granted to copy and distribute modified versions of this
+@c  manual under the conditions for verbatim copying, provided also that the
+@c  entire resulting derived work is distributed under the terms of a
+@c  permission notice identical to this one.
+
+@c  Permission is granted to copy and distribute translations of this manual
+@c  into another language, under the above conditions for modified versions.
+@c  @end ifinfo
+
+@c  @titlepage
+@c  @title GDB Annotations
+@c  @subtitle Edition @value{EDITION}
+@c  @subtitle @value{DATE}
+@c  @author Cygnus Support
+@c  @page
+@c  @vskip 0pt plus 1filll
+@c  Permission is granted to make and distribute verbatim copies of
+@c  this manual provided the copyright notice and this permission notice
+@c  are preserved on all copies.
+
+@c  Copyright @copyright{} 1994 Free Software Foundation
+@c  @end titlepage
+
+@c  @ifinfo
+@c  @node Top
+@c  @top GDB Annotations
+
+@c @syncodeindex fn cp
+
+@node Примечания
+@chapter Примечания @value{GDBN}
+
+Эта глава описывает примечания в @value{GDBN}.
+Примечания разработаны для согласования @value{GDBN} с
+графическими интерфейсами пользователя или другими аналогичными
+программами, которые хотят взаимодействовать с @value{GDBN} на
+относительно высоком уровне.
+
+@ignore
+This is Edition @value{EDITION}, @value{DATE}.
+@end ignore
+
+@menu
+* Обзор примечаний::    Что такое примечания; общий синтаксис.
+* Префикс server::      Подача команды без воздействия на состояние пользователя.
+* Примечания к значениям::   Значения явно помечаются.
+* Примечания к кадрам:: Примечания к кадрам стека.
+* Отображения::         @value{GDBN} может отображать что-то периодически.
+* Приглашения::         Примечания, отмечающие потребность @value{GDBN} во вводе.
+* Ошибки::              Примечания к сообщениям об ошибках.
+* Информация о точке останова::     Информация о точках останова.
+* Недостоверность::     Некоторые примечания, описывающие недостоверные вещи.
+* Примечания к выполнению::
+                        Выполняется ли программа, как она остановилась, и т.д.
+* Примечания к исходному тексту::  Примечания, описывающие исходный код.
+* Дальнейшие планы::    Примечания, которые могут быть добавлены в будущем.
+@end menu
+
+@node Обзор примечаний
+@section Что такое примечание?
+@cindex примечания
+
+Чтобы создавать примечания, запустите @value{GDBN} с ключем
+@code{--annotate=2}.
+
+Примечания начинаются с символа новой строки, двух символов
+@samp{control-z} и имени примечания.  Если нет дополнительной
+информации, связанной с примечанием, непосредственно за его именем следует
+символ новой строки.  Если дополнительная информация есть, за именем
+примечания следует пропуск, дополнительная информация и символ новой
+строки.  Дополнительная информация не может содержать символа новой
+строки.
+
+Любой вывод, не начинающийся с символа новой строки и двух
+@samp{control-z}, означает буквальный вывод @value{GDBN}.  В настоящее
+время @value{GDBN} не нужно выводить два @samp{control-z} вслед за
+символом новой строки, но если это понадобится, примечания могут быть
+расширены `экранирующим' примечанием, которое означает вывод этих
+трех символов.
+
+Вот простой пример запуска @value{GDBN} с примечаниями:
+
+@smallexample
+$ gdb --annotate=2
+GNU GDB 5.0
+Copyright 2000 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License,
+and you are welcome to change it and/or distribute copies of it
+under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty"
+for details.
+This GDB was configured as "sparc-sun-sunos4.1.3"
+
+^Z^Zpre-prompt
+(gdb) 
+^Z^Zprompt
+quit
+
+^Z^Zpost-prompt
+$ 
+@end smallexample
+
+Здесь @samp{quit} является для @value{GDBN} вводом; остальное---вывод
+@value{GDBN}.  Три строки, начинающиеся с @samp{^Z^Z} (где @samp{^Z}
+означает знак @samp{control-z}), суть примечания; остальное является
+выводом @value{GDBN}.
+
+@node Префикс server
+@section Префикс server
+@cindex префикс server для примечаний
+
+Чтобы подать команду @value{GDBN}, не оказывая влияния на определенные
+аспекты состояния, видимые для пользователей, начните ее с @samp{server }.
+Это означает, что данная команда не воздействует на историю команд, а также
+не влияет на понятие @value{GDBN} о том, какую команду повторять, если
+в пустой строке нажата клавиша @key{RET}.
+
+Префикс server не влияет на запись значений в историю значений; чтобы
+напечатать значение, не занося его в историю, используйте команду
+@code{output} вместо @code{print}.
+
+@node Примечания к значениям
+@section Значения
+
+@cindex примечания к значениям
+Когда значение выводится в различных контекстах, @value{GDBN} использует
+примечания, чтобы отделить его от окружающего текста.
+
+@findex value-history-begin
+@findex value-history-value
+@findex value-history-end
+Если значение выводится с помощью @code{print} и добавляется в историю
+значений, примечание выглядит так:
+
+@smallexample
+^Z^Zvalue-history-begin @var{номер-в-истории} @var{флаги-значения}
+@var{строка-истории}
+^Z^Zvalue-history-value
+@var{значение}
+^Z^Zvalue-history-end
+@end smallexample
+
+где @var{номер-в-истории}---номер, который значение получает в истории,
+@var{строка-истории}---строка, такая как @samp{$5 = }, которая
+представляет значение пользователю, @var{значение} является выводом,
+соответствующим самому значению, а @var{флаги-значения}---@samp{*} для
+значения, которое может быть разыменовано, и @samp{-}, если нет.
+
+@findex value-begin
+@findex value-end
+Если значение не добавляется в историю значений (это может быть или неверное
+число с плавающей точкой, или оно выводится командой @code{output}),
+примечание выглядит похожим образом:
+
+@smallexample
+^Z^Zvalue-begin @var{флаги-значения}
+@var{значение}
+^Z^Zvalue-end
+@end smallexample
+
+@findex arg-begin
+@findex arg-name-end
+@findex arg-value
+@findex arg-end
+Когда @value{GDBN} выводит аргумент функции (например, в выводе команды
+@code{backtrace}), он делает такие примечания:
+
+@smallexample
+^Z^Zarg-begin
+@var{имя-аргумента}
+^Z^Zarg-name-end
+@var{строка-разделитель}
+^Z^Zarg-value @var{флаги-значения}
+@var{значение}
+^Z^Zarg-end
+@end smallexample
+
+где @var{имя-аргумента} есть имя аргумента,
+@var{строка-разделитель}---текст (такой как @samp{=}), который отделяет
+имя от значения для удобства пользователя, а @var{флаги-значения} и
+@var{значение} имеют такой же смысл, что и в примечании
+@code{value-history-begin}.
+
+@findex field-begin
+@findex field-name-end
+@findex field-value
+@findex field-end
+При выводе структуры, @value{GDBN} делает следующие примечания:
+
+@smallexample
+^Z^Zfield-begin @var{флаги-значения}
+@var{имя-поля}
+^Z^Zfield-name-end
+@var{строка-разделитель}
+^Z^Zfield-value
+@var{значение}
+^Z^Zfield-end
+@end smallexample
+
+где @var{имя-поля} есть имя поля, @var{строка-разделитель}---текст
+(такой как @samp{=}), который отделяет имя от значения для удобства
+пользователя, а @var{флаги-значения} и @var{значение} имеют тот же
+смысл, что и в примечании @code{value-history-begin}.
+
+При выводе массива, @value{GDBN} делает следующие примечания:
+
+@smallexample
+^Z^Zarray-section-begin @var{индекс-в-массиве} @var{флаги-значения}
+@end smallexample
+
+где @var{индекс-в-массиве}---индекс первого аннотируемого элемента, а
+@var{флаги-значения} имеют такой же смысл, что и в примечании
+@code{value-history-begin}.  За этим следует произвольное число
+элементов.  Элемент может быть либо одиночным
+
+@findex elt
+@smallexample
+@samp{,} @var{пропуск}           ; @r{опускается для первого элемента}
+@var{значение}
+^Z^Zelt
+@end smallexample
+
+либо повторяющимся
+
+@findex elt-rep
+@findex elt-rep-end
+@smallexample
+@samp{,} @var{пропуск}           ; @r{опускается для первого элемента}
+@var{значение}
+^Z^Zelt-rep @var{число-повторений}
+@var{строка-повторений}
+^Z^Zelt-rep-end
+@end smallexample
+
+В обоих случаях, @var{значение} является выводом значения элемента, а
+@var{пропуск} может содержать пробелы, символы табуляции и новой
+строки.  В случае повторяющихся элементов, @var{число-повторений}
+представляет число последовательных элементов массива, которые содержат
+данное значение, а @var{строка-повторений} является строкой, которая
+предназначена для уведомления пользователя о том, что выводятся
+повторяющиеся элементы.
+
+@findex array-section-end
+После того, как выведены все элементы массива, примечание к массиву
+заканчивается так:
+
+@smallexample
+^Z^Zarray-section-end
+@end smallexample
+
+@node Примечания к кадрам
+@section Кадры
+
+@cindex примечания к кадрам
+Когда @value{GDBN} печатает кадр, он делает к нему примечания.
+Например, это применяется к кадрам, выводимым при остановке @value{GDBN}, 
+в результате вывода командами, такими как @code{backtrace} или
+@code{up}, и так далее.
+
+@findex frame-begin
+Примечания к кадру начинаются с
+
+@smallexample
+^Z^Zframe-begin @var{уровень} @var{адрес}
+@var{строка-уровня}
+@end smallexample
+
+где @var{уровень}---это номер кадра (0 для самого внутреннего кадра,
+другие кадры имеют положительные номера), @var{адрес}---это адрес кода,
+выполняющегося в данном кадре, а @var{строка-уровня}---строка,
+предназначенная для передачи уровня пользователю.  @var{Адрес} имеет
+форму @samp{0x}, за которым следует одна или более шестнадцатеричных
+цифр в нижнем регистре (заметьте, что это не зависит от языка).  Кадр
+заканчивается так:
+
+@findex frame-end
+@smallexample
+^Z^Zframe-end
+@end smallexample
+
+Между этими комментариями находится основное тело кадра, которое может
+состоять из
+
+@itemize @bullet
+@item
+@findex function-call
+@smallexample
+^Z^Zfunction-call
+@var{строка-вызова-функции}
+@end smallexample
+
+где @var{строка-вызова-функции} является текстом, предназначенным для
+уведомления пользователя, что этот кадр связан с вызовом функции,
+который @value{GDBN} сделал в отлаживаемой программе.
+
+@item
+@findex signal-handler-caller
+@smallexample
+^Z^Zsignal-handler-caller
+@var{строка-вызова-обработчика-сигнала}
+@end smallexample
+
+где @var{строка-вызова-обработчика-сигнала}---текст, предназначенный для
+уведомления пользователя, что этот кадр связан с тем механизмом, который
+использовался операционной системой при вызове обработчика сигнала
+(это тот кадр, из которого произошел вызов обработчика, а не кадр для
+самого обработчика).
+
+@item
+Обычный кадр.
+
+@findex frame-address
+@findex frame-address-end
+Это может, возможно (в зависимости от того, считается ли это информацией,
+интересной для пользователя), начинаться с
+
+@smallexample
+^Z^Zframe-address
+@var{адрес}
+^Z^Zframe-address-end
+@var{строка-разделитель}
+@end smallexample
+
+здесь @var{адрес}---это адрес, где происходит выполнение в кадре (тот же
+адрес, что и в примечании @code{frame-begin}, но выведенный в форме,
+предназначенной для пользователя---в частности, синтаксис различается в
+зависимости от языка), а @var{строка-разделитель} является строкой,
+предназначенной для отделения этого адреса от того, что за ним следует
+для удобства пользователя.
+
+@findex frame-function-name
+@findex frame-args
+Затем идет
+
+@smallexample
+^Z^Zframe-function-name
+@var{имя-функции}
+^Z^Zframe-args
+@var{аргументы}
+@end smallexample
+
+где @var{имя-функции} есть имя функции, выполняющейся в кадре, или
+@samp{??}, если оно не известно, а @var{аргументы}---это аргументы к
+кадру, со скобками вокруг них (каждый аргумент аннотируется также
+индивидуально, @pxref{Примечания к значениям}).
+
+@findex frame-source-begin
+@findex frame-source-file
+@findex frame-source-file-end
+@findex frame-source-line
+@findex frame-source-end
+Если доступна информация об исходных текстах, печатается ссылка на них:
+
+@smallexample
+^Z^Zframe-source-begin
+@var{вводная-исходная-строка}
+^Z^Zframe-source-file
+@var{имя-файла}
+^Z^Zframe-source-file-end
+:
+^Z^Zframe-source-line
+@var{номер-строки}
+^Z^Zframe-source-end
+@end smallexample
+
+где @var{вводная-исходная-строка} отделяет ссылку от предшествуещего ей
+текста, для удобства пользователя, @var{имя-файла}---это имя исходного
+файла, @var{номер-строки}---номер строки в этом файле (первая строка
+имеет номер 1).
+
+@findex frame-where
+Если @value{GDBN} печатает некоторую информацию о том, откуда появился
+этот кадр (какая библиотека, какой сегмент загрузки, и так далее; в
+настоящее время реализовано только на RS/6000), он делает такие
+примечания:
+
+@smallexample
+^Z^Zframe-where
+@var{информация}
+@end smallexample
+
+Затем, если исходный текст действительно должен быть отображен для этого
+кадра (например, это не верно для вывода от команды @code{backtrace}),
+тогда выводится примечание @code{source} (@pxref{Примечания к исходному
+тексту}).  В отличие от большинства примечаний, этот вывод производится
+вместо обычного текста, который был бы напечатан, а не в дополнение к нему.
+@end itemize
+
+@node Отображения
+@section Отображения
+
+@findex display-begin
+@findex display-number-end
+@findex display-format
+@findex display-expression
+@findex display-expression-end
+@findex display-value
+@findex display-end
+@cindex примечания к отображениям
+Когда @value{GDBN} велят отобразить что-то с помощью команды
+@code{display}, к результату отображения делаются примечания:
+
+@smallexample
+^Z^Zdisplay-begin
+@var{номер}
+^Z^Zdisplay-number-end
+@var{разделитель-номеров}
+^Z^Zdisplay-format
+@var{формат}
+^Z^Zdisplay-expression
+@var{выражение}
+^Z^Zdisplay-expression-end
+@var{разделитель-выражений}
+^Z^Zdisplay-value
+@var{значение}
+^Z^Zdisplay-end
+@end smallexample
+
+здесь @var{номер}---это номер отображения, @var{разделитель-номеров}
+предназначен для отделения номеров от того, что следует затем для
+пользователя, @var{формат} включает информацию о том, как отображается
+значение, такую как размер, формат и так далее, @var{выражение}---это
+отображаемое выражение, @var{разделитель-выражений} предназначен для
+отделения выражения от следующего за ним текста для пользователя, и
+@var{значение}---это действительное значение, которое отображается.
+
+@node Приглашения
+@section Примечания ко вводу @value{GDBN}
+
+@cindex примечания к приглашениям
+Когда @value{GDBN} выводит приглашение для ввода, он делает к этому
+примечания, так что становится возможным узнать, когда посылать данные,
+когда закончен вывод от данной команды, и так далее.
+
+Каждый из различных видов ввода имеет различный @dfn{тип ввода}.  Каждый
+тип ввода имеет три примечания: примечание @code{pre-}, обозначающее
+начало каждого выводимого приглашения, простое примечание, обозначающее
+конец приглашения, и затем примечание @code{post-}, обозначающее конец
+любого эхо, которое может быть ассоциировано (а может и не быть) со
+вводом.  Например, характерной чертой типа ввода @code{prompt} являются
+следующие примечания:
+
+@smallexample
+^Z^Zpre-prompt
+^Z^Zprompt
+^Z^Zpost-prompt
+@end smallexample
+
+Существуют следующие типы ввода:
+
+@table @code
+@findex pre-prompt
+@findex prompt
+@findex post-prompt
+@item prompt
+Когда @value{GDBN} запрашивает команду (главное приглашение @value{GDBN}).
+
+@findex pre-commands
+@findex commands
+@findex post-commands
+@item commands
+Когда @value{GDBN} запрашивает набор команд, как в команде @code{commands}.
+Примечания повторяются для каждой введенной команды.
+
+@findex pre-overload-choice
+@findex overload-choice
+@findex post-overload-choice
+@item overload-choice
+Когда @value{GDBN} хочет, чтобы пользователь выбрал одну из нескольких
+перегруженных функций.
+
+@findex pre-query
+@findex query
+@findex post-query
+@item query
+Когда @value{GDBN} хочет, чтобы пользователь подтвердил потенциально
+опасное действие.
+
+@findex pre-prompt-for-continue
+@findex prompt-for-continue
+@findex post-prompt-for-continue
+@item prompt-for-continue
+Когда @value{GDBN} запрашивает у пользователя нажатие ввода для
+продолжения.  Замечание: не ожидайте, что это будет работать хорошо;
+используйте вместо этого @code{set height 0} для отключения приглашений.
+Это происходит потому, что при наличии примечаний подсчет строк
+происходит неверно.
+@end table
+
+@node Ошибки
+@section Ошибки
+@cindex примечания к ошибкам, предупреждениям и прерываниям
+
+@findex quit
+@smallexample
+^Z^Zquit
+@end smallexample
+
+Это примечание появляется непосредственно перед тем, как @value{GDBN}
+отвечает на прерывание.
+
+@findex error
+@smallexample
+^Z^Zerror
+@end smallexample
+
+Это примечание появляется сразу перед тем, как @value{GDBN} отвечает на
+ошибку.
+
+Примечания выхода и ошибки обозначают, что любое примечание, в середине
+которого находился @value{GDBN}, могут внезапно оборваться.  Например,
+если за примечанием @code{value-history-begin} следует @code{error}, то
+не нужно ожидать соответствующий @code{value-history-end}.  Однако, не
+следует также ожидать, что его точно не будет; примечание об ошибке не
+обязательно означает, что @value{GDBN} немедленно возвращается в начало
+на самый верхний уровень.
+
+@findex error-begin
+Примечанию к ошибке или выходу может предшествовать
+
+@smallexample
+^Z^Zerror-begin
+@end smallexample
+
+Весь вывод между этим и примечанием к ошибке или выходу является
+сообщением об ошибке.
+
+Пока примечаний к предупреждающим сообщениям не делается.
+
+@node Информация о точке останова
+@section Информация о точке останова
+
+@cindex примечания к точкам останова
+К выводу, производимому командой @code{info breakpoints}, делаются
+следующие примечания:
+
+@findex breakpoints-headers
+@findex breakpoints-table
+@smallexample
+^Z^Zbreakpoints-headers
+@var{элемент-заголовка}
+^Z^Zbreakpoints-table
+@end smallexample
+
+где @var{элемент-заголовка} имеет тот же синтаксис, что и элемент
+(смотрите ниже), но вместо данных, он содержит строки, которые
+предназначены для разъяснения пользователю значений каждого поля.  Затем
+следует произвольное число элементов.  Если поле не подходит к этому
+элементу, оно опускается.  Поля могут содержать завершающие пропуски.
+Каждое поле состоит из:
+
+@findex record
+@findex field
+@smallexample
+^Z^Zrecord
+^Z^Zfield 0
+@var{номер}
+^Z^Zfield 1
+@var{тип}
+^Z^Zfield 2
+@var{положение}
+^Z^Zfield 3
+@var{включена}
+^Z^Zfield 4
+@var{адрес}
+^Z^Zfield 5
+@var{что}
+^Z^Zfield 6
+@var{кадр}
+^Z^Zfield 7
+@var{условие}
+^Z^Zfield 8
+@var{счетчик-игнорирований}
+^Z^Zfield 9
+@var{команды}
+@end smallexample
+
+Заметьте, что @var{адрес} предназначен для использования
+пользователем---синтаксис различается в зависимости от языка.
+
+Вывод заканчивается так:
+
+@findex breakpoints-table-end
+@smallexample
+^Z^Zbreakpoints-table-end
+@end smallexample
+
+@node Недостоверность
+@section Сообщения о недостоверности
+
+@cindex примечания к сообщениям о недостоверности
+Следующие примечания говорят о том, что определенные куски информации,
+описывающие состояние, могли измениться.
+
+@table @code
+@findex frames-invalid
+@item ^Z^Zframes-invalid
+
+Кадры (например, вывод команды @code{backtrace}) могли измениться.
+
+@findex breakpoints-invalid
+@item ^Z^Zbreakpoints-invalid
+
+Точки останова могли измениться.  Например, пользователь только что
+добавил или удалил точку останова.
+@end table
+
+@node Примечания к выполнению
+@section Выполнение программы
+@cindex примечания к выполняющимся программам
+
+@findex starting
+@findex stopping
+Когда программа начинает выполняться вследствие команды
+@value{GDBN}, такой как @code{step} или @code{continue}, выводится
+
+@smallexample
+^Z^Zstarting
+@end smallexample
+
+Когда программа останавливается, выводится
+
+@smallexample
+^Z^Zstopped
+@end smallexample
+
+Перед примечанием @code{stopped}, множество примечаний описывают, как
+программа остановилась.
+
+@table @code
+@findex exited
+@item ^Z^Zexited @var{код-выхода}
+Программа завершилась, и @var{код-выхода} является кодом выхода
+(ноль при успешном завершении, в противном случае не ноль).
+
+@findex signalled
+@findex signal-name
+@findex signal-name-end
+@findex signal-string
+@findex signal-string-end
+@item ^Z^Zsignalled
+Программа завершилась по сигналу.  После @code{^Z^Zsignalled}, примечания
+продолжаются:
+
+@smallexample
+@var{вступительный-текст}
+^Z^Zsignal-name
+@var{имя}
+^Z^Zsignal-name-end
+@var{текст-в-середине}
+^Z^Zsignal-string
+@var{строка}
+^Z^Zsignal-string-end
+@var{заключительный-текст}
+@end smallexample
+
+где @var{имя} является именем сигнала, таким как @code{SIGILL} или
+@code{SIGSEGV}, а @var{строка} представляет объяснение сигнала, такое как
+@code{Illegal Instruction} или @code{Segmentation fault}.
+@var{Вступительный-текст}, @var{текст-в-середине} и @var{заключительный
+текст} используются для удобства пользователя и не имеют определенного
+формата.
+
+@findex signal
+@item ^Z^Zsignal
+Синтаксис этого примечания такой же, как для @code{signalled}, но
+@value{GDBN} сообщает, что программа лишь получила сигнал, а не то, что
+она остановилась из-за него.
+
+@findex breakpoint
+@item ^Z^Zbreakpoint @var{номер}
+Программа достигла точки останова с номером @var{номер}.
+
+@findex watchpoint
+@item ^Z^Zwatchpoint @var{номер}
+Программа достигла точки наблюдения с номером @var{номер}.
+@end table
+
+@node Примечания к исходному тексту
+@section Вывод исходного текста
+@cindex примечания к отображению исходного текста
+
+@findex source
+Следующие примечания используются вместо вывода исходного текста:
+
+@smallexample
+^Z^Zsource @var{имя-файла}:@var{строка}:@var{символ}:@var{middle}:@var{адрес}
+@end smallexample
+
+где @var{имя-файла} указывает абсолютное имя файла,
+@var{строка}---это номер строки в этом файле (первая строка имеет номер 1),
+@var{символ}---позиция символа в файле (первый символ в исходном файле
+имеет номер 0) (для большинства отладочных форматов это будет
+обязательно указывать на начало строки), @var{middle} есть
+@samp{middle}, если @var{адрес} находится в середине строки, или
+@samp{beg}, если @var{адрес} находится в начале строки, а @var{адрес}
+является адресом в целевой программе, ассоциированным с выводимым
+исходным текстом.  @var{Адрес} записан в форме @samp{0x}, за которым
+следует одна или несколько шестнадцатеричных цифр в нижнем регистре
+(заметьте, что это не зависит от языка).
+
+@node Дальнейшие планы
+@section Примечания, которые могут понадобиться с будущем
+
+@format
+    - target-invalid
+      цель могла измениться (регистры, содержимое памяти или статус
+      выполнения).  Для эффективности выполнения, мы можем захотеть
+      определять `register-invalid' и `all-register-invalid' с большей
+      точностью
+
+    - систематические примечания к параметрам set/show (включая
+      сообщения о недостоверности).
+
+    - аналогично, `info' возвращает список кандидатов на сообщение о
+      недостоверности.
+@end format
+
+@ignore
+@node Index
+@unnumbered Index
+
+@printindex fn
+@end ignore
+
+@c @bye

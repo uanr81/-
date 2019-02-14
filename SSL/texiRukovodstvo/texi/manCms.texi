@@ -1,0 +1,573 @@
+@node CMS, CRL, CIPHERS, Top
+@chapter CMS
+@table @asis
+@item NAME
+       openssl-cms, cms - CMS утилита
+
+@item SYNOPSIS
+       openssl cms [@ref{cms -help,, -help}] [@ref{cms -encrypt,, -encrypt}] [@ref{cms -decrypt,, -decrypt}] [@ref{cms -sign,, -sign}] [@ref{cms -verify,, -verify}] [@ref{cms -cmsout,, -cmsout}] [@ref{cms -resign,, -resign}] [@ref{cms -data_create,, -data_create}] [@ref{cms -data_out,, -data_out}] [@ref{cms -digest_create,, -digest_create}] [@ref{cms -digest_verify,, -digest_verify}] [@ref{cms -compress,, -compress}] [@ref{cms -uncompress,, -uncompress}] [@ref{cms -EncryptedData_encrypt,, -EncryptedData_encrypt}] [@ref{cms -sign_receipt,, -sign_receipt}] [@ref{cms -verify_receipt receipt,, -verify_receipt receipt}] [@ref{cms -in filename,, -in filename}] [@ref{cms -inform SMIME|PEM|DER,, -inform SMIME|PEM|DER}] [@ref{cms -rctform SMIME|PEM|DER,, -rctform SMIME|PEM|DER}] [@ref{cms -out filename,, -out filename}] [@ref{cms -outform SMIME|PEM|DER,, -outform SMIME|PEM|DER}] [@ref{cms -stream -indef -noindef,, -stream -indef -noindef}] [@ref{cms -noindef,, -noindef}] [@ref{cms -content filename,, -content filename}] [@ref{cms -text,, -text}] [@ref{cms -noout,, -noout}] [@ref{cms -print,, -print}] [@ref{cms -CAfile file,, -CAfile file}] [@ref{cms -CApath dir,, -CApath dir}] [@ref{cms -no-CAfile,, -no-CAfile}] [@ref{cms -no-CApath,, -no-CApath}] [@ref{cms [-attime] [-check_ss_sig] [-crl_check] [-crl_check_all] [-explicit_policy] [-extended_crl] [-ignore_critical] [-inhibit_any] [-inhibit_map] [-no_alt_chains] [-no_check_time] [-partial_chain] [-policy] [-policy_check] [-policy_print] [-purpose] [-suiteB_128] [-suiteB_128_only] [-suiteB_192] [-trusted_first] [-use_deltas] [-auth_level] [-verify_depth] [-verify_email] [-verify_hostname] [-verify_ip] [-verify_name] [-x509_strict],, [-attime] [-check_ss_sig] [-crl_check] [-crl_check_all] [-explicit_policy] [-extended_crl] [-ignore_critical] [-inhibit_any] [-inhibit_map] [-no_alt_chains] [-no_check_time] [-partial_chain] [-policy] [-policy_check] [-policy_print] [-purpose] [-suiteB_128] [-suiteB_128_only] [-suiteB_192] [-trusted_first] [-use_deltas] [-auth_level] [-verify_depth] [-verify_email] [-verify_hostname] [-verify_ip] [-verify_name] [-x509_strict]}] [@ref{cms -md digest,, -md digest}] [@ref{cms -cipher,, -cipher}] [@ref{cms -nointern,, -nointern}] [@ref{cms -noverify,, -noverify}] [@ref{cms -nocerts,, -nocerts}] [@ref{cms -noattr,, -noattr}] [@ref{cms -nosmimecap,, -nosmimecap}] [@ref{cms -binary,, -binary}] [@ref{cms -crlfeol,, -crlfeol}] [@ref{cms -asciicrlf,, -asciicrlf}] [@ref{cms -nodetach,, -nodetach}] [@ref{cms -certfile file,, -certfile file}] [@ref{cms -certsout file,, -certsout file}] [@ref{cms -signer file,, -signer file}] [@ref{cms -recip file,, -recip file}] [@ref{cms -keyid,, -keyid}] [@ref{cms [-receipt_request_all] [-receipt_request_first],, [-receipt_request_all] [-receipt_request_first]}] [@ref{cms -receipt_request_from emailaddress,, -receipt_request_from emailaddress}] [@ref{cms -receipt_request_to emailaddress,, -receipt_request_to emailaddress}] [@ref{cms -receipt_request_print,, -receipt_request_print}] [@ref{cms -secretkey key,, -secretkey key}] [@ref{cms -secretkeyid id,, -secretkeyid id}] [@ref{cms -econtent_type type,, -econtent_type type}] [@ref{cms -inkey file,, -inkey file}] [@ref{cms -keyopt name:opt,, -keyopt name:opt}] [@ref{cms -passin arg,, -passin arg}] [@ref{cms -rand file...,, -rand file...}] [@ref{cms [-writerand file],, [-writerand file]}] [@ref{cms cert.pem...,, cert.pem...}] [@ref{cms -to, -from, -subject,, -to, -from, -subject}]...
+
+@item DESCRIPTION
+       Команда cms обрабатывает почту S/MIME v3.1. Может шифровать, расшифровывать,
+       подписывать и проверять, сжимать и распаковывать сообщения S/MIME.
+
+@item OPTIONS
+       Существует четырнадцать опций операций, которые устанавливают тип выполняемой
+       операции. Значение других параметров зависит от типа операции.
+@table @asis
+@item       -help @anchor{cms -help}
+           Распечатайте сообщение об использовании.
+
+@item       -encrypt @anchor{cms -encrypt}
+           Шифровать почту для заданных сертификатов получателей. Входной файл - это
+           сообщение, которое необходимо зашифровать. Выходной файл - это зашифрованная
+           почта в формате MIME. Фактический тип CMS - это <B>EnvelopedData<B>.
+
+           Обратите внимание, что для сертификата получателя не выполняется проверка отзыва,
+           поэтому, если этот ключ был скомпрометирован, другие могут иметь возможность
+           расшифровать текст.
+
+@item       -decrypt @anchor{cms -decrypt}
+           Расшифруйте почту, используя предоставленный сертификат и закрытый ключ. Ожидает
+           зашифрованное почтовое сообщение в формате MIME для входного файла. Расшифрованное
+           письмо записывается в выходной файл.
+
+@item       -debug_decrypt
+           Эта опция устанавливает флаг CMS_DEBUG_DECRYPT. Эту опцию следует использовать с
+           осторожностью: Раздел примечаний ниже.
+
+@item       -sign @anchor{cms -sign}
+           Подпишите почту используя предоставленный сертификат и закрытый ключ. Входной файл -
+           это сообщение, которое нужно подписать. Подписанное сообщение в формате MIME
+           записывается в выходной файл.
+
+@item       -verify @anchor{cms -verify}
+           Проверьте подписанную почту. Ожидает подписанное почтовое сообщение на входе и
+           выводит подписанные данные. Поддерживается как открытый текст, так и
+           непрозрачная подпись.
+
+@item       -cmsout @anchor{cms -cmsout}
+           Принимает входное сообщение и записывает структуру CMS в кодировке PEM.
+
+@item       -resign @anchor{cms -resign}
+           Отказаться от сообщения: принять существующее сообщение и одного или
+           нескольких новых подписантов.
+
+@item       -data_create @anchor{cms -data_create}
+           Создайте тип данных CMS.
+
+@item       -data_out @anchor{cms -data_out}
+           Тип данных и вывод содержимого.
+
+@item       -digest_create @anchor{cms -digest_create}
+           Создайте тип DigestedData CMS.
+
+@item       -digest_verify @anchor{cms -digest_verify}
+           Проверьте тип CMS DigestedData и выведите содержимое.
+
+@item       -compress @anchor{cms -compress}
+           Создайте тип CMS CompressedData. Чтобы эта опция работала, OpenSSL должен быть
+           скомпилирован с поддержкой zlib, иначе он выдаст ошибку.
+
+@item       -uncompress @anchor{cms -uncompress}
+           Распакуйте тип CMS CompressedData и выведите содержимое. Чтобы эта опция
+           работала, OpenSSL должен быть скомпилирован с поддержкой zlib, иначе он
+           выдаст ошибку.
+
+@item       -EncryptedData_encrypt @anchor{cms -EncryptedData_encrypt}
+           Зашифруйте содержимое, используя предоставленный симметричный ключ и алгоритм,
+           используя тип CMS EncryptedData, и выведите содержимое.
+
+@item       -sign_receipt @anchor{cms -sign_receipt}
+           Генерация и вывод подписанной квитанции за предоставленное сообщение. Входное
+           сообщение должно содержать подписанный запрос на получение. В остальном
+           функциональность аналогична операции -sign.
+
+@item       -verify_receipt receipt @anchor{cms -verify_receipt receipt}
+           Проверьте подписанную квитанцию ​​в квитанции имени файла. Входное сообщение
+           должно содержать исходный запрос на получение. В остальном функциональность
+           аналогична операции -verify.
+
+@item       -in filename @anchor{cms -in filename}
+           Входное сообщение должно быть зашифровано или подписано или сообщение
+           должно быть расшифровано или проверено.
+
+@item       -inform SMIME|PEM|DER @anchor{cms -inform SMIME|PEM|DER}
+           Это определяет формат ввода для структуры CMS. По умолчанию используется
+           SMIME, который читает сообщение в формате S/MIME. PEM и формат DER изменяют
+           это, ожидая вместо структуры CMS формата PEM и DER. В настоящее время это
+           влияет только на формат ввода структуры CMS, если структура CMS не вводится
+           (например, с помощью -encrypt или -sign), эта опция не действует.
+
+@item       -rctform SMIME|PEM|DER @anchor{cms -rctform SMIME|PEM|DER}
+           Укажите формат для подписанной квитанции для использования с
+           операцией -receipt_verify.
+
+@item       -out filename @anchor{cms -out filename}
+           Текст сообщения, который был расшифрован или проверен, или выходное сообщение
+           формата MIME, которое было подписано или проверено.
+
+@item       -outform SMIME|PEM|DER @anchor{cms -outform SMIME|PEM|DER}
+           Это определяет выходной формат для структуры CMS. По умолчанию используется SMIME,
+           который записывает сообщение в формате S/MIME. Формат PEM и DER измените это,
+           чтобы вместо этого записать структуры CMS формата PEM и DER. В настоящее время
+           это влияет только на формат вывода структуры CMS, если структура CMS не выводится
+           (например, с помощью -verify или -decrypt), эта опция не действует.
+
+@item       -stream -indef -noindef @anchor{cms -stream -indef -noindef}
+           Параметры -stream и -indef эквивалентны и позволяют потоковую передачу I/O для
+           операций кодирования. Это позволяет обрабатывать данные за один проход без
+           необходимости хранить все содержимое в памяти, потенциально поддерживая очень
+           большие файлы. Потоковая передача автоматически устанавливается для подписи
+           S/MIME с отсоединенными данными, если выходной формат - SMIME, в настоящее
+           время он отключен по умолчанию для всех других операций.
+
+@item       -noindef @anchor{cms -noindef}
+           Отключите потоковую передачу I/O, где она будет производить кодирование
+           неопределенной длины. Эта опция в настоящее время не имеет никакого эффекта.
+           В будущем потоковая передача будет включена по умолчанию для всех
+           соответствующих операций, и эта опция отключит ее.
+
+@item       -content filename @anchor{cms -content filename}
+           Это указывает файл, содержащий отсоединенное содержимое, это полезно только
+           с командой -verify. Это возможно только в том случае, если структура CMS
+           использует отдельную форму подписи, в которую не входит содержимое. Эта опция
+           переопределит любой контент, если формат ввода - S/MIME, и он использует тип
+           контента multipart/signed MIME.
+
+@item       -text @anchor{cms -text}
+           Эта опция добавляет текстовые заголовки (text/plain) MIME к предоставленному
+           сообщению при шифровании или подписании. При расшифровке или проверке он
+           удаляет заголовки текста: если дешифрованное или проверенное сообщение не
+           относится к типу MIME text/plain, то возникает ошибка.
+
+@item       -noout @anchor{cms -noout}
+           Для операции -cmsout не выводите проанализированную структуру CMS. Это полезно
+           в сочетании с опцией -print или если проверяется синтаксис структуры CMS.
+
+@item       -print @anchor{cms -print}
+           Для операции -cmsout распечатайте все поля структуры CMS. Это в основном полезно
+           для тестирования.
+
+@item       -CAfile file @anchor{cms -CAfile file}
+           Файл, содержащий доверенные сертификаты CA, используемый только с -verify.
+
+@item       -CApath dir @anchor{cms -CApath dir}
+           Каталог, содержащий доверенные сертификаты CA, используется только с -verify.
+           Этот каталог должен быть стандартным каталогом сертификатов: то есть хеш
+           каждого имени субъекта (используя x509 -hash) должен быть связан с
+           каждым сертификатом.
+
+@item       -no-CAfile @anchor{cms -no-CAfile}
+           Не загружайте доверенные сертификаты CA из расположения файла по умолчанию
+
+@item       -no-CApath @anchor{cms -no-CApath}
+           Не загружайте доверенные сертификаты CA из каталога по умолчанию
+
+@item       -md digest @anchor{cms -md digest}
+           Дайджест алгоритм для использования при подписании или отставке.
+           Если он отсутствует, будет использован алгоритм дайджеста по
+           умолчанию для ключа подписи (обычно SHA1).
+
+@item       -cipher @anchor{cms -cipher}
+           Алгоритм шифрования для использования. Например тройной DES (168 bits)
+           - -des3 или 256 bit AES - -aes256. Любое стандартное имя алгоритма
+           (как используется функцией EVP_get_cipherbyname()) также может быть
+           использовано перед чертой, например, -aes-128-cbc. Смотрите в enc(1)
+           список шифров, поддерживаемых вашей версией OpenSSL.
+
+           Если не указано, используется тройной DES. Используется только с
+           командами -encrypt и -EncryptedData_create.
+
+@item       -nointern @anchor{cms -nointern}
+           При проверке сообщения обычно проверяются сертификаты (если таковые
+           имеются), включенные в сообщение, для сертификата подписи. С этой
+           опцией используются только сертификаты, указанные в опции -certfile.
+           Однако предоставленные сертификаты могут использоваться как
+           ненадежные CAs.
+
+@item       -noverify @anchor{cms -noverify}
+           Не проверяйте сертификат подписавшего подписанного сообщения.
+
+@item       -nocerts @anchor{cms -nocerts}
+           При подписании сообщения сертификат подписывающего лица обычно включается
+           в эту опцию и исключается. Это уменьшит размер подписанного сообщения, но
+           у верификатора должна быть локально доступная копия сертификата подписавшего
+           (например, переданная с использованием опции -certfile).
+
+@item       -noattr @anchor{cms -noattr}
+           Обычно, когда сообщение подписано, включается набор атрибутов, которые
+           включают время подписания и поддерживаемые симметричные алгоритмы. С этой
+           опцией они не включены.
+
+@item       -nosmimecap @anchor{cms -nosmimecap}
+           Исключите список поддерживаемых алгоритмов из подписанных атрибутов,
+           другие опции, такие как время подписания и тип контента, все еще включены.
+
+@item       -binary @anchor{cms -binary}
+           Обычно входное сообщение преобразуется в формат "canonical", который
+           эффективно использует CR и LF в качестве конца строки: как того требует
+           спецификация S/MIME. Когда эта опция присутствует, перевод не происходит.
+           Это полезно при обработке двоичных данных, которые могут быть не в
+           формате MIME.
+
+@item       -crlfeol @anchor{cms -crlfeol}
+           Обычно выходной файл использует один LF в качестве конца строки. Когда
+           эта опция присутствует, вместо нее используется CRLF.
+
+@item       -asciicrlf @anchor{cms -asciicrlf}
+           При подписании используйте формат канонизации ASCII CRLF. Это удаляет
+           конечные пробелы из всех строк, удаляет конечные пустые строки в EOF и
+           устанавливает тип инкапсулированного содержимого. Эта опция обычно
+           используется с отдельным контентом и выходным форматом подписи DER. Этот
+           параметр обычно не требуется при проверке, поскольку он включается
+           автоматически, если обнаружен формат инкапсулированного содержимого.
+
+@item       -nodetach @anchor{cms -nodetach}
+           При подписании сообщения используйте непрозрачную подпись: эта форма более
+           устойчива к переводу почтовыми ретрансляторами, но не может быть прочитана
+           почтовыми агентами, которые не поддерживают S/MIME. Без этой опции
+           используется подписание открытого текста с типом MIME multipart/signed.
+
+@item       -certfile file @anchor{cms -certfile file}
+           Позволяет указать дополнительные сертификаты. При подписании они будут
+           включены в сообщение. При проверке их будут искать сертификаты подписавшихся.
+           Сертификаты должны быть в формате PEM.
+
+@item       -certsout file @anchor{cms -certsout file}
+           Все сертификаты, содержащиеся в сообщении, записываются в файл.
+
+@item       -signer file @anchor{cms -signer file}
+           Сертификат подписи при подписании или отставке сообщения, этот параметр можно
+           использовать несколько раз, если требуется более одного подписывающего лица.
+           Если сообщение проверяется, сертификаты подписывающих будут записаны в этот файл,
+           если проверка прошла успешно.
+
+@item       -recip file @anchor{cms -recip file}
+           При расшифровке сообщения указывается сертификат получателя. Сертификат должен
+           соответствовать одному из получателей сообщения, иначе возникает ошибка.
+
+           При шифровании сообщения эта опция может использоваться несколько раз для
+           указания каждого получателя. Эта форма должна использоваться, если требуются
+           настраиваемые параметры (например, для указания RSA-OAEP).
+
+           Эта опция поддерживает только сертификаты, содержащие ключи RSA, Diffie-Hellman или EC.
+
+@item       -keyid @anchor{cms -keyid}
+           Используйте идентификатор ключа субъекта для идентификации сертификатов
+           вместо имени эмитента и серийного номера. Поставляемый сертификат
+           должен включать расширение идентификатора ключа субъекта.
+           Поддерживается опциями -sign и -encrypt.
+
+@item       [-receipt_request_all] [-receipt_request_first] @anchor{cms [-receipt_request_all] [-receipt_request_first]} 
+           Для опции -sign включите подписанный запрос на получение. Укажите, что
+           запросы должны предоставляться всеми получателями или получателями
+           первого уровня (теми, которые отправлены по почте напрямую, а не из
+           списка рассылки). Проигнорировать это, включить-receipt_request_from.
+
+@item       -receipt_request_from emailaddress @anchor{cms -receipt_request_from emailaddress}
+           Для опции -sign включите подписанный запрос на получение. Добавьте явный
+           адрес электронной почты, где должны быть предоставлены квитанции.
+
+@item       -receipt_request_to emailaddress @anchor{cms -receipt_request_to emailaddress}
+           Добавьте явный адрес электронной почты, на который должны быть
+           отправлены подписанные квитанции. Эта опция должна, но предоставляется, если
+           подписанный чек запрашивается.
+
+@item       -receipt_request_print @anchor{cms -receipt_request_print}
+           Для операции -verify распечатайте содержимое любых подписанных запросов
+           на получение.
+
+@item       -secretkey key @anchor{cms -secretkey key}
+           Укажите симметричный ключ для использования. Ключ должен быть предоставлен
+           в шестнадцатеричном формате и соответствовать используемому алгоритму.
+           Поддерживается параметрами -EncryptedData_encrypt -EncryptedData_decrypt,
+           -encrypt и -decrypt. При использовании с -encrypt или -decrypt предоставленный
+           ключ используется для упаковки или разворачивания ключа шифрования содержимого
+           с использованием ключа AES типа KEKRecipientInfo.
+
+@item       -secretkeyid id @anchor{cms -secretkeyid id}
+           Идентификатор ключа для предоставленного симметричного ключа для типа
+           KEKRecipientInfo. Эта опция должна присутствовать, если опция -secretkey
+           используется с -encrypt. В операциях -decrypt идентификатор используется
+           для определения местоположения соответствующего ключа, если он не указан,
+           тогда делается попытка расшифровать любые структуры KEKRecipientInfo.
+
+@item       -econtent_type type @anchor{cms -econtent_type type}
+           Установите тип инкапсулированного содержимого, если он не указан, используется
+           тип данных. Аргументом типа может быть любое допустимое имя OID в текстовом или
+           числовом формате.
+
+@item       -inkey file @anchor{cms -inkey file}
+           Закрытый ключ для использования при подписании или расшифровке. Это должно
+           соответствовать соответствующему сертификату. Если эта опция не указана, то
+           закрытый ключ должен быть включен в файл сертификата, указанный в файле -recip
+           или -signer. При подписании эту опцию можно использовать несколько раз для
+           указания последовательных ключей.
+
+@item       -keyopt name:opt @anchor{cms -keyopt name:opt}
+           Для подписи и шифрования эту опцию можно использовать несколько раз,
+           чтобы установить индивидуальные параметры для предыдущего ключа или
+           сертификата. В настоящее время его можно использовать для установки
+           RSA-PSS для подписи, RSA-OAEP для шифрования или для изменения
+           параметров по умолчанию для ECDH.
+
+@item       -passin arg @anchor{cms -passin arg}
+           Источник пароля закрытого ключа. Для получения дополнительной
+           информации о формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl.
+
+@item       -rand file... @anchor{cms -rand file...}
+           Файл или файлы, содержащие случайные данные, используемые для заполнения
+           генератора случайных чисел. Можно указать несколько файлов, разделенных
+           символом, зависящим от ОС.  Разделитель ';' для MS-Windows, ',' для
+           OpenVMS, и ':' для остальных.
+
+@item       [-writerand file] @anchor{cms [-writerand file]}
+           Записывает случайные данные в указанный файл при выходе. Это может быть
+           использовано с последующим -rand флагом.
+
+@item       cert.pem... @anchor{cms cert.pem...}
+           Один или несколько сертификатов получателей сообщения:
+           используется при шифровании сообщения.
+
+@item       -to, -from, -subject @anchor{cms -to, -from, -subject}
+           Соответствующие заголовки почты. Они включены за пределы подписанной
+           части сообщения, поэтому они могут быть включены вручную. При
+           подписании многие почтовые клиенты S/MIME проверяют, совпадают
+           ли адреса электронной почты сертификата подписчиков с адресом From :.
+
+       [-attime] [-check_ss_sig] [-crl_check] [-crl_check_all] [-explicit_policy] [-extended_crl] [-ignore_critical] [-inhibit_any] [-inhibit_map] [-no_alt_chains] [-no_check_time] [-partial_chain] [-policy] [-policy_check] [-policy_print] [-purpose] [-suiteB_128] [-suiteB_128_only] [-suiteB_192] [-trusted_first] [-use_deltas] [-auth_level] [-verify_depth] [-verify_email] [-verify_hostname] [-verify_ip] [-verify_name] [-x509_strict] @anchor{cms [-attime] [-check_ss_sig] [-crl_check] [-crl_check_all] [-explicit_policy] [-extended_crl] [-ignore_critical] [-inhibit_any] [-inhibit_map] [-no_alt_chains] [-no_check_time] [-partial_chain] [-policy] [-policy_check] [-policy_print] [-purpose] [-suiteB_128] [-suiteB_128_only] [-suiteB_192] [-trusted_first] [-use_deltas] [-auth_level] [-verify_depth] [-verify_email] [-verify_hostname] [-verify_ip] [-verify_name] [-x509_strict]} 
+           Установите различные параметры проверки цепочки сертификатов. Смотрите
+           страницу руководства verify(1) для подробностей.
+@end table
+@item NOTES
+       Сообщение MIME должно быть отправлено без каких-либо пустых строк
+       между заголовками и выходными данными. Некоторые почтовые программы
+       автоматически добавляют пустую строку. Отправка почты напрямую в
+       sendmail - один из способов достижения правильного формата.
+
+       Поставляемое сообщение, которое должно быть подписано или зашифровано,
+       должно включать необходимые заголовки MIME, иначе многие клиенты S/MIME
+       не будут отображать его должным образом (если вообще будут). Вы можете
+       использовать опцию -text для автоматического добавления заголовков
+       простого текста.
+
+       Сообщение "signed and encrypted" - это сообщение, в котором подписанное
+       сообщение затем шифруется. Это может быть сделано путем шифрования уже
+       подписанного сообщения: см. Раздел примеров.
+
+       Эта версия программы позволяет только одного подписавшего на сообщение,
+       но она будет проверять нескольких подписчиков на полученных сообщениях.
+       Некоторые клиенты S/MIME задыхаются, если сообщение содержит несколько
+       подписчиков. Можно подписывать сообщения "in parallel", подписав
+       уже подписанное сообщение.
+
+       Параметры -encrypt и -decrypt отражают обычное использование в клиентах
+       S/MIME. Строго говоря, они обрабатывают данные в оболочке CMS:
+       зашифрованные данные CMS используются для других целей.
+
+       Опция -resign использует существующий дайджест сообщения при добавлении
+       нового подписавшего. Это означает, что атрибуты должны присутствовать по
+       крайней мере в одном существующем подписывающем лице, использующем тот
+       же дайджест сообщения, иначе эта операция завершится неудачно.
+
+       Параметры -stream и -indef включают потоковую поддержку I/O. В
+       результате кодирование происходит в BER с использованием созданного
+       кодирования неопределенной длины, а не в DER. Потоковая передача
+       поддерживается для операции -encrypt и операции -sign, если
+       содержимое не отсоединено.
+
+       Потоковая передача всегда используется для операции -sign с
+       отсоединенными данными, но, поскольку контент больше не является
+       частью структуры CMS, кодировка остается DER.
+
+       Если опция -decrypt используется без сертификата получателя, то
+       делается попытка определить местонахождение получателя, попробовав
+       каждого потенциального получателя по очереди, используя
+       предоставленный закрытый ключ. Чтобы предотвратить атаку MMA (атака
+       Блейхенбахера на заполнение PKCS #1 v1.5 RSA), все получатели
+       проверяются, и если ни один из получателей не соответствует
+       сообщению, это "decrypted" с использованием случайного ключа,
+       который обычно выводит мусор. Опцию -debug_decrypt можно использовать
+       для отключения защиты от атаки MMA и возврата ошибки, если не
+       удается найти получателя: эту опцию следует использовать с
+       осторожностью. Для более полного
+       описания см. CMS_decrypt).
+
+@item EXIT CODES
+@display
+       0   Операция прошла полностью успешно.
+
+       1   Произошла ошибка при разборе параметров команды.
+
+       2   Один из входных файлов не может быть прочитан.
+
+       3   Произошла ошибка при создании файла CMS или при чтении сообщения MIME.
+
+       4   Произошла ошибка при расшифровке или проверке сообщения.
+
+       5   Сообщение было проверено правильно, но при записи сертификатов
+       подписавших произошла ошибка.
+@end display
+@item COMPATIBILITY WITH PKCS#7 format.
+       Утилита smime может обрабатывать только старый формат PKCS#7. Утилита cms
+       поддерживает формат синтаксиса криптографических сообщений. Использование
+       некоторых функций приведет к сообщениям, которые не могут быть обработаны
+       приложениями, которые поддерживают только старый формат. Это подробно
+       описано ниже.
+
+       Использование опции -keyid с -sign или -encrypt.
+
+       Опция -outform PEM использует разные заголовки.
+
+       Опция -compress.
+
+       Опция -secretkey при использовании с -encrypt.
+
+       Использование PSS с -sign.
+
+       Использование ключей OAEP или non-RSA с помощью -encrypt.
+
+       Кроме того, тип -EncryptedData_create и -data_create не может
+       быть обработан более старой командой smime.
+
+@item EXAMPLES
+@display
+       Создать текстовое подписанное сообщение:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem
+
+       Создать непрозрачное подписанное сообщение
+
+        openssl cms -sign -in message.txt -text -out mail.msg -nodetach \
+               -signer mycert.pem
+
+       Создайте подписанное сообщение, добавьте несколько дополнительных
+       сертификатов и прочитайте закрытый ключ из другого файла:
+
+        openssl cms -sign -in in.txt -text -out mail.msg \
+               -signer mycert.pem -inkey mykey.pem -certfile mycerts.pem
+
+       Создайте подписанное сообщение с двумя подписавшими, используйте
+       идентификатор ключа:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem -signer othercert.pem -keyid
+
+       Отправьте подписанное сообщение под Unix напрямую в sendmail,
+       включая заголовки:
+
+        openssl cms -sign -in in.txt -text -signer mycert.pem \
+               -from steve@@openssl.org -to someone@@somewhere \
+               -subject "Signed message" | sendmail someone@@somewhere
+
+       Проверьте сообщение и извлеките сертификат подписавшего в
+       случае успеха:
+
+        openssl cms -verify -in mail.msg -signer user.pem -out signedtext.txt
+
+       Отправить зашифрованную почту, используя тройной DES:
+
+        openssl cms -encrypt -in in.txt -from steve@@openssl.org \
+               -to someone@@somewhere -subject "Encrypted message" \
+               -des3 user.pem -out mail.msg
+
+       Подпишите и зашифруйте почту:
+
+        openssl cms -sign -in ml.txt -signer my.pem -text \
+               | openssl cms -encrypt -out mail.msg \
+               -from steve@@openssl.org -to someone@@somewhere \
+               -subject "Signed and Encrypted message" -des3 user.pem
+
+       Примечание. Команда шифрования не включает параметр -text, поскольку
+       зашифрованное сообщение уже имеет заголовки MIME.
+
+       Расшифровать почту:
+
+        openssl cms -decrypt -in mail.msg -recip mycert.pem -inkey key.pem
+
+       Вывод из подписи формы Netscape представляет собой структуру PKCS#7
+       с отдельным форматом подписи. Вы можете использовать эту программу
+       для проверки подписи строкой, оборачивая закодированную структуру
+       base64 и окружая ее:
+
+        -----BEGIN PKCS7-----
+        -----END PKCS7-----
+
+       и с помощью команды,
+
+        openssl cms -verify -inform PEM -in signature.pem -content content.txt
+
+       в качестве альтернативы вы можете base64 декодировать подпись и использовать
+
+        openssl cms -verify -inform DER -in signature.der -content content.txt
+
+       Создайте зашифрованное сообщение, используя 128-битный Camellia:
+
+        openssl cms -encrypt -in plain.txt -camellia128 -out mail.msg cert.pem
+
+       Добавить подписанта в существующее сообщение:
+
+        openssl cms -resign -in mail.msg -signer newsign.pem -out mail2.msg
+
+       Подпишите почту используя RSA-PSS:
+
+        openssl cms -sign -in message.txt -text -out mail.msg \
+               -signer mycert.pem -keyopt rsa_padding_mode:pss
+
+       Создать зашифрованную почту, используя RSA-OAEP:
+
+        openssl cms -encrypt -in plain.txt -out mail.msg \
+               -recip cert.pem -keyopt rsa_padding_mode:oaep
+
+       Используйте SHA256 KDF с сертификатом ECDH:
+
+        openssl cms -encrypt -in plain.txt -out mail.msg \
+               -recip ecdhcert.pem -keyopt ecdh_kdf_md:sha256
+@end display
+@item BUGS
+       Синтаксический анализатор MIME не очень умен: он, кажется,
+       обрабатывает большинство сообщений, которые я на него
+       бросил, но может задушить другие.
+
+       В настоящее время код будет записывать только сертификат
+       подписавшего в файл: если подписчик имеет отдельный
+       сертификат шифрования, его необходимо извлечь вручную.
+       Должна быть какая-то эвристика, которая определяет
+       правильный сертификат шифрования.
+
+       В идеале должна поддерживаться база данных сертификатов для
+       каждого адреса электронной почты.
+
+       В настоящее время в коде не учитываются разрешенные алгоритмы
+       симметричного шифрования, указанные в подписанном атрибуте
+       SMIMECapabilities. это означает, что пользователь должен
+       вручную включить правильный алгоритм шифрования. Он должен
+       хранить список разрешенных шифров в базе данных и
+       использовать только их.
+
+       Проверка сертификата подписи не производится.
+
+@item HISTORY
+@display
+       Использование нескольких параметров -signer и команды -resign
+       были впервые добавлены в OpenSSL 1.0.0.
+
+       Опция keyopt была впервые добавлена ​​в OpenSSL 1.0.2.
+
+       Поддержка RSA-OAEP и RSA-PSS была впервые добавлена ​​в OpenSSL 1.0.2.
+
+       Использование ключей non-RSA с -encrypt и -decrypt было впервые
+       добавлено в OpenSSL 1.0.2.
+
+       Параметры -no_alt_chains были впервые добавлены в OpenSSL 1.0.2b.
+@end display
+@item COPYRIGHT
+       Copyright 2008-2018 The OpenSSL Project Authors. All Rights Reserved.
+
+       Licensed under the OpenSSL license (the "License").  You may not use this file except in
+       compliance with the License.  You can obtain a copy in the file LICENSE in the source
+       distribution or at <https://www.openssl.org/source/license.html>.
+@end table
+1.1.1a                                      2018-11-20                                      CMS(1)

@@ -1,14 +1,14 @@
 /* Fig. 2.1: fig02_01.c
-   A first program in C */
+   Первая программа на С */
 #include <stdio.h>
 
-/* function main begins program execution */
+/* функция main начинает выполнение программы */
 int main( void )
 {
-   printf( "Welcome to C!\n" );
+   printf( "Добро пожаловать в C!\n" );
 
-   return 0; /* indicate that program ended successfully */
-} /* end function main */
+   return 0; /* указать, что программа успешно завершилась */
+} /* конец функция main */
 
 
 /**************************************************************************
