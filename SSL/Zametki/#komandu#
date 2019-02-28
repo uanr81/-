@@ -1,0 +1,1 @@
+openssl ca -gencrl -config ./ca.config  -out ./ca.crl # создание списка отзыва
