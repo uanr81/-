@@ -1,0 +1,12 @@
+\input texinfo
+@setfilename ../../info/Tramp_2_3_26_1UserManual
+@documentencoding UTF-8
+@settitle Пользовательская Документация Tramp 2.3.3.26.1
+@node Top
+@top Пользовательская Документация Tramp 2.3.3.26.1
+@ifinfo
+@heading Пользовательская Документация Tramp 2.3.3.26.1
+@end ifinfo
+
+@include tramp.texi
+@bye

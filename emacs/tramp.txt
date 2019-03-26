@@ -1,0 +1,290 @@
+5.11 Выбор конфигурационных файлов для завершения имени user/host
+
+tramp-completion-function-alist использует предопределенные файлы для дополнения имени пользователя и хоста (см. Завершение имени файла). Для каждого метода он содержит набор файлов конфигурации и функцию, которая может анализировать этот файл. Каждая запись в tramp-completion-function-alist имеет вид (method pair1 pair2 ...).
+
+Каждая пара состоит из (функциональный файл). Функция отвечает за извлечение имен пользователей и хостов из файла для завершения. Есть две функции, которые обращаются к этой переменной:
+— Function: tramp-get-completion-function method
+
+    Эта функция возвращает список функций завершения для метода.
+
+    Example:
+
+              (tramp-get-completion-function "rsh")
+              
+                   ⇒ ((tramp-parse-rhosts "/etc/hosts.equiv")
+                       (tramp-parse-rhosts "~/.rhosts"))
+
+— Function: tramp-set-completion-function method function-list
+
+    Эта функция устанавливает список функций как список функций завершения для метода.
+
+    Example:
+
+              (tramp-set-completion-function "ssh"
+               '((tramp-parse-sconfig "/etc/ssh_config")
+                 (tramp-parse-sconfig "~/.ssh/config")))
+              
+                   ⇒ ((tramp-parse-sconfig "/etc/ssh_config")
+                       (tramp-parse-sconfig "~/.ssh/config"))
+
+Существуют следующие предопределенные функции анализа файлов конфигурации:
+
+tramp-parse-rhosts
+    Эта функция анализирует файлы, которые синтаксически эквивалентны ~/.rhosts. Он возвращает имена хостов и имена пользователей, если они указаны.
+tramp-parse-shosts
+    Эта функция анализирует файлы, которые синтаксически эквивалентны ~/.ssh/known_hosts. Поскольку в таких файлах не указаны имена пользователей, он может возвращать только имена хостов.
+tramp-parse-sconfig
+    Эта функция возвращает псевдонимы хоста, определенные записями хоста в файлах стиля ~/.ssh/config.
+tramp-parse-shostkeys
+    Разбор SSH2 каталогов /etc/ssh2/hostkeys/* и ~/ssh2/hostkeys/*. Хосты закодированы в именах файлов hostkey_portnumber_host-name.pub. Имена пользователей всегда равны нулю.
+tramp-parse-sknownhosts
+    Еще один разбор каталогов в стиле SSH2, таких как /etc/ssh2/knownhosts/* и ~/ssh2/knownhosts/*. В этом случае имена хостов закодированы в именах файлов host-name.algorithm.pub. Имена пользователей всегда nil.
+tramp-parse-hosts
+    Функция, предназначенная для /etc/hosts для имен хостов.
+tramp-parse-passwd
+    Функция, которая анализирует файлы /etc/passwd для имен пользователей.
+tramp-parse-etc-group
+    Функция, которая анализирует файлы /etc/group для имен групп.
+tramp-parse-netrc
+    Функция, которая анализирует файлы ~/.netrc и ~/.authinfo-style. 
+
+Чтобы сохранить пользовательский файл с пользовательскими данными в пользовательской структуре, должна быть предусмотрена пользовательская функция. Эта функция должна соответствовать следующим соглашениям:
+— Function: my-tramp-parse file
+
+    файл должен быть либо файлом на хосте, либо nil. Функция должна возвращать список (пользовательский хост), которые принимаются в качестве кандидатов для завершения имен пользователей и хостов.
+
+    Example:
+
+              (my-tramp-parse "~/.my-tramp-hosts")
+              
+                   ⇒ ((nil "toto") ("daniel" "melancholia"))
+
+
+5.12 Повторное использование паролей для нескольких подключений
+
+Чтобы избежать повторных запросов паролей, рассмотрите собственные механизмы кэширования, такие как ssh-agent для методов ssh-like или pageant для методов plink-like.
+
+Tramp предлагает альтернативы, когда собственные решения не могут удовлетворить потребности.
+
+5.12.1 Использование файла аутентификации
+
+Пакет auth-source.el, изначально разработанный для No Gnus, считывает пароли из разных источников, смотри auth-source. Файл аутентификации по умолчанию - ~/.authinfo.gpg, но его можно изменить с помощью переменной auth-sources.
+
+Типичная запись в файле аутентификации:
+
+     machine melancholia port scp login daniel password geheim
+
+Порт может использовать любой метод Tramp (см. Методы Inline, см. Методы External). Пропуск значений портов соответствует всем методам Tramp. Домен и порты, используемые в синтаксисе имени файла Tramp, должны быть добавлены к машине и элементам входа в систему:
+
+     machine melancholia#4711 port davs login daniel%BIZARRE password geheim
+
+Установите auth-source-debug в t для отладки сообщений.
+
+5.12.2 Кеширование паролей
+
+Tramp может кэшировать пароли в том виде, в котором они были введены, и использовать их при необходимости для одного и того же имени пользователя или хоста, независимо от метода доступа.
+
+password-cache-expiry устанавливает длительность (в секундах) запоминания паролей. Пароли никогда не сохраняются навсегда и не могут выходить за пределы срока действия текущего сеанса Emacs. Установите password-cache-expiry в nil, чтобы отключить срок действия.
+
+Установите для password-cache значение nil, чтобы отключить кэширование паролей.
+
+
+5.13 Повторное использование информации, связанной с подключением
+
+Для более быстрого начального времени соединения Tramp сохраняет предыдущие свойства соединения в файле, заданном пользовательской опцией tramp-persistency-file-name.
+
+Имя файла по умолчанию для tramp-persistency-file-name - ~/.emacs.d/tramp.
+
+Tramp читает этот файл во время запуска Emacs и записывает в него при выходе из Emacs. Удалите этот файл для Tramp, чтобы создать новый при следующем запуске Emacs.
+
+Установите для tramp-persistency-file-name значение nil, чтобы постоянно отключать хранение соединений.
+
+Когда Tramp обнаруживает изменение версии операционной системы на удаленном хосте (с помощью команды uname -sr), он сбрасывает всю информацию, связанную с подключением для этого хоста, и создает новую запись.
+
+
+5.14 Настройка собственной информации, связанной с подключением
+
+Для более точной настройки параметры, указанные в tramp-methods, могут быть перезаписаны вручную.
+
+Установите tramp-connection-properties для ручного переопределения tramp-methods. Свойства в этом списке находятся в форме (значение свойства regexp). регулярное выражение соответствует именам удаленных файлов. Используйте nil, чтобы соответствовать всем. свойство - это имя свойства, а значение - это значение свойства.
+
+Свойство - это любой специфический для метода параметр, содержащийся в tramp-methods. Ключ параметра в tramp-methods - это имя символа tramp-<foo>. Чтобы перезаписать это свойство, используйте строку ‘<foo>’ для свойства. Например, это меняет удаленную оболочку:
+
+     (add-to-list 'tramp-connection-properties
+                  (list (regexp-quote "/ssh:user@randomhost.your.domain:")
+                        "remote-shell" "/bin/ksh"))
+     
+     (add-to-list 'tramp-connection-properties
+                  (list (regexp-quote "/ssh:user@randomhost.your.domain:")
+                        "remote-shell-login" '("-")))
+
+Параметры tramp-remote-shell и tramp-remote-shell-login в tramp-methods теперь имеют новые значения для удаленного хоста.
+
+Свойство также может быть любым свойством, найденным в tramp-persistency-file-name.
+
+Чтобы узнать, как ограниченные оболочки случайным образом сбрасывают соединения, установите специальное свойство ‘busybox’. Например:
+
+     (add-to-list 'tramp-connection-properties
+                  (list (regexp-quote "/ssh:user@randomhost.your.domain:")
+                        "busybox" t))
+
+
+5.15 Как Tramp находит и использует программы на удаленном хосте
+
+Tramp требует доступа и прав на несколько команд на удаленных хостах: ls, test, find and cat.
+
+Кроме того, существуют другие необходимые программы для методов подключения Inline и External.
+
+Чтобы повысить производительность и точность удаленного доступа к файлам, Tramp использует perl (или perl5) и grep, когда они доступны.
+— User Option: tramp-remote-path
+
+    tramp-remote-path указывает, какие пути к удаленным каталогам Tramp может искать для удаленных программ.
+
+    Tramp использует стандартные значения по умолчанию, такие как /bin и /usr/bin, которые приемлемы для большинства хостов. Чтобы учесть различия в хостах и ​​путях, например, /bin:/usr/bin в Debian GNU / Linux или /usr/xpg4/bin:/usr/ccs/bin:/usr/bin:/opt/SUNWspro/bin в Solaris, Tramp запрашивает удаленный хост с помощью getconf PATH и обновляет символ tramp-default-remote-path.
+
+    В тех случаях, когда хосты сохраняют неясные местоположения для путей из соображений безопасности, вручную добавьте такие пути к локальному .emacs, как показано ниже для использования Tramp при подключении.
+
+              (add-to-list 'tramp-remote-path "/usr/local/perl/bin")
+
+    Другой способ найти удаленный путь - использовать путь, назначенный удаленному пользователю удаленным хостом. Tramp обычно не сохраняет этот удаленный путь после входа в систему. Однако tramp-own-remote-path сохраняет значение пути, которое можно использовать для обновления tramp-remote-path.
+
+              (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
+    Обратите внимание, что это работает, только если ваша удаленная оболочка /bin/sh поддерживает аргумент входа в систему ‘-l’. 
+
+Когда пути удаленного поиска изменены, локальные кэши Tramp должны быть пересчитаны. Чтобы заставить Tramp заново вычислить заново, выйдите из Emacs, удалите постоянный файл (см. Кэширование Connection) и перезапустите Emacs.
+
+
+5.16 Советы по удаленной настройке оболочки
+
+Tramp проверяет наличие стандартных программ в обычных местах. Обычная тактика включает в себя последовательные попытки тестирования -e, /usr/bin/test -e, и /bin/test -e. ls -d это другой подход. Но эти подходы не помогают с этими новыми шаблонами входа в систему.
+
+Когда Tramp сталкивается с двухфакторным входом в систему или дополнительными контрольными вопросами, такими как ввод даты рождения, кода безопасности или парольной фразы, Tramp требуется еще несколько шагов настройки, чтобы приспособиться к ним.
+
+Разница между запросом пароля и запросом парольной фразы заключается в том, что пароль для завершения входа в систему, в то время как пароль используется для авторизации доступа к локальной информации аутентификации, такой как ключ ssh.
+
+Не существует единой конфигурации, позволяющей учесть все вариации безопасности входа в систему, особенно экзотические. Тем не менее, Tramp предлагает несколько настроек для решения наиболее распространенных.
+
+tramp-shell-prompt-pattern
+    tramp-shell-prompt-pattern предназначен для приглашения оболочки удаленного входа в систему, которая может отличаться от приглашения локальной оболочки входа shell-prompt-pattern. Поскольку большинство хостов используют одинаковые приглашения, Tramp устанавливает одинаковое значение по умолчанию для обоих запросов.
+tramp-password-prompt-regexp
+tramp-wrong-passwd-regexp
+    Tramp использует tramp-password-prompt-regexp для различения запросов на ввод паролей и запросов на ввод парольных фраз. По умолчанию tramp-password-prompt-regexp обрабатывает обнаружение в англоязычных средах. Смотрите пример локализации ниже:
+
+              (customize-set-variable
+               'tramp-password-prompt-regexp
+                (concat
+                 "^.*"
+                 (regexp-opt
+                  '("passphrase" "Passphrase"
+                    ;; English
+                    "password" "Password"
+                    ;; Deutsch
+                    "passwort" "Passwort"
+                    ;; Français
+                    "mot de passe" "Mot de passe")
+                  t)
+                 ".*:\0? *"))
+
+    Подобная локализация может быть необходима для обработки неправильных запросов пароля, для которых Tramp использует tramp-wrong-passwd-regexp.
+tset и другие вопросы
+    Чтобы подавить несоответствующие запросы для типа терминала, Tramp устанавливает значение TERM в состояние «немой» до начала процесса удаленного входа в систему с помощью пользовательской опции tramp-terminal-type. Это заставит замолчать общие подсказки, связанные с tset.
+
+    Стратегия Tramp для обработки таких приглашений (обычно запускаемых из сценариев входа на удаленных хостах) состоит в том, чтобы задавать переменные среды, чтобы никакие запросы не прерывали процесс инициализации оболочки.
+
+    Альтернативный подход заключается в настройке Tramp со строками, которые могут идентифицировать такие вопросы, используя tramp-actions-before-shell. Пример:
+
+              (defconst my-tramp-prompt-regexp
+                (concat (regexp-opt '("Enter the birth date of your mother:") t)
+                        "\\s-*")
+                "Regular expression matching my login prompt question.")
+              
+              (defun my-tramp-action (proc vec)
+                "Enter \"19000101\" in order to give a correct answer."
+                (save-window-excursion
+                  (with-current-buffer (tramp-get-connection-buffer vec)
+                    (tramp-message vec 6 "\n%s" (buffer-string))
+                    (tramp-send-string vec "19000101"))))
+              
+              (add-to-list 'tramp-actions-before-shell
+                           '(my-tramp-prompt-regexp my-tramp-action))
+
+
+Противоречивые имена для пользователей и переменных в .profile
+    When a user name is the same as a variable name in a local file, such as .profile, then Tramp may send incorrect values for environment variables. To avoid incorrect values, change the local variable name to something different from the user name. For example, if the user name is FRUMPLE, then change the variable name to FRUMPLE_DIR.
+Non-Bourne commands in .profile
+    When the remote host's .profile is also used for shells other than Bourne shell, then some incompatible syntaxes for commands in .profile may trigger errors in Bourne shell on the host and may not complete client's Tramp connections.
+
+    One example of a Bourne shell incompatible syntax in .profile: using export FOO=bar instead of FOO=bar; export FOO. After remote login, Tramp will trigger an error during its execution of /bin/sh on the remote host because Bourne shell does not recognize the export command as entered in .profile.
+
+    Likewise, (~) character in paths will cause errors because Bourne shell does not do (~) character expansions.
+
+    One approach to avoiding these incompatibilities is to make all commands in ~/.shrc and ~/.profile Bourne shell compatible so Tramp can complete connections to that remote. To accommodate using non-Bourne shells on that remote, use other shell-specific config files. For example, bash can use ~/.bash_profile and ignore .profile.
+Interactive shell prompt
+    Tramp redefines the remote shell prompt internally for robust parsing. This redefinition affects the looks of a prompt in an interactive remote shell through commands, such as M-x shell <RET>. Such prompts, however, can be reset to something more readable and recognizable using these Tramp variables.
+
+    Tramp sets the INSIDE_EMACS variable in the startup script file ~/.emacs_SHELLNAME.
+
+    SHELLNAME is bash or equivalent shell names. Change it by setting the environment variable ESHELL in the .emacs as follows:
+
+              (setenv "ESHELL" "bash")
+
+    Then re-set the prompt string in ~/.emacs_SHELLNAME as follows:
+
+              # Reset the prompt for remote Tramp shells.
+              if [ "${INSIDE_EMACS/*tramp*/tramp}" == "tramp" ] ; then
+                 PS1="[\u@\h \w]$ "
+              fi
+
+
+busybox / nc
+    Tramp's nc method uses the nc command to install and execute a listener as follows (see tramp-methods):
+
+              $ nc -l -p 42
+
+    The above command-line syntax has changed with busybox versions. If nc refuses the ‘-p’ parameter, then overwrite as follows:
+
+              (add-to-list
+               'tramp-connection-properties
+               `(,(regexp-quote "192.168.0.1")
+                 "remote-copy-args" (("-l") ("%r"))))
+
+    where ‘192.168.0.1’ is the remote host IP address (see Predefined connection information). 
+
+Next: Auto-save and Backup, Previous: Remote shell setup, Up: Configuration
+5.17 Android shell setup hints
+
+Tramp uses the adb method to access Android devices. Android devices provide a restricted shell access through an USB connection. The local host must have the adb program installed. Usually, it is sufficient to open the file /adb::/. Then you can navigate in the filesystem via dired.
+
+Alternatively, applications such as SSHDroid that run sshd process on the Android device can accept any ssh-based methods provided these settings are adjusted:
+
+    sh must be specified for remote shell since Android devices do not provide /bin/sh. sh will then invoke whatever shell is installed on the device with this setting:
+
+              (add-to-list 'tramp-connection-properties
+              	     (list (regexp-quote "192.168.0.26") "remote-shell" "sh"))
+
+    where ‘192.168.0.26’ is the Android device's IP address. (see Predefined connection information).
+    Tramp requires preserving PATH environment variable from user settings. Android devices prefer /system/xbin path over /system/bin. Both of these are set as follows:
+
+              (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+              (add-to-list 'tramp-remote-path "/system/xbin")
+
+    When the Android device is not ‘rooted’, specify a writable directory for temporary files:
+
+              (add-to-list 'tramp-remote-process-environment "TMPDIR=$HOME")
+
+    Open a remote connection with the command C-x C-f /ssh:192.168.0.26#2222: <RET>, where sshd is listening on port ‘2222’.
+
+    To add a corresponding entry to the ~/.ssh/config file (recommended), use this:
+
+              Host android
+                   HostName 192.168.0.26
+                   User root
+                   Port 2222
+
+    To use the host name ‘android’ instead of the IP address shown in the previous example, fix the connection properties as follows:
+
+              (add-to-list 'tramp-connection-properties
+              	     (list (regexp-quote "android") "remote-shell" "sh"))
+
+    Open a remote connection with a more concise command C-x C-f /ssh:android: <RET>. 

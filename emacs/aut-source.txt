@@ -1,0 +1,16 @@
+auth-source-search (&rest spec &key type max host user port secret require create delete &allow-other-keys)
+auth-source-delete (&rest spec &key delete &allow-other-keys)
+auth-source-forget+ (&rest spec &allow-other-keys)
+auth-source-netrc-parse (&rest spec &key file max host user port delete require &allow-other-keys)
+auth-source-netrc-search (&rest spec &key backend require create delete type max host user port &allow-other-keys)
+auth-source-netrc-create (&rest spec &key backend secret host user port create &allow-other-keys)
+auth-source-secrets-search (&rest spec &key backend create delete label type max host user port &allow-other-keys)
+auth-source-secrets-create (&rest spec &key backend type max host user port &allow-other-keys)
+auth-source-macos-keychain-search (&rest spec &key backend create delete label type max host user port &allow-other-keys)
+auth-source-macos-keychain-search-items (coll type max &rest spec &key label type host user port &allow-other-keys)
+auth-source-macos-keychain-create (&rest spec &key backend type max host user port &allow-other-keys)
+auth-source-plstore-search (&rest spec &key backend create delete label type max host user port &allow-other-keys)
+auth-source-plstore-create (&rest spec &key backend secret host user port create &allow-other-keys)
+
+machine remoteuser port sudo login root password remote-user-sudopassword
+machine remote-server port sudo login root password remote-user-sudopassword

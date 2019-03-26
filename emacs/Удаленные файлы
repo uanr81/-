@@ -1,0 +1,1 @@
+/ssh:you@remotehost|sudo:them@remotehost:/path/to/file

@@ -1,0 +1,2109 @@
+
+Tramp 2.3.3.26.1 User Manual
+
+This file documents Tramp 2.3.3.26.1, a remote file editing package for Emacs.
+
+Tramp stands for “Transparent Remote (file) Access, Multiple Protocol”. This package provides remote file editing, similar to Ange FTP.
+
+The difference is that Ange FTP uses FTP to transfer files between the local and the remote host, whereas Tramp uses a combination of rsh and rcp or other work-alike programs, such as ssh/scp.
+
+You can find the latest version of this document on the web at https://www.gnu.org/software/tramp/.
+
+The latest release of Tramp is available for download, or you may see Obtaining Tramp for more details, including the Git server details.
+
+Tramp also has a Savannah Project Page.
+
+There is a mailing list for Tramp, available at tramp-devel@@gnu.org, and archived at the Tramp Mail Archive.
+
+Copyright © 1999–2018 Free Software Foundation, Inc.
+
+    Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation; with no Invariant Sections, with the Front-Cover Texts being “A GNU Manual”, and with the Back-Cover Texts as in (a) below. A copy of the license is included in the section entitled “GNU Free Documentation License”.
+
+    (a) The FSF's Back-Cover Text is: “You have the freedom to copy and modify this GNU manual.” 
+
+
+Tramp предназначен для прозрачного доступа к удаленным файлам из Emacs. Tramp обеспечивает простой, удобный и согласованный интерфейс для удаленных файлов, как если бы они были локальными файлами. Прозрачность Tramp's распространяется на редактирование, управление версиями и Dired.
+
+Tramp может обращаться к удаленным хостам, используя любое количество методов доступа, таких как rsh, rlogin, telnet и связанные с ними программы. Если эти программы могут успешно передавать символы ASCII, Tramp может использовать их. Tramp не требует 8-битных чистых соединений.
+
+Tramp самый распространенный метод доступа - через ssh, более безопасную альтернативу ftp и другим старым методам доступа.
+
+Tramp в операционных системах MS Windows интегрирован с пакетом PuTTY и использует программу plink.
+
+Tramp в основном работает прозрачно в фоновом режиме с помощью программ подключения. Пока эти программы включают удаленный вход и могут использовать терминал, Tramp может адаптировать их для беспрепятственного и прозрачного доступа.
+
+Tramp временно передает содержимое удаленного файла на локальный узел редактирования и связанных операций. Tramp также может передавать файлы между хостами, используя стандартные интерфейсы Emacs, что является преимуществом прямой интеграции Tramp в Emacs.
+
+Tramp может передавать файлы, используя любое количество доступных хост-программ для удаленных файлов, таких как rcp, scp, rsync или (под MS Windows) pscp. Tramp предоставляет простые способы указать эти программы и настроить их для определенных файлов, хостов или методов доступа.
+
+Для более быстрой передачи файлов небольшого размера Tramp поддерживает закодированную передачу напрямую через оболочку с использованием mimencode или uuencode при условии, что такие инструменты доступны на удаленном хосте. Tramp за кадром
+
+Доступ к удаленному файлу через Tramp влечет за собой ряд действий, многие из которых прозрачны для пользователя. Однако для некоторых действий может потребоваться ответ пользователя (например, ввод паролей или заполнение имен файлов). Один типичный сценарий, открывающий файл на удаленном хосте, представлен здесь, чтобы проиллюстрировать соответствующие шаги:
+
+C-x C-f, чтобы запустить find-file, введите часть имени файла Tramp, затем нажмите клавишу <TAB> для завершения. Если это первое соединение с этим хостом, вот что происходит:
+
+    Tramp вызывает ‘telnet host’ или ‘rsh host -l user’ и устанавливает внешний процесс для подключения к удаленному хосту. Tramp связывается с процессом через буфер Emacs, который также показывает выходные данные с удаленного хоста.
+    Удаленный хост может запрашивать имя входа (например, для telnet) в буфере. Если, с другой стороны, имя для входа было включено в часть имени файла, Tramp отправляет имя для входа, за которым следует новая строка.
+    Затем удаленный хост может запросить пароль или фразу-пароль (для rsh или для telnet). Tramp отображает запрос пароля в минибуфере. Затем Tramp отправляет все, что введено, на удаленный хост, за которым следует новая строка.
+    Теперь Tramp ожидает либо приглашения оболочки, либо сообщения об ошибке при входе.
+
+    Если Tramp не получает никаких сообщений в течение периода ожидания (например, минуты), то Tramp отвечает сообщением об ошибке о том, что не найдена подсказка удаленной оболочки. Если есть какие-либо сообщения от удаленного хоста, Tramp отображает их в буфере.
+
+    Для любого сообщения ‘login failed’ с удаленного хоста Tramp прерывает попытку входа и повторяет шаги входа снова.
+    После успешного входа в систему и Tramp распознает приглашение оболочки от удаленного хоста, Tramp подготавливает среду оболочки, отключая эхо-запросы, настройку приглашения оболочки и другие хозяйственные работы.
+
+    Обратите внимание, что для удаленной оболочки Tramp применяется /bin/sh. Удаленный хост должен распознать ‘exec /bin/sh’ и выполнить соответствующую оболочку. Эта оболочка должна поддерживать синтаксис оболочки Bourne.
+    Tramp выполняет команды cd и ls, чтобы найти, какие файлы существуют на удаленном хосте. Tramp иногда использует echo с globbing. Tramp проверяет, доступен ли для записи файл или каталог с помощью test. После каждой команды Tramp анализирует выходные данные удаленного хоста для завершения следующей операции.
+    После завершения имени удаленного файла Tramp передает содержимое файла с удаленного хоста.
+
+    Для встроенных переводов Tramp отправляет команду, такую ​​как ‘mimencode -b /path/to/remote/file’, ждет, пока вывод не накопится в буфере, декодирует этот вывод, чтобы вывести содержимое файла.
+
+    Для внешних передач Tramp отправляет команду следующим образом:
+
+              rcp user@host:/path/to/remote/file /tmp/tramp.4711
+
+    Tramp считывает локальный временный файл /tmp/tramp.4711 в буфер, а затем удаляет временный файл.
+    Отредактируйте, измените, измените содержимое буфера как обычно, а затем сохраните буфер с C-x C-s. 
+    Tramp передает содержимое буфера на удаленный хост в обратном порядке, используя соответствующую встроенную или внешнюю программу.
+
+Я надеюсь, что это предоставило вам базовый обзор того, что происходит за кулисами, когда вы открываете файл с помощью Tramp.
+
+
+@node Получение Tramp
+
+Tramp входит в состав Emacs (since Emacs 22.1).
+
+Tramp также свободно упаковывается для загрузки в Интернете по адресу https://ftp.gnu.org/gnu/tramp/.
+
+Версии разработки Tramp доступны на серверах Git. Версии для разработки содержат новые и неполные функции.
+
+Один из способов получения с Git-сервера - это посетить страницу проекта Savannah по следующему URL-адресу и затем щелкнуть ссылку Git на панели навигации вверху.
+
+https://savannah.gnu.org/projects/tramp/
+
+Другой способ - с помощью терминала как ниже:
+
+     $ cd ~/emacs
+     $ git clone git://git.savannah.gnu.org/tramp.git
+
+Из-за брандмауэра:
+
+     $ git config --global http.proxy http://user:pwd@@proxy.server.com:8080
+     $ git clone https://git.savannah.gnu.org/r/tramp.git
+
+Tramp Разработчики:
+
+     $ git clone login@@git.sv.gnu.org:/srv/git/tramp.git
+
+После одной из вышеперечисленных команд, ~/emacs/tramp будет содержать последнюю версию Tramp.
+
+Чтобы получить обновления из репозитория, используйте git pull:
+
+     $ cd ~/emacs/tramp
+     $ git pull
+
+Запустите autoconf следующим образом, чтобы сгенерировать актуальный скрипт настройки:
+
+     $ cd ~/emacs/tramp
+     $ autoconf
+
+
+@node История Tramp
+
+Разработка Tramp началась в конце ноября 1998 года как rssh.el. Это обеспечило только один метод доступа. Он использовал ssh для входа в систему и scp для передачи содержимого файла. Имя было изменено на rcp.el, прежде чем оно получило свое настоящее имя Tramp. Были добавлены новые методы удаленного доступа, так же как и поддержка контроля версий.
+
+April 2000 was the first time when multi-hop methods were added. In July 2002, Tramp unified file names with Ange FTP. In July 2004, proxy hosts replaced multi-hop methods. Running commands on remote hosts was introduced in December 2005. Support for gateways since April 2007 (and removed in December 2016). GVFS integration started in February 2009. Remote commands on MS Windows hosts since September 2011. Ad-hoc multi-hop methods (with a changed syntax) re-enabled in November 2011. In November 2012, added Juergen Hoetzel's tramp-adb.el.
+
+XEmacs support was stopped in January 2016. Since March 2017, Tramp syntax mandates a method.
+
+
+@node Краткое введение в использование Tramp
+
+Tramp расширяет синтаксис имени файла Emacs удаленным компонентом. Имя удаленного файла выглядит всегда как /method:user@host:/path/to/file.
+
+Вы можете использовать удаленные файлы точно так же, как обычные файлы, это означает, что вы можете открыть файл или каталог с помощью C-x C-f /method:user@host:/path/to/file <RET>, отредактировать файл и сохранить его. Вы также можете смешивать локальные и удаленные файлы в файловых операциях с двумя аргументами, такими как copy-file или rename-file. И, наконец, вы можете запускать даже процессы на удаленном хосте, когда буфер, из которого вы вызываете процесс, имеет удаленный каталог по умолчанию.
+
+@node Синтаксис имени файла
+
+К удаленным именам файлов добавляются части метод, пользователь и хост. Все они, а также часть локального имени файла, являются необязательными, в случае отсутствия части предполагается значение по умолчанию. Значением по умолчанию для пустой части имени локального файла является домашний каталог удаленного пользователя. Самое короткое имя удаленного файла /-::, следовательно. ‘-’ нотация для хоста по умолчанию используется по синтаксическим причинам, хоста по умолчанию.
+
+Часть 'method' описывает метод подключения, используемый для доступа к удаленному хосту, см. Ниже.
+
+'user' часть - это имя пользователя для доступа к удаленному хосту. Для метода smb для этого также может потребоваться доменное имя, в этом случае оно записывается как user%domain.
+
+Часть 'host' должна быть именем хоста, которое может быть разрешено на вашем локальном хосте. Это может быть короткое имя хоста, полное доменное имя, адрес IPv4 или IPv6, c синтаксисом имени файла. Некоторые методы подключения поддерживают также обозначение используемого порта, в этом случае оно записывается как host#port.
+
+@node Использование ssh и plink
+
+Если на вашем локальном хосте работает SSH-клиент, а на удаленном хосте работает SSH-сервер, самое простое имя удаленного файла: /ssh:user@host:/path/to/file. Имя удаленного файла /ssh:: открывает удаленное подключение к себе на локальном хосте и часто используется для тестирования Tramp.
+
+В MS Windows PuTTY часто используется как клиент SSH. Его метод plink может быть использован для открытия соединения с удаленным хостом, на котором запущен ssh-сервер.: /plink:user@host:/path/to/file.
+
+@node Использование su, sudo и sg
+
+Иногда необходимо работать на локальном хосте с разными разрешениями. Для этого вы можете использовать метод соединения su или sudo. Оба метода используют 'root' в качестве имени пользователя по умолчанию и возвращаемое значение (system-name) в качестве имени хоста по умолчанию. Поэтому удобно открывать файл как /sudo::/path/to/file.
+
+Метод sg обозначает “switch group”; измененная группа должна использоваться здесь как имя пользователя. Имя хоста по умолчанию такое же.
+
+@node Использование smbclient
+
+Для доступа к удаленному хосту MS Windows или серверу Samba используется клиент smbclient. Синтаксис имени удаленного файла: /smb:user%domain@@host:/path/to/file. Первая часть локального имени файла - это общий ресурс, экспортируемый удаленным хостом, в данном примере - ‘path’.
+
+@node Использование GVFS-базовых методов
+
+В системах, в которых установлена ​​виртуальная файловая система для Gnome Desktop (GVFS), предлагаемые методы могут использоваться Tramp. Примеры /sftp:user@@host:/path/to/file, /afp:user@@host:/path/to/file (accessing Apple's AFP file system), /dav:user@@host:/path/to/file and /davs:user@@host:/path/to/file (for WebDAV shares).
+
+@node Использование  Google Drive
+
+Другой метод на основе GVFS позволяет получить доступ к файловой системе Google Drive. Синтаксис имени файла здесь всегда /gdrive:john.doe@@gmail.com:/path/to/file. ‘john.doe@@gmail.com’ стоит здесь для вашей учетной записи Google Drive.
+
+@node Использование Android
+
+Доступ к устройству Android, подключенному через USB к вашему локальному хосту, можно получить с помощью команды adb. Имя пользователя или хоста не требуется. Синтаксис имени файла /adb::/path/to/file.
+
+
+@node Конфигурирование Tramp
+
+Tramp изначально настроен на использование программы scp для подключения к удаленному хосту. Просто введите C-x C-f, а затем введите имя файла /scp:user@@host:/path/to/file. For details, Детальнее: Method по умолчанию, User по умолчанию, Host по умолчанию.
+
+Для проблем, связанных с поведением удаленной оболочки, см. Настройка удаленной оболочки.
+
+Чтобы изменить тип подключения и метод доступа к файлу со значения по умолчанию на один из нескольких других параметров, см. Раздел Типы подключения.
+
+Обратите внимание, что некоторые пользовательские опции, описанные в этих примерах, не загружаются автоматически Emacs. Все примеры требуют, чтобы Tramp был установлен и загружен:
+
+     (customize-set-variable 'tramp-verbose 6 "Включить трассировку удаленных команд")
+
+
+@node Типы подключений к удаленным хостам
+
+Встроенный метод и внешний метод являются двумя основными типами методов доступа. Хотя они оба используют одни и те же программы удаленного доступа к оболочке, такие как rsh, ssh или telnet, они различаются по методам доступа к файлам. Выбор правильного метода становится важным для редактирования файлов, передачи больших файлов или работы с большим количеством файлов.
+
+Производительность внешних методов обычно выше, чем у встроенных методов, по крайней мере для больших файлов. Это вызвано необходимостью кодировать и декодировать данные при передаче inline.
+
+Единственным исключением из этого правила являются методы доступа на основе scp. Хотя эти методы действительно показывают более высокую производительность при фактической передаче файлов, накладные расходы на криптографическое согласование при запуске могут заглушить улучшение времени передачи файлов.
+
+Внешние методы должны быть настроены таким образом, чтобы им не требовался пароль (with ssh-agent, or such alike). Современные реализации scp предлагают варианты повторного использования существующих ssh-соединений, которые будут включены по умолчанию, если они доступны. Если это невозможно, вам следует рассмотреть возможность обработки пароля, в противном случае вам будет предложено ввести пароль при каждом действии копирования.
+
+
+@node Встроенные методы
+
+Встроенные методы используют одно и то же соединение для входа в систему и для передачи содержимого файла. Встроенные методы являются быстрыми и легкими для маленьких файлов. Они зависят от наличия подходящих программ кодирования и декодирования на удаленном хосте. Для локального источника и назначения Tramp может использовать встроенные эквиваленты таких программ в Emacs.
+
+Встроенные методы могут работать в ситуациях, когда внешняя программа передачи недоступна. Встроенные методы также работают при передаче файлов между разными пользователями на одном хосте.
+
+Tramp проверяет удаленный хост на наличие и удобство использования mimencode (часть пакета metamail) или uuencode. Tramp использует первую надежную команду, которую находит. Путь поиска Tramp можно настроить, см. Удаленные программы.
+
+В случае, когда mimencode и uuencode недоступны, Tramp сначала передает небольшую программу Perl на удаленный хост, а затем пытается использовать эту программу для кодирования и декодирования.
+
+Чтобы увеличить скорость передачи для больших текстовых файлов, используйте сжатие перед кодированием. Используйте опцию tramp-inline-compress-start-size которая указывает размер файла для такой оптимизации.
+
+rsh
+    rsh - это опция для подключения к хостам в локальных сетях, поскольку rsh не так безопасен, как другие методы
+ssh
+    ssh - более безопасный вариант подключения к удаленному хосту, чем другие.
+
+    ssh также может принимать дополнительные параметры в качестве номеров портов. Например, хост на порту 42 указывается как host#42 (реальное имя хоста, знак #, затем номер порта). Это то же самое, что и передача '-p 42' в команду ssh.
+telnet
+    Подключение к удаленному хосту с помощью telnet так же небезопасно, как и метод rsh.
+su
+    Вместо подключения к удаленному хосту, программа su позволяет редактировать от лица другогопользователя. Хост может быть либо ‘localhost’, либо хостом, возвращаемым функцией (system-name). Смотрите Multi-hops для исключения из этого поведения.
+sudo
+    Подобно методу su, sudo использует sudo. У sudo должны быть достаточные права для запуска оболочки.
+doas
+    Этот метод используется в OpenBSD как команда sudo.
+sg
+    Программа sg позволяет редактировать от лица разных групп. Хост может быть либо ‘localhost’, либо хостом, возвращаемым функцией (system-name). Имя пользователя должно быть указано, но оно обозначает имя группы. Смотрите Multi-hops для исключения из этого поведения.
+sshx
+    Работает как ssh, но без дополнительных запросов аутентификации. sshx использует ‘ssh -t -t host -l user /bin/sh’ и открывает соединение с помощью оболочки входа в систему “standard”.
+
+    Обратите внимание, что sshx не обходит вопросы аутентификации. Например, если ключ хоста удаленного хоста неизвестен, sshx все равно спросит: «Вы уверены, что хотите продолжить соединение?». Tramp не может справиться с такими вопросами. Соединения должны быть настроены так, чтобы вход в систему мог происходить без таких вопросов.
+
+    sshx полезен для пользователей MS Windows, когда ssh выдает ошибку о выделении псевдотерминала. Это происходит из-за отсутствия подсказок оболочки, что сбивает с толку Tramp.
+
+    sshx поддерживает аргумент ‘-p’.
+krlogin
+    Этот метод также похож на ssh. Он использует команду krlogin -x только для входа на удаленный хост.
+ksu
+    Это еще один метод из пакета Kerberos. Он ведет себя как su.
+plink
+    Метод plink предназначен для пользователей MS Windows с PuTTY-реализацией SSH. Он использует 'plink -ssh' для входа на удаленный хост.
+
+    Проверьте элемент управления 'Совместное использование SSH, если возможно' для этого сеанса.
+
+    plink метод поддерживает аргумент ‘-P’.
+plinkx
+    Другой метод, использующий PuTTY в MS Windows с именами сеансов вместо имен хостов. plinkx вызывает 'plink -load session -t'. Имена пользователей и номера портов должны быть определены в сеансе.
+
+    Проверьте элемент управления «Совместное использование SSH, если возможно» для этого сеанса.
+
+
+@node Внешние методы
+
+Внешние методы работают по нескольким каналам, используя для выполнения некоторых действий подключение к удаленной оболочке и делегируя передачу файлов внешней программе для передачи.
+
+Внешние методы экономят на накладных расходах кодирования и декодирования встроенных методов.
+
+Поскольку внешние методы открывают новый канал, файлы меньшего размера, чем tramp-copy-size-limit, все еще используют встроенные методы.
+
+rcp
+    Этот метод использует команды rsh и rcp для подключения к удаленному хосту и передачи файлов. Это самый быстрый доступный метод доступа.
+
+    Альтернативный метод remcp использует команды remsh и rcp.
+scp
+    Использование комбинации ssh для подключения и scp для передачи является наиболее безопасным. Хотя производительность хорошая, она медленнее, чем встроенные методы для небольших файлов. Несмотря на отсутствие затрат на кодирование и декодирование встроенных методов, криптографическое рукопожатие scp сводит на нет это увеличение скорости.
+
+    ssh-based поддеоживает параметр ‘-p’ функция для указания номеров портов. Например, host#42 тоже что и ‘-p 42’ в списке аргументов для SSH, и ‘-P 42’ в списке аргументов для scp.
+rsync
+    Команда ssh для подключения в сочетании с командой rsync для передачи аналогична методу scp.
+
+    rsync работает намного лучше, чем scp при передаче файлов, которые существуют на обоих хостах. Однако это преимущество теряется, если файл существует только на одной стороне соединения.
+
+    Этот метод поддерживает параметр ‘-p’ .
+scpx
+    scpx полезен, чтобы избежать вопросов оболочки входа в систему. По производительности он похож на scp. scpx использует ‘ssh -t -t host -l user /bin/sh’ для открытия соединения.
+
+    scpx полезен для пользователей MS Windows, когда ssh выдает ошибку о выделении псевдотерминала. Это происходит из-за отсутствия подсказок оболочки, что сбивает с толку Tramp.
+
+    Этот метод поддерживает ‘-p’ параметр.
+pscp
+psftp
+    Эти методы похожи на scp или sftp, но они используют команду plink для подключения к удаленному хосту и используют pscp или psftp для передачи файлов. Эти программы являются частью PuTTY, реализации SSH для MS Windows.
+
+    Проверьте элемент управления 'Совместное использование SSH, если возможно' для этого сеанса.
+
+    Этот метод поддерживает ‘-P’ параметр.
+fcp
+    Этот метод похож на scp, но использует fsh для подключения и fcp для передачи файлов. fsh/fcp, front-end для ssh, повторно используйте сессию ssh, отправив несколько команд. Это позволяет избежать накладных расходов при запуске благодаря безопасному соединению scp. Встроенные методы имеют аналогичные преимущества.
+
+    Команда, используемая для этого соединения: ‘fsh host -l user /bin/sh -i’
+
+    У fsh нет встроенного метода, поскольку мультиплексирование, которое он предлагает, бесполезно для Tramp. fsh подключается к удаленному хосту, а Tramp сохраняет это одно соединение открытым.
+nc
+    Использование telnet для подключения и nc для передачи файлов иногда является единственной комбинацией, подходящей для доступа к маршрутизаторам или узлам NAS. Эти тупые устройства имеют строго ограниченные локальные оболочки, такие как busybox, и не содержат никаких других программ кодирования или декодирования.
+ftp
+    Когда Tramp использует ftp, он пересылает запросы в любую программу ftp, указанную Ange FTP. Эта внешняя программа должна быть способна обслуживать запросы от Tramp.
+smb
+    Этот не собственный метод Tramp подключается через сетевой протокол Server Message Block (SMB) к хостам, на которых работают файловые серверы, которые обычно основаны на Samba или MS Windows.
+
+    Использование smbclient требует нескольких настроек при работе с Tramp:
+
+    Первый каталог в локальном имени должен быть именем общего ресурса на удаленном хосте.
+
+    Поскольку некоторые имена общих ресурсов SMB заканчиваются символом $, Tramp должен использовать $$ при указании этих общих ресурсов, чтобы избежать подстановки переменных среды.
+
+    Когда Tramp не указывает конкретное имя ресурса или использует общий удаленный каталог /, smbclient возвращает все доступные акции.
+
+    Поскольку аутентификация SMB основана на каждом общем ресурсе SMB, Tramp запрашивает пароль даже при доступе к другому общему ресурсу на том же хосте SMB. Эта подсказка может быть подавлена ​​обработкой пароля.
+
+    Для размещения пользователя name/domain cинтаксис имени, требуемый для авторизации в MS Windows, Tramp предоставляет расширенный синтаксис в формате пользовательского домена% (где user - имя пользователя,% - символ процента, а domain - имя домена MS Windows). Пример:
+
+              /smb:daniel%BIZARRE@@melancholia:/daniel$$/.emacs
+
+    где пользователь daniel подключается как пользователь домена к меланхолии хоста SMB в домене MS Windows BIZARRE для редактирования .emacs, расположенного в домашнем каталоге (share daniel $).
+
+    В качестве альтернативы, для локальных пользователей WINS (в отличие от пользователей домена), замените имя домена именем локального хоста в UPPERCASE, как показано здесь:
+
+              /smb:daniel%MELANCHOLIA@@melancholia:/daniel$$/.emacs
+
+    где пользователь daniel подключается как локальный пользователь к меланхолии хоста SMB в локальном домене MELANCHOLIA для редактирования .emacs, расположенного в домашнем каталоге (share daniel $).
+
+    The domain name and user name are optional for smbclient authentication. When user name is not specified, smbclient uses the anonymous user (without prompting for password). This behavior is unlike other Tramp methods, where local user name is substituted.
+
+    The smb method is unavailable if Emacs is run under a local user authentication context in MS Windows. However such users can still access remote files using UNC file names instead of Tramp:
+
+              //melancholia/daniel$$/.emacs
+
+    Спецификация имени файла UNC не позволяет указать другое имя пользователя для аутентификации, как это может сделать smbclient.
+adb
+    Этот метод использует программу Android Debug Bridge для доступа к устройствам Android. Для работы Tramp локально должен быть установлен Android Debug Bridge. Некоторые дистрибутивы GNU / Linux предоставляют Android Debug Bridge в качестве установочного пакета. Кроме того, программа устанавливается как часть Android SDK. Tramp находит программу adb либо через переменную окружения PATH, либо по абсолютному пути, заданному в пользовательской опции tramp-adb-program.
+
+    Tramp подключается к Android-устройствам с помощью adb, только когда пользовательская опция tramp-adb-connect-if-not-connected не равна нулю. В противном случае соединение должно быть установлено за пределами Emacs.
+
+    Tramp не требует части имени хоста имени удаленного файла, когда к устройству adb подключено одно устройство Android. Tramp вместо этого использует /adb:: как имя по умолчанию. adb devices показывает доступные имена хостов.
+
+    Метод adb обычно не требует имени пользователя для аутентификации на устройстве Android, потому что он запускается в процессе adbd. Но когда имя пользователя указано, Tramp применяет su в синтаксисе. Когда аутентификация не проходит успешно, особенно на некорневых устройствах Android, Tramp отображает ошибки входа в систему.
+
+    Для устройств Android, подключенных через TCP/IP, номер порта можно указать, используя синтаксис имени устройства#42, или Tramp может использовать значение по умолчанию, как объявлено в команде adb. Номера портов не применимы к устройствам Android, подключенным через USB.
+
+
+@node GVFS основанные на внешних методах
+
+GVFS is the virtual file system for the Gnome Desktop, https://en.wikipedia.org/wiki/GVFS. Remote files on GVFS are mounted locally through FUSE and Tramp uses this locally mounted directory internally.
+
+Emacs uses the D-Bus mechanism to communicate with GVFS. Emacs must have the message bus system, D-Bus integration active, see D-Bus.
+
+afp
+    This method is for connecting to remote hosts with the Apple Filing Protocol for accessing files on macOS volumes. Tramp access syntax requires a leading volume (share) name, for example: /afp:user@host:/volume.
+dav
+davs
+    dav method provides access to WebDAV files and directories based on standard protocols, such as HTTP. davs does the same but with SSL encryption. Both methods support the port numbers.
+gdrive
+    Via the gdrive method it is possible to access your Google Drive online storage. User and host name of the remote file name are your email address of the Google Drive credentials, like /gdrive:john.doe@gmail.com:/. These credentials must be populated in your Online Accounts application outside Emacs.
+
+    Since Google Drive uses cryptic blob file names internally, Tramp works with the display-name of the files. This could produce unexpected behavior in case two files in the same directory have the same display-name, such a situation must be avoided.
+obex
+    OBEX is an FTP-like access protocol for cell phones and similar simple devices. Tramp supports OBEX over Bluetooth.
+sftp
+    This method uses sftp in order to securely access remote hosts. sftp is a more secure option for connecting to hosts that for security reasons refuse ssh connections.
+synce
+    synce method allows connecting to MS Windows Mobile devices. It uses GVFS for mounting remote files and directories via FUSE and requires the SYNCE-GVFS plugin. 
+
+— User Option: tramp-gvfs-methods
+
+    This user option is a list of external methods for GVFS. By default, this list includes afp, dav, davs, gdrive, obex, sftp and synce. Other methods to include are: ftp and smb. 
+
+Next: Default User, Previous: GVFS based methods, Up: Configuration
+5.5 Selecting a default method
+
+In a remote file name, the use of a default method is indicated by the pseudo method -, File name syntax.
+— User Option: tramp-default-method
+
+    Default method is for transferring files. The user option tramp-default-method sets it. Tramp uses this user option to determine the default method for remote file names that do not have one specified.
+
+              (customize-set-variable 'tramp-default-method "ssh")
+
+— User Option: tramp-default-method-alist
+
+    Default methods for transferring files can be customized for specific user and host combinations through the user option tramp-default-method-alist.
+
+    For example, the following two lines specify to use the ssh method for all user names matching ‘john’ and the rsync method for all host names matching ‘lily’. The third line specifies to use the su method for the user ‘root’ on the host ‘localhost’.
+
+              (add-to-list 'tramp-default-method-alist '("" "john" "ssh"))
+              (add-to-list 'tramp-default-method-alist '("lily" "" "rsync"))
+              (add-to-list 'tramp-default-method-alist
+                           '("\\`localhost\\'" "\\`root\\'" "su"))
+
+External methods performance faster for large files. see Inline methods. see External methods.
+
+Choosing the access method also depends on the security environment. For example, rsh and telnet methods that use clear text password transfers are inappropriate for over the Internet connections. Secure remote connections should use ssh that provide encryption.
+5.5.1 Which method to use?
+
+Tramp provides maximum number of choices for maximum flexibility. Choosing which method depends on the hosts, clients, network speeds, and the security context.
+
+Start by using an inline method.
+
+External methods might be more efficient for large files, but most Tramp users edit small files more often than large files.
+
+Enable compression, tramp-inline-compress-start-size, for a performance boost for large files.
+
+Since ssh has become the most common method of remote host access and it has the most reasonable security protocols, use ssh method. Typical ssh usage to edit the /etc/motd file on the otherhost:
+
+     C-x C-f /ssh:root@otherhost:/etc/motd <RET>
+
+If ssh is unavailable for whatever reason, look for other obvious options. For MS Windows, try the plink method. For Kerberos, try krlogin.
+
+For editing local files as su or sudo methods, try the shortened syntax of ‘root’:
+
+     C-x C-f /su::/etc/motd <RET>
+
+For editing large files, scp is faster than ssh. pscp is faster than plink. But this speed improvement is not always true.
+
+Next: Default Host, Previous: Default Method, Up: Configuration
+5.6 Selecting a default user
+
+— User Option: tramp-default-user
+
+    Tramp file name can omit the user name part since Tramp substitutes the currently logged-in user name. However this substitution can be overridden with tramp-default-user. For example:
+
+              (customize-set-variable 'tramp-default-user "root")
+
+— User Option: tramp-default-user-alist
+
+    Instead of a single default user, tramp-default-user-alist allows multiple default user values based on access method or host name combinations. The alist can hold multiple values. For example, to use the ‘john’ as the default user for the domain ‘somewhere.else’ only:
+
+              (add-to-list 'tramp-default-user-alist
+                           '("ssh" ".*\\.somewhere\\.else\\'" "john"))
+
+    A Caution: Tramp will override any default user specified in the configuration files outside Emacs, such as ~/.ssh/config. To stop Tramp from applying the default value, set the corresponding alist entry to nil:
+
+              (add-to-list 'tramp-default-user-alist
+                           '("ssh" "\\`here\\.somewhere\\.else\\'" nil))
+
+    The last entry in tramp-default-user-alist should be reserved for catch-all or most often used login.
+
+              (add-to-list 'tramp-default-user-alist
+                           '(nil nil "jonas") t)
+
+Next: Multi-hops, Previous: Default User, Up: Configuration
+5.7 Selecting a default host
+
+— User Option: tramp-default-host
+
+    When host name is omitted, Tramp substitutes the value from the tramp-default-host user option. It is initially populated with the local host name where Emacs is running. The default method, default user and default host can be overridden as follows:
+
+              (custom-set-variables
+               '(tramp-default-method "ssh")
+               '(tramp-default-user "john")
+               '(tramp-default-host "target"))
+
+    With all defaults set, ‘/-::’ will connect Tramp to John's home directory on target via ssh. 
+
+— User Option: tramp-default-host-alist
+
+    Instead of a single default host, tramp-default-host-alist allows multiple default host values based on access method or user name combinations. The alist can hold multiple values. While tramp-default-host is sufficient in most cases, some methods, like adb, require defaults overwritten. 
+
+Next: Firewalls, Previous: Default Host, Up: Configuration
+5.8 Connecting to a remote host using multiple hops
+
+Multi-hops are methods to reach hosts behind firewalls or to reach the outside world from inside a bastion host. With multi-hops, Tramp can negotiate these hops with the appropriate user/host authentication at each hop. All methods until now have been the single hop kind, where the start and end points of the connection did not have intermediate check points.
+— User Option: tramp-default-proxies-alist
+
+    tramp-default-proxies-alist specifies proxy hosts to pass through. This user option is list of triples consisting of (host user proxy).
+
+    The first match is the proxy host through which passes the file name and the target host matching user@host. host and user are regular expressions or nil, interpreted as a regular expression which always matches.
+
+    proxy is a literal Tramp file name whose local name part is ignored, and the method and user name parts are optional.
+
+    The method must be an inline method (see Inline methods). If proxy is nil, no additional hop is required reaching user@host.
+
+    For example, to pass through the host ‘bastion.your.domain’ as user ‘bird’ to reach remote hosts outside the local domain:
+
+              (add-to-list 'tramp-default-proxies-alist
+                           '("\\." nil "/ssh:bird@bastion.your.domain:"))
+              (add-to-list 'tramp-default-proxies-alist
+                           '("\\.your\\.domain\\'" nil nil))
+
+    Note: add-to-list adds elements at the beginning of a list. Therefore, most relevant rules must come last in the list.
+
+    Proxy hosts can be cascaded in the alist. If there is another host called ‘jump.your.domain’, which is the only host allowed to connect to ‘bastion.your.domain’, then:
+
+              (add-to-list 'tramp-default-proxies-alist
+                           '("\\`bastion\\.your\\.domain\\'"
+                             "\\`bird\\'"
+                             "/ssh:jump.your.domain:"))
+
+    proxy can take patterns %h or %u for host or user respectively.
+
+    To login as ‘root’ on remote hosts in the domain ‘your.domain’, but login as ‘root’ is disabled for non-local access, then use this alist entry:
+
+              (add-to-list 'tramp-default-proxies-alist
+                           '("\\.your\\.domain\\'" "\\`root\\'" "/ssh:%h:"))
+
+    Opening /sudo:randomhost.your.domain: first connects to ‘randomhost.your.domain’ via ssh under your account name, and then performs sudo -u root on that host.
+
+    It is key for the sudo method in the above example to be applied on the host after reaching it and not on the local host.
+
+    host, user and proxy can also take Lisp forms. These forms when evaluated must return either a string or nil.
+
+    To generalize (from the previous example): For all hosts, except my local one, first connect via ssh, and then apply sudo -u root:
+
+              (add-to-list 'tramp-default-proxies-alist
+                           '(nil "\\`root\\'" "/ssh:%h:"))
+              (add-to-list 'tramp-default-proxies-alist
+                           '((regexp-quote (system-name)) nil nil))
+
+Passing through hops involves dealing with restricted shells, such as rbash. If Tramp is made aware, then it would use them for proxies only.
+— User Option: tramp-restricted-shell-hosts-alist
+
+    An alist of regular expressions of hosts running restricted shells, such as rbash. Tramp will then use them only as proxies.
+
+    To specify the bastion host from the example above as running a restricted shell:
+
+              (add-to-list 'tramp-restricted-shell-hosts-alist
+                           "\\`bastion\\.your\\.domain\\'")
+
+Next: Customizing Methods, Previous: Multi-hops, Up: Configuration
+5.9 Passing firewalls
+
+Sometimes, it is not possible to reach a remote host directly. A firewall might be in the way, which could be passed via a proxy server.
+
+Both ssh and PuTTY support such proxy settings, using an HTTP tunnel via the CONNECT command (conforming to RFC 2616, 2817 specifications). Proxy servers using HTTP 1.1 or later protocol support this command.
+5.9.1 Tunneling with ssh
+
+With ssh, you could use the ProxyCommand entry in the ~/.ssh/config:
+
+     Host host.other.domain
+          ProxyCommand nc -X connect -x proxy.your.domain:3128 %h %p
+
+nc is BSD's netcat program, which establishes HTTP tunnels. Any other program with such a feature could be used as well.
+
+In the example, opening /ssh:host.your.domain: passes the HTTP proxy server ‘proxy.your.domain’ on port 3128.
+5.9.2 Tunneling with PuTTY
+
+PuTTY does not need an external program, HTTP tunnel support is built-in. In the PuTTY config program, create a session for ‘host.your.domain’. In the Connection/Data entry, select the HTTP option, and add ‘proxy.your.domain’ as Proxy hostname, and 3128 as Port.
+
+Opening /plinkx:host.your.domain: passes the HTTP proxy server ‘proxy.your.domain’ on port 3128.
+
+Next: Customizing Completion, Previous: Firewalls, Up: Configuration
+5.10 Using Non-Standard Methods
+
+The tramp-methods variable currently has an exhaustive list of predefined methods. Any part of this list can be modified with more suitable settings. Refer to the Lisp documentation of that variable, accessible with C-h v tramp-methods <RET>.
+
+
+@node Выбор файлов конфигурации для завершения имени пользователя/хоста
+
+tramp-completion-function-alist использует предопределенные файлы для дополнения имени пользователя и хоста (см. Завершение имени файла). Для каждого метода он содержит набор файлов конфигурации и функцию, которая может анализировать этот файл. Каждая запись в tramp-completion-function-alist имеет вид (method pair1 pair2 ...).
+
+Каждая пара состоит из (функция - файл). Функция отвечает за извлечение имен пользователей и хостов из файла для завершения. Есть две функции, которые обращаются к этой переменной:
+— Function: tramp-get-completion-function method
+
+    Эта функция возвращает список функций завершения для метода.
+
+    Example:
+
+              (tramp-get-completion-function "rsh")
+              
+                   ⇒ ((tramp-parse-rhosts "/etc/hosts.equiv")
+                       (tramp-parse-rhosts "~/.rhosts"))
+
+— Function: tramp-set-completion-function method function-list
+
+    Эта функция устанавливает function-list в качестве списка функций завершения для method.
+
+    Example:
+
+              (tramp-set-completion-function "ssh"
+               '((tramp-parse-sconfig "/etc/ssh_config")
+                 (tramp-parse-sconfig "~/.ssh/config")))
+              
+                   ⇒ ((tramp-parse-sconfig "/etc/ssh_config")
+                       (tramp-parse-sconfig "~/.ssh/config"))
+
+Существуют следующие предопределенные функции разбора файлов конфигурации:
+
+tramp-parse-rhosts
+    Эта функция анализирует файлы, которые синтаксически эквивалентны ~/.rhosts. Она возвращает имена хостов и имена пользователей, если они указаны.
+tramp-parse-shosts
+    Эта функция анализирует файлы, которые синтаксически эквивалентны ~/.ssh/known_hosts. Поскольку в таких файлах не указаны имена пользователей, он может возвращать только имена хостов.
+tramp-parse-sconfig
+    Эта функция возвращает псевдонимы хоста, определенные записями хоста в стиле файла ~/.ssh/config.
+tramp-parse-shostkeys
+    SSH2 парсинг каталогов /etc/ssh2/hostkeys/* и ~/ssh2/hostkeys/*. Хосты закодированы в именах файлов hostkey_portnumber_host-name.pub. Имена пользователей всегда nil.
+tramp-parse-sknownhosts
+    Еще один синтаксический анализ каталогов в стиле SSH2, например /etc/ssh2/knownhosts/* и ~/ssh2/knownhosts/*. В этом случае имена хостов закодированы в именах файлов host-name.algorithm.pub. Имена пользователей всегда nil.
+tramp-parse-hosts
+    Функция, предназначенная для /etc/hosts файлов имен хостов.
+tramp-parse-passwd
+    Функция, которая разбирает /etc/passwd файлы для имен пользователей.
+tramp-parse-etc-group
+    Функция, которая разбирает /etc/group файлы для имен групп.
+tramp-parse-netrc
+    Функция, которая разбирает ~/.netrc и ~/.authinfo-стиль файлы. 
+
+Чтобы сохранить пользовательский файл с пользовательскими данными в пользовательской структуре, должна быть предусмотрена пользовательская функция. Эта функция должна соответствовать следующим соглашениям:
+— Function: my-tramp-parse file
+
+    файл должен быть либо файлом на хосте, либо nil. Функция должна возвращать список (пользователь - хост), которые принимаются в качестве кандидатов для завершения имен пользователей и хостов.
+
+    Example:
+
+              (my-tramp-parse "~/.my-tramp-hosts")
+              
+                   ⇒ ((nil "toto") ("daniel" "melancholia"))
+
+
+@node Повторное использование паролей для нескольких подключений
+
+Чтобы избежать повторных запросов паролей, рассмотрите собственные механизмы кэширования, такие как ssh-agent для ssh-подобных методов или pageant для plink-подобных методов.
+
+Tramp предлагает альтернативы, когда собственные решения не могут удовлетворить потребности.
+
+@node Использование файла аутентификации
+
+Пакет auth-source.el, изначально разработан для No Gnus, считывает пароли из разных источников, смотри auth-source. Файл аутентификации по умолчанию ~/.authinfo.gpg, но это можно изменить с помощью переменной auth-sources.
+
+Типичная запись в файле аутентификации:
+
+     machine melancholia port scp login daniel password geheim
+
+Порт может использовать любой метод Tramp (см. Встроенные методы, см. Внешние методы). Пропуск значений портов соответствует всем методам Tramp. Домен и порты, используемые в синтаксисе имени файла Tramp, должны быть добавлены к машине и элементам входа в систему:
+
+     machine melancholia#4711 port davs login daniel%BIZARRE password geheim
+
+Установите  auth-source-debug в t для вывода отладочных сообщений.
+
+5.12.2 Кеширование паролей
+
+Tramp может кэшировать пароли в том виде, в котором они были введены, и использовать их при необходимости для одного и того же имени пользователя или хоста, независимо от метода доступа.
+
+password-cache-expiry устанавливает длительность (в секундах) запоминания паролей. Пароли никогда не сохраняются навсегда и не могут выходить за пределы срока действия текущего сеанса Emacs. Установите password-cache-expiry в nil, чтобы отключить срок действия.
+
+Установите password-cache в nil для отключения кеширования пароля.
+
+
+@node Повторное использование информации, связанной с подключением
+
+Для более быстрого начального времени соединения Tramp сохраняет предыдущие свойства соединения в файле, заданном пользовательской опцией tramp-persistency-file-name.
+
+По умолчанию имя файла для tramp-persistency-file-name ~/.emacs.d/tramp.
+
+Tramp читает этот файл во время запуска Emacs и записывает в него при выходе из Emacs. Удалите этот файл для Tramp, чтобы создать новый при следующем запуске Emacs.
+
+Установите tramp-persistency-file-name в nil чтобы отключить постоянное хранение свойства соединений.
+
+Когда Tramp обнаруживает изменение версии операционной системы на удаленном хосте (с помощью команды uname -sr), он сбрасывает всю информацию, связанную с подключением для этого хоста, и создает новую запись.
+
+
+@node Настройка собственной информации, связанной с подключением
+
+Для более точной настройки параметры, указанные в tramp-methods, могут быть перезаписаны вручную.
+
+Установите tramp-connection-properties для ручного переопределения tramp-methods. Свойства в этом списке находятся в форме (значение свойства regexp). регулярное выражение соответствует именам удаленных файлов. Используйте nil, чтобы соответствовать всем. свойство - это имя свойства, а значение - это значение свойства.
+
+Свойство - это любой специфический для метода параметр, содержащийся в tramp-methods. Ключ параметра в tramp-methods - это имя символа tramp-<foo>. Чтобы перезаписать это свойство, используйте строку ‘<foo>’ для свойства. Например, это меняет удаленную оболочку:
+
+     (add-to-list 'tramp-connection-properties
+                  (list (regexp-quote "/ssh:user@randomhost.your.domain:")
+                        "remote-shell" "/bin/ksh"))
+     
+     (add-to-list 'tramp-connection-properties
+                  (list (regexp-quote "/ssh:user@randomhost.your.domain:")
+                        "remote-shell-login" '("-")))
+
+Параметры tramp-remote-shell и tramp-remote-shell-login в tramp-methods теперь имеют новые значения для удаленного хоста.
+
+Свойство также может быть любым свойством, найденным в tramp-persistency-file-name.
+
+Чтобы узнать, как ограниченные оболочки случайным образом сбрасывают соединения, установите специальное свойство ‘busybox’. Например:
+
+     (add-to-list 'tramp-connection-properties
+                  (list (regexp-quote "/ssh:user@randomhost.your.domain:")
+                        "busybox" t))
+
+
+@node Как Tramp находит и использует программы на удаленном хосте
+
+Tramp требует доступа и прав на несколько команд на удаленных хостах: ls, test, find и cat.
+
+Кроме того, существуют другие необходимые программы для Inline-методов (встроенных) и External-методов (внешних) подключения.
+
+Чтобы повысить производительность и точность удаленного доступа к файлам, Tramp использует perl (или perl5) и grep, когда они доступны.
+— User Option: tramp-remote-path
+
+    tramp-remote-path указывает, какие пути к удаленным каталогам Tramp может искать для удаленных программ.
+
+    Tramp использует стандартные значения по умолчанию, такие как /bin and /usr/bin, которые являются разумными для большинства хостов. Например, чтобы учесть различия в хостах и ​​путях, /bin:/usr/bin в Debian GNU/Linux и /usr/xpg4/bin:/usr/ccs/bin:/usr/bin:/opt/SUNWspro/bin в Solaris, Tramp запрашивает удаленный хост с помощью getconf PATH и обновляет символ tramp-default-remote-path.
+
+    В тех случаях, когда хосты сохраняют неясные места для путей из соображений безопасности, вручную добавьте такие пути к локальным файлам .emacs, как показано ниже для использования Tramp при подключении.
+
+              (add-to-list 'tramp-remote-path "/usr/local/perl/bin")
+
+    Другой способ найти удаленный путь - использовать путь, назначенный удаленному пользователю удаленным хостом. Tramp обычно не сохраняет этот удаленный путь после входа в систему. Однако tramp-own-remote-path сохраняет значение пути, которое можно использовать для обновления tramp-remote-path.
+
+              (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
+    Обратите внимание, что это работает, только если ваша удаленная оболочка /bin/sh поддерживает аргумент входа ‘-l’. 
+
+Когда пути удаленного поиска изменены, локальные кэши Tramp должны быть пересчитаны. Чтобы заставить Tramp заново вычислить заново, выйдите из Emacs, удалите постоянный файл (см. Кэширование подключений) и перезапустите Emacs.
+
+
+@node Советы по удаленной настройке оболочки
+
+Tramp проверяет наличие стандартных программ в обычных местах. Обычная тактика включает в себя последовательные попытки тестирования -e, /usr/bin/test -e, и /bin/test -e. ls -d это другой подход. Но эти подходы не помогают с этими новыми шаблонами входа в систему.
+
+Когда Tramp сталкивается с двухфакторным входом в систему или дополнительными контрольными вопросами, такими как ввод даты рождения, кода безопасности или парольной фразы, Tramp требуется еще несколько шагов настройки, чтобы приспособиться к ним.
+
+Разница между запросом пароля и запросом парольной фразы заключается в том, что пароль для завершения входа в систему, в то время как пароль используется для авторизации доступа к локальной информации аутентификации, такой как ключ ssh.
+
+Не существует единой конфигурации, позволяющей учесть все вариации безопасности входа в систему, особенно экзотические. Тем не менее, Tramp предлагает несколько настроек для решения наиболее распространенных.
+
+tramp-shell-prompt-pattern
+    tramp-shell-prompt-pattern предназначен для приглашения оболочки удаленного входа, которое может отличаться от приглашения оболочки локального входа, shell-prompt-pattern. Поскольку большинство хостов используют одинаковые приглашения, Tramp устанавливает одинаковое значение по умолчанию для обоих запросов.
+tramp-password-prompt-regexp
+tramp-wrong-passwd-regexp
+    Tramp использует tramp-password-prompt-regexp для различения запросов на ввод паролей и запросов на ввод парольных фраз. По умолчанию tramp-password-prompt-regexp обрабатывает обнаружение в англоязычных средах. Смотрите пример локализации ниже:
+
+              (customize-set-variable
+               'tramp-password-prompt-regexp
+                (concat
+                 "^.*"
+                 (regexp-opt
+                  '("passphrase" "Passphrase"
+                    ;; English
+                    "password" "Password"
+                    ;; Deutsch
+                    "passwort" "Passwort"
+                    ;; Français
+                    "mot de passe" "Mot de passe")
+                  t)
+                 ".*:\0? *"))
+
+    Подобная локализация может быть необходима для обработки неправильных запросов пароля, для которых используется Tramp tramp-wrong-passwd-regexp.
+tset и другие запросы
+    Чтобы подавить неподходящие запросы для типа терминала, Tramp отключает TERM до того, как начать процесс удаленного входа в систему с помощью пользовательской опции tramp-terminal-type. Это заставит замолчать общие подсказки, связанные с tset.
+
+    Стратегия Tramp для обработки таких приглашений (обычно запускаемых из сценариев входа на удаленных хостах) состоит в том, чтобы задавать переменные среды, чтобы никакие запросы не прерывали процесс инициализации оболочки.
+
+    Альтернативный подход заключается в настройке Tramp со строками, которые могут идентифицировать такие вопросы, используя tramp-actions-before-shell. пример:
+
+              (defconst my-tramp-prompt-regexp
+                (concat (regexp-opt '("Введите дату рождения вашей матери:") t)
+                        "\\s-*")
+                "Регулярное выражение, соответствующее моему запросу на вход в систему.")
+              
+              (defun my-tramp-action (proc vec)
+                "Введите \"19000101\", чтобы дать правильный ответ."
+                (save-window-excursion
+                  (with-current-buffer (tramp-get-connection-buffer vec)
+                    (tramp-message vec 6 "\n%s" (buffer-string))
+                    (tramp-send-string vec "19000101"))))
+              
+              (add-to-list 'tramp-actions-before-shell
+                           '(my-tramp-prompt-regexp my-tramp-action))
+
+
+Противоречивые имена для пользователей переменных в .profile
+    Если имя пользователя совпадает с именем переменной в локальном файле, например .profile, Tramp может отправлять неверные значения для переменных среды. Чтобы избежать неправильных значений, измените имя локальной переменной на имя, отличное от имени пользователя. Например, если имя пользователя - FRUMPLE, измените имя переменной на FRUMPLE_DIR.
+Non-Bourne команды в .profile
+    Когда .profile удаленного хоста также используется для оболочек, отличных от оболочки Bourne, некоторые несовместимые синтаксисы для команд в .profile могут вызвать ошибки в оболочке Bourne на хосте и могут не завершить клиентские соединения Tramp.
+
+    Один пример несовместимого синтаксиса оболочки Bourne в .profile: с помощью export FOO=bar вместо FOO=bar; export FOO. После удаленного входа Tramp вызовет ошибку во время выполнения /bin/sh на удаленном хосте, поскольку оболочка Bourne не распознает команду экспорта, введенную в .profile.
+
+    Аналогично, символ (~) в путях вызовет ошибки, потому что оболочка Bourne не выполняет (~) символьных расширений.
+
+    Один из способов избежать этих несовместимостей состоит в том, чтобы сделать все команды в ~/.shrc и ~/.profile Bourne совместимыми с оболочкой, так что Tramp может устанавливать соединения с этим пультом. Чтобы использовать не-борновские оболочки на этом пульте, используйте другие специфичные для оболочки конфигурационные файлы. Например, Bash может использовать ~/.bash_profile and ignore .profile.
+Интерактивная оболочка подсказки
+    Tramp переопределяет внутреннее приглашение удаленной оболочки для надежного анализа. Это переопределение влияет на внешний вид приглашения в интерактивной удаленной оболочке с помощью таких команд, как M-x shell <RET>. Такие подсказки, однако, могут быть сброшены во что-то более читаемое и распознаваемое с помощью этих переменных Tramp.
+
+    Tramp устанавливает переменную INSIDE_EMACS в файле сценария запуска ~/.emacs_SHELLNAME.
+
+    SHELLNAME - это bash или эквивалентные имена оболочки. Измените его, установив переменную окружения ESHELL в .emacs следующим образом:
+
+              (setenv "ESHELL" "bash")
+
+    Затем заново установите строку приглашения в ~/.emacs_SHELLNAME как ниже:
+
+              # Сбросить подсказку для удаленных оболочек Tramp.
+              if [ "${INSIDE_EMACS/*tramp*/tramp}" == "tramp" ] ; then
+                 PS1="[\u@\h \w]$ "
+              fi
+
+
+busybox / nc
+    Метод Tramp nc использует команду nc для установки и выполнения прослушиванияя следующим образом (смотри tramp-methods ):
+
+              $ nc -l -p 42
+
+    Приведенный выше синтаксис командной строки изменился с версиями busybox. Если nc отклоняет параметр ‘-p’, перезапишите его следующим образом:
+
+              (add-to-list
+               'tramp-connection-properties
+               `(,(regexp-quote "192.168.0.1")
+                 "remote-copy-args" (("-l") ("%r"))))
+
+    где ‘192.168.0.1’ - адрес удаленного хоста IP (см. «Предопределенная информация о соединении»).
+
+
+@node Советы по настройке оболочки Android
+
+Tramp использует метод adb для доступа к устройствам Android. Устройства Android обеспечивают ограниченный доступ к оболочке через соединение USB. На локальном хосте должна быть установлена ​​программа adb. Обычно достаточно ввести  /adb::/ чтобы открыть файл. Затем вы можете перемещаться в файловой системе через Dired.
+
+Кроме того, приложения, такие как SSHDroid, которые запускают процесс sshd на устройстве Android, могут принимать любые методы, основанные на ssh, при условии настройки этих параметров:
+
+    sh должен быть указан для удаленной оболочки, так как устройства Android не предоставляют /bin/sh. Затем sh вызовет любую оболочку, установленную на устройстве, с этим параметром:
+
+              (add-to-list 'tramp-connection-properties
+              	     (list (regexp-quote "192.168.0.26") "remote-shell" "sh"))
+
+    where ##@‘192.168.0.26’@## is the Android device's IP address. (see Predefined connection information).
+    Tramp требует сохранения переменной окружения PATH из пользовательских настроек. Android устройства предпочитают /system/xbin путь вместо /system/bin. Оба из них установлены следующим образом:
+
+              (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+              (add-to-list 'tramp-remote-path "/system/xbin")
+
+    Если устройство Android не является ‘rooted’ (рутирован), укажите доступный для записи каталог для временных файлов:
+
+              (add-to-list 'tramp-remote-process-environment "TMPDIR=$HOME")
+
+    Откройте удаленное соединение с помощью команды C-x C-f /ssh:192.168.0.26#2222: <RET>, где sshd прослушивает порт 2222.
+
+    Чтобы добавить соответствующую запись в ~/.ssh/config файл (рекомендация), используйте:
+
+              Host android
+                   HostName 192.168.0.26
+                   User root
+                   Port 2222
+
+    Чтобы использовать имя хоста ‘android’ вместо IP-адреса, показанного в предыдущем примере, исправьте свойства подключения следующим образом:
+
+              (add-to-list 'tramp-connection-properties
+              	     (list (regexp-quote "android") "remote-shell" "sh"))
+
+    Откройте удаленное соединение с помощью более краткой команды C-x C-f /ssh:android: <RET>. 
+
+
+@node Автосохранение и резервное копирование конфигурации
+
+Чтобы Tramp не сохранял файлы резервных копий, принадлежащих ‘root’, в места, доступные другим, необходимо изменить настройки резервного копирования по умолчанию в backup-directory-alist.
+
+Вот сценарий, где файлы могут быть произвольно записаны. Emacs по умолчанию записывает файлы резервных копий в тот же каталог, что и исходные файлы, если только не изменено сохранять в другое место, например~/.emacs.d/backups/. Такой каталог также будет использоваться Tramp по умолчанию при использовании, скажем, файла с ограниченным доступом. /su:root@@localhost:/etc/secretfile. Файл резервной копии секретного файла теперь принадлежит пользователю, вошедшему в систему с Tramp, а не 'root'.
+
+Когда backup-directory-alist равен nil (по умолчанию), таких проблем не возникает.
+
+Чтобы использовать функцию резервного копирования для файлов Tramp “turn off” и запретить сохранение Tramp в каталог резервных копий, используйте это:
+
+     (add-to-list 'backup-directory-alist
+                  (cons tramp-file-name-regexp nil))
+
+Отключение резервного копирования может быть нацелено только на методы su и sudo:
+
+     (setq backup-enable-predicate
+           (lambda (name)
+             (and (normal-backup-enable-predicate name)
+                  (not
+                   (let ((method (file-remote-p name 'method)))
+                     (when (stringp method)
+                       (member method '("su" "sudo"))))))))
+
+Другой вариант - создать лучшее имя файла резервной копии с именами пользователей и хостов, начинающимися с префикса имени файла. Например, трансформировать /etc/secretfile в ~/.emacs.d/backups/!su:root@@localhost:!etc!secretfile, установите пользовательскую опцию Tramp tramp-backup-directory-alist из существующей пользовательской опции backup-directory-alist.
+
+Затем Tramp создает резервную копию имени файла, преобразуемого префиксом, состоящим из имени DIRECTORY. Этот префикс имени файла появится только тогда, когда DIRECTORY является абсолютным локальным именем файла.
+
+Пример:
+
+     (add-to-list 'backup-directory-alist
+                  (cons "." "~/.emacs.d/backups/"))
+     (customize-set-variable
+      'tramp-backup-directory-alist backup-directory-alist)
+
+Имя файла резервной копии /su:root@@localhost:/etc/secretfile было бы /su:root@@localhost:~/.emacs.d/backups/!su:root@localhost:!etc!secretfile~
+
+Как и в случае файлов резервных копий, аналогичные проблемы именования файлов влияют на автоматическое сохранение файлов Tramp. Автосохраненные файлы сохраняются в каталоге, указанном опцией пользователя auto-save-file-name-transforms. По умолчанию это локальный временный каталог. Но в некоторых версиях Debian GNU / Linux это указывает на каталог с исходным кодом, где был скомпилирован Emacs. Следует установить такие значения в допустимый каталог.
+
+Установите auto-save-file-name-transforms в nil, чтобы сохранить автоматически сохраненные файлы в том же каталоге, что и исходный файл.
+
+В качестве альтернативы, установите опцию пользователя tramp-auto-save-directory, чтобы направить все автосохранения в это место.
+
+
+@node Проблемы с Cygwin SSH
+
+Этот раздел неполон. Пожалуйста, поделитесь своими решениями.
+
+Cyshwin ssh работает только с Cygwin-версией Emacs. Чтобы проверить совместимость: введите M-x eshell <RET>, и начать SSH test.host <RET>. Несовместимости вызывают это сообщение:
+
+     Псевдо-терминал не будет выделен, потому что stdin не является терминалом.
+
+Некоторые старые версии Cygwin's ssh работают с методом доступа sshx. Обратитесь к часто задаваемым вопросам Cygwin на https://cygwin.com/faq/ для деталей.
+
+В Emacs Wiki объясняется, как использовать вспомогательную программу fakecygpty для решения этой проблемы.
+
+При использовании метода доступа scpx Emacs может вызывать scp с именами файлов MS Windows, например c:/foo. Но версия scp, установленная с Cygwin, не знает о именовании файлов MS Windows, что приводит к неправильному поиску хоста с именем c.
+
+Обходной путь: напишите скрипт-обертку для scp для преобразования имен файлов Windows в имена файлов Cygwin.
+
+При использовании ssh-agent в MS Windows для беспарольного взаимодействия методы ssh зависят от переменной окружения SSH_AUTH_SOCK. Но эта переменная не устанавливается, когда Emacs запускается из ярлыка на рабочем столе и происходит сбой аутентификации.
+
+Один из обходных путей - использовать SSH-агент на базе MS Windows, например, Pageant. Он является частью набора инструментов Putty.
+
+Резервный вариант - запустить Emacs из оболочки.
+
+
+6 Использование TRAMP
+
+Tramp работает прозрачно, получая доступ к удаленным файлам, как будто они локальные. Однако Tramp использует формализованный синтаксис именования удаленных файлов для прозрачного выполнения своих функций. Этот синтаксис состоит из множества частей, определяющих методы доступа, аутентификацию, имена хостов и имена файлов. Ange FTP использует похожий синтаксис.
+
+В отличие от мгновенного открытия локальных файлов в Emacs, открытие удаленных файлов в Tramp поначалу происходит медленнее. Иногда происходит заметная задержка, прежде чем в минибуфере появляются запросы на ввод пароля или аутентификации. Нажатие <RET> или других клавиш в течение этого промежутка будет обрабатываться Emacs. Это средство опережающего ввода - особенность Emacs, которая может вызывать пропущенные запросы при использовании Tramp.
+
+@node Соглашения об имени файла Tramp
+
+/method:host:/path/to/file открывает файл /path/to/file на удаленном хосте 'host', используя метод 'method'.
+
+/ssh:melancholia:.emacs
+    Для файла .emacs, расположенного в домашнем каталоге, на хосте melancholia, используется метод ssh.
+/ssh:melancholia.danann.net:.emacs
+    Для файла .emacs указано полное доменное имя хоста.
+/ssh:melancholia:~/.emacs
+    Для файла .emacs, указанного с помощью ~, который расширяется (подстановка домашнего каталога).
+/ssh:melancholia:~daniel/.emacs
+    Для файла .emacs, расположенного в домашнем каталоге daniel на хосте, melancholia. Конструкция ~ <user> расширяется в домашний каталог этого пользователя на удаленном хосте.
+/ssh:melancholia:/etc/squid.conf
+    Для файла /etc/squid.conf хоста melancholia. 
+
+хост может принимать адреса IPv4 или IPv6, как в /ssh:127.0.0.1:.emacs или /ssh:[::1]:.emacs. По синтаксическим причинам адреса IPv6 должны быть заключены в квадратные скобки [ и ].
+
+По умолчанию Tramp будет использовать текущее локальное имя пользователя в качестве имени удаленного пользователя для входа на удаленный хост. Указание другого имени с использованием правильного синтаксиса переопределит это поведение по умолчанию:
+
+     /method:user@@host:path/to/file
+
+/ssh:daniel@@melancholia:.emacs для файла .emacs на хосте melancholia в домашней папке daniel's, доступ через метод ssh.
+
+Для указания номеров портов добавьте #port к имени хоста. Например: /ssh:daniel@@melancholia#42:.emacs.
+
+Все части метода, имени пользователя, имени хоста, номера порта и локального имени являются необязательными, См. Метод по умолчанию, См. Пользователь по умолчанию, См. Хост по умолчанию. По синтаксическим причинам метод по умолчанию должен указываться псевдо-методом -.
+
+
+@node Альтернативный синтаксис имени файла
+
+Синтаксис, описанный в синтаксисе имени File, является синтаксисом по умолчанию, который активируется после запуска Emacs. Однако это можно изменить.
+— Command: tramp-change-syntax syntax
+
+    Эта команда изменяет синтаксис, используемый Tramp для имен удаленных файлов. Помимо значения по умолчанию, синтаксис может быть
+
+        Упрощенный Синтаксис имени удаленного файла аналогичен синтаксису, используемому Ange FTP. Имя удаленного файла имеет вид /user@@host:path/to/file. user@ часть является необязательной, а метод определяется методом по умолчанию.
+        separate
+
+        Синтаксис имени удаленного файла аналогичен синтаксису, используемому XEmacs. Имя удаленного файла имеет вид /[method/user@@host]path/to/file. method и user@ части не являются обязательными. 
+
+— Variable: tramp-file-name-regexp
+
+    Эта переменная содержит регулярное выражение, соответствующее выбранному синтаксису имени удаленного файла. Однако не рекомендуется использовать эту переменную во внешних пакетах, вызов file-remote-p гораздо более уместен. 
+
+
+@node  Завершение имени файла
+
+Tramp может дополнить следующие компоненты имени файла Tramp: имя  method , имя user, название host, и имена файлов, расположенные на удаленных хостах. Включите это, активировав частичное завершение в .emacs.
+
+Например, введите C-x C-f / s <TAB>, Варианты завершения TRAMP отображаются как
+
+     
+
+  sbin/ 	  scp: 	  scpx: 	  sftp: 	  sg:
+     
+  smb: 	  srv/ 	  ssh: 	  sshx: 	  su:
+     
+  sudo: 	  sys/
+     
+
+‘ssh:’ это возможное завершение для соответствующего метода, и ‘sbin/’ обозначает каталог /sbin на вашем местном хосте.
+
+Введите s h : для завершения минибуфера до ‘/ssh:’. Ввод <TAB> показывает имена хостов, извлекаемые Tramp из ~/.ssh/config файла, например.
+
+     
+
+  ssh:127.0.0.1: 	  ssh:192.168.0.1:
+     
+  ssh:[::1]: 	  ssh:localhost:
+     
+  ssh:melancholia.danann.net: 	  ssh:melancholia:
+     
+
+Выберите хост из списка выше, а затем продолжайте вводить имена файлов на этом хосте.
+
+Если конфигурация (см. Настройка завершения) включает имена пользователей, то в списках завершения будут учитываться также имена пользователей.
+
+Ранее посещенные удаленные узлы или узлы, чьи соединения хранятся постоянно (см. Кэширование соединений), будут включены в списки завершения.
+
+После завершения имени удаленного хоста происходит заполнение имен файлов на удаленном хосте. Он работает так же, как и при локальном завершении файла хоста, за исключением того, что уничтожение с помощью двойной косой черты // убивает только часть имени файла в синтаксисе имени файла Tramp. Тройной слэш обозначает поведение по умолчанию.
+
+Example:
+
+     C-x C-f /ssh:melancholia:/usr/local/bin//etc <TAB>
+          -| /ssh:melancholia:/etc
+     
+     C-x C-f /ssh:melancholia://etc <TAB>
+          -| /etc
+     
+     C-x C-f /ssh:melancholia:/usr/local/bin///etc <TAB>
+          -| /etc
+
+Во время завершения имени файла содержимое удаленного каталога регулярно перечитывается, чтобы учесть любые изменения в файловой системе, которые могут повлиять на кандидатов на завершение. Такие повторные чтения могут объяснить изменения в файловой системе приложениями вне Emacs (см. Кэширование подключений).
+— Опция использования: tramp-completion-reread-directory-timeout
+
+    Время ожидания - это количество секунд с момента последней удаленной команды для перечитывания содержимого удаленного каталога. Значение 0 перечитывается сразу после завершения имени файла, nil использует содержимое кэшированного каталога.
+
+
+@noe Объявление нескольких прыжков в имени файла
+
+Синтаксис имени файла Tramp может соответствовать специальной спецификации нескольких прокси-серверов без использования настройки конфигурации tramp-default-proxies-alist (см. Несколько переходов).
+
+Каждый прокси указывается с использованием того же синтаксиса, что и спецификация удаленного хоста, за исключением части имени файла. Каждый прыжок отделяется символом '|'. Цепочка прокси от начального хоста до конечного имени хоста и имени файла. Например, перепрыгивая через один прокси‘bird@bastion’ на удаленный файл на ‘you@remotehost’:
+
+     
+     C-x C-f /ssh:bird@bastion|ssh:you@remotehost:/path <RET>
+
+Прокси могут принимать шаблоны %h или %u.
+
+Tramp добавляет специальные определения на лету к tramp-default-proxies-alist и доступен для повторного использования во время этого сеанса Emacs. Последующие соединения Tramp с тем же удаленным хостом могут затем использовать форму ярлыка: ‘/ssh:you@remotehost:/path’.
+— Использование опции: tramp-save-ad-hoc-proxies
+
+    Чтобы специальные определения автоматически сохранялись в tramp-default-proxies-alist для будущих сессий Emacs, установите для tramp-save-ad-hoc-proxies значение non-nil.
+
+              (customize-set-variable 'tramp-save-ad-hoc-proxies t)
+
+
+@node Интеграция с другими пакетами Emacs
+
+Tramp поддерживает запуск новых запущенных процессов на удаленном хосте для обнаружения имен удаленных файлов. Пакеты Emacs на удаленном хосте не нуждаются в особых модификациях для использования Tramp.
+
+Этот тип интеграции не работает с методом ftp и не поддерживает pty-связь, как указано в start-file-process.
+
+process-file и start-file-process отработает на удаленном хосте, когда переменная default-directory удалена:
+
+     (let ((default-directory "/ssh:remote.host:"))
+       (start-file-process "grep" (get-buffer-create "*grep*")
+                           "/bin/sh" "-c" "grep -e tramp *"))
+
+Удаленные процессы не применяются к GVFS (см. Методы, основанные на GVFS), поскольку удаленная файловая система монтируется на локальном хосте, а Tramp получает доступ только путем изменения default-directory.
+
+Tramp запускает удаленный процесс, когда команда выполняется в буфере удаленного файла или каталога. На данный момент эти пакеты интегрированы для работы с Tramp: compile.el (такие команды, как compile и grep) и gud.el (gdb или perldb).
+
+Чтобы Tramp мог найти программу в удаленной оболочке, он должен быть доступен через путь поиска по умолчанию, заданный Tramp при первом подключении. В качестве альтернативы используйте абсолютный путь или расширение tramp-remote-path (см. Удаленные программы):
+
+     (add-to-list 'tramp-remote-path "~/bin")
+     (add-to-list 'tramp-remote-path "/appli/pub/bin")
+
+Настройте пользовательскую опцию tramp-remote-process-environment в соответствии с условиями удаленной программы для удаленного хоста. tramp-remote-process-environment - это список строк, структурированных аналогично процессу-среде, где каждый элемент представляет собой строку вида‘ENVVARNAME=VALUE’.
+
+Чтобы избежать любых конфликтов с локальными переменными среды хоста, установленными через локальные файлы конфигурации, такие как ~/.profile, используйте ‘ENVVARNAME=’ сбросить их для удаленной среды.
+
+Используйте add-to-list чтобы добавить записи:
+
+     (add-to-list 'tramp-remote-process-environment "JAVA_HOME=/opt/java")
+
+Изменение или удаление уже существующих значений в списке tramp-remote-process-environment может оказаться невозможным на ограниченных удаленных хостах. Например, некоторые системные администраторы не разрешают изменять переменную окружения HISTORY. Чтобы учесть такие ограничения при использовании Tramp, исправьте tramp-remote-process-environment с помощью следующего кода в локальном файле .emacs:
+
+     (let ((process-environment tramp-remote-process-environment))
+       (setenv "HISTORY" nil)
+       (setq tramp-remote-process-environment process-environment))
+
+Установка переменной окружения ENV указывает некоторым оболочкам прочитать файл инициализации. По умолчанию Tramp отключил это. Вы можете переписать это поведение, оценив
+
+     (let ((process-environment tramp-remote-process-environment))
+       (setenv "ENV" "$HOME/.profile")
+       (setq tramp-remote-process-environment process-environment))
+
+В дополнение к tramp-remote-process-environment вы можете устанавливать переменные окружения для отдельных вызовов удаленных процессов путем привязки process-environment. Tramp применяет любые записи, которых нет в глобальном значении по умолчанию process-environment (переопределяет tramp-remote-process-environment settings, если они конфликтуют). Например:
+
+     (let ((process-environment (cons "HGPLAIN=1" process-environment)))
+       (process-file ...))
+
+Привязка таким образом работает независимо от того, является ли вызываемый процесс локальным или удаленным, поскольку Tramp добавит только параметр HGPLAIN, а локальные процессы примут все значение process-environment вместе с новым значением HGPLAIN.
+
+Для интеграции других пакетов Emacs, чтобы Tramp мог выполняться удаленно, отправьте отчет об ошибке. Смотрите сообщения об ошибках.
+@node Запуск удаленных программ, которые создают локальные окна X11
+
+Чтобы разрешить удаленной программе создавать окно X11 на локальном хосте, установите переменную среды DISPLAY для удаленного хоста следующим образом в локальном файле .emacs:
+
+     (add-to-list 'tramp-remote-process-environment
+                  (format "DISPLAY=%s" (getenv "DISPLAY")))
+
+(getenv "DISPLAY") должен вернуть узнаваемое имя для локального хоста, чтобы удаленный хост мог перенаправлять взаимодействия окна X11. Если запрос по узнаваемому имени по какой-либо причине невозможен, тогда замените (getenv "DISPLAY") с жестко закодированным, фиксированным именем. Обратите внимание, что с помощью :0 для X11 отображаемое имя здесь не будет работать должным образом.
+
+Альтернативный подход - указать в файле ForwardX11 yes или ForwardX11Trusted yes ~/.ssh/config на локальном хосте.
+
+@node Запуск оболочки на удаленном хосте
+
+Установите для explicit-shell-file-name соответствующее имя оболочки при использовании Tramp между двумя хостами с разными операционными системами, такими как ‘windows-nt’ and ‘gnu/linux’. Эта опция обеспечивает правильное имя программы удаленной оболочки.
+
+Когда explicit-shell-file-name равно nil, интерактивный вызов оболочки будет запрашивать имя оболочки.
+
+Начиная с Emacs 26, вы можете использовать локальные переменные соединения для установки разных значений explicit-shell-file-name для разных удаленных хостов.
+
+     (connection-local-set-profile-variables
+       'remote-bash
+       '((explicit-shell-file-name . "/bin/bash")
+         (explicit-bash-args . ("-i"))))
+     
+     (connection-local-set-profile-variables
+       'remote-ksh
+       '((explicit-shell-file-name . "/bin/ksh")
+         (explicit-ksh-args . ("-i"))))
+     
+     (connection-local-set-profiles
+       '(:application tramp :protocol "ssh" :machine "localhost")
+       'remote-bash)
+     
+     (connection-local-set-profiles
+       `(:application tramp :protocol "sudo"
+         :user "root" :machine ,(system-name))
+       'remote-ksh)
+
+@node  Запуск shell-command на удаленном хосте
+
+shell-command выполняет команды синхронно или асинхронно на удаленных хостах и ​​отображает вывод в буферах на локальном хосте. Пример:
+
+     C-x C-f /sudo:: <RET>
+     M-& tail -f /var/log/syslog.log <RET>
+
+tail команда выводит непрерывно в локальный буфер, *Async Shell Command*
+
+M-x auto-revert-tail-mode <RET> работает аналогично, показывая непрерывный вывод.
+
+@node Запуск eshell на удаленном хосте
+
+Tramp интегрирован в eshell.el, который включает интерактивные сеансы eshell на удаленных хостах в командной строке. Вы должны добавить модуль em-tramp в eshell-modules-list. Вот пример взаимодействия после открытия M-x eshell <RET> на удаленном хосте:
+
+     ~ $ cd /sudo::/etc <RET>
+     /sudo:root@@host:/etc $ hostname <RET>
+     host
+     /sudo:root@@host:/etc $ id <RET>
+     uid=0(root) gid=0(root) groups=0(root)
+     /sudo:root@@host:/etc $ find-file shadow <RET>
+     #<buffer shadow>
+     /sudo:root@@host:/etc $
+
+eshell добавил пользовательские команды su и sudo, которые правильно устанавливают каталог по умолчанию для буфера *eshell*. Tramp молча обновляет tramp-default-proxies-alist записью для этого каталога (см. Multi-hops):
+
+     ~ $ cd /ssh:user@@remotehost:/etc <RET>
+     /ssh:user@@remotehost:/etc $ find-file shadow <RET>
+     File is not readable: /ssh:user@@remotehost:/etc/shadow
+     /ssh:user@@remotehost:/etc $ sudo find-file shadow <RET>
+     #<buffer shadow>
+     
+     /ssh:user@@remotehost:/etc $ su - <RET>
+     /su:root@@remotehost:/root $ id <RET>
+     uid=0(root) gid=0(root) groups=0(root)
+     /su:root@@remotehost:/root $
+
+@node Запуск отладчика на удаленном хосте
+
+gud.el предоставляет унифицированный интерфейс для символических отладчиков. Tramp может запускать отладку на удаленных хостах, вызывая gdb с именем удаленного файла:
+
+     M-x gdb <RET>
+     Run gdb (like this): gdb -i=mi /ssh:host:~/myprog <RET>
+
+Поскольку удаленные процессы gdb и gdb-inferior не принадлежат к одной и той же группе процессов на удаленном хосте, появится предупреждение, которое можно игнорировать:
+
+     &"warning: GDB: Failed to set controlling terminal: Operation not permitted\n"
+     &"внимание: GDB: Не удалось установить управляющий терминал: операция не разрешена\n"
+
+Как следствие, будут введены ограничения на ввод-вывод отлаживаемого процесса.
+
+Относительные имена файлов основаны на удаленном каталоге по умолчанию. Когда myprog.pl существует в /ssh:host:/home/user, действительные вызовы включают:
+
+     M-x perldb <RET>
+     Run perldb (like this): perl -d myprog.pl <RET>
+
+Просто локальная часть имени удаленного файла, например, perl -d /home/user/myprog.pl, это невозможно.
+
+Аргументы отлаживаемой программы должны быть буквальными, могут принимать относительные или абсолютные пути, но не удаленные пути.
+@node  Запуск удаленных процессов на хостах MS Windows
+
+winexe runs processes on a remote MS Windows host, and Tramp can use it for process-file and start-file-process.
+
+tramp-smb-winexe-program specifies the local winexe command. Powershell V2.0 on the remote host is required to run processes triggered from Tramp.
+
+explicit-shell-file-name and explicit-*-args have to be set properly so M-x shell <RET> can open a proper remote shell on a MS Windows host. To open cmd, set it as follows:
+
+     (setq explicit-shell-file-name "cmd"
+           explicit-cmd-args '("/q"))
+
+To open powershell as a remote shell, use this:
+
+     (setq explicit-shell-file-name "powershell"
+           explicit-powershell-args '("-file" "-"))
+
+Previous: Remote processes, Up: Usage
+6.6 Cleanup remote connections
+
+Tramp provides several ways to flush remote connections.
+— Command: tramp-cleanup-connection vec
+
+    This command flushes all connection related objects. vec is the internal representation of a remote connection. When called interactively, this command lists active remote connections in the minibuffer. Each connection is of the format /method:user@host:. Flushing remote connections also cleans the password cache (see Password handling), file cache, connection cache (see Connection caching), and connection buffers. 
+
+— Command: tramp-cleanup-this-connection
+
+    Flushes only the current buffer's remote connection objects, the same as in tramp-cleanup-connection. 
+
+— Command: tramp-cleanup-all-connections
+
+    Flushes all active remote connection objects, the same as in tramp-cleanup-connection. 
+
+— Command: tramp-cleanup-all-buffers
+
+    Just as for tramp-cleanup-all-connections, all remote connections are cleaned up in addition to killing buffers related to that remote connection. 
+
+Next: Frequently Asked Questions, Previous: Usage, Up: Top
+7 Reporting Bugs and Problems
+
+Tramp's development team is actively engaged in solving bugs and problems and looks to feature requests and suggestions.
+
+Tramp's mailing list is the place for more advice and information on working with Tramp, solving problems, discussing, and general discussions about Tramp.
+
+Tramp's mailing list is moderated but even non-subscribers can post for moderator approval. Sometimes this approval step may take as long as 48 hours due to public holidays.
+
+tramp-devel@gnu.org is the mailing list. Messages sent to this address go to all the subscribers. This is not the address to send subscription requests to.
+
+To subscribe to the mailing list, visit: the Tramp Mail Subscription Page.
+
+Check if the bug or problem is already addressed in See Frequently Asked Questions.
+
+Run M-x tramp-bug <RET> to generate a buffer with details of the system along with the details of the Tramp installation. Please include these details with the bug report.
+
+The bug report must describe in as excruciating detail as possible the steps required to reproduce the problem. These details must include the setup of the remote host and any special or unique conditions that exist.
+
+Include a minimal test case that reproduces the problem. This will help the development team find the best solution and avoid unrelated detours.
+
+To exclude cache-related problems, flush all caches before running the test, Cleanup remote connections.
+
+When including Tramp's messages in the bug report, increase the verbosity level to 6 (see Traces) in the ~/.emacs file before repeating steps to the bug. Include the contents of the *tramp/foo* and *debug tramp/foo* buffers with the bug report.
+
+Note that a verbosity level greater than 6 is not necessary at this stage. Also note that a verbosity level of 6 or greater, the contents of files and directories will be included in the debug buffer. Passwords typed in Tramp will never be included there.
+
+Next: Files directories and localnames, Previous: Bug Reports, Up: Top
+8 Frequently Asked Questions
+
+    Where is the latest Tramp?
+
+    Tramp is available at the GNU URL:
+
+    https://ftp.gnu.org/gnu/tramp/
+
+    Tramp's GNU project page is located here:
+
+    https://savannah.gnu.org/projects/tramp/
+    Which systems does it work on?
+
+    The package works successfully on Emacs 24, Emacs 25, and Emacs 26.
+
+    While Unix and Unix-like systems are the primary remote targets, Tramp has equal success connecting to other platforms, such as MS Windows 7/8/10.
+    How to speed up Tramp?
+
+    Tramp does many things in the background, some of which depends on network speeds, response speeds of remote hosts, and authentication delays. During these operations, Tramp's responsiveness slows down. Some suggestions within the scope of Tramp's settings include:
+
+    Use an external method, such as scp, which are faster than internal methods.
+
+    Keep the file tramp-persistency-file-name, which is where Tramp caches remote information about hosts and files. Caching is enabled by default. Don't disable it.
+
+    Set remote-file-name-inhibit-cache to nil if remote files are not independently updated outside Tramp's control. That cache cleanup will be necessary if the remote directories or files are updated independent of Tramp.
+
+    Set tramp-completion-reread-directory-timeout to nil to speed up completions, File name completion.
+
+    Disable version control to avoid delays:
+
+              (setq vc-ignore-dir-regexp
+                    (format "\\(%s\\)\\|\\(%s\\)"
+                            vc-ignore-dir-regexp
+                            tramp-file-name-regexp))
+
+    If this is too radical, because you want to use version control remotely, trim vc-handled-backends to just those you care about, for example:
+
+              (setq vc-handled-backends '(SVN Git))
+
+    Disable excessive traces. Set tramp-verbose to 3 or lower, default being 3. Increase trace levels temporarily when hunting for bugs.
+    Tramp does not connect to the remote host
+
+    Three main reasons for why Tramp does not connect to the remote host:
+        Unknown characters in the prompt
+
+        Tramp needs a clean recognizable prompt on the remote host for accurate parsing. Shell prompts that contain escape sequences for coloring cause parsing problems. Remote shell setup for customizing prompt detection using regular expressions.
+
+        To check if the remote host's prompt is being recognized, use this test: switch to Tramp connection buffer *tramp/foo*, put the cursor at the top of the buffer, and then apply the following expression:
+
+                       M-: (re-search-forward (concat tramp-shell-prompt-pattern "$")) <RET>
+
+        If the cursor has not moved to the prompt at the bottom of the buffer, then Tramp has failed to recognize the prompt.
+
+        When using zsh on remote hosts, disable zsh line editor because zsh uses left-hand side and right-hand side prompts in parallel. Add the following line to ~/.zshrc:
+
+                       [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
+
+        When using fish shell on remote hosts, disable fancy formatting by adding the following to ~/.config/fish/config.fish:
+
+                       function fish_prompt
+                         if test $TERM = "dumb"
+                            echo "\$ "
+                         else
+                            ...
+                         end
+                       end
+
+        When using WinSSHD on remote hosts, Tramp does not recognize the strange prompt settings.
+
+        A similar problem exist with the iTerm2 shell integration, which sends proprietary escape codes when starting a shell. This can be suppressed by changing the respective integration snippet in your ~/.profile like this:
+
+                       [ $TERM = "dumb" ] || \
+                       test -e "${HOME}/.iterm2_shell_integration.bash" && \
+                       source "${HOME}/.iterm2_shell_integration.bash"
+
+        Echoed characters after login
+
+        Tramp suppresses echos from remote hosts with the stty -echo command. But sometimes it is too late to suppress welcome messages from the remote host containing harmful control characters. Using sshx or scpx methods can avoid this problem because they allocate a pseudo tty. See Inline methods.
+        Tramp stops transferring strings longer than 500 characters
+
+        Set tramp-chunksize to 500 to get around this problem, which is related to faulty implementation of process-send-string on HP-UX, FreeBSD and Tru64 Unix systems. Consult the documentation for tramp-chunksize to see when this is necessary.
+
+        Set file-precious-flag to t for files accessed by Tramp so the file contents are checked using checksum by first saving to a temporary file.
+
+                       (add-hook
+                        'find-file-hook
+                        (lambda ()
+                          (when (file-remote-p default-directory)
+                            (set (make-local-variable 'file-precious-flag) t))))
+
+    Tramp does not recognize if a ssh session hangs
+
+    ssh sessions on the local host hang when the network is down. Tramp cannot safely detect such hangs. The network configuration for ssh can be configured to kill such hangs with the following command in the ~/.ssh/config:
+
+              Host *
+                   ServerAliveInterval 5
+
+    Tramp does not use default ssh ControlPath
+
+    Tramp overwrites ControlPath settings when initiating ssh sessions. Tramp does this to fend off a stall if a master session opened outside the Emacs session is no longer open. That is why Tramp prompts for the password again even if there is an ssh already open.
+
+    Some ssh versions support a ControlPersist option, which allows you to set the ControlPath provided the variable tramp-ssh-controlmaster-options is customized as follows:
+
+              (customize-set-variable
+               'tramp-ssh-controlmaster-options
+               (concat
+                 "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+                 "-o ControlMaster=auto -o ControlPersist=yes"))
+
+    Note how "%r", "%h" and "%p" must be encoded as "%%r", "%%h" and "%%p".
+
+    If the ~/.ssh/config is configured appropriately for the above behavior, then any changes to ssh can be suppressed with this nil setting:
+
+              (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
+
+    File name completion does not work with Tramp
+
+    ANSI escape sequences from the remote shell may cause errors in Tramp's parsing of remote buffers.
+
+    To test if this is the case, open a remote shell and check if the output of ls is in color.
+
+    To disable ANSI escape sequences from the remote hosts, disable ‘--color=yes’ or ‘--color=auto’ in the remote host's .bashrc or .profile. Turn this alias on and off to see if file name completion works.
+    File name completion does not work in directories with large number of files
+
+    This may be related to globbing, which is the use of shell's ability to expand wild card specifications, such as ‘*.c’. For directories with large number of files, globbing might exceed the shell's limit on length of command lines and hang. Tramp uses globbing.
+
+    To test if globbing hangs, open a shell on the remote host and then run ls -d * ..?* > /dev/null.
+
+    When testing, ensure the remote shell is the same shell (/bin/sh, ksh or bash), that Tramp uses when connecting to that host.
+    How to get notified after Tramp completes file transfers?
+
+    Make Emacs beep after reading from or writing to the remote host with the following code in ~/.emacs file.
+
+              (defadvice tramp-handle-write-region
+                (after tramp-write-beep-advice activate)
+                "Make tramp beep after writing a file."
+                (interactive)
+                (beep))
+              
+              (defadvice tramp-handle-do-copy-or-rename-file
+                (after tramp-copy-beep-advice activate)
+                "Make tramp beep after copying a file."
+                (interactive)
+                (beep))
+              
+              (defadvice tramp-handle-insert-file-contents
+                (after tramp-insert-beep-advice activate)
+                "Make tramp beep after inserting a file."
+                (interactive)
+                (beep))
+
+    How to get a Visual Warning when working with ‘root’ privileges? Host indication in the mode line?
+
+    Install tramp-theme from GNU ELPA via Emacs' Package Manager. Enable it via M-x load-theme <RET> tramp <RET>. Further customization is explained in user option tramp-theme-face-remapping-alist.
+    Remote host does not understand default options for directory listing
+
+    Emacs computes the dired options based on the local host but if the remote host cannot understand the same ls command, then set them with a hook as follows:
+
+              (add-hook
+               'dired-before-readin-hook
+               (lambda ()
+                 (when (file-remote-p default-directory)
+                   (setq dired-actual-switches "-al"))))
+
+    Why is ~/.sh_history file on the remote host growing?
+
+    Due to the remote shell saving tilde expansions triggered by Tramp, the history file is probably growing rapidly. Tramp can suppress this behavior with the user option tramp-histfile-override. When set to t, environment variable HISTFILE is unset, and environment variables HISTFILESIZE HISTSIZE are set to 0.
+
+    Alternatively, tramp-histfile-override could be a string. Environment variable HISTFILE is set to this file name then. Be careful when setting to /dev/null; this might result in undesired results when using bash as remote shell.
+
+    Another approach is to disable Tramp's handling of the HISTFILE at all by setting tramp-histfile-override to nil. In this case, saving history could be turned off by putting this shell code in the .bashrc or .kshrc file:
+
+              if [ -f $HOME/.sh_history ] ; then
+                 /bin/rm $HOME/.sh_history
+              fi
+              if [ "${HISTFILE-unset}" != "unset" ] ; then
+                 unset HISTFILE
+              fi
+              if [ "${HISTSIZE-unset}" != "unset" ] ; then
+                 unset HISTSIZE
+              fi
+
+    For ssh-based method, add the following line to your ~/.ssh/environment file:
+
+              HISTFILE=/dev/null
+
+    How to shorten long file names when typing in Tramp?
+
+    Adapt several of these approaches to reduce typing. If the full name is /ssh:news@news.my.domain:/opt/news/etc, then:
+        Use simplified syntax:
+
+        If you always apply the default method (see Default Method), you could use the simplified Tramp syntax (see Change file name syntax):
+
+                       (customize-set-variable 'tramp-default-method "ssh")
+                       (tramp-change-syntax 'simplified)
+
+        The reduced typing: C-x C-f /news@news.my.domain:/opt/news/etc <RET>.
+        Use default values for method name and user name:
+
+        You can define default methods and user names for hosts, (see Default Method, see Default User):
+
+                       (custom-set-variables
+                        '(tramp-default-method "ssh")
+                        '(tramp-default-user "news"))
+
+        The reduced typing: C-x C-f /-:news.my.domain:/opt/news/etc <RET>.
+
+        Note that there are some useful shortcuts already. Accessing your local host as ‘root’ user, is possible just by C-x C-f /su:: <RET>.
+        Use configuration options of the access method:
+
+        Programs used for access methods already offer powerful configurations (see Customizing Completion). For ssh, configure the file ~/.ssh/config:
+
+                       Host xy
+                            HostName news.my.domain
+                            User news
+
+        The reduced typing: C-x C-f /ssh:xy:/opt/news/etc <RET>.
+
+        Depending on the number of files in the directories, host names completion can further reduce key strokes: C-x C-f /ssh:x <TAB>.
+        Use environment variables to expand long strings
+
+        For long file names, set up environment variables that are expanded in the minibuffer. Environment variables are set either outside Emacs or inside Emacs with Lisp:
+
+                       (setenv "xy" "/ssh:news@news.my.domain:/opt/news/etc/")
+
+        The reduced typing: C-x C-f $xy <RET>.
+
+        Note that file name cannot be edited here because the environment variables are not expanded during editing in the minibuffer.
+        Define own keys:
+
+        Redefine another key sequence in Emacs for C-x C-f:
+
+                       (global-set-key
+                        [(control x) (control y)]
+                        (lambda ()
+                          (interactive)
+                          (find-file
+                           (read-file-name
+                            "Find Tramp file: "
+                            "/ssh:news@news.my.domain:/opt/news/etc/"))))
+
+        Simply typing C-x C-y would prepare minibuffer editing of file name.
+
+        See the Emacs Wiki for a more comprehensive example.
+        Define own abbreviation (1):
+
+        Abbreviation list expansion can be used to reduce typing long file names:
+
+                       (add-to-list
+                        'directory-abbrev-alist
+                        '("^/xy" . "/ssh:news@news.my.domain:/opt/news/etc/"))
+
+        The reduced typing: C-x C-f /xy <RET>.
+
+        Note that file name cannot be edited here because the environment variables are not expanded during editing in the minibuffer.
+        Define own abbreviation (2):
+
+        The abbrev-mode gives additional flexibility for editing in the minibuffer:
+
+                       (define-abbrev-table 'my-tramp-abbrev-table
+                         '(("xy" "/ssh:news@news.my.domain:/opt/news/etc/")))
+                       
+                       (add-hook
+                        'minibuffer-setup-hook
+                        (lambda ()
+                          (abbrev-mode 1)
+                          (setq local-abbrev-table my-tramp-abbrev-table)))
+                       
+                       (defadvice minibuffer-complete
+                         (before my-minibuffer-complete activate)
+                         (expand-abbrev))
+                       
+                       ;; If you use partial-completion-mode
+                       (defadvice PC-do-completion
+                         (before my-PC-do-completion activate)
+                         (expand-abbrev))
+
+        The reduced typing: C-x C-f xy <TAB>.
+
+        The minibuffer expands for further editing.
+        Use bookmarks:
+
+        Use bookmarks to save Tramp file names.
+
+        Upon visiting a location with Tramp, save it as a bookmark with <menu-bar> <edit> <bookmarks> <set>.
+
+        To revisit that bookmark: <menu-bar> <edit> <bookmarks> <jump>.
+        Use recent files:
+
+        recentf remembers visited places.
+
+        Keep remote file names in the recent list without have to check for their accessibility through remote access:
+
+                       (recentf-mode 1)
+
+        Reaching recently opened files: <menu-bar> <file> <Open Recent>.
+        Use filecache:
+
+        Since filecache remembers visited places, add the remote directory to the cache:
+
+                       
+                       
+                       (eval-after-load "filecache"
+                         '(file-cache-add-directory
+                           "/ssh:news@news.my.domain:/opt/news/etc/"))
+
+        Then use directory completion in the minibuffer with C-x C-f C-<TAB>.
+        Use bbdb:
+
+        bbdb has a built-in feature for Ange FTP files, which also works for Tramp file names.
+
+        Load bbdb in Emacs:
+
+                       (require 'bbdb)
+                       (bbdb-initialize)
+
+        Create a BBDB entry with M-x bbdb-create-ftp-site <RET>. Then specify a method and user name where needed. Examples:
+
+                       M-x bbdb-create-ftp-site <RET>
+                       Ftp Site: news.my.domain <RET>
+                       Ftp Directory: /opt/news/etc/ <RET>
+                       Ftp Username: ssh:news <RET>
+                       Company: <RET>
+                       Additional Comments: <RET>
+
+        In BBDB buffer, access an entry by pressing the key F. 
+
+    Thanks to Tramp users for contributing to these recipes.
+    Why saved multi-hop file names do not work in a new Emacs session?
+
+    When saving ad-hoc multi-hop Tramp file names (see Ad-hoc multi-hops) via bookmarks, recent files, filecache, bbdb, or another package, use the full ad-hoc file name including all hops, like /ssh:bird@bastion|ssh:news.my.domain:/opt/news/etc.
+
+    Alternatively, when saving abbreviated multi-hop file names /ssh:news@news.my.domain:/opt/news/etc, the user option tramp-save-ad-hoc-proxies must be set non-nil value.
+    How to connect to a remote Emacs session using Tramp?
+
+    Configure Emacs Client
+
+    Then on the remote host, start the Emacs Server:
+
+              (require 'server)
+              (setq server-host (system-name)
+                    server-use-tcp t)
+              (server-start)
+
+    If (system-name) of the remote host cannot be resolved on the local host, use IP address instead.
+
+    Copy from the remote host the resulting file ~/.emacs.d/server/server to the local host, to the same location.
+
+    Then start Emacs Client from the command line:
+
+              emacsclient /ssh:user@host:/file/to/edit
+
+    user and host refer to the local host.
+
+    To make Emacs Client an editor for other programs, use a wrapper script emacsclient.sh:
+
+              #!/bin/sh
+              emacsclient /ssh:$(whoami)@$(hostname --fqdn):$1
+
+    Then change the environment variable EDITOR to point to the wrapper script:
+
+              export EDITOR=/path/to/emacsclient.sh
+
+    How to disable other packages from calling Tramp?
+
+    There are packages that call Tramp without the user ever entering a remote file name. Even without applying a remote file syntax, some packages enable Tramp on their own. How can users disable such features.
+        ido.el
+
+        Disable Tramp file name completion:
+
+                       (customize-set-variable 'ido-enable-tramp-completion nil)
+
+        rlogin.el
+
+        Disable remote directory tracking mode:
+
+                       (rlogin-directory-tracking-mode -1)
+
+    How to disable Tramp?
+        To keep Ange FTP as default the remote files access package, set this in .emacs:
+
+                       (customize-set-variable 'tramp-default-method "ftp")
+
+        To disable both Tramp (and Ange FTP), set tramp-mode to nil in .emacs. Note, that we don't use customize-set-variable, in order to avoid loading Tramp.
+
+                       (setq tramp-mode nil)
+
+        To unload Tramp, type M-x tramp-unload-tramp <RET>. Unloading Tramp resets Ange FTP plugins also. 
+
+Next: Traces and Profiles, Previous: Frequently Asked Questions, Up: Top
+9 How file names, directories and localnames are mangled and managed.
+
+    Localname deconstruction: Splitting a localname into its component parts.
+    External packages: Integrating with external Lisp packages. 
+
+Next: External packages, Up: Files directories and localnames
+9.1 Splitting a localname into its component parts
+
+Tramp package redefines lisp functions file-name-directory and file-name-nondirectory to accommodate the unique file naming syntax that Tramp requires.
+
+The replacements dissect the file name, use the original handler for the localname, take that result, and then re-build the Tramp file name. By relying on the original handlers for localnames, Tramp benefits from platform specific hacks to the original handlers.
+
+Previous: Localname deconstruction, Up: Files directories and localnames
+9.2 Integrating with external Lisp packages
+9.2.1 File name completion.
+
+Sometimes, it is not convenient to open a new connection to a remote host, including entering the password and alike. For example, this is nasty for packages providing file name completion. Such a package could signal to Tramp, that they don't want it to establish a new connection. Use the variable non-essential temporarily and bind it to non-nil value.
+
+     (let ((non-essential t))
+       ...)
+
+9.2.2 File attributes cache.
+
+Keeping a local cache of remote file attributes in sync with the remote host is a time-consuming operation. Flushing and re-querying these attributes can tax Tramp to a grinding halt on busy remote servers.
+
+To get around these types of slow-downs in Tramp's responsiveness, set the process-file-side-effects to nil to stop Tramp from flushing the cache. This is helpful in situations where callers to process-file know there are no file attribute changes. The let-bind form to accomplish this:
+
+     (let (process-file-side-effects)
+       ...)
+
+For asynchronous processes, Tramp uses a process sentinel to flush file attributes cache. When callers to start-file-process know beforehand no file attribute changes are expected, then the process sentinel should be set to the default state. In cases where the caller defines its own process sentinel, Tramp's process sentinel is overwritten. The caller can still flush the file attributes cache in its process sentinel with this code:
+
+     (unless (memq (process-status proc) '(run open))
+       (dired-uncache remote-directory))
+
+Since Tramp traverses subdirectories starting with the root-directory, it is most likely sufficient to make the default-directory of the process buffer as the root directory.
+
+Next: GNU Free Documentation License, Previous: Files directories and localnames, Up: Top
+10 How to Customize Traces
+
+Tramp messages are raised with verbosity levels ranging from 0 to 10. Tramp does not display all messages; only those with a verbosity level less than or equal to tramp-verbose.
+
+The verbosity levels are
+
+ 0 silent (no Tramp messages at all)
+ 1 errors
+ 2 warnings
+ 3 connection to remote hosts (default verbosity)
+ 4 activities
+ 5 internal
+ 6 sent and received strings
+ 7 file caching
+ 8 connection properties
+ 9 test commands
+10 traces (huge)
+
+With tramp-verbose greater than or equal to 4, messages are also written to a Tramp debug buffer. Such debug buffers are essential to bug and problem analyses. For Tramp bug reports, set the tramp-verbose level to 6 (see Bug Reports).
+
+The debug buffer is in Outline Mode. In this buffer, messages can be filtered by their level. To see messages up to verbosity level 5, enter C-u 6 C-c C-q.
+
+Tramp handles errors internally. But to get a Lisp backtrace, both the error and the signal have to be set as follows:
+
+     (setq debug-on-error t
+           debug-on-signal t)
+
+If tramp-verbose is greater than or equal to 10, Lisp backtraces are also added to the Tramp debug buffer in case of errors.
+
+To enable stepping through Tramp function call traces, they have to be specifically enabled as shown in this code:
+
+     (require 'trace)
+     (dolist (elt (all-completions "tramp-" obarray 'functionp))
+       (trace-function-background (intern elt)))
+     (untrace-function 'tramp-read-passwd)
+
+The buffer *trace-output* contains the output from the function call traces. Disable tramp-read-passwd to stop password strings from being written to *trace-output*.
+
+Next: Function Index, Previous: Traces and Profiles, Up: Top
+Appendix A GNU Free Documentation License
+Version 1.3, 3 November 2008
+
+     Copyright © 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+     https://fsf.org/
+     
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+
+    PREAMBLE
+
+    The purpose of this License is to make a manual, textbook, or other functional and useful document free in the sense of freedom: to assure everyone the effective freedom to copy and redistribute it, with or without modifying it, either commercially or noncommercially. Secondarily, this License preserves for the author and publisher a way to get credit for their work, while not being considered responsible for modifications made by others.
+
+    This License is a kind of “copyleft”, which means that derivative works of the document must themselves be free in the same sense. It complements the GNU General Public License, which is a copyleft license designed for free software.
+
+    We have designed this License in order to use it for manuals for free software, because free software needs free documentation: a free program should come with manuals providing the same freedoms that the software does. But this License is not limited to software manuals; it can be used for any textual work, regardless of subject matter or whether it is published as a printed book. We recommend this License principally for works whose purpose is instruction or reference.
+    APPLICABILITY AND DEFINITIONS
+
+    This License applies to any manual or other work, in any medium, that contains a notice placed by the copyright holder saying it can be distributed under the terms of this License. Such a notice grants a world-wide, royalty-free license, unlimited in duration, to use that work under the conditions stated herein. The “Document”, below, refers to any such manual or work. Any member of the public is a licensee, and is addressed as “you”. You accept the license if you copy, modify or distribute the work in a way requiring permission under copyright law.
+
+    A “Modified Version” of the Document means any work containing the Document or a portion of it, either copied verbatim, or with modifications and/or translated into another language.
+
+    A “Secondary Section” is a named appendix or a front-matter section of the Document that deals exclusively with the relationship of the publishers or authors of the Document to the Document's overall subject (or to related matters) and contains nothing that could fall directly within that overall subject. (Thus, if the Document is in part a textbook of mathematics, a Secondary Section may not explain any mathematics.) The relationship could be a matter of historical connection with the subject or with related matters, or of legal, commercial, philosophical, ethical or political position regarding them.
+
+    The “Invariant Sections” are certain Secondary Sections whose titles are designated, as being those of Invariant Sections, in the notice that says that the Document is released under this License. If a section does not fit the above definition of Secondary then it is not allowed to be designated as Invariant. The Document may contain zero Invariant Sections. If the Document does not identify any Invariant Sections then there are none.
+
+    The “Cover Texts” are certain short passages of text that are listed, as Front-Cover Texts or Back-Cover Texts, in the notice that says that the Document is released under this License. A Front-Cover Text may be at most 5 words, and a Back-Cover Text may be at most 25 words.
+
+    A “Transparent” copy of the Document means a machine-readable copy, represented in a format whose specification is available to the general public, that is suitable for revising the document straightforwardly with generic text editors or (for images composed of pixels) generic paint programs or (for drawings) some widely available drawing editor, and that is suitable for input to text formatters or for automatic translation to a variety of formats suitable for input to text formatters. A copy made in an otherwise Transparent file format whose markup, or absence of markup, has been arranged to thwart or discourage subsequent modification by readers is not Transparent. An image format is not Transparent if used for any substantial amount of text. A copy that is not “Transparent” is called “Opaque”.
+
+    Examples of suitable formats for Transparent copies include plain ASCII without markup, Texinfo input format, LaTeX input format, SGML or XML using a publicly available DTD, and standard-conforming simple HTML, PostScript or PDF designed for human modification. Examples of transparent image formats include PNG, XCF and JPG. Opaque formats include proprietary formats that can be read and edited only by proprietary word processors, SGML or XML for which the DTD and/or processing tools are not generally available, and the machine-generated HTML, PostScript or PDF produced by some word processors for output purposes only.
+
+    The “Title Page” means, for a printed book, the title page itself, plus such following pages as are needed to hold, legibly, the material this License requires to appear in the title page. For works in formats which do not have any title page as such, “Title Page” means the text near the most prominent appearance of the work's title, preceding the beginning of the body of the text.
+
+    The “publisher” means any person or entity that distributes copies of the Document to the public.
+
+    A section “Entitled XYZ” means a named subunit of the Document whose title either is precisely XYZ or contains XYZ in parentheses following text that translates XYZ in another language. (Here XYZ stands for a specific section name mentioned below, such as “Acknowledgements”, “Dedications”, “Endorsements”, or “History”.) To “Preserve the Title” of such a section when you modify the Document means that it remains a section “Entitled XYZ” according to this definition.
+
+    The Document may include Warranty Disclaimers next to the notice which states that this License applies to the Document. These Warranty Disclaimers are considered to be included by reference in this License, but only as regards disclaiming warranties: any other implication that these Warranty Disclaimers may have is void and has no effect on the meaning of this License.
+    VERBATIM COPYING
+
+    You may copy and distribute the Document in any medium, either commercially or noncommercially, provided that this License, the copyright notices, and the license notice saying this License applies to the Document are reproduced in all copies, and that you add no other conditions whatsoever to those of this License. You may not use technical measures to obstruct or control the reading or further copying of the copies you make or distribute. However, you may accept compensation in exchange for copies. If you distribute a large enough number of copies you must also follow the conditions in section 3.
+
+    You may also lend copies, under the same conditions stated above, and you may publicly display copies.
+    COPYING IN QUANTITY
+
+    If you publish printed copies (or copies in media that commonly have printed covers) of the Document, numbering more than 100, and the Document's license notice requires Cover Texts, you must enclose the copies in covers that carry, clearly and legibly, all these Cover Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on the back cover. Both covers must also clearly and legibly identify you as the publisher of these copies. The front cover must present the full title with all words of the title equally prominent and visible. You may add other material on the covers in addition. Copying with changes limited to the covers, as long as they preserve the title of the Document and satisfy these conditions, can be treated as verbatim copying in other respects.
+
+    If the required texts for either cover are too voluminous to fit legibly, you should put the first ones listed (as many as fit reasonably) on the actual cover, and continue the rest onto adjacent pages.
+
+    If you publish or distribute Opaque copies of the Document numbering more than 100, you must either include a machine-readable Transparent copy along with each Opaque copy, or state in or with each Opaque copy a computer-network location from which the general network-using public has access to download using public-standard network protocols a complete Transparent copy of the Document, free of added material. If you use the latter option, you must take reasonably prudent steps, when you begin distribution of Opaque copies in quantity, to ensure that this Transparent copy will remain thus accessible at the stated location until at least one year after the last time you distribute an Opaque copy (directly or through your agents or retailers) of that edition to the public.
+
+    It is requested, but not required, that you contact the authors of the Document well before redistributing any large number of copies, to give them a chance to provide you with an updated version of the Document.
+    MODIFICATIONS
+
+    You may copy and distribute a Modified Version of the Document under the conditions of sections 2 and 3 above, provided that you release the Modified Version under precisely this License, with the Modified Version filling the role of the Document, thus licensing distribution and modification of the Modified Version to whoever possesses a copy of it. In addition, you must do these things in the Modified Version:
+        Use in the Title Page (and on the covers, if any) a title distinct from that of the Document, and from those of previous versions (which should, if there were any, be listed in the History section of the Document). You may use the same title as a previous version if the original publisher of that version gives permission.
+        List on the Title Page, as authors, one or more persons or entities responsible for authorship of the modifications in the Modified Version, together with at least five of the principal authors of the Document (all of its principal authors, if it has fewer than five), unless they release you from this requirement.
+        State on the Title page the name of the publisher of the Modified Version, as the publisher.
+        Preserve all the copyright notices of the Document.
+        Add an appropriate copyright notice for your modifications adjacent to the other copyright notices.
+        Include, immediately after the copyright notices, a license notice giving the public permission to use the Modified Version under the terms of this License, in the form shown in the Addendum below.
+        Preserve in that license notice the full lists of Invariant Sections and required Cover Texts given in the Document's license notice.
+        Include an unaltered copy of this License.
+        Preserve the section Entitled “History”, Preserve its Title, and add to it an item stating at least the title, year, new authors, and publisher of the Modified Version as given on the Title Page. If there is no section Entitled “History” in the Document, create one stating the title, year, authors, and publisher of the Document as given on its Title Page, then add an item describing the Modified Version as stated in the previous sentence.
+        Preserve the network location, if any, given in the Document for public access to a Transparent copy of the Document, and likewise the network locations given in the Document for previous versions it was based on. These may be placed in the “History” section. You may omit a network location for a work that was published at least four years before the Document itself, or if the original publisher of the version it refers to gives permission.
+        For any section Entitled “Acknowledgements” or “Dedications”, Preserve the Title of the section, and preserve in the section all the substance and tone of each of the contributor acknowledgements and/or dedications given therein.
+        Preserve all the Invariant Sections of the Document, unaltered in their text and in their titles. Section numbers or the equivalent are not considered part of the section titles.
+        Delete any section Entitled “Endorsements”. Such a section may not be included in the Modified Version.
+        Do not retitle any existing section to be Entitled “Endorsements” or to conflict in title with any Invariant Section.
+        Preserve any Warranty Disclaimers. 
+
+    If the Modified Version includes new front-matter sections or appendices that qualify as Secondary Sections and contain no material copied from the Document, you may at your option designate some or all of these sections as invariant. To do this, add their titles to the list of Invariant Sections in the Modified Version's license notice. These titles must be distinct from any other section titles.
+
+    You may add a section Entitled “Endorsements”, provided it contains nothing but endorsements of your Modified Version by various parties—for example, statements of peer review or that the text has been approved by an organization as the authoritative definition of a standard.
+
+    You may add a passage of up to five words as a Front-Cover Text, and a passage of up to 25 words as a Back-Cover Text, to the end of the list of Cover Texts in the Modified Version. Only one passage of Front-Cover Text and one of Back-Cover Text may be added by (or through arrangements made by) any one entity. If the Document already includes a cover text for the same cover, previously added by you or by arrangement made by the same entity you are acting on behalf of, you may not add another; but you may replace the old one, on explicit permission from the previous publisher that added the old one.
+
+    The author(s) and publisher(s) of the Document do not by this License give permission to use their names for publicity for or to assert or imply endorsement of any Modified Version.
+    COMBINING DOCUMENTS
+
+    You may combine the Document with other documents released under this License, under the terms defined in section 4 above for modified versions, provided that you include in the combination all of the Invariant Sections of all of the original documents, unmodified, and list them all as Invariant Sections of your combined work in its license notice, and that you preserve all their Warranty Disclaimers.
+
+    The combined work need only contain one copy of this License, and multiple identical Invariant Sections may be replaced with a single copy. If there are multiple Invariant Sections with the same name but different contents, make the title of each such section unique by adding at the end of it, in parentheses, the name of the original author or publisher of that section if known, or else a unique number. Make the same adjustment to the section titles in the list of Invariant Sections in the license notice of the combined work.
+
+    In the combination, you must combine any sections Entitled “History” in the various original documents, forming one section Entitled “History”; likewise combine any sections Entitled “Acknowledgements”, and any sections Entitled “Dedications”. You must delete all sections Entitled “Endorsements.”
+    COLLECTIONS OF DOCUMENTS
+
+    You may make a collection consisting of the Document and other documents released under this License, and replace the individual copies of this License in the various documents with a single copy that is included in the collection, provided that you follow the rules of this License for verbatim copying of each of the documents in all other respects.
+
+    You may extract a single document from such a collection, and distribute it individually under this License, provided you insert a copy of this License into the extracted document, and follow this License in all other respects regarding verbatim copying of that document.
+    AGGREGATION WITH INDEPENDENT WORKS
+
+    A compilation of the Document or its derivatives with other separate and independent documents or works, in or on a volume of a storage or distribution medium, is called an “aggregate” if the copyright resulting from the compilation is not used to limit the legal rights of the compilation's users beyond what the individual works permit. When the Document is included in an aggregate, this License does not apply to the other works in the aggregate which are not themselves derivative works of the Document.
+
+    If the Cover Text requirement of section 3 is applicable to these copies of the Document, then if the Document is less than one half of the entire aggregate, the Document's Cover Texts may be placed on covers that bracket the Document within the aggregate, or the electronic equivalent of covers if the Document is in electronic form. Otherwise they must appear on printed covers that bracket the whole aggregate.
+    TRANSLATION
+
+    Translation is considered a kind of modification, so you may distribute translations of the Document under the terms of section 4. Replacing Invariant Sections with translations requires special permission from their copyright holders, but you may include translations of some or all Invariant Sections in addition to the original versions of these Invariant Sections. You may include a translation of this License, and all the license notices in the Document, and any Warranty Disclaimers, provided that you also include the original English version of this License and the original versions of those notices and disclaimers. In case of a disagreement between the translation and the original version of this License or a notice or disclaimer, the original version will prevail.
+
+    If a section in the Document is Entitled “Acknowledgements”, “Dedications”, or “History”, the requirement (section 4) to Preserve its Title (section 1) will typically require changing the actual title.
+    TERMINATION
+
+    You may not copy, modify, sublicense, or distribute the Document except as expressly provided under this License. Any attempt otherwise to copy, modify, sublicense, or distribute it is void, and will automatically terminate your rights under this License.
+
+    However, if you cease all violation of this License, then your license from a particular copyright holder is reinstated (a) provisionally, unless and until the copyright holder explicitly and finally terminates your license, and (b) permanently, if the copyright holder fails to notify you of the violation by some reasonable means prior to 60 days after the cessation.
+
+    Moreover, your license from a particular copyright holder is reinstated permanently if the copyright holder notifies you of the violation by some reasonable means, this is the first time you have received notice of violation of this License (for any work) from that copyright holder, and you cure the violation prior to 30 days after your receipt of the notice.
+
+    Termination of your rights under this section does not terminate the licenses of parties who have received copies or rights from you under this License. If your rights have been terminated and not permanently reinstated, receipt of a copy of some or all of the same material does not give you any rights to use it.
+    FUTURE REVISIONS OF THIS LICENSE
+
+    The Free Software Foundation may publish new, revised versions of the GNU Free Documentation License from time to time. Such new versions will be similar in spirit to the present version, but may differ in detail to address new problems or concerns. See https://www.gnu.org/licenses/.
+
+    Each version of the License is given a distinguishing version number. If the Document specifies that a particular numbered version of this License “or any later version” applies to it, you have the option of following the terms and conditions either of that specified version or of any later version that has been published (not as a draft) by the Free Software Foundation. If the Document does not specify a version number of this License, you may choose any version ever published (not as a draft) by the Free Software Foundation. If the Document specifies that a proxy can decide which future versions of this License can be used, that proxy's public statement of acceptance of a version permanently authorizes you to choose that version for the Document.
+    RELICENSING
+
+    “Massive Multiauthor Collaboration Site” (or “MMC Site”) means any World Wide Web server that publishes copyrightable works and also provides prominent facilities for anybody to edit those works. A public wiki that anybody can edit is an example of such a server. A “Massive Multiauthor Collaboration” (or “MMC”) contained in the site means any set of copyrightable works thus published on the MMC site.
+
+    “CC-BY-SA” means the Creative Commons Attribution-Share Alike 3.0 license published by Creative Commons Corporation, a not-for-profit corporation with a principal place of business in San Francisco, California, as well as future copyleft versions of that license published by that same organization.
+
+    “Incorporate” means to publish or republish a Document, in whole or in part, as part of another Document.
+
+    An MMC is “eligible for relicensing” if it is licensed under this License, and if all works that were first published under this License somewhere other than this MMC, and subsequently incorporated in whole or in part into the MMC, (1) had no cover texts or invariant sections, and (2) were thus incorporated prior to November 1, 2008.
+
+    The operator of an MMC Site may republish an MMC contained in the site under CC-BY-SA on the same site at any time before August 1, 2009, provided the MMC is eligible for relicensing. 
+
+ADDENDUM: How to use this License for your documents
+
+To use this License in a document you have written, include a copy of the License in the document and put the following copyright and license notices just after the title page:
+
+       Copyright (C)  year  your name.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+
+If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts, replace the “with...Texts.” line with this:
+
+         with the Invariant Sections being list their titles, with
+         the Front-Cover Texts being list, and with the Back-Cover Texts
+         being list.
+
+If you have Invariant Sections without Cover Texts, or some other combination of the three, merge those two alternatives to suit the situation.
+
+If your document contains nontrivial examples of program code, we recommend releasing these examples in parallel under your choice of free software license, such as the GNU General Public License, to permit their use in free software.
+
+Next: Variable Index, Previous: GNU Free Documentation License, Up: Top
+Function Index
+
+    my-tramp-parse: Customizing Completion
+    tramp-bug: Bug Reports
+    tramp-change-syntax: Change file name syntax
+    tramp-cleanup-all-buffers: Cleanup remote connections
+    tramp-cleanup-all-connections: Cleanup remote connections
+    tramp-cleanup-connection: Cleanup remote connections
+    tramp-cleanup-this-connection: Cleanup remote connections
+    tramp-get-completion-function: Customizing Completion
+    tramp-parse-etc-group: Customizing Completion
+    tramp-parse-hosts: Customizing Completion
+    tramp-parse-netrc: Customizing Completion
+    tramp-parse-passwd: Customizing Completion
+    tramp-parse-rhosts: Customizing Completion
+    tramp-parse-sconfig: Customizing Completion
+    tramp-parse-shostkeys: Customizing Completion
+    tramp-parse-shosts: Customizing Completion
+    tramp-parse-sknownhosts: Customizing Completion
+    tramp-set-completion-function: Customizing Completion
+
+Next: Concept Index, Previous: Function Index, Up: Top
+Variable Index
+
+    auth-source-debug: Password handling
+    auth-sources: Password handling
+    auto-save-file-name-transforms: Auto-save and Backup
+    backup-directory-alist: Auto-save and Backup
+    password-cache: Password handling
+    password-cache-expiry: Password handling
+    tramp-actions-before-shell: Remote shell setup
+    tramp-adb-connect-if-not-connected: External methods
+    tramp-adb-program: External methods
+    tramp-auto-save-directory: Auto-save and Backup
+    tramp-backup-directory-alist: Auto-save and Backup
+    tramp-completion-function-alist: Customizing Completion
+    tramp-completion-reread-directory-timeout: File name completion
+    tramp-connection-properties: Predefined connection information
+    tramp-default-host: Default Host
+    tramp-default-host-alist: Default Host
+    tramp-default-method: Default Method
+    tramp-default-method-alist: Default Method
+    tramp-default-proxies-alist: Multi-hops
+    tramp-default-remote-path: Remote programs
+    tramp-default-user: Default User
+    tramp-default-user-alist: Default User
+    tramp-file-name-regexp: Change file name syntax
+    tramp-gvfs-methods: GVFS based methods
+    tramp-histfile-override: Frequently Asked Questions
+    tramp-inline-compress-start-size: Inline methods
+    tramp-methods: Customizing Methods
+    tramp-own-remote-path: Remote programs
+    tramp-password-prompt-regexp: Remote shell setup
+    tramp-persistency-file-name: Connection caching
+    tramp-remote-path: Remote programs
+    tramp-remote-process-environment: Remote processes
+    tramp-restricted-shell-hosts-alist: Multi-hops
+    tramp-save-ad-hoc-proxies: Ad-hoc multi-hops
+    tramp-shell-prompt-pattern: Remote shell setup
+    tramp-ssh-controlmaster-options: Frequently Asked Questions
+    tramp-terminal-type: Remote shell setup
+    tramp-theme-face-remapping-alist: Frequently Asked Questions
+    tramp-use-ssh-controlmaster-options: Frequently Asked Questions
+    tramp-wrong-passwd-regexp: Remote shell setup
+
+Previous: Variable Index, Up: Top
+Concept Index
+
+    .login file: Remote shell setup
+    .profile file: Remote shell setup
+    adb method: External methods
+    adb method: Quick Start Guide
+    afp method: GVFS based methods
+    afp method: Quick Start Guide
+    alternative file name syntax: Change file name syntax
+    android: Quick Start Guide
+    android (with adb method): External methods
+    android shell setup for ssh: Android shell setup
+    auto-save: Auto-save and Backup
+    backup: Auto-save and Backup
+    base-64 encoding: Inline methods
+    behind the scenes: Overview
+    bug reports: Bug Reports
+    caching: Connection caching
+    change file name syntax: Change file name syntax
+    choosing the right method: Default Method
+    cleanup: Cleanup remote connections
+    compile: Remote processes
+    configuration: Configuration
+    connection types, overview: Connection types
+    create your own methods: Customizing Methods
+    customizing completion: Customizing Completion
+    customizing methods: Customizing Methods
+    cygwin and fakecygpty: Windows setup hints
+    cygwin and ssh-agent: Windows setup hints
+    cygwin, issues: Windows setup hints
+    dav method: GVFS based methods
+    dav method: Quick Start Guide
+    davs method: GVFS based methods
+    davs method: Quick Start Guide
+    dbus: GVFS based methods
+    default configuration: Configuration
+    default host: Default Host
+    default method: Default Method
+    default user: Default User
+    details of operation: Overview
+    development history: History
+    doas method: Inline methods
+    eshell: Remote processes
+    external methods: External methods
+    fakecygpty and cygwin: Windows setup hints
+    FAQ: Frequently Asked Questions
+    fcp (with fcp method): External methods
+    fcp method: External methods
+    file name completion: File name completion
+    file name examples: File name syntax
+    file name syntax: File name syntax
+    file name syntax: Quick Start Guide
+    frequently asked questions: Frequently Asked Questions
+    fsh (with fcp method): External methods
+    fsh method: External methods
+    ftp method: External methods
+    gdb: Remote processes
+    gdrive method: GVFS based methods
+    gdrive method: Quick Start Guide
+    google drive: GVFS based methods
+    google drive: Quick Start Guide
+    gud: Remote processes
+    gvfs based methods: GVFS based methods
+    gvfs based methods: Quick Start Guide
+    history: History
+    how it works: Overview
+    http tunnel: Firewalls
+    inline methods: Inline methods
+    kerberos (with krlogin method): Inline methods
+    kerberos (with ksu method): Inline methods
+    krlogin method: Inline methods
+    ksu method: Inline methods
+    method adb: External methods
+    method adb: Quick Start Guide
+    method afp: GVFS based methods
+    method afp: Quick Start Guide
+    method dav: GVFS based methods
+    method dav: Quick Start Guide
+    method davs: GVFS based methods
+    method davs: Quick Start Guide
+    method doas: Inline methods
+    method fcp: External methods
+    method fsh: External methods
+    method ftp: External methods
+    method gdrive: GVFS based methods
+    method gdrive: Quick Start Guide
+    method krlogin: Inline methods
+    method ksu: Inline methods
+    method nc: External methods
+    method obex: GVFS based methods
+    method plink: Inline methods
+    method plink: Quick Start Guide
+    method plinkx: Inline methods
+    method pscp: External methods
+    method psftp: External methods
+    method rcp: External methods
+    method rsh: Inline methods
+    method rsync: External methods
+    method scp: External methods
+    method scpx: External methods
+    method scpx with cygwin: Windows setup hints
+    method sftp: GVFS based methods
+    method sftp: Quick Start Guide
+    method sg: Inline methods
+    method sg: Quick Start Guide
+    method smb: External methods
+    method smb: Quick Start Guide
+    method ssh: Inline methods
+    method ssh: Quick Start Guide
+    method sshx: Inline methods
+    method sshx with cygwin: Windows setup hints
+    method su: Inline methods
+    method su: Quick Start Guide
+    method sudo: Inline methods
+    method sudo: Quick Start Guide
+    method synce: GVFS based methods
+    method telnet: Inline methods
+    methods, external: External methods
+    methods, gvfs: GVFS based methods
+    methods, gvfs: Quick Start Guide
+    methods, inline: Inline methods
+    mimencode: Inline methods
+    ms windows (with smb method): External methods
+    ms windows (with smb method): Quick Start Guide
+    multi-hop: Multi-hops
+    multi-hop, ad-hoc: Ad-hoc multi-hops
+    nc (with nc method): External methods
+    nc method: External methods
+    nc unix command: Remote shell setup
+    obex method: GVFS based methods
+    obtaining Tramp: Obtaining <span class="sc">Tramp</span>
+    overview: Overview
+    passwords: Password handling
+    perldb: Remote processes
+    plink (with pscp method): External methods
+    plink (with psftp method): External methods
+    plink method: Inline methods
+    plink method: Quick Start Guide
+    plinkx method: Inline methods
+    powershell: Remote processes
+    proxy hosts: Multi-hops
+    proxy hosts, ad-hoc: Ad-hoc multi-hops
+    proxy hosts, http tunnel: Firewalls
+    pscp (with pscp method): External methods
+    pscp (with psftp method): External methods
+    pscp method: External methods
+    psftp method: External methods
+    putty (with pscp method): External methods
+    putty (with psftp method): External methods
+    quick start guide: Quick Start Guide
+    rcp (with rcp method): External methods
+    rcp method: External methods
+    recompile: Remote processes
+    remote shell setup: Remote shell setup
+    rsh (with rcp method): External methods
+    rsh method: Inline methods
+    rsync (with rsync method): External methods
+    rsync method: External methods
+    scp (with scp method): External methods
+    scp (with scpx method): External methods
+    scp method: External methods
+    scpx method: External methods
+    scpx method with cygwin: Windows setup hints
+    selecting config files: Customizing Completion
+    separate syntax: Change file name syntax
+    sftp method: GVFS based methods
+    sftp method: Quick Start Guide
+    sg method: Inline methods
+    sg method: Quick Start Guide
+    shell: Remote processes
+    shell init files: Remote shell setup
+    shell-command: Remote processes
+    simplified syntax: Change file name syntax
+    smb method: External methods
+    smb method: Quick Start Guide
+    smbclient: External methods
+    smbclient: Quick Start Guide
+    ssh (with rsync method): External methods
+    ssh (with scp method): External methods
+    ssh (with scpx method): External methods
+    ssh method: Inline methods
+    ssh method: Quick Start Guide
+    SSH_AUTH_SOCK and emacs on ms windows: Windows setup hints
+    sshx method: Inline methods
+    sshx method with cygwin: Windows setup hints
+    su method: Inline methods
+    su method: Quick Start Guide
+    sudo method: Inline methods
+    sudo method: Quick Start Guide
+    synce method: GVFS based methods
+    telnet (with nc method): External methods
+    telnet method: Inline methods
+    Tramp theme: Frequently Asked Questions
+    tset unix command: Remote shell setup
+    type-ahead: Usage
+    unix command nc: Remote shell setup
+    unix command tset: Remote shell setup
+    using non-standard methods: Customizing Methods
+    using Tramp: Usage
+    uuencode: Inline methods
+    winexe: Remote processes
+
