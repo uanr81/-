@@ -1,0 +1,56 @@
+
+# Это общесистемный файл конфигурации клиента ssh. Смотрите ssh_config(5) для
+#получения дополнительной информации. Этот файл предоставляет значения по умолчанию
+#для пользователей, и значения можно изменить в файлах конфигурации для каждого
+#пользователя или в командной строке.
+
+# Данные конфигурации анализируются следующим образом:
+#  1. параметры командной строки
+#  2. пользовательский файл
+#  3. общесистемный файл
+# Любое значение конфигурации изменяется только при первой установке. Таким образом,
+# специфичные для хоста определения должны быть в начале файла конфигурации, а значения
+# по умолчанию - в конце.
+
+# По умолчанию для всего сайта используются некоторые часто используемые параметры.
+# Полный список доступных параметров, их значения и значения по умолчанию см. На
+# справочной странице ssh_config(5).
+
+Host *
+#   ForwardAgent no
+#   ForwardX11 no
+#   ForwardX11Trusted yes
+#   RhostsRSAAuthentication no
+#   RSAAuthentication yes
+#   PasswordAuthentication yes
+#   HostbasedAuthentication no
+#   GSSAPIAuthentication no
+#   GSSAPIDelegateCredentials no
+#   GSSAPIKeyExchange no
+#   GSSAPITrustDNS no
+#   BatchMode no
+#   CheckHostIP yes
+#   AddressFamily any
+#   ConnectTimeout 0
+#   StrictHostKeyChecking ask
+#   IdentityFile ~/.ssh/identity
+#   IdentityFile ~/.ssh/id_rsa
+#   IdentityFile ~/.ssh/id_dsa
+#   IdentityFile ~/.ssh/id_ecdsa
+#   IdentityFile ~/.ssh/id_ed25519
+#   Port 22
+#   Protocol 2
+#   Cipher 3des
+#   Ciphers aes128-ctr,aes192-ctr,aes256-ctr,arcfour256,arcfour128,aes128-cbc,3des-cbc
+#   MACs hmac-md5,hmac-sha1,umac-64@@openssh.com,hmac-ripemd160
+#   EscapeChar ~
+#   Tunnel no
+#   TunnelDevice any:any
+#   PermitLocalCommand no
+#   VisualHostKey no
+#   ProxyCommand ssh -q -W %h:%p gateway.example.com
+#   RekeyLimit 1G 1h
+    SendEnv LANG LC_*
+    HashKnownHosts yes
+    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials no

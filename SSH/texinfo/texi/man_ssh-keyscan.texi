@@ -1,0 +1,107 @@
+SSH-KEYSCAN(1)            BSD General Commands Manual           SSH-KEYSCAN(1)
+
+NAME
+     ssh-keyscan — собрать открытые ключи ssh
+
+SYNOPSIS
+     ssh-keyscan [-46cHv] [-f file] [-p port] [-T timeout] [-t type]
+                 [host | addrlist namelist] ...
+
+DESCRIPTION
+     ssh-keyscan - это утилита для сбора открытых ключей хоста ssh для ряда хостов. Она
+     была разработана, чтобы помочь в создании и проверке файлов ssh_known_hosts.
+     ssh-keyscan предоставляет минимальный интерфейс, подходящий для использования
+     скриптами оболочки и perl.
+
+     ssh-keyscan использует неблокирующий сокет I/O для связи с максимально возможным
+     количеством параллельных хостов, поэтому он очень эффективен. Ключи от домена
+     хостов 1,000 могут быть собраны за десятки секунд, даже когда некоторые из этих
+     хостов не работают или не запускают ssh. Для сканирования не требуется вход в систему
+     для проверки компьютеров, а также процесс сканирования не требует шифрования.
+
+     Возможны следующие варианты:
+
+     -4      Заставляет ssh-keyscan использовать только адреса IPv4.
+
+     -6      Заставляет ssh-keyscan использовать только адреса IPv6.
+
+     -c      Запросите сертификаты от целевых хостов вместо простых ключей.
+
+     -f file
+             Чтение пар файлов хоста или “addrlist namelist” из файла, по одной на строку.
+             Если вместо имени файла указано -, ssh-keyscan будет считывать хосты или
+             пары “addrlist namelist” из стандартного ввода.
+
+     -H      Хэшируйте все имена хостов и адреса в выводе. Хеш-имена могут обычно
+             использоваться ssh и sshd, но они не раскрывают идентификационную информацию,
+             если содержимое файла будет раскрыто.
+
+     -p port
+             Порт для подключения на удаленном хосте.
+
+     -T timeout
+             Установите время ожидания для попыток подключения. Если с момента установления
+             соединения с хостом или с момента последнего чтения чего-либо с этого хоста
+             истекло время ожидания, то соединение закрывается и рассматриваемый хост
+             считается недоступным. По умолчанию 5 секунд.
+
+     -t type
+             Указывает тип ключа, который нужно получить с отсканированных хостов.
+             Возможные значения: “rsa1” для версии протокола 1 и “dsa”, “ecdsa”, “ed25519”,
+             или “rsa” для версии протокола 2. Несколько значений можно указать, разделяя
+             их запятыми. По умолчанию выбираются ключи “rsa”, “ecdsa”, и “ed25519”.
+
+     -v      Детальный режим. Заставляет ssh-keyscan печатать отладочные сообщения
+             о его ходе.
+
+SECURITY
+     Если файл ssh_known_hosts создается с использованием ssh-keyscan без проверки
+     ключей, пользователи будут уязвимы для атак посредника. С другой стороны, если
+     модель безопасности допускает такой риск, ssh-keyscan может помочь в обнаружении
+     несанкционированных ключевых файлов или атак посредников, которые начались после
+     создания файла ssh_known_hosts.
+
+FILES
+     Формат ввода:
+
+     1.2.3.4,1.2.4.4 name.my.domain,name,n.my.domain,n,1.2.3.4,1.2.4.4
+
+     Выходной формат для ключей RSA1:
+
+     host-or-namelist bits exponent modulus
+
+     Выходной формат для RSA, DSA, ECDSA, и Ed25519 keys:
+
+     host-or-namelist keytype base64-encoded-key
+
+     Где тип ключа “ecdsa-sha2-nistp256”, “ecdsa-sha2-nistp384”,
+     “ecdsa-sha2-nistp521”, “ssh-ed25519”, “ssh-dss” или “ssh-rsa”.
+
+     /etc/ssh/ssh_known_hosts
+
+EXAMPLES
+     Напечатайте ключ хоста rsa для имени хоста машины:
+
+     $ ssh-keyscan hostname
+
+     Найдите все хосты из файла ssh_hosts, которые имеют новые или отличающиеся
+     от ключей в отсортированном файле ssh_known_hosts:
+
+     $ ssh-keyscan -t rsa,dsa,ecdsa,ed25519 -f ssh_hosts | \
+             sort -u - ssh_known_hosts | diff ssh_known_hosts -
+
+SEE ALSO
+     ssh(1), sshd(8)
+
+AUTHORS
+     David Mazieres <dm@lcs.mit.edu> wrote the initial version, and Wayne
+     Davison <wayned@users.sourceforge.net> added support for protocol version
+     2.
+
+BUGS
+     It generates "Connection closed by remote host" messages on the consoles
+     of all the machines it scans if the server is older than version 2.9.
+     This is because it opens a connection to the ssh port, reads the public
+     key, and drops the connection as soon as it gets the key.
+
+BSD                            November 8, 2015                            BSD

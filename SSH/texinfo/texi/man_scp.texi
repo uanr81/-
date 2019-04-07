@@ -1,0 +1,170 @@
+SCP(1)                    BSD General Commands Manual                   SCP(1)
+
+NAME
+     scp — безопасное копирование (программа удаленного копирования файлов)
+
+SYNOPSIS
+     scp [-12346BCpqrTv] [-c cipher] [-F ssh_config] [-i identity_file]
+         [-l limit] [-o ssh_option] [-P port] [-S program]
+         [[user@]host1:]file1 ... [[user@@]host2:]file2
+
+DESCRIPTION
+     scp копирует файлы между хостами в сети. Он использует ssh(1) для передачи данных, использует ту
+     же аутентификацию и обеспечивает ту же безопасность, что и ssh(1). scp запросит пароли или парольные
+     фразы, если они необходимы для аутентификации.
+
+     Имена файлов могут содержать спецификацию пользователя и хоста, чтобы указать, что файл должен быть
+     скопирован на/с этого хоста. Локальные имена файлов можно сделать явными, используя абсолютные или
+     относительные имена путей, чтобы избежать scp-обработки имен файлов, содержащих ‘:’ в качестве
+     спецификаторов хоста. Копии между двумя удаленными хостами также разрешены.
+
+     Варианты следующие:
+
+     -1
+             Заставляет scp использовать протокол 1.
+
+     -2
+             Заставляет scp использовать протокол 2.
+
+     -3
+             Копии между двумя удаленными хостами передаются через локальный хост. Без этой опции данные
+             копируются непосредственно между двумя удаленными хостами. Обратите внимание, что эта опция
+             отключает индикатор прогресса.
+
+     -4
+             Заставляет scp использовать только адреса IPv4.
+
+     -6
+             Заставляет scp использовать только адреса IPv6.
+
+     -B
+             Выбирает пакетный режим (запрещает запрашивать пароли или парольные фразы).
+
+     -C
+             Включение сжатия. Передает флаг -C в ssh (1), чтобы включить сжатие.
+
+     -c cipher
+             Выбирает шифр, который будет использоваться для шифрования передачи данных. Эта опция
+             напрямую передается в ssh(1).
+
+     -F ssh_config
+             Определяет альтернативный файл конфигурации для пользователя для ssh. Эта опция напрямую
+             передается в ssh (1).
+
+     -i identity_file
+             Выбирает файл, из которого читается идентификатор (закрытый ключ) для аутентификации с
+             открытым ключом. Эта опция напрямую передается в ssh(1).
+
+     -l limit
+             Ограничивает используемую пропускную способность, указанную в Кбит/с.
+
+     -o ssh_option
+             Может использоваться для передачи параметров в ssh в формате, используемом в
+             ssh_config(5). Это полезно для указания параметров, для которых нет отдельного
+             флага командной строки scp.  Для получения полной информации о параметрах, перечисленных
+             ниже, и их возможных значений, смотри ssh_config(5).
+
+                   AddressFamily
+                   BatchMode
+                   BindAddress
+                   CanonicalDomains
+                   CanonicalizeFallbackLocal
+                   CanonicalizeHostname
+                   CanonicalizeMaxDots
+                   CanonicalizePermittedCNAMEs
+                   CertificateFile
+                   ChallengeResponseAuthentication
+                   CheckHostIP
+                   Cipher
+                   Ciphers
+                   Compression
+                   CompressionLevel
+                   ConnectionAttempts
+                   ConnectTimeout
+                   ControlMaster
+                   ControlPath
+                   ControlPersist
+                   GlobalKnownHostsFile
+                   GSSAPIAuthentication
+                   GSSAPIDelegateCredentials
+                   HashKnownHosts
+                   Host
+                   HostbasedAuthentication
+                   HostbasedKeyTypes
+                   HostKeyAlgorithms
+                   HostKeyAlias
+                   HostName
+                   IdentityFile
+                   IdentitiesOnly
+                   IPQoS
+                   KbdInteractiveAuthentication
+                   KbdInteractiveDevices
+                   KexAlgorithms
+                   LogLevel
+                   MACs
+                   NoHostAuthenticationForLocalhost
+                   NumberOfPasswordPrompts
+                   PasswordAuthentication
+                   PKCS11Provider
+                   Port
+                   PreferredAuthentications
+                   Protocol
+                   ProxyCommand
+                   PubkeyAcceptedKeyTypes
+                   PubkeyAuthentication
+                   RekeyLimit
+                   RhostsRSAAuthentication
+                   RSAAuthentication
+                   SendEnv
+                   ServerAliveInterval
+                   ServerAliveCountMax
+                   StrictHostKeyChecking
+                   TCPKeepAlive
+                   UpdateHostKeys
+                   UsePrivilegedPort
+                   User
+                   UserKnownHostsFile
+                   VerifyHostKeyDNS
+
+     -P port
+             Указывает порт для подключения на удаленном хосте. Обратите внимание, что этот параметр
+             записывается с заглавной буквы ‘P’, поскольку -p уже зарезервирован для сохранения времени
+             и режимов файла.
+
+     -p      Сохраняет время модификации, время доступа и режимы из исходного файла.
+
+     -q      Тихий режим: отключает индикатор хода выполнения, а также предупреждающие и диагностические
+             сообщения от ssh(1).
+
+     -r      Рекурсивно копировать целые каталоги. Обратите внимание, что scp следует символическим ссылкам,
+             встречающимся в обходе дерева.
+
+     -S program
+             Имя программы, используемой для зашифрованного соединения. Программа должна понимать опции ssh(1).
+
+     -T      Отключить строгую проверку имени файла. По умолчанию при копировании файлов с удаленного хоста
+             в локальный каталог scp проверяет, совпадают ли полученные имена файлов с запрошенными в командной
+             строке, чтобы предотвратить отправку удаленным концом неожиданных или нежелательных файлов. Из-за
+             различий в том, как различные операционные системы и оболочки интерпретируют подстановочные знаки
+             имени файла, эти проверки могут привести к отклонению нужных файлов. Эта опция отключает эти
+             проверки за счет полного доверия, что сервер не будет отправлять неожиданные имена файлов.
+
+     -v      Детальный режим. Заставляет scp и ssh(1) печатать отладочные сообщения об их прогрессе. Это
+             полезно при отладке проблем с подключением, аутентификацией и настройкой.
+
+EXIT STATUS
+     Утилита scp завершает работу с 0 в случае успеха и >0 в случае возникновения ошибки.
+
+SEE ALSO
+     sftp(1), ssh(1), ssh-add(1), ssh-agent(1), ssh-keygen(1), ssh_config(5),
+     sshd(8)
+
+HISTORY
+     scp is based on the rcp program in BSD source code from the Regents of
+     the University of California.
+
+AUTHORS
+     Timo Rinne <tri@iki.fi>
+     Tatu Ylonen <ylo@cs.hut.fi>
+
+BSD                           September 25, 2015                           BSD

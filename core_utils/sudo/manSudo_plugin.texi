@@ -4,28 +4,25 @@ NAME
      sudo_plugin — Sudo Plugin API
 
 DESCRIPTION
-     Starting with version 1.8, sudo supports a plugin API for policy and ses‐
-     sion logging.  Plugins may be compiled as dynamic shared objects (the
-     default on systems that support them) or compiled statically into the
-     sudo binary itself.  By default, the sudoers policy plugin and an associ‐
-     ated I/O logging plugin are used.  Via the plugin API, sudo can be con‐
-     figured to use alternate policy and/or I/O logging plugins provided by
-     third parties.  The plugins to be used are specified in the sudo.conf(5)
-     file.
+     Начиная с версии 1.8, sudo поддерживает API-плагин для ведения журнала политики и
+     сессии. Плагины могут быть скомпилированы как динамические общие объекты (по умолчанию
+     в системах, которые их поддерживают) или статически скомпилированы в сам двоичный
+     файл sudo. По умолчанию используются плагин политики sudoers и связанный плагин
+     ввода-вывода. С помощью API плагинов можно настроить sudo на использование
+     альтернативных плагинов политики и/или журналов ввода/вывода, предоставляемых третьими
+     сторонами. Используемые плагины указаны в файле sudo.conf(5).
 
-     The API is versioned with a major and minor number.  The minor version
-     number is incremented when additions are made.  The major number is
-     incremented when incompatible changes are made.  A plugin should be check
-     the version passed to it and make sure that the major version matches.
+     Версия API имеет старший и младший номер. Дополнительный номер версии увеличивается
+     при добавлении. Основной номер увеличивается при несовместимых изменениях. Плагин
+     должен проверить переданную ему версию и убедиться, что основная версия совпадает.
 
-     The plugin API is defined by the sudo_plugin.h header file.
+     API плагина определяется заголовочным файлом sudo_plugin.h.
 
    Policy plugin API
-     A policy plugin must declare and populate a policy_plugin struct in the
-     global scope.  This structure contains pointers to the functions that
-     implement the sudo policy checks.  The name of the symbol should be spec‐
-     ified in sudo.conf(5) along with a path to the plugin so that sudo can
-     load it.
+     Плагин политики должен объявить и заполнить структуру policy_plugin в глобальной
+     области видимости. Эта структура содержит указатели на функции, которые реализуют
+     проверки политики sudo. Имя символа должно быть указано в sudo.conf(5) вместе с
+     путем к плагину, чтобы sudo мог его загрузить.
 
      struct policy_plugin {
      #define SUDO_POLICY_PLUGIN     1
@@ -51,15 +48,14 @@ DESCRIPTION
             int (*deregister_hook)(struct sudo_hook *hook));
      };
 
-     The policy_plugin struct has the following fields:
+     Структура policy_plugin имеет следующие поля:
 
-     type  The type field should always be set to SUDO_POLICY_PLUGIN.
+     type  Поле типа всегда должно быть установлено SUDO_POLICY_PLUGIN.
 
      version
-           The version field should be set to SUDO_API_VERSION.
+           Поле версии должно быть установлено в SUDO_API_VERSION.
 
-           This allows sudo to determine the API version the plugin was built
-           against.
+           Это позволяет sudo определить версию API, для которой был построен плагин.
 
      open
            int (*open)(unsigned int version, sudo_conv_t conversation,
@@ -67,749 +63,706 @@ DESCRIPTION
                        char * const user_info[], char * const user_env[],
                        char * const plugin_options[]);
 
-           Returns 1 on success, 0 on failure, -1 if a general error occurred,
-           or -2 if there was a usage error.  In the latter case, sudo will
-           print a usage message before it exits.  If an error occurs, the
-           plugin may optionally call the conversation() or plugin_printf()
-           function with SUDO_CONF_ERROR_MSG to present additional error
-           information to the user.
+           Возвращает 1 при успехе, 0 при ошибке, -1, если произошла общая ошибка,
+           или -2, если произошла ошибка использования. В последнем случае sudo напечатает
+           сообщение об использовании до его выхода. Если возникает ошибка, плагин может
+           дополнительно вызвать функцию conversation() или plugin_printf() с
+           SUDO_CONF_ERROR_MSG, чтобы предоставить пользователю дополнительную информацию
+           об ошибке.
 
-           The function arguments are as follows:
+           Аргументы функции следующие:
 
            version
-                 The version passed in by sudo allows the plugin to determine
-                 the major and minor version number of the plugin API sup‐
-                 ported by sudo.
+                 Версия, передаваемая sudo, позволяет плагину определять основной
+                 и вспомогательный номер версии API плагина, поддерживаемого sudo.
 
            conversation
-                 A pointer to the conversation() function that can be used by
-                 the plugin to interact with the user (see below).  Returns 0
-                 on success and -1 on failure.
+                 Указатель на функцию conversation(), которая может использоваться
+                 плагином для взаимодействия с пользователем (см. Ниже). Возвращает
+                 0 при успехе и -1 при ошибке.
 
            plugin_printf
-                 A pointer to a printf()-style function that may be used to
-                 display informational or error messages (see below).  Returns
-                 the number of characters printed on success and -1 on fail‐
-                 ure.
+                 Указатель на функцию printf()-style, которая может использоваться для
+                 отображения информационных сообщений или сообщений об ошибках (см. Ниже).
+                 Возвращает количество символов, напечатанных в случае успеха, и -1 в
+                 случае ошибки.
 
            settings
-                 A vector of user-supplied sudo settings in the form of
-                 “name=value” strings.  The vector is terminated by a NULL
-                 pointer.  These settings correspond to flags the user speci‐
-                 fied when running sudo.  As such, they will only be present
-                 when the corresponding flag has been specified on the command
-                 line.
+                 Вектор пользовательских настроек sudo в виде строк “name=value”. Вектор
+                 завершается указателем NULL. Эти настройки соответствуют флагам, указанным
+                 пользователем при запуске sudo. Таким образом, они будут присутствовать
+                 только тогда, когда соответствующий флаг был указан в командной строке.
 
-                 When parsing settings, the plugin should split on the first
-                 equal sign (‘=’) since the name field will never include one
-                 itself but the value might.
+                 При разборе настроек плагин должен разделяться на первый знак равенства
+                 (‘=’), так как поле имени никогда не будет включать в себя один, но
+                 значение может.
 
                  bsdauth_type=string
-                       Authentication type, if specified by the -a flag, to
-                       use on systems where BSD authentication is supported.
+                       Тип аутентификации, если он указан флагом -a, для использования
+                       в системах, где поддерживается аутентификация BSD.
 
                  closefrom=number
-                       If specified, the user has requested via the -C flag
-                       that sudo close all files descriptors with a value of
-                       number or higher.  The plugin may optionally pass this,
-                       or another value, back in the command_info list.
+                       Если указан, пользователь запрашивает через флаг -C, что sudo
+                       закрывает все файловые дескрипторы со значением число или выше.
+                       Плагин может при желании передать это или другое значение обратно
+                       в список command_info.
 
                  debug_flags=string
-                       A debug file path name followed by a space and a comma-
-                       separated list of debug flags that correspond to the
-                       plugin's Debug entry in sudo.conf(5), if there is one.
-                       The flags are passed to the plugin exactly as they
-                       appear in sudo.conf(5).  The syntax used by sudo and
-                       the sudoers plugin is subsystem@priority but a plugin
-                       is free to use a different format so long as it does
-                       not include a comma (‘,’).  Prior to sudo 1.8.12, there
-                       was no way to specify plugin-specific debug_flags so
-                       the value was always the same as that used by the sudo
-                       front end and did not include a path name, only the
-                       flags themselves.  As of version 1.7 of the plugin
-                       interface, sudo will only pass debug_flags if
-                       sudo.conf(5) contains a plugin-specific Debug entry.
+                       Путь к файлу отладки, за которым следуют пробел и разделенный
+                       запятыми список флагов отладки, соответствующих записи отладки
+                       плагина в sudo.conf(5), если таковая имеется. Флаги передаются
+                       плагину именно так, как они отображаются в sudo.conf(5). Синтаксис,
+                       используемый sudo и плагином sudoers, - это subsystem@@priority, но
+                       плагин может использовать другой формат, если он не содержит запятую
+                       (‘,’). До sudo 1.8.12 не было никакого способа указать специфичный
+                       для плагина debug_flags, так что значение всегда было таким же, как
+                       использовалось внешним интерфейсом sudo и не включало имя пути,
+                       только сами флаги. Начиная с версии 1.7 интерфейса плагина, sudo
+                       передаст debug_flags, только если sudo.conf(5) содержит
+                       специфическую для плагина запись Debug.
 
                  debug_level=number
-                       This setting has been deprecated in favor of
-                       debug_flags.
+                       Этот параметр устарел в пользу debug_flags.
 
                  ignore_ticket=bool
-                       Set to true if the user specified the -k flag along
-                       with a command, indicating that the user wishes to
-                       ignore any cached authentication credentials.
-                       implied_shell to true.  This allows sudo with no argu‐
-                       ments to be used similarly to su(1).  If the plugin
-                       does not to support this usage, it may return a value
-                       of -2 from the check_policy() function, which will
-                       cause sudo to print a usage message and exit.
+                       Установите в значение true, если пользователь указал флаг -k вместе
+                       с командой, указывающей, что пользователь хочет игнорировать любые
+                       кэшированные учетные данные аутентификации. implied_shell к истине.
+                       Это позволяет использовать sudo без аргументов аналогично su(1).
+                       Если плагин не поддерживает это использование, он может вернуть
+                       значение -2 из функции check_policy(), что заставит sudo напечатать
+                       сообщение об использовании и выйти.
 
                  implied_shell=bool
-                       If the user does not specify a program on the command
-                       line, sudo will pass the plugin the path to the user's
-                       shell and set
+                       Если пользователь не указывает программу в командной строке, sudo
+                       передаст плагину путь к оболочке пользователя и установит
 
                  login_class=string
-                       BSD login class to use when setting resource limits and
-                       nice value, if specified by the -c flag.
+                       Класс входа в BSD для использования при установке ограничений
+                       ресурсов и значения nice, если оно указано флагом -c.
 
                  login_shell=bool
-                       Set to true if the user specified the -i flag, indicat‐
-                       ing that the user wishes to run a login shell.
+                       Установите в значение true, если пользователь указал флаг -i,
+                       указывающий, что пользователь желает запустить оболочку входа в
+                       систему.
 
                  max_groups=int
-                       The maximum number of groups a user may belong to.
-                       This will only be present if there is a corresponding
-                       setting in sudo.conf(5).
+                       Максимальное количество групп, к которым может принадлежать
+                       пользователь. Это будет присутствовать только при наличии
+                       соответствующей настройки в sudo.conf(5).
 
                  network_addrs=list
-                       A space-separated list of IP network addresses and net‐
-                       masks in the form “addr/netmask”, e.g.
-                       “192.168.1.2/255.255.255.0”.  The address and netmask
-                       pairs may be either IPv4 or IPv6, depending on what the
-                       operating system supports.  If the address contains a
-                       colon (‘:’), it is an IPv6 address, else it is IPv4.
+                       Разделенный пробелами список сетевых IP-адресов и сетевых масок в
+                       форме “addr/netmask”, например, “192.168.1.2/255.255.255.0”. Пары
+                       адреса и маски сети могут быть либо IPv4 или IPv6, в зависимости от
+                       того, что поддерживает операционная система. Если адрес содержит
+                       двоеточие (‘:’), это адрес IPv6, иначе это IPv4.
 
                  noninteractive=bool
-                       Set to true if the user specified the -n flag, indicat‐
-                       ing that sudo should operate in non-interactive mode.
-                       The plugin may reject a command run in non-interactive
-                       mode if user interaction is required.
+                       Установите в значение true, если пользователь указал флаг -n,
+                       указывающий, что sudo должен работать в неинтерактивном режиме.
+                       Плагин может отклонить команду, запущенную в неинтерактивном режиме,
+                       если требуется взаимодействие с пользователем.
 
                  plugin_dir=string
-                       The default plugin directory used by the sudo front
-                       end.  This is the default directory set at compile time
-                       and may not correspond to the directory the running
-                       plugin was loaded from.  It may be used by a plugin to
-                       locate support files.
+                       Каталог плагинов по умолчанию, используемый интерфейсом sudo. Это
+                       каталог по умолчанию, установленный во время компиляции и может не
+                       соответствовать каталогу, из которого был загружен работающий плагин.
+                       Может использоваться плагином для поиска файлов поддержки.
 
                  plugin_path=string
-                       The path name of plugin loaded by the sudo front end.
-                       The path name will be a fully-qualified unless the
-                       plugin was statically compiled into sudo.
+                       Путь к плагину, загружаемому интерфейсом sudo. Путь будет полностью
+                       определенным, если плагин не был статически скомпилирован в sudo.
 
                  preserve_environment=bool
-                       Set to true if the user specified the -E flag, indicat‐
-                       ing that the user wishes to preserve the environment.
+                       Установите в значение true, если пользователь указал флаг -E,
+                       указывающий, что пользователь желает сохранить среду.
 
                  preserve_groups=bool
-                       Set to true if the user specified the -P flag, indicat‐
-                       ing that the user wishes to preserve the group vector
-                       instead of setting it based on the runas user.
+                       Установите в значение true, если пользователь указал флаг -P,
+                       указывающий, что пользователь желает сохранить групповой вектор
+                       вместо его установки на основе пользователя runas.
 
                  progname=string
-                       The command name that sudo was run as, typically “sudo”
-                       or “sudoedit”.
+                       Имя команды, под которой запускался sudo, обычно “sudo” или
+                       “sudoedit”.
 
                  prompt=string
-                       The prompt to use when requesting a password, if speci‐
-                       fied via the -p flag.
+                       Подсказка для использования при запросе пароля, если она указана
+                       с помощью флага -p.
 
                  remote_host=string
-                       The name of the remote host to run the command on, if
-                       specified via the -h option.  Support for running the
-                       command on a remote host is meant to be implemented via
-                       a helper program that is executed in place of the user-
-                       specified command.  The sudo front end is only capable
-                       of executing commands on the local host.  Only avail‐
-                       able starting with API version 1.4.
+                       Имя удаленного хоста, на котором будет выполняться команда, если
+                       оно указано с помощью параметра -h. Поддержка запуска команды на
+                       удаленном хосте должна быть реализована с помощью вспомогательной
+                       программы, которая выполняется вместо указанной пользователем
+                       команды. Внешний интерфейс sudo способен выполнять команды только
+                       на локальном хосте. Доступно только начиная с версии API 1.4.
 
                  run_shell=bool
-                       Set to true if the user specified the -s flag, indicat‐
-                       ing that the user wishes to run a shell.
+                       Установите значение true, если пользователь указал флаг -s,
+                       указывающий, что пользователь желает запустить оболочку.
 
                  runas_group=string
-                       The group name or gid to run the command as, if speci‐
-                       fied via the -g flag.
+                       Имя группы или gid для запуска команды, как это указано
+                       в флаге -g.
 
                  runas_user=string
-                       The user name or uid to run the command as, if speci‐
-                       fied via the -u flag.
+                       Имя пользователя или uid для запуска команды, как
+                       указано в флаге -u.
 
                  selinux_role=string
-                       SELinux role to use when executing the command, if
-                       specified by the -r flag.
+                       Правило SELinux для использования при выполнении команды, если
+                       она указана флагом -r.
 
                  selinux_type=string
-                       SELinux type to use when executing the command, if
-                       specified by the -t flag.
+                       Тип SELinux, используемый при выполнении команды, если он указан
+                       флагом -t.
 
                  set_home=bool
-                       Set to true if the user specified the -H flag.  If
-                       true, set the HOME environment variable to the target
-                       user's home directory.
+                       Установите в значение true, если пользователь указал флаг -H.
+                       Если true, установите переменную среды HOME в домашний каталог
+                       целевого пользователя.
 
                  sudoedit=bool
-                       Set to true when the -e flag is is specified or if
-                       invoked as sudoedit.  The plugin shall substitute an
-                       editor into argv in the check_policy() function or
-                       return -2 with a usage error if the plugin does not
-                       support sudoedit.  For more information, see the
-                       check_policy section.
+                       Устанавливается в true, когда установлен флаг -e или если он
+                       вызывается как sudoedit. Плагин должен заменить редактор в argv в
+                       функции check_policy() или вернуть -2 с ошибкой использования, если
+                       плагин не поддерживает sudoedit. Для получения дополнительной
+                       информации см. Раздел check_policy.
 
-                 Additional settings may be added in the future so the plugin
-                 should silently ignore settings that it does not recognize.
+                 В будущем могут быть добавлены дополнительные настройки, поэтому плагин
+                 должен молча игнорировать настройки, которые он не распознает.
 
            user_info
-                 A vector of information about the user running the command in
-                 the form of “name=value” strings.  The vector is terminated
-                 by a NULL pointer.
+                 Вектор информации о пользователе, выполняющем команду в виде строк
+                 “name=value”. Вектор завершается указателем NULL.
 
-                 When parsing user_info, the plugin should split on the first
-                 equal sign (‘=’) since the name field will never include one
-                 itself but the value might.
+                 При синтаксическом анализе user_info плагин должен разбиваться на первый
+                 знак равенства (‘=’), поскольку поле имени никогда не будет включать его
+                 в себя, а значение может.
 
                  cols=int
-                       The number of columns the user's terminal supports.  If
-                       there is no terminal device available, a default value
-                       of 80 is used.
+                       Количество столбцов, поддерживаемых пользовательским терминалом.
+                       Если нет доступных терминальных устройств, используется значение по
+                       умолчанию 80.
 
                  cwd=string
-                       The user's current working directory.
+                       Текущий рабочий каталог пользователя.
 
                  egid=gid_t
-                       The effective group ID of the user invoking sudo.
+                       Эффективный групповой ID пользователя, вызывающего sudo.
 
                  euid=uid_t
-                       The effective user ID of the user invoking sudo.
+                       Эффективный пользовательский ID пользователя, вызывающего sudo.
 
                  gid=gid_t
-                       The real group ID of the user invoking sudo.
+                       Реальный групповой ID пользователя, вызывающего sudo.
 
                  groups=list
-                       The user's supplementary group list formatted as a
-                       string of comma-separated group IDs.
+                       Список дополнительных групп пользователя, отформатированный в
+                       виде строки разделенной запятыми IDs групп.
 
                  host=string
-                       The local machine's hostname as returned by the
-                       gethostname(2) system call.
+                       Имя хоста локальной машины, возвращаемое системным вызовом
+                       gethostname(2).
 
                  lines=int
-                       The number of lines the user's terminal supports.  If
-                       there is no terminal device available, a default value
-                       of 24 is used.
+                       Количество строк, поддерживаемых пользовательским терминалом.
+                       Если нет доступного терминального устройства, используется
+                       значение по умолчанию 24.
 
                  pgid=int
-                       The ID of the process group that the running sudo
-                       process is a member of.  Only available starting with
-                       API version 1.2.
+                       ID группы процессов, членом которой является запущенный процесс
+                       sudo. Доступно только начиная с версии API 1.2.
 
                  pid=int
-                       The process ID of the running sudo process.  Only
-                       available starting with API version 1.2.
+                      ID запущенного процесса sudo. Доступно только начиная с версии
+                      API 1.2.
 
                  plugin_options
-                       Any (non-comment) strings immediately after the plugin
-                       path are passed as arguments to the plugin.  These
-                       arguments are split on a white space boundary and are
-                       passed to the plugin in the form of a NULL-terminated
-                       array of strings.  If no arguments were specified,
-                       plugin_options will be the NULL pointer.
+                       Любые (не комментирующие) строки сразу после пути к плагину
+                       передаются плагину в качестве аргументов. Эти аргументы разбиваются
+                       пробелами и передаются плагину в виде массива строк с нулевым
+                       символом в конце. Если аргументы не указаны, plugin_options
+                       будет указателем NULL.
 
-                       NOTE: the plugin_options parameter is only available
-                       starting with API version 1.2.  A plugin must check the
-                       API version specified by the sudo front end before
-                       using plugin_options.  Failure to do so may result in a
-                       crash.
+                       ПРИМЕЧАНИЕ: параметр plugin_options доступен только начиная с
+                       версии API 1.2. Плагин должен проверить версию API, указанную
+                       интерфейсом sudo, перед использованием plugin_options. Невыполнение
+                       этого требования может привести к сбою.
 
                  ppid=int
-                       The parent process ID of the running sudo process.
-                       Only available starting with API version 1.2.
+                       Идентификатор родительского процесса запущенного процесса sudo.
+                       Доступно только начиная с версии API 1.2.
 
                  sid=int
-                       The session ID of the running sudo process or 0 if sudo
-                       is not part of a POSIX job control session.  Only
-                       available starting with API version 1.2.
+                       Идентификатор сеанса запущенного процесса sudo или 0, если sudo не
+                       является частью сеанса управления заданиями POSIX. Доступно только
+                       начиная с версии API 1.2.
 
                  tcpgid=int
-                       The ID of the foreground process group associated with
-                       the terminal device associated with the sudo process or
-                       -1 if there is no terminal present.  Only available
-                       starting with API version 1.2.
+                       Идентификатор группы процессов переднего плана, связанной с
+                       терминальным устройством, связанным с процессом sudo, или -1, если
+                       нет терминала. Доступно только начиная с версии API 1.2.
 
                  tty=string
-                       The path to the user's terminal device.  If the user
-                       has no terminal device associated with the session, the
-                       value will be empty, as in “tty=”.
+                       Путь к терминальному устройству пользователя. Если у пользователя
+                       нет терминального устройства, связанного с сеансом, значение будет
+                       пустым, как в “tty=”.
 
                  uid=uid_t
-                       The real user ID of the user invoking sudo.
+                       Реальный идентификатор пользователя, вызывающего sudo.
 
                  user=string
-                       The name of the user invoking sudo.
+                       Имя пользователя, вызывающего sudo.
 
            user_env
-                 The user's environment in the form of a NULL-terminated
-                 vector of “name=value” strings.
+                 Среда пользователя в форме NULL-завершенного вектора строк
+                 “name=value”.
 
-                 When parsing user_env, the plugin should split on the first
-                 equal sign (‘=’) since the name field will never include one
-                 itself but the value might.
+                 При синтаксическом анализе user_env плагин должен разделяться на первый
+                 знак равенства (‘=’), так как поле имени никогда не будет включать в
+                 себя один, но значение может.
 
      close
            void (*close)(int exit_status, int error);
 
-           The close() function is called when the command being run by sudo
-           finishes.
+           Функция close() вызывается, когда завершается команда, запускаемая sudo.
 
-           The function arguments are as follows:
+           Аргументы функции следующие:
 
            exit_status
-                 The command's exit status, as returned by the wait(2) system
-                 call.  The value of exit_status is undefined if error is non-
-                 zero.
+                 Статус завершения команды, возвращаемый системным вызовом wait(2).
+                 Значение exit_status не определено, если ошибка не равна нулю.
 
            error
-                 If the command could not be executed, this is set to the
-                 value of errno set by the execve(2) system call.  The plugin
-                 is responsible for displaying error information via the
-                 conversation() or plugin_printf() function.  If the command
-                 was successfully executed, the value of error is 0.
+                 Если команда не может быть выполнена, для нее устанавливается значение
+                 errno, установленное системным вызовом execve(2). Плагин отвечает за
+                 отображение информации об ошибках с помощью функции conversation() или
+                 plugin_printf(). Если команда была успешно выполнена, значение ошибки
+                 равно 0.
 
-           If no close() function is defined, no I/O logging plugins are
-           loaded, and neither the timeout not use_pty options are set in the
-           command_info list, the sudo front end may execute the command
-           directly instead of running it as a child process.
+           Если функция close() не определена, плагины ведения журнала ввода-вывода не
+           загружены, и в списке command_info не заданы параметры timeout и use_pty,
+           внешний интерфейс sudo может выполнить команду напрямую, а не запускать ее как
+           дочерний процесс.
 
      show_version
            int (*show_version)(int verbose);
 
-           The show_version() function is called by sudo when the user speci‐
-           fies the -V option.  The plugin may display its version information
-           to the user via the conversation() or plugin_printf() function
-           using SUDO_CONV_INFO_MSG.  If the user requests detailed version
-           information, the verbose flag will be set.
+           Функция show_version() вызывается sudo, когда пользователь указывает опцию -V.
+           Плагин может отображать информацию о своей версии пользователю через функцию
+           conversation() или plugin_printf(), используя SUDO_CONV_INFO_MSG. Если
+           пользователь запрашивает подробную информацию о версии, будет установлен
+           подробный флаг.
 
      check_policy
            int (*check_policy)(int argc, char * const argv[]
                                char *env_add[], char **command_info[],
                                char **argv_out[], char **user_env_out[]);
 
-           The check_policy() function is called by sudo to determine whether
-           the user is allowed to run the specified commands.
+           sudo вызывает функцию check_policy(), чтобы определить, разрешено ли
+           пользователю запускать указанные команды.
 
-           If the sudoedit option was enabled in the settings array passed to
-           the open() function, the user has requested sudoedit mode.
-           sudoedit is a mechanism for editing one or more files where an edi‐
-           tor is run with the user's credentials instead of with elevated
-           privileges.  sudo achieves this by creating user-writable temporary
-           copies of the files to be edited and then overwriting the originals
-           with the temporary copies after editing is complete.  If the plugin
-           supports sudoedit, it should choose the editor to be used, poten‐
-           tially from a variable in the user's environment, such as EDITOR,
-           and include it in argv_out (note that environment variables may
-           include command line flags).  The files to be edited should be
-           copied from argv into argv_out, separated from the editor and its
-           arguments by a “--” element.  The “--” will be removed by sudo
-           before the editor is executed.  The plugin should also set
-           sudoedit=true in the command_info list.
+           Если опция sudoedit была включена в массиве настроек, переданном функции
+           open(), пользователь запросил режим sudoedit. sudoedit - это механизм
+           редактирования одного или нескольких файлов, в которых редактор запускается с
+           учетными данными пользователя, а не с повышенными привилегиями. sudo достигает
+           этого, создавая доступные для записи временные копии файлов для редактирования,
+           а затем перезаписывая оригиналы временными копиями после завершения
+           редактирования.  Если плагин поддерживает sudoedit, он должен выбрать
+           редактор, который будет использоваться, потенциально из переменной среды
+           пользователя, такой как EDITOR, и включить его в argv_out (обратите внимание,
+           что переменные среды могут включать флаги командной строки). Файлы для
+           редактирования должны быть скопированы из argv в argv_out, отделены от редактора
+           и его аргументов элементом “--”. “--” будет удален с помощью sudo до запуска
+           редактора. Плагин также должен установить sudoedit=true в списке command_info.
 
-           The check_policy() function returns 1 if the command is allowed, 0
-           if not allowed, -1 for a general error, or -2 for a usage error or
-           if sudoedit was specified but is unsupported by the plugin.  In the
-           latter case, sudo will print a usage message before it exits.  If
-           an error occurs, the plugin may optionally call the conversation()
-           or plugin_printf() function with SUDO_CONF_ERROR_MSG to present
-           additional error information to the user.
+           Функция check_policy() возвращает 1, если команда разрешена, 0, если не
+           разрешена, -1 для общей ошибки или -2 для ошибки использования или если был
+           указан sudoedit, но не поддерживается плагином. В последнем случае sudo
+           напечатает сообщение об использовании до его выхода. Если возникает ошибка,
+           плагин может дополнительно вызвать функцию conversation() или plugin_printf()
+           с помощью SUDO_CONF_ERROR_MSG, чтобы предоставить пользователю дополнительную
+           информацию об ошибке.
 
-           The function arguments are as follows:
+           Аргументы функции следующие:
 
-           argc  The number of elements in argv, not counting the final NULL
-                 pointer.
+           argc  Количество элементов в argv, не считая конечного указателя NULL.
 
-           argv  The argument vector describing the command the user wishes to
-                 run, in the same form as what would be passed to the
-                 execve(2) system call.  The vector is terminated by a NULL
-                 pointer.
+           argv  Вектор аргумента, описывающий команду, которую пользователь хочет
+                 выполнить, в той же форме, что и передаваемый системному вызову
+                 execve(2). Вектор завершается указателем NULL.
 
            env_add
-                 Additional environment variables specified by the user on the
-                 command line in the form of a NULL-terminated vector of
-                 “name=value” strings.  The plugin may reject the command if
-                 one or more variables are not allowed to be set, or it may
-                 silently ignore such variables.
+                 Дополнительные переменные окружения, указанные пользователем в командной
+                 строке в виде NULL-концевого вектора строк “name=value”. Плагин может
+                 отклонить команду, если одна или несколько переменных не могут быть
+                 установлены, или он может молча игнорировать такие переменные.
 
-                 When parsing env_add, the plugin should split on the first
-                 equal sign (‘=’) since the name field will never include one
-                 itself but the value might.
+                 При синтаксическом анализе env_add плагин должен разбиваться на первый
+                 знак равенства (‘=’), поскольку поле имени никогда не будет включать его
+                 в себя, а значение может.
 
            command_info
-                 Information about the command being run in the form of
-                 “name=value” strings.  These values are used by sudo to set
-                 the execution environment when running a command.  The plugin
-                 is responsible for creating and populating the vector, which
-                 must be terminated with a NULL pointer.  The following values
-                 are recognized by sudo:
+                 Информация о команде, выполняемой в виде строк “name=value”. Эти значения
+                 используются sudo для установки среды выполнения при запуске команды.
+                 Плагин отвечает за создание и заполнение вектора, который должен
+                 заканчиваться указателем NULL. Следующие значения распознаются sudo:
 
                  chroot=string
-                       The root directory to use when running the command.
+                       Корневой каталог, используемый при запуске команды.
 
                  closefrom=number
-                       If specified, sudo will close all files descriptors
-                       with a value of number or higher.
+                       Если указано, sudo закроет все файловые дескрипторы со
+                       значением число или выше.
 
                  command=string
-                       Fully qualified path to the command to be executed.
+                       Полноценный путь к команде, которая будет выполнена.
 
                  cwd=string
-                       The current working directory to change to when execut‐
-                       ing the command.
+                       Текущий рабочий каталог, который нужно изменить при выполнении
+                       команды.
 
                  exec_background=bool
-                       By default, sudo runs a command as the foreground
-                       process as long as sudo itself is running in the fore‐
-                       ground.  When exec_background is enabled and the com‐
-                       mand is being run in a pty (due to I/O logging or the
-                       use_pty setting), the command will be run as a back‐
-                       ground process.  Attempts to read from the controlling
-                       terminal (or to change terminal settings) will result
-                       in the command being suspended with the SIGTTIN signal
-                       (or SIGTTOU in the case of terminal settings).  If this
-                       happens when sudo is a foreground process, the command
-                       will be granted the controlling terminal and resumed in
-                       the foreground with no user intervention required.  The
-                       advantage of initially running the command in the back‐
-                       ground is that sudo need not read from the terminal
-                       unless the command explicitly requests it.  Otherwise,
-                       any terminal input must be passed to the command,
-                       whether it has required it or not (the kernel buffers
-                       terminals so it is not possible to tell whether the
-                       command really wants the input).  This is different
-                       from historic sudo behavior or when the command is not
-                       being run in a pty.
+                       По умолчанию sudo запускает команду в качестве процесса переднего
+                       плана, пока само sudo работает на переднем плане. Когда функция
+                       exec_background включена и команда выполняется в pty (из-за записи
+                       в журнал ввода-вывода или установки use_pty), команда будет
+                       выполняться как фоновый процесс. Попытки чтения с управляющего
+                       терминала (или изменения настроек терминала) приведут к приостановке
+                       команды с помощью сигнала SIGTTIN (или SIGTTOU в случае настроек
+                       терминала). Если это происходит, когда sudo является процессом
+                       переднего плана, команда будет предоставлена ​​управляющему терминалу
+                       и возобновлена ​​на переднем плане без вмешательства пользователя.
+                       Преимущество первоначального запуска команды в фоновом режиме
+                       заключается в том, что sudo не нужно читать с терминала, если только
+                       команда явно не запрашивает ее. В противном случае любой ввод с
+                       терминала должен быть передан команде, независимо от того, требовала
+                       она этого или нет (ядро буферизует терминалы, поэтому невозможно
+                       определить, действительно ли команда хочет ввод). Это отличается от
+                       исторического поведения sudo или когда команда не запускается в pty.
 
-                       For this to work seamlessly, the operating system must
-                       support the automatic restarting of system calls.
-                       Unfortunately, not all operating systems do this by
-                       default, and even those that do may have bugs.  For
-                       example, Mac OS X fails to restart the tcgetattr() and
-                       tcsetattr() system calls (this is a bug in Mac OS X).
-                       Furthermore, because this behavior depends on the com‐
-                       mand stopping with the SIGTTIN or SIGTTOU signals, pro‐
-                       grams that catch these signals and suspend themselves
-                       with a different signal (usually SIGTOP) will not be
-                       automatically foregrounded.  Some versions of the linux
-                       su(1) command behave this way.  Because of this, a
-                       plugin should not set exec_background unless it is
-                       explicitly enabled by the administrator and there
-                       should be a way to enabled or disable it on a per-com‐
-                       mand basis.
+                       Чтобы это работало без проблем, операционная система должна
+                       поддерживать автоматический перезапуск системных вызовов. К
+                       сожалению, не все операционные системы делают это по умолчанию, и
+                       даже те, которые имеют, могут иметь ошибки. Например, Mac OS X не
+                       может перезапустить системные вызовы tcgetattr() и tcsetattr() (это
+                       ошибка в Mac OS X). Кроме того, поскольку это поведение зависит от
+                       остановки команды с помощью сигналов SIGTTIN или SIGTTOU, программы,
+                       которые улавливают эти сигналы и приостанавливают себя другим
+                       сигналом (обычно SIGTOP), не будут автоматически предопределены.
+                       Некоторые версии команды linux su(1) ведут себя таким образом.
+                       Из-за этого плагин не должен устанавливать exec_background, если
+                       он явно не включен администратором, и должен быть способ включить
+                       или отключить его на индивидуальной основе.
 
-                       This setting has no effect unless I/O logging is
-                       enabled or use_pty is enabled.
+                       Этот параметр не действует, если не включено ведение журнала
+                       ввода-вывода или включен use_pty.
 
                  execfd=number
-                       If specified, sudo will use the fexecve(2) system call
-                       to execute the command instead of execve(2).  The spec‐
-                       ified number must refer to an open file descriptor.
+                       Если указано, sudo будет использовать системный вызов fexecve(2)
+                       для выполнения команды вместо execve(2). Указанный номер должен
+                       ссылаться на дескриптор открытого файла.
 
                  iolog_compress=bool
-                       Set to true if the I/O logging plugins, if any, should
-                       compress the log data.  This is a hint to the I/O log‐
-                       ging plugin which may choose to ignore it.
+                       Установите значение true, если подключаемые модули журналов
+                       ввода-вывода, если таковые имеются, должны сжимать данные журнала.
+                       Это подсказка для плагина ввода-вывода, который может игнорировать
+                       его.
 
                  iolog_path=string
-                       Fully qualified path to the file or directory in which
-                       I/O log is to be stored.  This is a hint to the I/O
-                       logging plugin which may choose to ignore it.  If no
-                       I/O logging plugin is loaded, this setting has no
-                       effect.
+                       Полный путь к файлу или каталогу, в котором должен храниться
+                       журнал ввода/вывода. Это подсказка для плагина ввода/вывода, который
+                       может игнорировать его. Если плагин регистрации ввода/вывода не
+                       загружен, этот параметр не действует.
 
                  iolog_stdin=bool
-                       Set to true if the I/O logging plugins, if any, should
-                       log the standard input if it is not connected to a ter‐
-                       minal device.  This is a hint to the I/O logging plugin
-                       which may choose to ignore it.
+                       Установите в значение true, если плагины ввода/вывода, если таковые
+                       имеются, должны регистрировать стандартный вход, если он не
+                       подключен к оконечному устройству. Это подсказка для плагина
+                       ввода/вывода, который может игнорировать его.
 
                  iolog_stdout=bool
-                       Set to true if the I/O logging plugins, if any, should
-                       log the standard output if it is not connected to a
-                       terminal device.  This is a hint to the I/O logging
-                       plugin which may choose to ignore it.
+                       Установите в значение true, если подключаемые модули регистрации
+                       входов/выходов, если таковые имеются, должны регистрировать
+                       стандартный вывод, если он не подключен к терминальному устройству.
+                       Это подсказка для плагина ввода/вывода, который может игнорировать
+                       его.
 
                  iolog_stderr=bool
-                       Set to true if the I/O logging plugins, if any, should
-                       log the standard error if it is not connected to a ter‐
-                       minal device.  This is a hint to the I/O logging plugin
-                       which may choose to ignore it.
+                       Установите в значение true, если подключаемые модули регистрации
+                       входов/выходов, если таковые имеются, должны регистрировать
+                       стандартную ошибку, если она не подключена к оконечному устройству.
+                       Это подсказка для плагина ввода/вывода, который может игнорировать
+                       его.
 
                  iolog_ttyin=bool
-                       Set to true if the I/O logging plugins, if any, should
-                       log all terminal input.  This only includes input typed
-                       by the user and not from a pipe or redirected from a
-                       file.  This is a hint to the I/O logging plugin which
-                       may choose to ignore it.
+                       Установите в значение true, если подключаемые модули регистрации
+                       входов/выходов, если таковые имеются, должны регистрировать все
+                       входные данные терминала. Это включает только ввод, введенный
+                       пользователем, а не из канала или перенаправленный из файла. Это
+                       подсказка для плагина ввода/вывода, который может игнорировать его.
 
                  iolog_ttyout=bool
-                       Set to true if the I/O logging plugins, if any, should
-                       log all terminal output.  This only includes output to
-                       the screen, not output to a pipe or file.  This is a
-                       hint to the I/O logging plugin which may choose to
-                       ignore it.
+                       Установите в значение true, если подключаемые модули регистрации
+                       ввода/вывода, если таковые имеются, должны регистрировать все
+                       выходные данные терминала. Это включает в себя только вывод на
+                       экран, а не вывод в канал или файл. Это подсказка для плагина
+                       ввода/вывода, который может игнорировать его.
 
                  login_class=string
-                       BSD login class to use when setting resource limits and
-                       nice value (optional).  This option is only set on sys‐
-                       tems that support login classes.
+                       Класс входа в BSD для использования при установке ограничений
+                       ресурса и значения nice (необязательно). Эта опция установлена ​​
+                       только в системах, которые поддерживают классы входа в систему.
 
                  nice=int
-                       Nice value (priority) to use when executing the com‐
-                       mand.  The nice value, if specified, overrides the pri‐
-                       ority associated with the login_class on BSD systems.
+                       Хорошее значение (приоритет) для использования при выполнении
+                       команды. Значение nice, если оно указано, переопределяет приоритет,
+                       связанный с login_class в системах BSD.
 
                  noexec=bool
-                       If set, prevent the command from executing other pro‐
-                       grams.
+                       Если установлено, не позволяйте команде выполнять другие программы.
 
                  preserve_fds=list
-                       A comma-separated list of file descriptors that should
-                       be preserved, regardless of the value of the closefrom
-                       setting.  Only available starting with API version 1.5.
+                       Разделенный запятыми список файловых дескрипторов, которые должны
+                       быть сохранены, независимо от значения параметра closefrom. Доступно
+                       только начиная с версии API 1.5.
 
                  preserve_groups=bool
-                       If set, sudo will preserve the user's group vector
-                       instead of initializing the group vector based on
-                       runas_user.
+                       Если установлено, sudo будет сохранять вектор группы пользователя
+                       вместо инициализации вектора группы на основе runas_user.
 
                  runas_egid=gid
-                       Effective group ID to run the command as.  If not spec‐
-                       ified, the value of runas_gid is used.
+                       Эффективный идентификатор группы для запуска команды. Если не
+                       указано, используется значение runas_gid.
 
                  runas_euid=uid
-                       Effective user ID to run the command as.  If not speci‐
-                       fied, the value of runas_uid is used.
+                       Эффективный идентификатор пользователя для запуска команды. Если
+                       не указано, используется значение runas_uid.
 
                  runas_gid=gid
-                       Group ID to run the command as.
+                       Идентификатор группы от имени которой запуск команды.
 
                  runas_groups=list
-                       The supplementary group vector to use for the command
-                       in the form of a comma-separated list of group IDs.  If
-                       preserve_groups is set, this option is ignored.
+                       Вектор дополнительной группы, используемый для команды в виде
+                       списка идентификаторов групп, разделенных запятыми. Если установлено
+                       preserve_groups, эта опция игнорируется.
 
                  runas_uid=uid
-                       User ID to run the command as.
+                       Идентификатор пользователя от имени которого запуск команды.
 
                  selinux_role=string
-                       SELinux role to use when executing the command.
+                       Правила SELinux для использования при выполнении команды.
 
                  selinux_type=string
-                       SELinux type to use when executing the command.
+                       Тип SELinux для использования при выполнении команды.
 
                  set_utmp=bool
-                       Create a utmp (or utmpx) entry when a pseudo-tty is
-                       allocated.  By default, the new entry will be a copy of
-                       the user's existing utmp entry (if any), with the tty,
-                       time, type and pid fields updated.
+                       Создайте запись utmp (или utmpx), когда выделяется псевдо-tty.
+                       По умолчанию новая запись будет копией существующей записи
+                       пользователя utmp (если есть) с обновленными полями tty,
+                       time, type и pid.
 
                  sudoedit=bool
-                       Set to true when in sudoedit mode.  The plugin may
-                       enable sudoedit mode even if sudo was not invoked as
-                       sudoedit.  This allows the plugin to perform command
-                       substitution and transparently enable sudoedit when the
-                       user attempts to run an editor.
+                       Установите в true в режиме sudoedit. Плагин может включить режим
+                       sudoedit, даже если sudo не вызывался как sudoedit. Это позволяет
+                       плагину выполнять подстановку команд и прозрачно включать sudoedit,
+                       когда пользователь пытается запустить редактор.
 
                  sudoedit_checkdir=bool
-                       Set to false to disable directory writability checks in
-                       sudoedit.  By default, sudoedit 1.8.16 and higher will
-                       check all directory components of the path to be edited
-                       for writability by the invoking user.  Symbolic links
-                       will not be followed in writable directories and
-                       sudoedit will refuse to edit a file located in a
-                       writable directory.  These restrictions are not
-                       enforced when sudoedit is run by root.  The
-                       sudoedit_follow option can be set to false to disable
-                       this check.  Only available starting with API version
-                       1.8.
+                       Установите в false, чтобы отключить проверку на доступность
+                       каталога в sudoedit. По умолчанию sudoedit 1.8.16 и выше проверит
+                       все компоненты каталога пути, который будет отредактирован для
+                       возможности записи вызывающим пользователем.Символьные ссылки не
+                       будут использоваться в директориях для записи, и sudoedit откажется
+                       редактировать файл, расположенный в директории для записи. Эти
+                       ограничения не применяются, когда sudoedit запускается пользователем
+                       root. Параметр sudoedit_follow может быть установлен в false, чтобы
+                       отключить эту проверку. Доступно только начиная с версии API 1.8.
 
                  sudoedit_follow=bool
-                       Set to true to allow sudoedit to edit files that are
-                       symbolic links.  By default, sudoedit 1.8.15 and higher
-                       will refuse to open a symbolic link.  The
-                       sudoedit_follow option can be used to restore the older
-                       behavior and allow sudoedit to open symbolic links.
-                       Only available starting with API version 1.8.
+                       Установите в true, чтобы разрешить sudoedit редактировать файлы,
+                       которые являются символическими ссылками. По умолчанию sudoedit
+                       1.8.15 и выше не будет открывать символическую ссылку. Параметр
+                       sudoedit_follow можно использовать для восстановления старого
+                       поведения и разрешения sudoedit открывать символические ссылки.
+                       Доступно только начиная с версии API 1.8.
 
                  timeout=int
-                       Command timeout.  If non-zero then when the timeout
-                       expires the command will be killed.
+                       Тайм-аут команды. Если не ноль, то по истечении времени ожидания
+                       команда будет убита.
 
                  umask=octal
-                       The file creation mask to use when executing the com‐
-                       mand.
+                       Маска создания файла, используемая при выполнении команды.
 
                  use_pty=bool
-                       Allocate a pseudo-tty to run the command in, regardless
-                       of whether or not I/O logging is in use.  By default,
-                       sudo will only run the command in a pty when an I/O log
-                       plugin is loaded.
+                       Выделите псевдо-tty для запуска команды, независимо от того,
+                       используется ли ведение журнала ввода-вывода. По умолчанию
+                       команда sudo запускает команду в pty только тогда, когда загружен
+                       плагин журнала ввода-вывода.
 
                  utmp_user=string
-                       User name to use when constructing a new utmp (or
-                       utmpx) entry when set_utmp is enabled.  This option can
-                       be used to set the user field in the utmp entry to the
-                       user the command runs as rather than the invoking user.
-                       If not set, sudo will base the new entry on the invok‐
-                       ing user's existing entry.
+                       Имя пользователя для использования при создании новой записи utmp
+                       (или utmpx), когда set_utmp включен. Эта опция может использоваться
+                       для установки пользовательского поля в записи utmp для пользователя,
+                       от которого запускается команда, а не от вызывающего пользователя.
+                       Если не установлен, sudo будет основывать новую запись на
+                       существующей записи вызывающего пользователя.
 
-                 Unsupported values will be ignored.
+                 Неподдерживаемые значения будут игнорироваться.
 
            argv_out
-                 The NULL-terminated argument vector to pass to the execve(2)
-                 system call when executing the command.  The plugin is
-                 responsible for allocating and populating the vector.
+                 Вектор аргумента с нулевым символом в конце для передачи системному
+                 вызову execve(2) при выполнении команды. Плагин отвечает за выделение
+                 и заполнение вектора.
 
            user_env_out
-                 The NULL-terminated environment vector to use when executing
-                 the command.  The plugin is responsible for allocating and
-                 populating the vector.
+                 Вектор среды с нулевым символом в конце, который будет использоваться
+                 при выполнении команды. Плагин отвечает за выделение и заполнение вектора.
 
      list
            int (*list)(int verbose, const char *list_user,
                        int argc, char * const argv[]);
 
-           List available privileges for the invoking user.  Returns 1 on suc‐
-           cess, 0 on failure and -1 on error.  On error, the plugin may
-           optionally call the conversation() or plugin_printf() function with
-           SUDO_CONF_ERROR_MSG to present additional error information to the
-           user.
+           Перечислите доступные привилегии для вызывающего пользователя. Возвращает 1
+           при успехе, 0 при ошибке и -1 при ошибке. В случае ошибки плагин может
+           дополнительно вызвать функцию conversation() или plugin_printf() с помощью
+           SUDO_CONF_ERROR_MSG, чтобы предоставить пользователю дополнительную
+           информацию об ошибке.
 
-           Privileges should be output via the conversation() or
-           plugin_printf() function using SUDO_CONV_INFO_MSG,
+           Привилегии должны выводиться через функцию conversation() или plugin_printf()
+           с использованием SUDO_CONV_INFO_MSG,
 
            verbose
-                 Flag indicating whether to list in verbose mode or not.
+                 Флаг, указывающий, будет ли список в подробном режиме или нет.
 
            list_user
-                 The name of a different user to list privileges for if the
-                 policy allows it.  If NULL, the plugin should list the privi‐
-                 leges of the invoking user.
+                 Имя другого пользователя для списка привилегий, если политика это
+                 позволяет. Если NULL, плагин должен перечислить привилегии вызывающего
+                 пользователя.
 
-           argc  The number of elements in argv, not counting the final NULL
-                 pointer.
+           argc  Количество элементов в argv, не считая конечного указателя NULL.
 
-           argv  If non-NULL, an argument vector describing a command the user
-                 wishes to check against the policy in the same form as what
-                 would be passed to the execve(2) system call.  If the command
-                 is permitted by the policy, the fully-qualified path to the
-                 command should be displayed along with any command line argu‐
-                 ments.
+           argv  Если не NULL, вектор аргумента, описывающий команду, которую
+                 пользователь хочет проверить на соответствие политике в той же форме,
+                 что и то, что будет передано системному вызову execve(2). Если команда
+                 разрешена политикой, должен быть отображен полный путь к команде вместе
+                 с аргументами командной строки.
 
      validate
            int (*validate)(void);
 
-           The validate() function is called when sudo is run with the -v
-           flag.  For policy plugins such as sudoers that cache authentication
-           credentials, this function will validate and cache the credentials.
+           Функция validate() вызывается, когда sudo запускается с флагом -v. Для
+           плагинов политики, таких как sudoers, которые кэшируют учетные данные
+           аутентификации, эта функция будет проверять и кэшировать учетные данные.
 
-           The validate() function should be NULL if the plugin does not sup‐
-           port credential caching.
+           Функция validate() должна быть NULL, если плагин не поддерживает
+           кэширование учетных данных.
 
-           Returns 1 on success, 0 on failure and -1 on error.  On error, the
-           plugin may optionally call the conversation() or plugin_printf()
-           function with SUDO_CONF_ERROR_MSG to present additional error
-           information to the user.
+           Возвращает 1 при успехе, 0 при ошибке и -1 при ошибке. В случае ошибки
+           плагин может дополнительно вызвать функцию conversation() или plugin_printf()
+           с помощью SUDO_CONF_ERROR_MSG, чтобы предоставить пользователю дополнительную
+           информацию об ошибке.
 
      invalidate
            void (*invalidate)(int remove);
 
-           The invalidate() function is called when sudo is called with the -k
-           or -K flag.  For policy plugins such as sudoers that cache authen‐
-           tication credentials, this function will invalidate the creden‐
-           tials.  If the remove flag is set, the plugin may remove the cre‐
-           dentials instead of simply invalidating them.
+           Функция invalidate() вызывается, когда sudo вызывается с флагом -k или -K. Для
+           плагинов политики, таких как sudoers, которые кэшируют учетные данные
+           аутентификации, эта функция аннулирует учетные данные. Если установлен флаг
+           удаления, плагин может удалить учетные данные, а не просто сделать их
+           недействительными.
 
-           The invalidate() function should be NULL if the plugin does not
-           support credential caching.
+           Функция invalidate() должна быть NULL, если плагин не поддерживает
+           кэширование учетных данных.
 
      init_session
            int (*init_session)(struct passwd *pwd, char **user_envp[);
 
-           The init_session() function is called before sudo sets up the exe‐
-           cution environment for the command.  It is run in the parent sudo
-           process and before any uid or gid changes.  This can be used to
-           perform session setup that is not supported by command_info, such
-           as opening the PAM session.  The close() function can be used to
-           tear down the session that was opened by init_session.
+           Функция init_session() вызывается перед тем, как sudo устанавливает среду
+           выполнения для команды. Она запускается в родительском процессе sudo и до
+           любых изменений uid или gid. Это можно использовать для настройки сеанса,
+           которая не поддерживается command_info, например, для открытия сеанса PAM.
+           Функцию close() можно использовать для срыва сеанса, который был открыт
+           init_session.
 
-           The pwd argument points to a passwd struct for the user the command
-           will be run as if the uid the command will run as was found in the
-           password database, otherwise it will be NULL.
+           Аргумент pwd указывает на структуру passwd для пользователя, команда будет
+           выполняться так, как если бы uid команды выполнялся так, как было найдено в
+           базе данных паролей, в противном случае это будет NULL.
 
-           The user_env argument points to the environment the command will
-           run in, in the form of a NULL-terminated vector of “name=value”
-           strings.  This is the same string passed back to the front end via
-           the Policy Plugin's user_env_out parameter.  If the init_session()
-           function needs to modify the user environment, it should update the
-           pointer stored in user_env.  The expected use case is to merge the
-           contents of the PAM environment (if any) with the contents of
-           user_env.  NOTE: the user_env parameter is only available starting
-           with API version 1.2.  A plugin must check the API version speci‐
-           fied by the sudo front end before using user_env.  Failure to do so
-           may result in a crash.
+           Аргумент user_env указывает на среду, в которой будет выполняться команда,
+           в виде вектора NULL-terminated строк “name=value”. Это та же самая строка,
+           которая передается обратно во внешний интерфейс через параметр user_env_out
+           плагина политики. Если функция init_session() должна изменить пользовательскую
+           среду, она должна обновить указатель, хранящийся в user_env. Ожидаемый вариант
+           использования - объединить содержимое среды PAM (если есть) с содержимым
+           user_env. ПРИМЕЧАНИЕ. Параметр user_env доступен только начиная с версии API 1.2.
+           Плагин должен проверять версию API, указанную интерфейсом sudo, перед
+           использованием user_env. Невыполнение этого требования может привести к сбою.
 
-           Returns 1 on success, 0 on failure and -1 on error.  On error, the
-           plugin may optionally call the conversation() or plugin_printf()
-           function with SUDO_CONF_ERROR_MSG to present additional error
-           information to the user.
+           Возвращает 1 при успехе, 0 при ошибке и -1 при ошибке. В случае ошибки плагин
+           может дополнительно вызвать функцию dialog () или plugin_printf () с
+           SUDO_CONF_ERROR_MSG, чтобы предоставить пользователю дополнительную
+           информацию об ошибке.
 
      register_hooks
            void (*register_hooks)(int version,
               int (*register_hook)(struct sudo_hook *hook));
 
-           The register_hooks() function is called by the sudo front end to
-           register any hooks the plugin needs.  If the plugin does not sup‐
-           port hooks, register_hooks should be set to the NULL pointer.
+           Функция register_hooks () вызывается внешним интерфейсом sudo для регистрации
+           любых хуков, которые нужны плагину. Если плагин не поддерживает хуки, то для
+           register_hooks должен быть установлен указатель NULL.
 
-           The version argument describes the version of the hooks API sup‐
-           ported by the sudo front end.
+           Аргумент version описывает версию API ловушек, поддерживаемую внешним
+           интерфейсом sudo.
 
-           The register_hook() function should be used to register any sup‐
-           ported hooks the plugin needs.  It returns 0 on success, 1 if the
-           hook type is not supported and -1 if the major version in struct
-           hook does not match the front end's major hook API version.
+           Функция register_hook() должна использоваться для регистрации любых
+           поддерживаемых ловушек, которые нужны плагину. В случае успеха возвращается 0,
+           1, если тип ловушки не поддерживается, и -1, если основная версия в структурном
+           хуке не совпадает с основной версией API внешнего обработчика.
 
-           See the Hook function API section below for more information about
-           hooks.
+           См. Раздел API функции Hook ниже для получения дополнительной информации
+           о хуках.
 
-           NOTE: the register_hooks() function is only available starting with
-           API version 1.2.  If the sudo front end doesn't support API version
-           1.2 or higher, register_hooks will not be called.
+           ПРИМЕЧАНИЕ: функция register_hooks() доступна только начиная с версии API 1.2.
+           Если интерфейс sudo не поддерживает API версии 1.2 или выше, register_hooks
+           не будет вызываться.
 
      deregister_hooks
            void (*deregister_hooks)(int version,
               int (*deregister_hook)(struct sudo_hook *hook));
 
-           The deregister_hooks() function is called by the sudo front end to
-           deregister any hooks the plugin has registered.  If the plugin does
-           not support hooks, deregister_hooks should be set to the NULL
-           pointer.
+           Функция deregister_hooks() вызывается внешним интерфейсом sudo для отмены
+           регистрации всех хуков, зарегистрированных плагином. Если плагин не поддерживает
+           хуки, для deregister_hooks должен быть установлен указатель NULL.
 
-           The version argument describes the version of the hooks API sup‐
-           ported by the sudo front end.
+           Аргумент version описывает версию API ловушек, поддерживаемую внешним
+           интерфейсом sudo.
 
-           The deregister_hook() function should be used to deregister any
-           hooks that were put in place by the register_hook() function.  If
-           the plugin tries to deregister a hook that the front end does not
-           support, deregister_hook will return an error.
+           Функция deregister_hook() должна использоваться для отмены регистрации всех
+           хуков, которые были установлены на месте функцией register_hook(). Если плагин
+           пытается отменить регистрацию хука, который не поддерживает внешний интерфейс,
+           deregister_hook выдаст ошибку.
 
-           See the Hook function API section below for more information about
-           hooks.
+           См. Раздел API функции Hook ниже для получения дополнительной информации
+           о хуках.
 
-           NOTE: the deregister_hooks() function is only available starting
-           with API version 1.2.  If the sudo front end doesn't support API
-           version 1.2 or higher, deregister_hooks will not be called.
+           ПРИМЕЧАНИЕ: функция deregister_hooks() доступна только начиная с версии API 1.2.
+           Если внешний интерфейс sudo не поддерживает API версии 1.2 или выше,
+           deregister_hooks вызываться не будет.
 
      Policy Plugin Version Macros
 
-     /* Plugin API version major/minor. */
+     /* Версия API плагина мажор/минор. */
      #define SUDO_API_VERSION_MAJOR 1
      #define SUDO_API_VERSION_MINOR 2
      #define SUDO_API_MKVERSION(x, y) ((x << 16) | y)
      #define SUDO_API_VERSION SUDO_API_MKVERSION(SUDO_API_VERSION_MAJOR,\
                                                  SUDO_API_VERSION_MINOR)
 
-     /* Getters and setters for API version */
+     /* Получатели и установщики для версии API */
      #define SUDO_API_VERSION_GET_MAJOR(v) ((v) >> 16)
      #define SUDO_API_VERSION_GET_MINOR(v) ((v) & 0xffff)
      #define SUDO_API_VERSION_SET_MAJOR(vp, n) do { \
@@ -842,45 +795,44 @@ DESCRIPTION
             int (*deregister_hook)(struct sudo_hook *hook));
      };
 
-     When an I/O plugin is loaded, sudo runs the command in a pseudo-tty.
-     This makes it possible to log the input and output from the user's ses‐
-     sion.  If any of the standard input, standard output or standard error do
-     not correspond to a tty, sudo will open a pipe to capture the I/O for
-     logging before passing it on.
+     Когда подключаемый модуль ввода/вывода загружен, sudo запускает команду в псевдо-tty.
+     Это позволяет регистрировать ввод и вывод с сессии пользователя. Если какой-либо из
+     стандартных входных данных, стандартных выходных данных или стандартной ошибки не
+     соответствует tty, sudo откроет канал для захвата ввода / вывода для регистрации
+     перед передачей.
 
-     The log_ttyin function receives the raw user input from the terminal
-     device (note that this will include input even when echo is disabled,
-     such as when a password is read).  The log_ttyout function receives out‐
-     put from the pseudo-tty that is suitable for replaying the user's session
-     at a later time.  The log_stdin(), log_stdout() and log_stderr() func‐
-     tions are only called if the standard input, standard output or standard
-     error respectively correspond to something other than a tty.
+     Функция log_ttyin получает необработанный пользовательский ввод от терминального
+     устройства (обратите внимание, что он будет включать в себя ввод, даже когда эхо
+     отключено, например, когда пароль читается). Функция log_ttyout получает выход от
+     псевдотерминала, который подходит для воспроизведения сеанса пользователя в более
+     позднее время. Функции log_stdin(), log_stdout() и log_stderr() вызываются только в
+     том случае, если стандартный ввод, стандартный вывод или стандартная ошибка
+     соответственно соответствуют чему-то другому, чем tty.
 
-     Any of the logging functions may be set to the NULL pointer if no logging
-     is to be performed.  If the open function returns 0, no I/O will be sent
-     to the plugin.
+     Любая из функций ведения журнала может быть установлена ​​в нулевой указатель, если
+     запись не производится. Если функция открытия возвращает 0, плагин не будет отправлять
+     ввод-вывод.
 
-     If a logging function returns an error (-1), the running command will be
-     terminated and all of the plugin's logging functions will be disabled.
-     Other I/O logging plugins will still receive any remaining input or out‐
-     put that has not yet been processed.
+     Если функция регистрации возвращает ошибку (-1), рабочая команда будет прервана и
+     все функции регистрации плагина будут отключены. Другие плагины ввода/вывода
+     по-прежнему будут получать любые оставшиеся входные или выходные данные, которые еще
+     не были обработаны.
 
-     If an input logging function rejects the data by returning 0, the command
-     will be terminated and the data will not be passed to the command, though
-     it will still be sent to any other I/O logging plugins.  If an output
-     logging function rejects the data by returning 0, the command will be
-     terminated and the data will not be written to the terminal, though it
-     will still be sent to any other I/O logging plugins.
+     Если функция регистрации входных данных отклоняет данные, возвращая 0, команда будет
+     прервана, и данные не будут переданы команде, хотя все равно будут отправлены любым
+     другим подключаемым модулям ввода-вывода. Если функция регистрации выходных данных
+     отклоняет данные, возвращая 0, команда будет прервана, и данные не будут записаны на
+     терминал, хотя все равно будут отправлены на другие плагины ввода-вывода.
 
-     The io_plugin struct has the following fields:
+     Структура io_plugin имеет следующие поля:
 
-     type  The type field should always be set to SUDO_IO_PLUGIN.
+     type  Поле типа всегда должно быть установлено в SUDO_IO_PLUGIN.
 
      version
-           The version field should be set to SUDO_API_VERSION.
+           Поле версии должно быть установлено в SUDO_API_VERSION.
 
-           This allows sudo to determine the API version the plugin was built
-           against.
+           Это позволяет sudo определить версию API, против которой был
+           построен плагин.
 
      open
            int (*open)(unsigned int version, sudo_conv_t conversation,
@@ -888,89 +840,81 @@ DESCRIPTION
                        char * const user_info[], int argc, char * const argv[],
                        char * const user_env[], char * const plugin_options[]);
 
-           The open() function is run before the log_ttyin(), log_ttyout(),
-           log_stdin(), log_stdout(), log_stderr(), or show_version() func‐
-           tions are called.  It is only called if the version is being
-           requested or if the policy plugin's check_policy() function has
-           returned successfully.  It returns 1 on success, 0 on failure, -1
-           if a general error occurred, or -2 if there was a usage error.  In
-           the latter case, sudo will print a usage message before it exits.
-           If an error occurs, the plugin may optionally call the
-           conversation() or plugin_printf() function with SUDO_CONF_ERROR_MSG
-           to present additional error information to the user.
+           Функция open() запускается до вызова функций log_ttyin(), log_ttyout(),
+           log_stdin(), log_stdout(), log_stderr(), или show_version(). Она вызывается
+           только в том случае, если запрашивается версия или если функция check_policy()
+           плагина политики вернулась успешно. Возвращает 1 в случае успеха, 0 в случае
+           ошибки, -1 в случае общей ошибки или -2 в случае ошибки использования. В
+           последнем случае sudo напечатает сообщение об использовании до его выхода. В
+           случае возникновения ошибки плагин может дополнительно вызвать функцию
+           conversation() или plugin_printf() с помощью SUDO_CONF_ERROR_MSG, чтобы
+           предоставить пользователю дополнительную информацию об ошибке.
 
-           The function arguments are as follows:
+           Аргументы функции следующие:
 
            version
-                 The version passed in by sudo allows the plugin to determine
-                 the major and minor version number of the plugin API sup‐
-                 ported by sudo.
+                 Версия, передаваемая sudo, позволяет плагину определять основной и
+                 вспомогательный номер версии API плагина, поддерживаемого sudo.
 
            conversation
-                 A pointer to the conversation() function that may be used by
-                 the show_version() function to display version information
-                 (see show_version() below).  The conversation() function may
-                 also be used to display additional error message to the user.
-                 The conversation() function returns 0 on success and -1 on
-                 failure.
+                 Указатель на функцию conversation(), которая может использоваться функцией
+                 show_version() для отображения информации о версии (смотри show_version()
+                 ниже).  Функция conversation() также может использоваться для отображения
+                 дополнительного сообщения об ошибке пользователю. Функция conversation()
+                 возвращает 0 в случае успеха и -1 в случае неудачи.
 
            plugin_printf
-                 A pointer to a printf()-style function that may be used by
-                 the show_version() function to display version information
-                 (see show_version below).  The plugin_printf() function may
-                 also be used to display additional error message to the user.
-                 The plugin_printf() function returns number of characters
-                 printed on success and -1 on failure.
+                 Указатель на функцию printf()-style, которая может использоваться функцией
+                 show_version() для отображения информации о версии (см. Show_version ниже).
+                 Функция plugin_printf() может также использоваться для отображения
+                 дополнительного сообщения об ошибке пользователю. Функция plugin_printf()
+                 возвращает количество символов, напечатанных в случае успеха, и -1 при
+                 ошибке.
 
            settings
-                 A vector of user-supplied sudo settings in the form of
-                 “name=value” strings.  The vector is terminated by a NULL
-                 pointer.  These settings correspond to flags the user speci‐
-                 fied when running sudo.  As such, they will only be present
-                 when the corresponding flag has been specified on the command
-                 line.
+                 Вектор пользовательских настроек sudo в виде строк “name=value”. Вектор
+                 заканчивается нулевым указателем. Эти настройки соответствуют флагам,
+                 указанным пользователем при запуске sudo. Таким образом, они будут
+                 присутствовать только тогда, когда соответствующий флаг был указан в
+                 командной строке.
 
-                 When parsing settings, the plugin should split on the first
-                 equal sign (‘=’) since the name field will never include one
-                 itself but the value might.
+                 При разборе настроек плагин должен разделяться на первый знак
+                 равенства (‘=’), так как поле имени никогда не будет включать в себя
+                 один, но значение может.
 
-                 See the Policy plugin API section for a list of all possible
-                 settings.
+                 См. Раздел API плагина Policy для получения списка всех возможных
+                 настроек.
 
            user_info
-                 A vector of information about the user running the command in
-                 the form of “name=value” strings.  The vector is terminated
-                 by a NULL pointer.
+                 Вектор информации о пользователе, выполняющем команду в виде строк
+                 “name=value”. Вектор завершается указателем NULL.
 
-                 When parsing user_info, the plugin should split on the first
-                 equal sign (‘=’) since the name field will never include one
-                 itself but the value might.
+                 При синтаксическом анализе user_info плагин должен делиться на первый
+                 знак равенства (‘=’), так как поле имени никогда не будет включать в
+                 себя один, но значение может.
 
-                 See the Policy plugin API section for a list of all possible
-                 strings.
+                 См. Раздел API плагина Policy для получения списка всех
+                 возможных строк.
 
-           argc  The number of elements in argv, not counting the final NULL
-                 pointer.
+           argc  Количество элементов в argv, не считая конечного указателя NULL.
 
-           argv  If non-NULL, an argument vector describing a command the user
-                 wishes to run in the same form as what would be passed to the
-                 execve(2) system call.
+           argv  Если не-NULL, вектор аргумента, описывающий команду, которую
+           пользователь желает выполнить в той же форме, что и передаваемый системному
+           вызову execve(2).
 
            user_env
-                 The user's environment in the form of a NULL-terminated vec‐
-                 tor of “name=value” strings.
+                 Среда пользователя в форме NULL-концевого вектора строк
+                 “name=value”.
 
-                 When parsing user_env, the plugin should split on the first
-                 equal sign (‘=’) since the name field will never include one
-                 itself but the value might.
+                 При синтаксическом анализе user_env плагин должен разделяться на первый
+                 знак равенства (‘=’), так как поле имени никогда не будет включать в
+                 себя один, но значение может.
 
            plugin_options
-                 Any (non-comment) strings immediately after the plugin path
-                 are treated as arguments to the plugin.  These arguments are
-                 split on a white space boundary and are passed to the plugin
-                 in the form of a NULL-terminated array of strings.  If no
-                 arguments were specified, plugin_options will be the NULL
-                 pointer.
+                 Любые (без комментариев) строки сразу после пути к плагину рассматриваются
+                 как аргументы для плагина. Эти аргументы разбиваются на границе пустого
+                 пространства и передаются плагину в виде массива строк, оканчивающегося
+                 на NULL. Если аргументы не указаны, plugin_options будет указателем NULL.
 
                  NOTE: the plugin_options parameter is only available starting
                  with API version 1.2.  A plugin must check the API version
