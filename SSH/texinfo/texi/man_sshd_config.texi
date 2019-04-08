@@ -502,54 +502,51 @@ DESCRIPTION
              ~/.ssh/known_hosts во время RhostsRSAAuthentication или
              HostbasedAuthentication. По умолчанию используется “no”.
 
-     IPQoS   Specifies the IPv4 type-of-service or DSCP class for the connec‐
-             tion.  Accepted values are “af11”, “af12”, “af13”, “af21”,
-             “af22”, “af23”, “af31”, “af32”, “af33”, “af41”, “af42”, “af43”,
-             “cs0”, “cs1”, “cs2”, “cs3”, “cs4”, “cs5”, “cs6”, “cs7”, “ef”,
-             “lowdelay”, “throughput”, “reliability”, or a numeric value.
-             This option may take one or two arguments, separated by white‐
-             space.  If one argument is specified, it is used as the packet
-             class unconditionally.  If two values are specified, the first is
-             automatically selected for interactive sessions and the second
-             for non-interactive sessions.  The default is “lowdelay” for
-             interactive sessions and “throughput” for non-interactive ses‐
-             sions.
+     IPQoS
+             Определяет тип сервиса IPv4 или класс DSCP для соединения. Допустимые
+             значения: “af11”, “af12”, “af13”, “af21”, “af22”, “af23”, “af31”,
+             “af32”, “af33”, “af41”, “af42”, “af43”, “cs0”, “cs1”, “cs2”, “cs3”,
+             “cs4”, “cs5”, “cs6”, “cs7”, “ef”, “lowdelay”, “throughput”,
+             “reliability” или числовое значение. Эта опция может принимать один
+             или два аргумента, разделенных пробелом. Если указан один аргумент,
+             он безоговорочно используется в качестве класса пакета. Если указаны
+             два значения, первое автоматически выбирается для интерактивных сеансов,
+             а второе - для неинтерактивных сеансов. По умолчанию “lowdelay” для
+             интерактивных сессий и “throughput” для неинтерактивных сессий.
 
      KbdInteractiveAuthentication
-             Specifies whether to allow keyboard-interactive authentication.
-             The argument to this keyword must be “yes” or “no”.  The default
-             is to use whatever value ChallengeResponseAuthentication is set
-             to (by default “yes”).
+             Указывает, разрешить ли интерактивную аутентификацию с клавиатуры. Аргумент
+             к этому ключевому слову должен быть “yes” или “no”. По умолчанию используется
+             любое значение, установленное для ChallengeResponseAuthentication (по
+             умолчанию “yes”)..
 
      KerberosAuthentication
-             Specifies whether the password provided by the user for
-             PasswordAuthentication will be validated through the Kerberos
-             KDC.  To use this option, the server needs a Kerberos servtab
-             which allows the verification of the KDC's identity.  The default
-             is “no”.
+             Указывает, будет ли пароль, предоставленный пользователем для
+             PasswordAuthentication, проверяться через Kerberos KDC. Чтобы
+             использовать эту опцию, серверу нужен сервабер Kerberos, который
+             позволяет проверять идентичность KDC's. По умолчанию используется “no”.
 
      KerberosGetAFSToken
-             If AFS is active and the user has a Kerberos 5 TGT, attempt to
-             acquire an AFS token before accessing the user's home directory.
-             The default is “no”.
+             Если AFS активен и у пользователя Kerberos 5 TGT, попытайтесь получить
+             токен AFS перед доступом к домашнему каталогу пользователя. По умолчанию
+             используется “no”.
 
      KerberosOrLocalPasswd
-             If password authentication through Kerberos fails then the pass‐
-             word will be validated via any additional local mechanism such as
-             /etc/passwd.  The default is “yes”.
+             Если аутентификация по паролю через Kerberos не удалась, пароль будет
+             проверен с помощью любого дополнительного локального механизма, такого
+             как /etc/passwd. По умолчанию используется “yes”.
 
      KerberosTicketCleanup
-             Specifies whether to automatically destroy the user's ticket
-             cache file on logout.  The default is “yes”.
+             Указывает, нужно ли автоматически уничтожать файл кэша билетов
+             пользователя при выходе из системы. По умолчанию используется “yes”.
 
      KexAlgorithms
-             Specifies the available KEX (Key Exchange) algorithms.  Multiple
-             algorithms must be comma-separated.  Alternately if the specified
-             value begins with a ‘+’ character, then the specified methods
-             will be appended to the default set instead of replacing them.
-             The supported algorithms are:
+             Определяет доступные алгоритмы KEX (Key Exchange(Обмен ключами)). Несколько
+             алгоритмов должны быть разделены запятыми. С другой стороны, если
+             указанное значение начинается с символа ‘+’, то указанные методы будут
+             добавлены к набору по умолчанию вместо их замены. Поддерживаемые алгоритмы:
 
-                   curve25519-sha256@libssh.org
+                   curve25519-sha256@@libssh.org
                    diffie-hellman-group1-sha1
                    diffie-hellman-group14-sha1
                    diffie-hellman-group-exchange-sha1
@@ -558,58 +555,57 @@ DESCRIPTION
                    ecdh-sha2-nistp384
                    ecdh-sha2-nistp521
 
-             The default is:
+             По умолчанию:
 
-                   curve25519-sha256@libssh.org,
+                   curve25519-sha256@@libssh.org,
                    ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,
                    diffie-hellman-group-exchange-sha256,
                    diffie-hellman-group14-sha1
 
-             The list of available key exchange algorithms may also be
-             obtained using the -Q option of ssh(1) with an argument of “kex”.
+             Список доступных алгоритмов обмена ключами также можно получить, используя
+             опцию -Q ssh(1) с аргументом “kex”.
 
      KeyRegenerationInterval
-             In protocol version 1, the ephemeral server key is automatically
-             regenerated after this many seconds (if it has been used).  The
-             purpose of regeneration is to prevent decrypting captured ses‐
-             sions by later breaking into the machine and stealing the keys.
-             The key is never stored anywhere.  If the value is 0, the key is
-             never regenerated.  The default is 3600 (seconds).
+             В протоколе версии 1 эфемерный серверный ключ автоматически восстанавливается
+             через столько секунд (если он использовался). Целью регенерации является
+             предотвращение дешифрования захваченных сессий путем последующего взлома
+             машины и кражи ключей. Ключ никогда нигде не хранится. Если значение
+             равно 0, ключ никогда не восстанавливается. По умолчанию 3600 (секунд).
 
      ListenAddress
-             Specifies the local addresses sshd(8) should listen on.  The fol‐
-             lowing forms may be used:
+             Определяет локальные адреса, которые должен прослушивать sshd(8). Можно
+             использовать следующие формы:
 
                    ListenAddress host|IPv4_addr|IPv6_addr
                    ListenAddress host|IPv4_addr:port
                    ListenAddress [host|IPv6_addr]:port
 
-             If port is not specified, sshd will listen on the address and all
-             Port options specified.  The default is to listen on all local
-             addresses.  Multiple ListenAddress options are permitted.
+             Если порт не указан, sshd будет прослушивать адрес и все указанные
+             параметры порта. По умолчанию прослушиваются все локальные адреса.
+             Допускается несколько опций ListenAddress.
 
      LoginGraceTime
-             The server disconnects after this time if the user has not suc‐
-             cessfully logged in.  If the value is 0, there is no time limit.
-             The default is 120 seconds.
+             Сервер отключается после этого времени, если пользователь не вошел в
+             систему. Если значение равно 0, ограничения по времени нет. Значение по
+             умолчанию составляет 120 секунд.
 
      LogLevel
-             Gives the verbosity level that is used when logging messages from
-             sshd(8).  The possible values are: QUIET, FATAL, ERROR, INFO,
-             VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3.  The default is INFO.
-             DEBUG and DEBUG1 are equivalent.  DEBUG2 and DEBUG3 each specify
-             higher levels of debugging output.  Logging with a DEBUG level
-             violates the privacy of users and is not recommended.
+             Дает уровень многословия, который используется при регистрации сообщений
+             от sshd(8). Возможные значения: QUIET, FATAL, ERROR, INFO, VERBOSE,
+             DEBUG, DEBUG1, DEBUG2, и DEBUG3. По умолчанию используется INFO. DEBUG
+             и DEBUG1 эквивалентны. Последующие DEBUG2 и DEBUG3 указывает более высокий
+             уровень вывода отладочной информации. Регистрация с уровнем DEBUG нарушает
+             конфиденциальность пользователей и не рекомендуется.
 
-     MACs    Specifies the available MAC (message authentication code) algo‐
-             rithms.  The MAC algorithm is used for data integrity protection.
-             Multiple algorithms must be comma-separated.  If the specified
-             value begins with a ‘+’ character, then the specified algorithms
-             will be appended to the default set instead of replacing them.
+     MACs
+             Определяет доступные алгоритмы MAC (код аутентификации сообщения). Алгоритм
+             MAC используется для защиты целостности данных. Несколько алгоритмов должны
+             быть разделены запятыми. Если указанное значение начинается с символа ‘+’,
+             то указанные алгоритмы будут добавлены в набор по умолчанию вместо их замены.
 
-             The algorithms that contain “-etm” calculate the MAC after
-             encryption (encrypt-then-mac).  These are considered safer and
-             their use recommended.  The supported MACs are:
+             Алгоритмы, содержащие “-etm”, вычисляют MAC после шифрования
+             (encrypt-then-mac). Они считаются более безопасными, и их использование
+             рекомендуется. Поддерживаемые MACs:
 
                    hmac-md5
                    hmac-md5-96
@@ -618,53 +614,54 @@ DESCRIPTION
                    hmac-sha1-96
                    hmac-sha2-256
                    hmac-sha2-512
-                   umac-64@openssh.com
-                   umac-128@openssh.com
-                   hmac-md5-etm@openssh.com
-                   hmac-md5-96-etm@openssh.com
-                   hmac-ripemd160-etm@openssh.com
-                   hmac-sha1-etm@openssh.com
-                   hmac-sha1-96-etm@openssh.com
-                   hmac-sha2-256-etm@openssh.com
-                   hmac-sha2-512-etm@openssh.com
-                   umac-64-etm@openssh.com
-                   umac-128-etm@openssh.com
+                   umac-64@@openssh.com
+                   umac-128@@openssh.com
+                   hmac-md5-etm@@openssh.com
+                   hmac-md5-96-etm@@openssh.com
+                   hmac-ripemd160-etm@@openssh.com
+                   hmac-sha1-etm@@openssh.com
+                   hmac-sha1-96-etm@@openssh.com
+                   hmac-sha2-256-etm@@openssh.com
+                   hmac-sha2-512-etm@@openssh.com
+                   umac-64-etm@@openssh.com
+                   umac-128-etm@@openssh.com
 
-             The default is:
+             По умолчанию:
 
-                   umac-64-etm@openssh.com,umac-128-etm@openssh.com,
-                   hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,
-                   hmac-sha1-etm@openssh.com,
-                   umac-64@openssh.com,umac-128@openssh.com,
+                   umac-64-etm@@openssh.com,umac-128-etm@@openssh.com,
+                   hmac-sha2-256-etm@@openssh.com,hmac-sha2-512-etm@@openssh.com,
+                   hmac-sha1-etm@@openssh.com,
+                   umac-64@openssh.com,umac-128@@openssh.com,
                    hmac-sha2-256,hmac-sha2-512,hmac-sha1
 
-             The list of available MAC algorithms may also be obtained using
-             the -Q option of ssh(1) with an argument of “mac”.
+             Список доступных алгоритмов MAC можно также получить с помощью
+             опции -Q ssh(1) с аргументом “mac”.
 
-     Match   Introduces a conditional block.  If all of the criteria on the
-             Match line are satisfied, the keywords on the following lines
-             override those set in the global section of the config file,
-             until either another Match line or the end of the file.  If a
-             keyword appears in multiple Match blocks that are satisfied, only
-             the first instance of the keyword is applied.
+     Match
+             Вводит условный блок. Если все критерии в строке Match удовлетворены,
+             ключевые слова в следующих строках переопределяют те, которые установлены
+             в глобальном разделе файла конфигурации, до следующей строки Match или
+             конца файла. Если ключевое слово появляется в нескольких удовлетворенных
+             блоках соответствия, применяется только первый экземпляр ключевого слова.
 
-             The arguments to Match are one or more criteria-pattern pairs or
-             the single token All which matches all criteria.  The available
-             criteria are User, Group, Host, LocalAddress, LocalPort, and
-             Address.  The match patterns may consist of single entries or
-             comma-separated lists and may use the wildcard and negation oper‐
-             ators described in the PATTERNS section of ssh_config(5).
+             Аргументами Match являются одна или несколько пар критериев-шаблонов
+             или один токен All, который соответствует всем критериям. Доступные
+             критерии: User, Group, Host, LocalAddress, LocalPort, и Address.
+             Шаблоны соответствия могут состоять из отдельных записей или
+             разделенных запятыми списков и могут использовать подстановочные
+             знаки и операторы отрицания, описанные в разделе
+             PATTERNS ssh_config(5).
 
-             The patterns in an Address criteria may additionally contain
-             addresses to match in CIDR address/masklen format, e.g.
-             “192.0.2.0/24” or “3ffe:ffff::/32”.  Note that the mask length
-             provided must be consistent with the address - it is an error to
-             specify a mask length that is too long for the address or one
-             with bits set in this host portion of the address.  For example,
-             “192.0.2.0/33” and “192.0.2.0/8” respectively.
+             Шаблоны в критериях Address могут дополнительно содержать адреса для
+             сопоставления в формате CIDR address/masklen (адрес/маска подсети),
+             например, “192.0.2.0/24” или “3ffe:ffff::/32”. Обратите внимание,
+             что предоставленная длина маски должна соответствовать адресу -
+             ошибочно указывать длину маски, которая слишком велика для адреса или
+             с битами, установленными в этой части хоста адреса. Например,
+             “192.0.2.0/33” и “192.0.2.0/8” соответственно.
 
-             Only a subset of keywords may be used on the lines following a
-             Match keyword.  Available keywords are AcceptEnv,
+             В строках, следующих за ключевым словом Match, можно использовать
+             только подмножество ключевых слов.  Доступные ключевые слова AcceptEnv,
              AllowAgentForwarding, AllowGroups, AllowStreamLocalForwarding,
              AllowTcpForwarding, AllowUsers, AuthenticationMethods,
              AuthorizedKeysCommand, AuthorizedKeysCommandUser,
@@ -680,367 +677,366 @@ DESCRIPTION
              PubkeyAuthentication, RekeyLimit, RevokedKeys,
              RhostsRSAAuthentication, RSAAuthentication, StreamLocalBindMask,
              StreamLocalBindUnlink, TrustedUserCAKeys, X11DisplayOffset,
-             X11Forwarding and X11UseLocalHost.
+             X11Forwarding и X11UseLocalHost.
 
      MaxAuthTries
-             Specifies the maximum number of authentication attempts permitted
-             per connection.  Once the number of failures reaches half this
-             value, additional failures are logged.  The default is 6.
+             Задает максимальное количество попыток аутентификации, разрешенных для
+             одного соединения. Когда число отказов достигает половины этого значения,
+             регистрируются дополнительные сбои. По умолчанию 6.
 
      MaxSessions
-             Specifies the maximum number of open shell, login or subsystem
-             (e.g. sftp) sessions permitted per network connection.  Multiple
-             sessions may be established by clients that support connection
-             multiplexing.  Setting MaxSessions to 1 will effectively disable
-             session multiplexing, whereas setting it to 0 will prevent all
-             shell, login and subsystem sessions while still permitting for‐
-             warding.  The default is 10.
+             Задает максимальное количество сеансов открытой оболочки, входа в систему
+             или подсистемы (например, sftp), разрешенных для одного сетевого
+             подключения. Несколько сеансов могут быть установлены клиентами, которые
+             поддерживают мультиплексирование соединений. Установка MaxSessions в 1
+             эффективно отключит мультиплексирование сеансов, в то время как установка
+             в 0 предотвратит все сеансы оболочки, входа в систему и подсистемы, в то
+             же время разрешая пересылку. По умолчанию 10.
 
      MaxStartups
-             Specifies the maximum number of concurrent unauthenticated con‐
-             nections to the SSH daemon.  Additional connections will be
-             dropped until authentication succeeds or the LoginGraceTime
-             expires for a connection.  The default is 10:30:100.
+             Задает максимальное количество одновременных неаутентифицированных
+             подключений к демону SSH. Дополнительные соединения будут сброшены до
+             тех пор, пока аутентификация не пройдет успешно или не истечет срок
+             действия LoginGraceTime для соединения. По умолчанию
+             используется 10:30:100.
 
-             Alternatively, random early drop can be enabled by specifying the
-             three colon separated values “start:rate:full” (e.g. "10:30:60").
-             sshd(8) will refuse connection attempts with a probability of
-             “rate/100” (30%) if there are currently “start” (10) unauthenti‐
-             cated connections.  The probability increases linearly and all
-             connection attempts are refused if the number of unauthenticated
-             connections reaches “full” (60).
+             Альтернативно, случайное раннее отбрасывание может быть включено путем
+             указания трех разделенных двоеточиями значений “start:rate:full”
+             (например, "10:30:60"). sshd(8) будет отказывать в попытках
+             подключения с вероятностью “rate/100” (30%), если в настоящее время
+             существуют “start” (10) неавторизованные подключения. Вероятность
+             возрастает линейно, и все попытки подключения отклоняются, если число
+             подключений без проверки подлинности достигает значения “full” (60).
 
      PasswordAuthentication
-             Specifies whether password authentication is allowed.  The
-             default is “yes”.
+             Указывает, разрешена ли аутентификация по паролю. По умолчанию
+             используется “yes”.
 
      PermitEmptyPasswords
-             When password authentication is allowed, it specifies whether the
-             server allows login to accounts with empty password strings.  The
-             default is “no”.
+             Когда аутентификация по паролю разрешена, она указывает, разрешает ли
+             сервер входить в учетные записи с пустыми строками пароля. По умолчанию
+             используется “no”.
 
      PermitOpen
-             Specifies the destinations to which TCP port forwarding is per‐
-             mitted.  The forwarding specification must be one of the follow‐
-             ing forms:
+             Определяет пункты назначения, для которых разрешена переадресация
+             порта TCP. Спецификация пересылки должна быть одной из следующих форм:
 
                    PermitOpen host:port
                    PermitOpen IPv4_addr:port
                    PermitOpen [IPv6_addr]:port
 
-             Multiple forwards may be specified by separating them with white‐
-             space.  An argument of “any” can be used to remove all restric‐
-             tions and permit any forwarding requests.  An argument of “none”
-             can be used to prohibit all forwarding requests.  By default all
-             port forwarding requests are permitted.
+             Можно указать несколько форвардов, разделив их пробелами. Аргумент “any”
+             может использоваться для снятия всех ограничений и разрешения любых запросов
+             на пересылку. Аргумент “none” может использоваться для запрета всех запросов
+             на пересылку. По умолчанию все запросы на переадресацию портов разрешены.
 
      PermitRootLogin
-             Specifies whether root can log in using ssh(1).  The argument
-             must be “yes”, “prohibit-password”, “without-password”,
-             “forced-commands-only”, or “no”.  The default is
-             “prohibit-password”.
+             Указывает, может ли root войти в систему с помощью ssh(1). Аргумент должен
+             быть “yes”, “prohibit-password”, “without-password”, “forced-commands-only”,
+             или “no”. По умолчанию используется “prohibit-password”.
 
-             If this option is set to “prohibit-password” or
-             “without-password”, password and keyboard-interactive authentica‐
-             tion are disabled for root.
+             Если для этого параметра установлено значение “prohibit-password” или
+             “without-password”, пароль и клавиатурно-интерактивная аутентификация
+             отключены для пользователя root.
 
-             If this option is set to “forced-commands-only”, root login with
-             public key authentication will be allowed, but only if the
-             command option has been specified (which may be useful for taking
-             remote backups even if root login is normally not allowed).  All
-             other authentication methods are disabled for root.
+             Если для этого параметра установлено значение “forced-commands-only”, будет
+             разрешен вход в систему root с аутентификацией с открытым ключом, но только
+             если была указана опция команды (что может быть полезно для создания
+             удаленных резервных копий, даже если вход в систему root обычно не разрешен).
+             Все остальные методы аутентификации отключены для root.
 
-             If this option is set to “no”, root is not allowed to log in.
+             Если для этого параметра установлено значение “no”, root не
+             может войти в систему.
 
      PermitTunnel
-             Specifies whether tun(4) device forwarding is allowed.  The argu‐
-             ment must be “yes”, “point-to-point” (layer 3), “ethernet” (layer
-             2), or “no”.  Specifying “yes” permits both “point-to-point” and
-             “ethernet”.  The default is “no”.
+             Указывает, разрешена ли пересылка устройства tun(4). Аргумент должен быть
+             “yes”, “point-to-point” (layer 3), “ethernet” (уровень 2), или “no”.
+             Указание “yes” разрешает оба “point-to-point” и “ethernet”. По умолчанию
+             используется “no”.
 
-             Independent of this setting, the permissions of the selected
-             tun(4) device must allow access to the user.
+             Независимо от этого параметра разрешения выбранного устройства tun(4)
+             должны разрешать доступ пользователю.
 
      PermitTTY
-             Specifies whether pty(4) allocation is permitted.  The default is
-             “yes”.
+             Указывает, разрешено ли выделение pty(4). По умолчанию
+             используется “yes”.
 
      PermitUserEnvironment
-             Specifies whether ~/.ssh/environment and environment= options in
-             ~/.ssh/authorized_keys are processed by sshd(8).  The default is
-             “no”.  Enabling environment processing may enable users to bypass
-             access restrictions in some configurations using mechanisms such
-             as LD_PRELOAD.
+             Определяет, обрабатываются ли опции ~/.ssh/environment и environment= в
+             ~/.ssh/authorized_keys с помощью sshd(8). По умолчанию используется “no”.
+             Включение обработки среды может позволить пользователям обойти ограничения
+             доступа в некоторых конфигурациях, используя такие механизмы,
+             как LD_PRELOAD.
 
      PermitUserRC
-             Specifies whether any ~/.ssh/rc file is executed.  The default is
-             “yes”.
+             Указывает, выполняется ли какой-либо файл ~/.ssh/rc. По умолчанию
+             используется “yes”.
 
      PidFile
-             Specifies the file that contains the process ID of the SSH dae‐
-             mon, or “none” to not write one.  The default is
-             /var/run/sshd.pid.
+             Указывает файл, содержащий процесс ID демона SSH, или “none”, чтобы
+             не записывать его. По умолчанию используется /var/run/sshd.pid.
 
-     Port    Specifies the port number that sshd(8) listens on.  The default
+     Port
+             Specifies the port number that sshd(8) listens on.  The default
              is 22.  Multiple options of this type are permitted.  See also
              ListenAddress.
 
      PrintLastLog
-             Specifies whether sshd(8) should print the date and time of the
-             last user login when a user logs in interactively.  The default
-             is “yes”.
+             Указывает, должен ли sshd(8) печатать дату и время последнего входа
+             пользователя, когда пользователь входит в систему в интерактивном режиме.
+             По умолчанию используется “yes”.
 
      PrintMotd
-             Specifies whether sshd(8) should print /etc/motd when a user logs
-             in interactively.  (On some systems it is also printed by the
-             shell, /etc/profile, or equivalent.)  The default is “yes”.
+             Указывает, должен ли sshd(8) печатать /etc/motd, когда пользователь входит
+             в систему в интерактивном режиме. (В некоторых системах он также печатается
+             с помощью оболочки, /etc/profile или эквивалентной.) По умолчанию
+             используется “yes”.
 
      Protocol
-             Specifies the protocol versions sshd(8) supports.  The possible
-             values are ‘1’ and ‘2’.  Multiple versions must be comma-sepa‐
-             rated.  The default is ‘2’.  Protocol 1 suffers from a number of
-             cryptographic weaknesses and should not be used.  It is only
-             offered to support legacy devices.
+             Определяет версии протокола, поддерживаемые sshd(8). Возможные
+             значения: ‘1’ и ‘2’. Несколько версий должны быть разделены запятыми.
+             По умолчанию используется ‘2’. Протокол 1 страдает от ряда
+             криптографических недостатков и не должен использоваться. Предлагается
+             только для поддержки устаревших устройств.
 
-             Note that the order of the protocol list does not indicate pref‐
-             erence, because the client selects among multiple protocol ver‐
-             sions offered by the server.  Specifying “2,1” is identical to
-             “1,2”.
+             Обратите внимание, что порядок списка протоколов не указывает на
+             предпочтение, потому что клиент выбирает из нескольких вариантов
+             протоколов, предлагаемых сервером. Указание “2,1” идентично “1,2”.
 
      PubkeyAcceptedKeyTypes
-             Specifies the key types that will be accepted for public key
-             authentication as a comma-separated pattern list.  Alternately if
-             the specified value begins with a ‘+’ character, then the speci‐
-             fied key types will be appended to the default set instead of
-             replacing them.  The default for this option is:
+             Задает типы ключей, которые будут приняты для аутентификации с открытым
+             ключом в виде списка шаблонов, разделенных запятыми. С другой стороны,
+             если указанное значение начинается с символа ‘+’, то указанные типы
+             ключей будут добавляться к набору по умолчанию вместо их замены. По
+             умолчанию для этой опции:
 
-                ecdsa-sha2-nistp256-cert-v01@openssh.com,
-                ecdsa-sha2-nistp384-cert-v01@openssh.com,
-                ecdsa-sha2-nistp521-cert-v01@openssh.com,
-                ssh-ed25519-cert-v01@openssh.com,
-                ssh-rsa-cert-v01@openssh.com,
+                ecdsa-sha2-nistp256-cert-v01@@openssh.com,
+                ecdsa-sha2-nistp384-cert-v01@@openssh.com,
+                ecdsa-sha2-nistp521-cert-v01@@openssh.com,
+                ssh-ed25519-cert-v01@@openssh.com,
+                ssh-rsa-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
                 ssh-ed25519,ssh-rsa
 
-             The -Q option of ssh(1) may be used to list supported key types.
+             Опция -Q в ssh(1) может использоваться для отображения
+             поддерживаемых типов ключей.
 
      PubkeyAuthentication
-             Specifies whether public key authentication is allowed.  The
-             default is “yes”.
+             Указывает, разрешена ли аутентификация с открытым ключом. По умолчанию
+             используется “yes”.
 
      RekeyLimit
-             Specifies the maximum amount of data that may be transmitted
-             before the session key is renegotiated, optionally followed a
-             maximum amount of time that may pass before the session key is
-             renegotiated.  The first argument is specified in bytes and may
-             have a suffix of ‘K’, ‘M’, or ‘G’ to indicate Kilobytes,
-             Megabytes, or Gigabytes, respectively.  The default is between
-             ‘1G’ and ‘4G’, depending on the cipher.  The optional second
-             value is specified in seconds and may use any of the units docu‐
-             mented in the TIME FORMATS section.  The default value for
-             RekeyLimit is “default none”, which means that rekeying is per‐
-             formed after the cipher's default amount of data has been sent or
-             received and no time based rekeying is done.
+             Задает максимальный объем данных, которые могут быть переданы до
+             повторного согласования ключа сеанса, при желании может следовать
+             максимальное количество времени, которое может пройти до повторного
+             согласования ключа сеанса. Первый аргумент указывается в байтах и ​​может
+             иметь суффикс ‘K’, ‘M’, или ‘G’ для обозначения Kilobytes, Megabytes,
+             или Gigabytes соответственно. Значение по умолчанию находится между
+             ‘1G’ и ‘4G’, в зависимости от шифра. Необязательное второе значение
+             указывается в секундах и может использовать любые единицы измерения,
+             описанные в разделе TIME FORMATS. Значением по умолчанию для RekeyLimit
+             является “default none”, что означает, что повторный ввод выполняется
+             после того, как объем данных шифра был отправлен или получен, и
+             повторный ввод по времени не выполняется.
 
      RevokedKeys
-             Specifies revoked public keys file, or “none” to not use one.
-             Keys listed in this file will be refused for public key authenti‐
-             cation.  Note that if this file is not readable, then public key
-             authentication will be refused for all users.  Keys may be speci‐
-             fied as a text file, listing one public key per line, or as an
-             OpenSSH Key Revocation List (KRL) as generated by ssh-keygen(1).
-             For more information on KRLs, see the KEY REVOCATION LISTS sec‐
-             tion in ssh-keygen(1).
+             Указывает отозванный файл открытых ключей или “none”, чтобы не
+             использовать его. Ключи, перечисленные в этом файле, будут отклонены
+             для аутентификации с открытым ключом. Обратите внимание, что если этот
+             файл недоступен для чтения, аутентификация с открытым ключом будет
+             отклонена для всех пользователей. Ключи могут быть указаны в виде
+             текстового файла с указанием одного открытого ключа в строке или в
+             виде OpenSSH Key Revocation List(KRL), сгенерированного ssh-keygen(1).
+             Для получения дополнительной информации об KRLs см. Раздел
+             KEY REVOCATION LISTS в ssh-keygen(1).
 
      RhostsRSAAuthentication
-             Specifies whether rhosts or /etc/hosts.equiv authentication
-             together with successful RSA host authentication is allowed.  The
-             default is “no”.  This option applies to protocol version 1 only.
+             Указывает, разрешена ли аутентификация rhosts или /etc/hosts.equiv
+             вместе с успешной аутентификацией хоста RSA. По умолчанию используется
+             “no”. Эта опция применяется только к версии протокола 1.
 
      RSAAuthentication
-             Specifies whether pure RSA authentication is allowed.  The
-             default is “yes”.  This option applies to protocol version 1
-             only.
+             Указывает, разрешена ли чистая аутентификация RSA. По умолчанию
+             используется “yes”. Эта опция применяется только к версии протокола 1.
 
      ServerKeyBits
-             Defines the number of bits in the ephemeral protocol version 1
-             server key.  The default and minimum value is 1024.
+             Определяет количество бит в ключе сервера эфемерного протокола версии 1.
+             Минимальное значение по умолчанию - 1024.
 
      StreamLocalBindMask
-             Sets the octal file creation mode mask (umask) used when creating
-             a Unix-domain socket file for local or remote port forwarding.
-             This option is only used for port forwarding to a Unix-domain
-             socket file.
+             Устанавливает восьмеричную маску режима создания файла (umask),
+             используемую при создании файла сокета Unix-домена для локальной или
+             удаленной переадресации портов. Эта опция используется только для
+             переадресации портов в файл сокета Unix-домена.
 
-             The default value is 0177, which creates a Unix-domain socket
-             file that is readable and writable only by the owner.  Note that
-             not all operating systems honor the file mode on Unix-domain
-             socket files.
+             Значением по умолчанию является 0177, которое создает файл сокета
+             Unix-домена, который доступен для чтения и записи только владельцу.
+             Обратите внимание, что не все операционные системы поддерживают режим
+             файлов в файлах сокетов Unix-домена.
 
      StreamLocalBindUnlink
-             Specifies whether to remove an existing Unix-domain socket file
-             for local or remote port forwarding before creating a new one.
-             If the socket file already exists and StreamLocalBindUnlink is
-             not enabled, sshd will be unable to forward the port to the Unix-
-             domain socket file.  This option is only used for port forwarding
-             to a Unix-domain socket file.
+             Указывает, следует ли удалить существующий файл сокета Unix-домена для
+             локальной или удаленной переадресации портов перед созданием нового. Если
+             файл сокета уже существует и StreamLocalBindUnlink не включен, sshd не
+             сможет перенаправить порт в файл сокета Unix-домена. Эта опция используется
+             только для переадресации портов в файл сокета Unix-домена.
 
-             The argument must be “yes” or “no”.  The default is “no”.
+             Аргумент должен быть “yes” или “no”. По умолчанию используется “no”.
 
      StrictModes
-             Specifies whether sshd(8) should check file modes and ownership
-             of the user's files and home directory before accepting login.
-             This is normally desirable because novices sometimes accidentally
-             leave their directory or files world-writable.  The default is
-             “yes”.  Note that this does not apply to ChrootDirectory, whose
-             permissions and ownership are checked unconditionally.
+             Определяет, должен ли sshd(8) проверять режимы файлов и владение файлами
+             пользователя и домашним каталогом, прежде чем принимать вход в систему.
+             Обычно это желательно, потому что новички иногда случайно покидают свои
+             каталоги или файлы, доступные для записи. По умолчанию используется “yes”.
+             Обратите внимание, что это не относится к ChrootDirectory, права и владение
+             которого проверяются безоговорочно.
 
      Subsystem
-             Configures an external subsystem (e.g. file transfer daemon).
-             Arguments should be a subsystem name and a command (with optional
-             arguments) to execute upon subsystem request.
+             Настраивает внешнюю подсистему (например, демон передачи файлов). Аргументы
+             должны быть именем подсистемы и командой (с необязательными аргументами)
+             для выполнения по запросу подсистемы.
 
-             The command sftp-server(8) implements the “sftp” file transfer
-             subsystem.
+             Команда sftp-server(8) реализует подсистему передачи файлов “sftp”.
 
-             Alternately the name “internal-sftp” implements an in-process
-             “sftp” server.  This may simplify configurations using
-             ChrootDirectory to force a different filesystem root on clients.
+             Альтернативно имя “internal-sftp” реализует внутрипроцессный сервер
+             “sftp”. Это может упростить конфигурации, использующие ChrootDirectory
+             для принудительного создания корня другой файловой системы на клиентах.
 
-             By default no subsystems are defined.
+             По умолчанию подсистемы не определены.
 
      SyslogFacility
-             Gives the facility code that is used when logging messages from
-             sshd(8).  The possible values are: DAEMON, USER, AUTH, LOCAL0,
-             LOCAL1, LOCAL2, LOCAL3, LOCAL4, LOCAL5, LOCAL6, LOCAL7.  The
-             default is AUTH.
+             Предоставляет код объекта, который используется при регистрации сообщений
+             от sshd(8). Возможные значения: DAEMON, USER, AUTH, LOCAL0, LOCAL1, LOCAL2,
+             LOCAL3, LOCAL4, LOCAL5, LOCAL6, LOCAL7. По умолчанию используется AUTH.
 
      TCPKeepAlive
-             Specifies whether the system should send TCP keepalive messages
-             to the other side.  If they are sent, death of the connection or
-             crash of one of the machines will be properly noticed.  However,
-             this means that connections will die if the route is down tempo‐
-             rarily, and some people find it annoying.  On the other hand, if
-             TCP keepalives are not sent, sessions may hang indefinitely on
-             the server, leaving “ghost” users and consuming server resources.
+             Указывает, должна ли система отправлять сообщения поддержки активности
+             TCP другой стороне. Если они отправлены, смерть соединения или сбой
+             одной из машин будут замечены должным образом. Однако это означает, что
+             соединения прекратят свое существование, если маршрут временно не работает,
+             и некоторые люди считают это раздражающим. С другой стороны, если сообщения
+             поддержки активности TCP не отправляются, сеансы могут зависать на сервере
+             неограниченное время, оставляя пользователей “ghost” и потребляя ресурсы
+             сервера.
 
-             The default is “yes” (to send TCP keepalive messages), and the
-             server will notice if the network goes down or the client host
-             crashes.  This avoids infinitely hanging sessions.
+             По умолчанию используется “yes” (для отправки сообщений keepalive TCP), и
+             сервер заметит, если сеть выйдет из строя или произойдет сбой хоста клиента.
+             Это позволяет избежать бесконечно зависающих сессий.
 
-             To disable TCP keepalive messages, the value should be set to
-             “no”.
+             Чтобы отключить сообщения поддержки активности TCP, необходимо
+             установить значение “no”.
 
-             This option was formerly called KeepAlive.
+             Этот вариант ранее назывался KeepAlive.
 
      TrustedUserCAKeys
-             Specifies a file containing public keys of certificate authori‐
-             ties that are trusted to sign user certificates for authentica‐
-             tion, or “none” to not use one.  Keys are listed one per line;
-             empty lines and comments starting with ‘#’ are allowed.  If a
-             certificate is presented for authentication and has its signing
-             CA key listed in this file, then it may be used for authentica‐
-             tion for any user listed in the certificate's principals list.
-             Note that certificates that lack a list of principals will not be
-             permitted for authentication using TrustedUserCAKeys.  For more
-             details on certificates, see the CERTIFICATES section in
+             Определяет файл, содержащий открытые ключи полномочий сертификатов, которым
+             доверяют подписывать пользовательские сертификаты для аутентификации, или
+             “none”, чтобы не использовать их. Ключи указаны по одному в строке;
+             допускаются пустые строки и комментарии, начинающиеся с ‘#’. Если сертификат
+             представлен для аутентификации и его подписывающий ключ CA указан в этом
+             файле, его можно использовать для аутентификации любого пользователя,
+             указанного в списке участников сертификата. Обратите внимание, что
+             сертификаты, в которых отсутствует список участников, не будут разрешены
+             для аутентификации с использованием TrustedUserCAKeys. Для получения
+             дополнительной информации о сертификатах см. Раздел CERTIFICATES в
              ssh-keygen(1).
 
-     UseDNS  Specifies whether sshd(8) should look up the remote host name,
-             and to check that the resolved host name for the remote IP
-             address maps back to the very same IP address.
+     UseDNS
+             Указывает, должен ли sshd(8) искать имя удаленного хоста и проверять,
+             соответствует ли разрешенное имя хоста для адреса удаленного IP тому
+             же адресу IP.
 
-             If this option is set to “no” (the default) then only addresses
-             and not host names may be used in ~/.ssh/known_hosts from and
-             sshd_config Match Host directives.
+             Если для этого параметра установлено значение “no” (по умолчанию),
+             то в директивах ~/.ssh/known_hosts from и sshd_config Match Host могут
+             использоваться только адреса, а не имена хостов.
 
      UseLogin
-             Specifies whether login(1) is used for interactive login ses‐
-             sions.  The default is “no”.  Note that login(1) is never used
-             for remote command execution.  Note also, that if this is
-             enabled, X11Forwarding will be disabled because login(1) does not
-             know how to handle xauth(1) cookies.  If UsePrivilegeSeparation
-             is specified, it will be disabled after authentication.
+             Указывает, используется ли login(1) для интерактивных сеансов входа
+             в систему. По умолчанию используется “no”. Обратите внимание, что
+             login(1) никогда не используется для удаленного выполнения команд.
+             Также обратите внимание, что если это включено, X11Forwarding будет
+             отключен, потому что login(1) не знает, как обращаться с файлами
+             cookie xauth(1). Если указан UsePrivilegeSeparation, он будет
+             отключен после аутентификации.
 
-     UsePAM  Enables the Pluggable Authentication Module interface.  If set to
-             “yes” this will enable PAM authentication using
-             ChallengeResponseAuthentication and PasswordAuthentication in
-             addition to PAM account and session module processing for all
-             authentication types.
+     UsePAM
+             Включает интерфейс Pluggable Authentication Module
+             (Сменный модуль аутентификации). Если установлено значение “yes”,
+             это включит аутентификацию PAM с использованием
+             ChallengeResponseAuthentication и PasswordAuthentication в
+             дополнение к обработке учетной записи PAM и модуля сеанса для
+             всех типов аутентификации.
 
-             Because PAM challenge-response authentication usually serves an
-             equivalent role to password authentication, you should disable
-             either PasswordAuthentication or ChallengeResponseAuthentication.
+             Поскольку проверка подлинности «запрос-ответ» PAM обычно играет роль,
+             эквивалентную проверке подлинности по паролю, следует отключить
+             PasswordAuthentication или ChallengeResponseAuthentication.
 
-             If UsePAM is enabled, you will not be able to run sshd(8) as a
-             non-root user.  The default is “no”.
+             Если UsePAM включен, вы не сможете запускать sshd(8) от имени
+             пользователя без полномочий root. По умолчанию используется “no”.
 
      UsePrivilegeSeparation
-             Specifies whether sshd(8) separates privileges by creating an
-             unprivileged child process to deal with incoming network traffic.
-             After successful authentication, another process will be created
-             that has the privilege of the authenticated user.  The goal of
-             privilege separation is to prevent privilege escalation by con‐
-             taining any corruption within the unprivileged processes.  The
-             argument must be “yes”, “no”, or “sandbox”.  If
-             UsePrivilegeSeparation is set to “sandbox” then the pre-authenti‐
-             cation unprivileged process is subject to additional restric‐
-             tions.  The default is “sandbox”.
+             Указывает, разделяет ли sshd(8) привилегии, создавая непривилегированный
+             дочерний процесс для обработки входящего сетевого трафика. После успешной
+             аутентификации будет создан другой процесс, имеющий привилегию
+             аутентифицированного пользователя. Цель разделения привилегий состоит в
+             том, чтобы предотвратить повышение привилегий путем сдерживания любого
+             повреждения в непривилегированных процессах. Аргумент должен быть “yes”,
+             “no”, или “sandbox”. Если для UsePrivilegeSeparation установлено значение
+             “sandbox”, то непривилегированный процесс предварительной аутентификации
+             будет подвергаться дополнительным ограничениям. По умолчанию используется
+             “sandbox”.
 
      VersionAddendum
-             Optionally specifies additional text to append to the SSH proto‐
-             col banner sent by the server upon connection.  The default is
-             “none”.
+             Опционально указывает дополнительный текст для добавления к баннеру
+             протокола SSH, отправляемому сервером при подключении. По умолчанию
+             используется “none”.
 
      X11DisplayOffset
-             Specifies the first display number available for sshd(8)'s X11
-             forwarding.  This prevents sshd from interfering with real X11
-             servers.  The default is 10.
+             Задает первый номер дисплея, доступный для пересылки X11 в sshd(8). Это
+             предотвращает взаимодействие sshd с реальными серверами X11.
+             По умолчанию 10.
 
      X11Forwarding
-             Specifies whether X11 forwarding is permitted.  The argument must
-             be “yes” or “no”.  The default is “no”.
+             Указывает, разрешена ли пересылка X11. Аргумент должен быть “yes” или
+             “no”. По умолчанию используется “no”.
 
-             When X11 forwarding is enabled, there may be additional exposure
-             to the server and to client displays if the sshd(8) proxy display
-             is configured to listen on the wildcard address (see
-             X11UseLocalhost below), though this is not the default.  Addi‐
-             tionally, the authentication spoofing and authentication data
-             verification and substitution occur on the client side.  The
-             security risk of using X11 forwarding is that the client's X11
-             display server may be exposed to attack when the SSH client
-             requests forwarding (see the warnings for ForwardX11 in
-             ssh_config(5)).  A system administrator may have a stance in
-             which they want to protect clients that may expose themselves to
-             attack by unwittingly requesting X11 forwarding, which can war‐
-             rant a “no” setting.
+             Когда включена переадресация X11, сервер и клиентские дисплеи могут
+             получить дополнительную информацию, если прокси-сервер sshd(8) настроен
+             на прослушивание по шаблону (см. Ниже X11UseLocalhost), хотя это не
+             значение по умолчанию. Кроме того, проверка подлинности подделка и
+             проверка и замена данных аутентификации происходят на стороне клиента.
+             Риск безопасности при использовании пересылки X11 состоит в том, что
+             сервер дисплея X11 клиента может подвергаться атаке, когда клиент SSH
+             запрашивает переадресацию (см. Предупреждения для ForwardX11 в
+             ssh_config(5)). Системный администратор может иметь позицию, в которой
+             он хочет защитить клиентов, которые могут подвергнуть себя атаке, невольно
+             запросив переадресацию X11, что может гарантировать настройку “no”.
 
-             Note that disabling X11 forwarding does not prevent users from
-             forwarding X11 traffic, as users can always install their own
-             forwarders.  X11 forwarding is automatically disabled if UseLogin
-             is enabled.
+             Обратите внимание, что отключение пересылки X11 не мешает пользователям
+             пересылать трафик X11, поскольку пользователи всегда могут установить свои
+             собственные серверы пересылки. Пересылка X11 автоматически отключается,
+             если включен UseLogin.
 
      X11UseLocalhost
-             Specifies whether sshd(8) should bind the X11 forwarding server
-             to the loopback address or to the wildcard address.  By default,
-             sshd binds the forwarding server to the loopback address and sets
-             the hostname part of the DISPLAY environment variable to
-             “localhost”.  This prevents remote hosts from connecting to the
-             proxy display.  However, some older X11 clients may not function
-             with this configuration.  X11UseLocalhost may be set to “no” to
-             specify that the forwarding server should be bound to the wild‐
-             card address.  The argument must be “yes” or “no”.  The default
-             is “yes”.
+             Указывает, должен ли sshd(8) связывать сервер пересылки X11 с адресом
+             обратной связи или с подстановочным адресом. По умолчанию sshd связывает
+             сервер пересылки с адресом обратной связи и устанавливает для части имени
+             хоста переменной среды DISPLAY значение “localhost”. Это предотвращает
+             подключение удаленных хостов к прокси-дисплею. Однако некоторые старые
+             клиенты X11 могут не работать с этой конфигурацией. X11UseLocalhost может
+             быть установлен в “no”, чтобы указать, что сервер пересылки должен быть
+             связан с адресом подстановочного знака. Аргумент должен быть “yes” или
+             “no”. По умолчанию используется “yes”.
 
      XAuthLocation
-             Specifies the full pathname of the xauth(1) program, or “none” to
-             not use one.  The default is /usr/bin/xauth.
+             Задает полный путь к программе xauth(1) или “none”, чтобы не использовать
+             ее. По умолчанию используется /usr/bin/xauth.
 
 TIME FORMATS
-     sshd(8) command-line arguments and configuration file options that spec‐
-     ify time may be expressed using a sequence of the form: time[qualifier],
-     where time is a positive integer value and qualifier is one of the fol‐
-     lowing:
+     sshd(8) аргументы командной строки и параметры файла конфигурации, которые
+     задают время, могут быть выражены с помощью последовательности вида:
+     time[qualifier] (время[спецификатор]), где time - положительное целочисленное
+     значение, а квалификатор - один из следующих:
 
            ⟨none⟩  seconds
            s | S   seconds
@@ -1049,10 +1045,10 @@ TIME FORMATS
            d | D   days
            w | W   weeks
 
-     Each member of the sequence is added together to calculate the total time
-     value.
+     Каждый член последовательности складывается вместе для вычисления общего
+     значения времени.
 
-     Time format examples:
+     Примеры формата времени:
 
            600     600 seconds (10 minutes)
            10m     10 minutes
@@ -1060,9 +1056,9 @@ TIME FORMATS
 
 FILES
      /etc/ssh/sshd_config
-             Contains configuration data for sshd(8).  This file should be
-             writable by root only, but it is recommended (though not neces‐
-             sary) that it be world-readable.
+             Содержит данные конфигурации для sshd(8). Этот файл должен быть доступен
+             для записи только пользователю root, но рекомендуется
+             (хотя и не обязательно), чтобы он был доступен для чтения всем.
 
 SEE ALSO
      sshd(8)
