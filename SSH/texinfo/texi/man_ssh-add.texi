@@ -1,14 +1,26 @@
-SSH-ADD(1)                BSD General Commands Manual               SSH-ADD(1)
+@node SSH-ADD(1), SSH-AGENT, SFTP(1), Top
+@chapter SSH-ADD
 
-NAME
+@table @asis
+@item NAME
      ssh-add — добавляет личный ключ к агенту аутентификации
 
-SYNOPSIS
-     ssh-add [-cDdkLlXx] [-E fingerprint_hash] [-t life] [file ...]
-     ssh-add -s pkcs11
-     ssh-add -e pkcs11
-
-DESCRIPTION
+@item SYNOPSIS
+     ssh-add [-@ref{man_ssh_add c,, c}@ref{man_ssh_add D,, D}@ref{man_ssh_add d,, d}@ref{man_ssh_add k,, k}@ref{man_ssh_add L,, L}@ref{man_ssh_add l,, l}@ref{man_ssh_add X,, X}@ref{man_ssh_add x,, x}] [@ref{man_ssh_add -E fingerprint_hash,, -E fingerprint_hash}] [@ref{man_ssh_add -t life,, -t life}] [file ...]
+     ssh-add @ref{man_ssh_add -s pkcs11,, -s pkcs11}
+     ssh-add @ref{man_ssh_add -e pkcs11,, -e pkcs11}
+@item Переменные окружения
+        @ref{man_ssh_add DISPLAY и SSH_ASKPASS,, DISPLAY и SSH_ASKPASS}
+        @ref{man_ssh_add SSH_AUTH_SOCK,, SSH_AUTH_SOCK}
+@item Файлы
+@display
+        @ref{man_ssh_add ~/.ssh/identity,, ~/.ssh/identity}
+        @ref{man_ssh_add ~/.ssh/id_dsa,, ~/.ssh/id_dsa}
+        @ref{man_ssh_add ~/.ssh/id_ecdsa,, ~/.ssh/id_ecdsa}
+        @ref{man_ssh_add ~/.ssh/id_ed25519,, ~/.ssh/id_ed25519}
+        @ref{man_ssh_add ~/.ssh/id_rsa,, ~/.ssh/id_rsa}
+@end display
+@item DESCRIPTION
      ssh-add добавляет личный ключ к агенту аутентификации ssh-agent(1). При запуске
      без аргументов он добавляет файлы ~/.ssh/id_rsa, ~/.ssh/id_dsa, ~/.ssh/id_ecdsa,
      ~/.ssh/id_ed25519 и ~/.ssh/identity. После загрузки закрытого ключа ssh-add
@@ -24,17 +36,17 @@ DESCRIPTION
      должна содержать имя своего сокета, чтобы ssh-add мог работать.
 
      Возможны следующие варианты:
-
-     -c
+@table @asis
+@item     -c @anchor{man_ssh_add c}
              Указывает, что добавленные идентификаторы должны быть подтверждены перед
              использованием для аутентификации. Подтверждение выполняется с помощью
              ssh-askpass(1). Успешное подтверждение сигнализируется нулевым статусом
              выхода из ssh-askpass(1), а не текстом, введенным в запрашивающую сторону.
 
-     -D
+@item     -D @anchor{man_ssh_add D}
              Удаляет все удостоверения от агента.
 
-     -d
+@item     -d @anchor{man_ssh_add d}
              Вместо добавления идентификаторов удаляет идентификаторы из агента. Если
              ssh-add был запущен без аргументов, ключи для идентификаторов по умолчанию и
              соответствующие им сертификаты будут удалены. В противном случае список
@@ -43,42 +55,43 @@ DESCRIPTION
              Если по указанному пути открытый ключ не найден, ssh-add добавит .pub и
              повторит попытку.
 
-     -E fingerprint_hash
+@item     -E fingerprint_hash @anchor{man_ssh_add -E fingerprint_hash}
              Определяет алгоритм хеширования, используемый при отображении отпечатков
              клавиш. Допустимые варианты: “md5” и “sha256”. По умолчанию используется
              “sha256”.
 
-     -e pkcs11
+@item     -e pkcs11 @anchor{man_ssh_add -e pkcs11}
              Удалить ключи, предоставляемые общей библиотекой PKCS#11 pkcs11.
 
-     -k
+@item     -k @anchor{man_ssh_add k}
              При загрузке ключей или удалении ключей из агента обрабатывайте только
              простые личные ключи и пропускайте сертификаты.
 
-     -L
+@item     -L @anchor{man_ssh_add L}
              Перечисляет параметры открытого ключа всех идентификаторов, представленных
              в настоящее время агентом.
 
-     -l
+@item     -l @anchor{man_ssh_add l}
              Перечисляет отпечатки всех идентификаторов, представленных в
              настоящее время агентом.
 
-     -s pkcs11
+@item     -s pkcs11 @anchor{man_ssh_add -s pkcs11}
              Добавьте ключи, предоставляемые общей библиотекой PKCS#11 pkcs11.
 
-     -t life
+@item     -t life @anchor{man_ssh_add -t life}
              Установите максимальное время жизни при добавлении идентификаторов агенту.
              Время жизни может быть указано в секундах или в формате времени, указанном
              в sshd_config(5).
 
-     -X
+@item     -X @anchor{man_ssh_add X}
              Разблокировать агент.
 
-     -x
+@item     -x @anchor{man_ssh_add x}
              Заблокируйте агент паролем.
-
-ENVIRONMENT
-     DISPLAY и SSH_ASKPASS
+@end table
+@item ENVIRONMENT
+@table @asis
+@item     DISPLAY и SSH_ASKPASS @anchor{man_ssh_add DISPLAY и SSH_ASKPASS}
              Если ssh-add требуется фраза-пароль, она будет считывать фразу-пароль с
              текущего терминала, если она была запущена с терминала. Если ssh-add не имеет
              связанного с ним терминала, но установлены DISPLAY и SSH_ASKPASS, он выполнит
@@ -88,38 +101,40 @@ ENVIRONMENT
              машинах может потребоваться перенаправить ввод с /dev/null, чтобы сделать
              эту работу.)
 
-     SSH_AUTH_SOCK
+@item     SSH_AUTH_SOCK @anchor{man_ssh_add SSH_AUTH_SOCK}
              Определяет путь к сокету UNIX-домена, используемому для связи с агентом.
-
-FILES
-     ~/.ssh/identity
+@end table
+@item FILES
+@display
+     ~/.ssh/identity @anchor{man_ssh_add ~/.ssh/identity}
              Содержит протокол аутентификации RSA версии 1 пользователя.
 
-     ~/.ssh/id_dsa
+     ~/.ssh/id_dsa @anchor{man_ssh_add ~/.ssh/id_dsa}
              Содержит протокол аутентификации DSA версии 2 пользователя.
 
-     ~/.ssh/id_ecdsa
+     ~/.ssh/id_ecdsa @anchor{man_ssh_add ~/.ssh/id_ecdsa}
              Содержит протокол аутентификации ECDSA версии 2 пользователя.
 
-     ~/.ssh/id_ed25519
+     ~/.ssh/id_ed25519 @anchor{man_ssh_add ~/.ssh/id_ed25519}
              Содержит протокол аутентификации Ed25519 версии 2 удостоверения
              личности пользователя.
 
-     ~/.ssh/id_rsa
+     ~/.ssh/id_rsa @anchor{man_ssh_add ~/.ssh/id_rsa}
              Содержит протокол аутентификации RSA версии 2 пользователя.
 
+@end display
      Идентификационные файлы не должны быть доступны для чтения никому, кроме
      пользователя. Обратите внимание, что ssh-add игнорирует файлы идентификации,
      если они доступны другим.
 
-EXIT STATUS
+@item EXIT STATUS
      Состояние выхода равно 0 в случае успеха, 1, если указанная команда не
      выполнена, и 2, если ssh-add не может связаться с агентом аутентификации.
 
-SEE ALSO
+@item SEE ALSO
      ssh(1), ssh-agent(1), ssh-askpass(1), ssh-keygen(1), sshd(8)
 
-AUTHORS
+@item AUTHORS
      OpenSSH is a derivative of the original and free ssh 1.2.12 release by
      Tatu Ylonen.  Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo
      de Raadt and Dug Song removed many bugs, re-added newer features and cre‐
@@ -127,3 +142,4 @@ AUTHORS
      versions 1.5 and 2.0.
 
 BSD                             March 30, 2015                             BSD
+@end table

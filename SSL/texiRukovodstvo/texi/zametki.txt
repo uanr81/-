@@ -7,20 +7,74 @@ asn1parse(1), ca(1), ciphers(1), cms(1), config(5), crl(1),
        sess_id(1), smime(1), speed(1), spkac(1), srp(1), storeutl(1), ts(1),
        verify(1), version(1), x509(1), crypto(7), ssl(7), x509v3_config(5)
 
-  asn1parse.texi
-  FileOpensslConf.texi
-  instrukciia.texi
-  manCA.texi
-  manCiphers.texi
-  manCms.texi
-  manConfig.texi
-  manCrl2pkcs7.texi
-  manCrl.texi
-  manOpenSSL.texi
-  manSTOREUTL.texi
-  manx509v3_config.texi
-  nanSSLconnect.texi
+  asn1parse.texi @include asn1parse.texi
+  FileOpensslConf.texi @include FileOpensslConf.texi
+  instrukciia.texi @include instrukciia.texi
+  manCA.texi @include manCA.texi
+  manCiphers.texi @include manCiphers.texi
+  manCms.texi @include manCms.texi
+  manConfig.texi @include manConfig.texi
+  manCrl2pkcs7.texi @include manCrl2pkcs7.texi
+  manCrl.texi @include manCrl.texi
+  manOpenSSL.texi @include manOpenSSL.texi
+  manSTOREUTL.texi @include manSTOREUTL.texi
+  manx509v3_config.texi @include manx509v3_config.texi
+  nanSSLconnect.texi @include nanSSLconnect.texi
   openSSL.texi
-  reqman.texi
-  x509man.texi
+  reqman.texi @include reqman.texi
+  x509man.texi @include x509man.texi
   zametki.txt
+
+  man_version.texi p 
+  man_verify.texi
+  man_ts.texi
+  man_s_time.texi
+  man_s_server.texi
+  man_srp.texi
+  man_spkac.texi
+  man_speed.texi
+  man_smime.texi
+  man_sess_id.texi
+  man_s_client.texi
+  man_rsautl.texi
+  man_rsa.texi
+  man_rehash.texi
+  man_rand.texi
+  man_prime.texi
+  man_pkeyutl.texi
+  man_pkey.texi
+  man_pkeyparam.texi
+  man_pkcs8.texi
+  man_pkcs7.texi
+  man_pkcs12.texi
+  man_passwd.texi
+  man_ocsp.texi
+  man_nseq.texi
+  man_genrsa.texi
+  man_genpkey.texi
+  man_gendsa.texi
+  man_errstr.texi
+  man_engine.texi
+  man_enc.texi
+  man_ec.texi
+  man_ecparam.texi
+  man_dsa.texi
+  man_dsaparam.texi
+  man_dhparam.texi
+  man_dgst.texi
+  man_crypto.texi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

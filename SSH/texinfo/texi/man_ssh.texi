@@ -1,17 +1,52 @@
-SSH(1)                    BSD General Commands Manual                   SSH(1)
-
-NAME
+@node SSH, SSHD, Top, Top
+@chapter SSH
+@table @asis
+@item NAME
      ssh — OpenSSH SSH клиент (программа удаленного входа)
 
-SYNOPSIS
-     ssh [-1246AaCfGgKkMNnqsTtVvXxYy] [-b bind_address] [-c cipher_spec]
-         [-D [bind_address:]port] [-E log_file] [-e escape_char]
-         [-F configfile] [-I pkcs11] [-i identity_file] [-L address]
-         [-l login_name] [-m mac_spec] [-O ctl_cmd] [-o option] [-p port]
-         [-Q query_option] [-R address] [-S ctl_path] [-W host:port]
-         [-w local_tun[:remote_tun]] [user@]hostname [command]
-
-DESCRIPTION
+@item SYNOPSIS
+     ssh [-@ref{man_ssh_ssh 1,, 1}@ref{man_ssh_ssh 2,, 2}@ref{man_ssh_ssh 4,, 4}@ref{man_ssh_ssh 6,, 6}@ref{man_ssh_ssh A,, A}@ref{man_ssh_ssh a,, a}@ref{man_ssh_ssh -C,, -C}@ref{man_ssh_ssh f,, f}@ref{man_ssh_ssh G,, G}@ref{man_ssh_ssh g,, g}@ref{man_ssh_ssh K,, K}@ref{man_ssh_ssh k,, k}@ref{man_ssh_ssh M,, M}@ref{man_ssh_ssh N,, N}@ref{man_ssh_ssh n,, n}@ref{man_ssh_ssh q,, q}@ref{man_ssh_ssh s,, s}@ref{man_ssh_ssh T,, T}@ref{man_ssh_ssh t,, t}@ref{man_ssh_ssh V,, V}@ref{man_ssh_ssh v,, v}@ref{man_ssh_ssh X,, X}@ref{man_ssh_ssh x,, x}@ref{man_ssh_ssh Y,, Y}@ref{man_ssh_ssh y,, y}] [@ref{man_ssh_ssh -b bind_address,, -b bind_address}] [@ref{man_ssh_ssh -c cipher_spec,, -c cipher_spec}]
+         [@ref{man_ssh_ssh -D [bind_address:]port,, -D [bind_address:]port}] [@ref{man_ssh_ssh -E log_file,, -E log_file}] [@ref{man_ssh_ssh -e escape_char,, -e escape_char}]
+         [@ref{man_ssh_ssh -F configfile,, -F configfile}] [@ref{man_ssh_ssh -I pkcs11,, -I pkcs11}] [@ref{man_ssh_ssh -i identity_file,, -i identity_file}] [@ref{man_ssh_ssh Перенаправление локального соединения,, -L address}]
+         [@ref{man_ssh_ssh -l login_name,, -l login_name}] [@ref{man_ssh_ssh -m mac_spec,, -m mac_spec}] [@ref{man_ssh_ssh -O ctl_cmd,, -O ctl_cmd}] [@ref{man_ssh_ssh -o option,, -o option}] [@ref{man_ssh_ssh -p port,, -p port}]
+         [@ref{man_ssh_ssh -Q query_option,, -Q query_option}] [@ref{man_ssh_ssh Перенаправление удаленного соединения,, -R address}] [@ref{man_ssh_ssh -S ctl_path,, -S ctl_path}] [@ref{man_ssh_ssh -W host:port,, -W host:port}]
+         [@ref{man_ssh_ssh -w local_tun[:remote_tun],, -w local_tun[:remote_tun]}] [user@@]hostname [command]
+@item Переменные окружения ssh
+@display
+     @ref{man_ssh_peremen_okruj DISPLAY,, DISPLAY}
+     @ref{man_ssh_peremen_okruj HOME,, HOME}
+     @ref{man_ssh_peremen_okruj LOGNAME,, LOGNAME}
+     @ref{man_ssh_peremen_okruj MAIL,, MAIL}
+     @ref{man_ssh_peremen_okruj PATH,, PATH}
+     @ref{man_ssh_peremen_okruj SSH_ASKPASS,, SSH_ASKPASS}
+     @ref{man_ssh_peremen_okruj SSH_AUTH_SOCK,, SSH_AUTH_SOCK}
+     @ref{man_ssh_peremen_okruj SSH_CONNECTION,, SSH_CONNECTION}
+     @ref{man_ssh_peremen_okruj SSH_ORIGINAL_COMMAND,, SSH_ORIGINAL_COMMAND}
+     @ref{man_ssh_peremen_okruj SSH_TTY,, SSH_TTY}
+     @ref{man_ssh_peremen_okruj TZ,, TZ}
+     @ref{man_ssh_peremen_okruj USER,, USER}
+@end display
+@item Список файлов
+@display
+     @ref{man_ssh_peremen_okruj ~/.rhosts,, ~/.rhosts}
+     @ref{man_ssh_peremen_okruj ~/.shosts,, ~/.shosts}
+     @ref{man_ssh_peremen_okruj ~/.ssh/,, ~/.ssh/}
+     @ref{man_ssh_peremen_okruj ~/.ssh/authorized_keys,, ~/.ssh/authorized_keys}
+     @ref{man_ssh_peremen_okruj ~/.ssh/config,, ~/.ssh/config}
+     @ref{man_ssh_peremen_okruj ~/.ssh/environment,, ~/.ssh/environment}
+     @ref{man_ssh_peremen_okruj Файлы закрытых частей ключа аунтификации,, Файлы закрытых частей ключа аунтификации}
+     @ref{man_ssh_peremen_okruj Файлы открытой части ключа аунтификации,, Файлы открытой части ключа аунтификации}
+     @ref{man_ssh_peremen_okruj ~/.ssh/known_hosts,, ~/.ssh/known_hosts}
+     @ref{man_ssh_peremen_okruj ~/.ssh/rc,, ~/.ssh/rc}
+     @ref{man_ssh_peremen_okruj /etc/hosts.equiv,, /etc/hosts.equiv}
+     @ref{man_ssh_peremen_okruj /etc/ssh/shosts.equiv,, /etc/ssh/shosts.equiv}
+     @ref{man_ssh_peremen_okruj /etc/ssh/ssh_config,, /etc/ssh/ssh_config}
+     @ref{man_ssh_peremen_okruj Файлы закрытой части ключей аунтификации на основании хоста,, Файлы закрытой части ключей аунтификации на основании хоста}
+     @ref{man_ssh_peremen_okruj /etc/ssh/ssh_known_hosts,, /etc/ssh/ssh_known_hosts}
+     @ref{man_ssh_peremen_okruj /etc/ssh/sshrc,, /etc/ssh/sshrc}
+     
+@end display
+@item DESCRIPTION
      ssh (SSH-клиент) - это программа для входа на удаленный компьютер и выполнения
      команд на удаленном компьютере. Она предназначена для обеспечения безопасной
      зашифрованной связи между двумя ненадежными узлами через небезопасную сеть.
@@ -26,16 +61,21 @@ DESCRIPTION
      в систему.
 
      Варианты следующие:
+@table @asis
+@item     -1 @anchor{man_ssh_ssh 1}
+             Заставляет ssh использовать только протокол версии 1.
 
-     -1      Заставляет ssh использовать только протокол версии 1.
+@item     -2 @anchor{man_ssh_ssh 2}
+             Заставляет ssh использовать только протокол версии 2.
 
-     -2      Заставляет ssh использовать только протокол версии 2.
+@item     -4 @anchor{man_ssh_ssh 4}
+             Заставляет ssh использовать только адреса IPv4.
 
-     -4      Заставляет ssh использовать только адреса IPv4.
+@item     -6 @anchor{man_ssh_ssh 6}
+             Заставляет ssh использовать только адреса IPv6.
 
-     -6      Заставляет ssh использовать только адреса IPv6.
-
-     -A      Включает переадресацию соединения с агентом аутентификации. Это также
+@item     -A @anchor{man_ssh_ssh A}
+             Включает переадресацию соединения с агентом аутентификации. Это также
              может быть указано для каждого хоста в файле конфигурации.
 
              Переадресация агента должна быть включена с осторожностью. Пользователи с
@@ -46,14 +86,16 @@ DESCRIPTION
              им проходить проверку подлинности с использованием идентификаторов,
              загруженных в агент.
 
-     -a      Отключает переадресацию соединения агента аутентификации.
+@item     -a @anchor{man_ssh_ssh a}
+             Отключает переадресацию соединения агента аутентификации.
 
-     -b bind_address
+@item     -b bind_address @anchor{man_ssh_ssh -b bind_address}
              Используйте bind_address на локальной машине в качестве адреса
              источника соединения. Полезно только в системах с более чем
              одним адресом.
 
-     -C      Запрашивает сжатие всех данных (включая stdin, stdout, stderr, и
+@item     -C @anchor{man_ssh_ssh -C}
+             Запрашивает сжатие всех данных (включая stdin, stdout, stderr, и
              данные для переадресованных соединений X11, TCP и UNIX-доменов). Алгоритм
              сжатия тот же, что и в gzip(1), и “level” можно контролировать с помощью
              параметра CompressionLevel для версии протокола 1. Сжатие желательно на
@@ -61,7 +103,7 @@ DESCRIPTION
              замедлит работу. Значение по умолчанию может быть установлено для каждого
              хоста отдельно в файлах конфигурации; см. вариант Compression.
 
-     -c cipher_spec
+@item     -c cipher_spec @anchor{man_ssh_ssh -c cipher_spec}
              Выбирает спецификацию шифра для шифрования сеанса.
 
              Протокол версии 1 позволяет указывать один шифр. Поддерживаемые значения:
@@ -70,7 +112,7 @@ DESCRIPTION
              Ключевое слово Ciphers в ssh_config(5) для получения дополнительной
              информации.
 
-     -D [bind_address:]port
+@item     -D [bind_address:]port @anchor{man_ssh_ssh -D [bind_address:]port}
              Определяет локальную переадресацию портов на уровне приложения “dynamic”.
              Это работает путем выделения сокета для прослушивания порта на локальной
              стороне, необязательно привязанного к указанному bind_address. Всякий раз,
@@ -90,10 +132,10 @@ DESCRIPTION
              в то время как пустой адрес или ‘*’ указывает, что порт должен быть доступен
              со всех интерфейсов.
 
-     -E log_file
+@item     -E log_file @anchor{man_ssh_ssh -E log_file}
              Добавлять журналы отладки в log_file вместо стандартной ошибки.
 
-     -e escape_char
+@item     -e escape_char @anchor{man_ssh_ssh -e escape_char}
              Устанавливает escape-символ для сеансов с pty (по умолчанию: ‘~’).
              Экранирующий символ распознается только в начале строки. Экранирующий
              символ, за которым следует точка (‘.’), закрывает соединение; затем
@@ -101,13 +143,13 @@ DESCRIPTION
              один раз. Установка символа в “none” отключает любые экранирования и делает
              сеанс полностью прозрачным.
 
-     -F configfile
+@item     -F configfile @anchor{man_ssh_ssh -F configfile}
              Определяет альтернативный файл конфигурации для каждого пользователя. Если
              файл конфигурации указан в командной строке, системный файл конфигурации
              (/etc/ssh/ssh_config) будет проигнорирован. По умолчанию для файла
              конфигурации для каждого пользователя используется ~/.ssh/config.
 
-     -f
+@item     -f @anchor{man_ssh_ssh f}
              Просит ssh перейти в фоновый режим непосредственно перед выполнением команды.
              Это полезно, если пользователь хочет сделать это в фоновом режиме. Это
              подразумевает -n. Рекомендуемый способ запуска программ X11 на удаленном
@@ -117,37 +159,49 @@ DESCRIPTION
              значение“yes”, клиент, запущенный с -f, будет ожидать успешной установки
              всех удаленных портов, прежде чем перейти в фоновый режим.
 
-     -G      Заставляет ssh распечатать свою конфигурацию после оценки блоков Host и
+@item     -G @anchor{man_ssh_ssh G}
+             Заставляет ssh распечатать свою конфигурацию после оценки блоков Host и
              Match и выйти.
 
-     -g      Позволяет удаленным хостам подключаться к локальным перенаправленным портам.
+@item     -g @anchor{man_ssh_ssh g}
+             Позволяет удаленным хостам подключаться к локальным перенаправленным портам.
              Если используется мультиплексное соединение, то эта опция должна быть
              указана в главном процессе.
 
-     -I pkcs11
+@item     -I pkcs11 @anchor{man_ssh_ssh -I pkcs11}
              Укажите общую библиотеку PKCS#11, которую ssh должен использовать для связи
              с маркером PKCS#11, предоставляющим личный ключ RSA пользователя.
 
-     -i identity_file
+@item     -i identity_file @anchor{man_ssh_ssh -i identity_file}
              Выбирает файл, из которого читается идентификатор (закрытый ключ) для
-             аутентификации с открытым ключом. По умолчанию используется ~/.ssh/identity
-             для версии протокола 1 и ~/.ssh/id_dsa, ~/.ssh/id_ecdsa, ~/.ssh/id_ed25519 и
-             ~/.ssh/id_rsa для версии протокола 2. Файлы идентификации также могут быть
+             аутентификации с открытым ключом. По умолчанию используется
+@display
+             ~/.ssh/identity для версии протокола 1 и
+             ~/.ssh/id_dsa,
+             ~/.ssh/id_ecdsa,
+             ~/.ssh/id_ed25519 и
+             ~/.ssh/id_rsa
+@end display
+             для версии протокола 2. Файлы идентификации также могут быть
              указаны для каждого хоста в файле конфигурации. Можно иметь несколько
              параметров -i (и несколько идентификаторов, указанных в файлах конфигурации).
              Если в директиве CertificateFile явно не указаны сертификаты, ssh также
              попытается загрузить информацию о сертификате из имени файла, полученного
              путем добавления -cert.pub к именам идентификаторов.
 
-     -K      Включает аутентификацию на основе GSSAPI и пересылку (делегирование) учетных
+@item     -K @anchor{man_ssh_ssh K}
+             Включает аутентификацию на основе GSSAPI и пересылку (делегирование) учетных
              данных GSSAPI на сервер.
 
-     -k      Отключает пересылку (делегирование) учетных данных GSSAPI на сервер.
-
+@item     -k @anchor{man_ssh_ssh k}
+             Отключает пересылку (делегирование) учетных данных GSSAPI на сервер.
+@item  Перенаправление локального соединения @anchor{man_ssh_ssh Перенаправление локального соединения}
+@display
      -L [bind_address:]port:host:hostport
      -L [bind_address:]port:remote_socket
      -L local_socket:host:hostport
      -L local_socket:remote_socket
+@end display
              Указывает, что соединения с данным портом TCP или сокетом Unix на локальном
              (клиентском) хосте должны быть перенаправлены на данный хост и порт или
              сокет Unix на удаленной стороне. Это работает путем выделения сокета для
@@ -169,23 +223,26 @@ DESCRIPTION
              в то время как пустой адрес или ‘*’ указывает, что порт должен быть доступен
              со всех интерфейсов.
 
-     -l login_name
+@item     -l login_name @anchor{man_ssh_ssh -l login_name}
              Указывает пользователя для входа в систему как на удаленном компьютере.
              Это также может быть указано для каждого хоста в файле конфигурации.
 
-     -M      Помещает ssh-клиент в режим “master” для совместного использования соединения.
+@item     -M @anchor{man_ssh_ssh M}
+             Помещает ssh-клиент в режим “master” для совместного использования соединения.
              Несколько опций -M переводят ssh в режим “master” с подтверждением,
              необходимым перед тем, как будут приняты подчиненные соединения. Обратитесь
              к описанию ControlMaster в ssh_config(5) для деталей.
 
-     -m mac_spec
+@item     -m mac_spec @anchor{man_ssh_ssh -m mac_spec}
              Разделенный запятыми список алгоритмов MAC (код аутентификации сообщения),
              указанный в порядке предпочтения. Смотрите ключевое слово MACs для получения
              дополнительной информации.
 
-     -N      Не выполняйте удаленную команду. Это полезно только для переадресации портов.
+@item     -N @anchor{man_ssh_ssh N}
+             Не выполняйте удаленную команду. Это полезно только для переадресации портов.
 
-     -n      Перенаправляет stdin из /dev/null (фактически, предотвращает чтение
+@item     -n @anchor{man_ssh_ssh n}
+             Перенаправляет stdin из /dev/null (фактически, предотвращает чтение
              из stdin). Это необходимо использовать, когда ssh запускается в фоновом
              режиме. Обычная хитрость заключается в том, чтобы использовать это для
              запуска программ X11 на удаленной машине. Например,
@@ -195,116 +252,119 @@ DESCRIPTION
              (Это не работает, если ssh нужно запросить пароль или фразу-пароль;
              см. Также параметр -f.)
 
-     -O ctl_cmd
+@item     -O ctl_cmd @anchor{man_ssh_ssh -O ctl_cmd}
              Управлять активным ведущим процессом мультиплексирования соединений. Когда
              указана опция -O, аргумент ctl_cmd интерпретируется и передается ведущему
              процессу. Допустимые команды:
+@display
              “check” (проверьте, что основной процесс запущен),
              “forward” (переадресация запросов без выполнения команд),
              “cancel” (отмена переадресаций),
              “exit” (запрос на выход мастера) и
              “stop” (запрос мастера на прекращение приема дальнейшие
              запросы мультиплексирования).
-
-     -o option
+@end display
+@item     -o option @anchor{man_ssh_ssh -o option}
              Может использоваться для задания параметров в формате, используемом в файле
              конфигурации. Это полезно для указания параметров, для которых нет отдельного
              флага командной строки. Для получения полной информации о параметрах,
              перечисленных ниже, и их возможных значений, смотри ssh_config(5).
+@display
+      @ref{man_ssh_ssh_config AddKeysToAgent,, AddKeysToAgent}
+      @ref{man_ssh_ssh_config AddressFamily,, AddressFamily}
+      @ref{man_ssh_ssh_config BatchMode,, BatchMode}
+      @ref{man_ssh_ssh_config BindAddress,, BindAddress}
+      @ref{man_ssh_ssh_config CanonicalDomains,, CanonicalDomains}
+      @ref{man_ssh_ssh_config CanonicalizeFallbackLocal,, CanonicalizeFallbackLocal}
+      @ref{man_ssh_ssh_config CanonicalizeHostname,, CanonicalizeHostname}
+      @ref{man_ssh_ssh_config CanonicalizeMaxDots,, CanonicalizeMaxDots}
+      @ref{man_ssh_ssh_config CanonicalizePermittedCNAMEs,, CanonicalizePermittedCNAMEs}
+      @ref{man_ssh_ssh_config CertificateFile,, CertificateFile}
+      @ref{man_ssh_ssh_config ChallengeResponseAuthentication,, ChallengeResponseAuthentication}
+      @ref{man_ssh_ssh_config CheckHostIP,, CheckHostIP}
+      @ref{man_ssh_ssh_config Cipher,, Cipher}
+      @ref{man_ssh_ssh_config Ciphers,, Ciphers}
+      @ref{man_ssh_ssh_config ClearAllForwardings,, ClearAllForwardings}
+      @ref{man_ssh_ssh_config Compression,, Compression}
+      @ref{man_ssh_ssh_config CompressionLevel,, CompressionLevel}
+      @ref{man_ssh_ssh_config ConnectionAttempts,, ConnectionAttempts}
+      @ref{man_ssh_ssh_config ConnectTimeout,, ConnectTimeout}
+      @ref{man_ssh_ssh_config ControlMaster,, ControlMaster}
+      @ref{man_ssh_ssh_config ControlPath,, ControlPath}
+      @ref{man_ssh_ssh_config ControlPersist,, ControlPersist}
+      @ref{man_ssh_ssh_config DynamicForward,, DynamicForward}
+      @ref{man_ssh_ssh_config EscapeChar,, EscapeChar}
+      @ref{man_ssh_ssh_config ExitOnForwardFailure,, ExitOnForwardFailure}
+      @ref{man_ssh_ssh_config FingerprintHash,, FingerprintHash}
+      @ref{man_ssh_ssh_config ForwardAgent,, ForwardAgent}
+      @ref{man_ssh_ssh_config ForwardX11,, ForwardX11}
+      @ref{man_ssh_ssh_config ForwardX11Timeout,, ForwardX11Timeout}
+      @ref{man_ssh_ssh_config ForwardX11Trusted,, ForwardX11Trusted}
+      @ref{man_ssh_ssh_config GatewayPorts,, GatewayPorts}
+      @ref{man_ssh_ssh_config GlobalKnownHostsFile,, GlobalKnownHostsFile}
+      @ref{man_ssh_ssh_config GSSAPIAuthentication,, GSSAPIAuthentication}
+      @ref{man_ssh_ssh_config GSSAPIDelegateCredentials,, GSSAPIDelegateCredentials}
+      @ref{man_ssh_ssh_config HashKnownHosts,, HashKnownHosts}
+      @ref{man_ssh_ssh_config Host,, Host}
+      @ref{man_ssh_ssh_config HostbasedAuthentication,, HostbasedAuthentication}
+      @ref{man_ssh_ssh_config HostbasedKeyTypes,, HostbasedKeyTypes}
+      @ref{man_ssh_ssh_config HostKeyAlgorithms,, HostKeyAlgorithms}
+      @ref{man_ssh_ssh_config HostKeyAlias,, HostKeyAlias}
+      @ref{man_ssh_ssh_config HostName,, HostName}
+      @ref{man_ssh_ssh_config IdentityFile,, IdentityFile}
+      @ref{man_ssh_ssh_config IdentitiesOnly,, IdentitiesOnly}
+      @ref{man_ssh_ssh_config IPQoS,, IPQoS}
+      @ref{man_ssh_ssh_config KbdInteractiveAuthentication,, KbdInteractiveAuthentication}
+      @ref{man_ssh_ssh_config KbdInteractiveDevices,, KbdInteractiveDevices}
+      @ref{man_ssh_ssh_config KexAlgorithms,, KexAlgorithms}
+      @ref{man_ssh_ssh_config LocalCommand,, LocalCommand}
+      @ref{man_ssh_ssh_config LocalForward,, LocalForward}
+      @ref{man_ssh_ssh_config LogLevel,, LogLevel}
+      @ref{man_ssh_ssh_config MACs,, MACs}
+      @ref{man_ssh_ssh_config Match,, Match}
+      @ref{man_ssh_ssh_config NoHostAuthenticationForLocalhost,, NoHostAuthenticationForLocalhost}
+      @ref{man_ssh_ssh_config NumberOfPasswordPrompts,, NumberOfPasswordPrompts}
+      @ref{man_ssh_ssh_config PasswordAuthentication,, PasswordAuthentication}
+      @ref{man_ssh_ssh_config PermitLocalCommand,, PermitLocalCommand}
+      @ref{man_ssh_ssh_config PKCS11Provider,, PKCS11Provider}
+      @ref{man_ssh_ssh_config Port,, Port}
+      @ref{man_ssh_ssh_config PreferredAuthentications,, PreferredAuthentications}
+      @ref{man_ssh_ssh_config Protocol,, Protocol}
+      @ref{man_ssh_ssh_config ProxyCommand,, ProxyCommand}
+      @ref{man_ssh_ssh_config ProxyUseFdpass,, ProxyUseFdpass}
+      @ref{man_ssh_ssh_config PubkeyAcceptedKeyTypes,, PubkeyAcceptedKeyTypes}
+      @ref{man_ssh_ssh_config PubkeyAuthentication,, PubkeyAuthentication}
+      @ref{man_ssh_ssh_config RekeyLimit,, RekeyLimit}
+      @ref{man_ssh_ssh_config RemoteForward,, RemoteForward}
+      @ref{man_ssh_ssh_config RequestTTY,, RequestTTY}
+      @ref{man_ssh_ssh_config RhostsRSAAuthentication,, RhostsRSAAuthentication}
+      @ref{man_ssh_ssh_config RSAAuthentication,, RSAAuthentication}
+      @ref{man_ssh_ssh_config SendEnv,, SendEnv}
+      @ref{man_ssh_ssh_config ServerAliveInterval,, ServerAliveInterval}
+      @ref{man_ssh_ssh_config ServerAliveCountMax,, ServerAliveCountMax}
+      @ref{man_ssh_ssh_config StreamLocalBindMask,, StreamLocalBindMask}
+      @ref{man_ssh_ssh_config StreamLocalBindUnlink,, StreamLocalBindUnlink}
+      @ref{man_ssh_ssh_config StrictHostKeyChecking,, StrictHostKeyChecking}
+      @ref{man_ssh_ssh_config TCPKeepAlive,, TCPKeepAlive}
+      @ref{man_ssh_ssh_config Tunnel,, Tunnel}
+      @ref{man_ssh_ssh_config TunnelDevice,, TunnelDevice}
+      @ref{man_ssh_ssh_config UpdateHostKeys,, UpdateHostKeys}
+      @ref{man_ssh_ssh_config UsePrivilegedPort,, UsePrivilegedPort}
+      @ref{man_ssh_ssh_config User,, User}
+      @ref{man_ssh_ssh_config UserKnownHostsFile,, UserKnownHostsFile}
+      @ref{man_ssh_ssh_config VerifyHostKeyDNS,, VerifyHostKeyDNS}
+      @ref{man_ssh_ssh_config VisualHostKey,, VisualHostKey}
+      @ref{man_ssh_ssh_config XAuthLocation,, XAuthLocation}
 
-                   AddKeysToAgent
-                   AddressFamily
-                   BatchMode
-                   BindAddress
-                   CanonicalDomains
-                   CanonicalizeFallbackLocal
-                   CanonicalizeHostname
-                   CanonicalizeMaxDots
-                   CanonicalizePermittedCNAMEs
-                   CertificateFile
-                   ChallengeResponseAuthentication
-                   CheckHostIP
-                   Cipher
-                   Ciphers
-                   ClearAllForwardings
-                   Compression
-                   CompressionLevel
-                   ConnectionAttempts
-                   ConnectTimeout
-                   ControlMaster
-                   ControlPath
-                   ControlPersist
-                   DynamicForward
-                   EscapeChar
-                   ExitOnForwardFailure
-                   FingerprintHash
-                   ForwardAgent
-                   ForwardX11
-                   ForwardX11Timeout
-                   ForwardX11Trusted
-                   GatewayPorts
-                   GlobalKnownHostsFile
-                   GSSAPIAuthentication
-                   GSSAPIDelegateCredentials
-                   HashKnownHosts
-                   Host
-                   HostbasedAuthentication
-                   HostbasedKeyTypes
-                   HostKeyAlgorithms
-                   HostKeyAlias
-                   HostName
-                   IdentityFile
-                   IdentitiesOnly
-                   IPQoS
-                   KbdInteractiveAuthentication
-                   KbdInteractiveDevices
-                   KexAlgorithms
-                   LocalCommand
-                   LocalForward
-                   LogLevel
-                   MACs
-                   Match
-                   NoHostAuthenticationForLocalhost
-                   NumberOfPasswordPrompts
-                   PasswordAuthentication
-                   PermitLocalCommand
-                   PKCS11Provider
-                   Port
-                   PreferredAuthentications
-                   Protocol
-                   ProxyCommand
-                   ProxyUseFdpass
-                   PubkeyAcceptedKeyTypes
-                   PubkeyAuthentication
-                   RekeyLimit
-                   RemoteForward
-                   RequestTTY
-                   RhostsRSAAuthentication
-                   RSAAuthentication
-                   SendEnv
-                   ServerAliveInterval
-                   ServerAliveCountMax
-                   StreamLocalBindMask
-                   StreamLocalBindUnlink
-                   StrictHostKeyChecking
-                   TCPKeepAlive
-                   Tunnel
-                   TunnelDevice
-                   UpdateHostKeys
-                   UsePrivilegedPort
-                   User
-                   UserKnownHostsFile
-                   VerifyHostKeyDNS
-                   VisualHostKey
-                   XAuthLocation
-
-     -p port
+@end display
+@item     -p port @anchor{man_ssh_ssh -p port}
              Порт для подключения на удаленном хосте. Это может быть указано для
              каждого хоста в файле конфигурации.
 
-     -Q query_option
+@item     -Q query_option @anchor{man_ssh_ssh -Q query_option}
              Запрашивает ssh для алгоритмов, поддерживаемых для указанной версии 2.
              Доступные функции:
+@display
              cipher (поддерживаемые симметричные шифры),
              cipher-auth (поддерживаемые симметричные шифры, которые поддерживают
              аутентифицированное шифрование),
@@ -314,15 +374,17 @@ DESCRIPTION
              key-cert (типы ключей сертификатов),
              key-plain (типы ключей без сертификатов) и
              protocol-version (поддерживаемые версии протокола SSH).
-
-     -q
+@end display
+@item     -q @anchor{man_ssh_ssh q}
              Бесшумный режим. Вызывает подавление большинства предупреждений и
              диагностических сообщений.
-
+@item Перенаправление удаленного соединения @anchor{man_ssh_ssh Перенаправление удаленного соединения}
+@display
      -R [bind_address:]port:host:hostport
      -R [bind_address:]port:local_socket
      -R remote_socket:host:hostport
      -R remote_socket:local_socket
+@end display
              Указывает, что соединения с указанным портом TCP или сокетом Unix на
              удаленном (серверном) хосте должны перенаправляться на данный хост и порт
              или сокет Unix на локальной стороне. Это работает путем выделения сокета
@@ -347,42 +409,42 @@ DESCRIPTION
              на сервере и сообщаться клиенту во время выполнения. При использовании
              вместе с -O forward выделенный порт будет выведен на стандартный вывод.
 
-     -S ctl_path
+@item     -S ctl_path @anchor{man_ssh_ssh -S ctl_path}
              Определяет расположение управляющего сокета для разделения соединений или
              строку “none” для отключения совместного использования соединений.
              Обратитесь к описанию ControlPath и ControlMaster в
              ssh_config(5) для деталей.
 
-     -s
+@item     -s @anchor{man_ssh_ssh s}
              Может использоваться для запроса вызова подсистемы в удаленной системе.
              Подсистемы облегчают использование SSH в качестве безопасного транспорта
              для других приложений (например, sftp(1)). Подсистема указана как
              удаленная команда.
 
-     -T
+@item     -T @anchor{man_ssh_ssh T}
              Отключить выделение псевдо-терминала.
 
-     -t
+@item     -t @anchor{man_ssh_ssh t}
              Принудительное псевдо-терминальное размещение. Это может использоваться
              для выполнения произвольных программ на экране на удаленном компьютере,
              что может быть очень полезным, например, при реализации сервисов меню.
              Несколько опций -t вызывают распределение tty, даже если ssh не имеет
              локального tty.
 
-     -V
+@item     -V @anchor{man_ssh_ssh V}
              Показать номер версии и выйти.
 
-     -v
+@item     -v @anchor{man_ssh_ssh v}
              Детальный режим. Заставляет ssh печатать отладочные сообщения о его
              ходе. Это полезно при отладке проблем с подключением, аутентификацией
              и настройкой. Несколько опций -v увеличивают многословие. Максимум 3.
 
-     -W host:port
+@item     -W host:port @anchor{man_ssh_ssh -W host:port}
              Просит, чтобы стандартный ввод и вывод на клиенте был перенаправлен на хост
              через порт по безопасному каналу. Подразумевает -N, -T, ExitOnForwardFailure
              и ClearAllForwardings.
 
-     -w local_tun[:remote_tun]
+@item     -w local_tun[:remote_tun] @anchor{man_ssh_ssh -w local_tun[:remote_tun]}
              Запрашивает переадресацию туннельных устройств с указанными устройствами
              tun(4) между клиентом (local_tun) и сервером (remote_tun).
 
@@ -393,7 +455,8 @@ DESCRIPTION
              Tunnel не установлена, она устанавливается в режим туннеля по умолчанию,
              то есть “point-to-point”.
 
-     -X      Включает пересылку X11. Это также может быть указано для каждого хоста
+@item     -X @anchor{man_ssh_ssh X}
+             Включает пересылку X11. Это также может быть указано для каждого хоста
              в файле конфигурации.
 
              Пересылка X11 должна быть включена с осторожностью. Пользователи с
@@ -414,10 +477,10 @@ DESCRIPTION
              потока. Это может измениться в будущем в зависимости от клиента. побочные
              улучшения.)
 
-     -x
+@item     -x @anchor{man_ssh_ssh x}
              Отключает пересылку X11.
 
-     -Y
+@item     -Y @anchor{man_ssh_ssh Y}
              Включает доверенную пересылку X11. Переадресация доверенных X11 не
              контролируется расширением X11 SECURITY.
 
@@ -427,15 +490,15 @@ DESCRIPTION
              ForwardX11Trusted в “no”, чтобы восстановить поведение восходящего потока.
              Это может измениться в будущем в зависимости от клиента усовершенствования.)
 
-     -y
+@item     -y @anchor{man_ssh_ssh y}
              Отправьте информацию журнала с помощью системного модуля syslog(3). По
              умолчанию эта информация отправляется в stderr.
 
      ssh может дополнительно получить данные конфигурации из файла конфигурации для
      каждого пользователя и общесистемного файла конфигурации. Формат файла и параметры
      конфигурации описаны в ssh_config (5).
-
-AUTHENTICATION
+@end table
+@item AUTHENTICATION
      SSSS-клиент OpenSSH поддерживает протоколы SSH 1 и 2. По умолчанию
      используется только протокол 2, хотя это можно изменить с помощью
      параметра Protocol в параметрах ssh_config(5) или -1 и -2 (см. Выше).
@@ -483,15 +546,26 @@ AUTHENTICATION
      соответствующему открытому ключу принять учетную запись.
 
      Пользователь создает свою пару ключей, запустив ssh-keygen(1). Это хранит закрытый
-     ключ в ~/.ssh/identity (protocol 1), ~/.ssh/id_dsa (DSA), ~/.ssh/id_ecdsa (ECDSA),
-     ~/.ssh/id_ed25519 (Ed25519), или ~/.ssh/id_rsa (RSA) и stores the public key in
-     ~/.ssh/identity.pub (protocol 1), ~/.ssh/id_dsa.pub (DSA), ~/.ssh/id_ecdsa.pub (ECDSA),
-     ~/.ssh/id_ed25519.pub (Ed25519), или ~/.ssh/id_rsa.pub (RSA) в домашнем каталоге
-     пользователя. Затем пользователь должен скопировать открытый ключ в
-     ~/.ssh/authorized_keys в своем домашнем каталоге на удаленном компьютере. Файл
-     author_keys соответствует обычному ~/.rhosts file и имеет один ключ на строку,
-     хотя строки могут быть очень длинными. После этого пользователь может войти без
-     указания пароля.
+     ключ в:
+@display
+           ~/.ssh/identity (protocol 1),
+           ~/.ssh/id_dsa (DSA),
+           ~/.ssh/id_ecdsa (ECDSA),
+           ~/.ssh/id_ed25519 (Ed25519), или
+           ~/.ssh/id_rsa (RSA)
+
+     и хранит открытый ключ в:
+           ~/.ssh/identity.pub (protocol 1),
+           ~/.ssh/id_dsa.pub (DSA),
+           ~/.ssh/id_ecdsa.pub (ECDSA),
+           ~/.ssh/id_ed25519.pub (Ed25519), или
+           ~/.ssh/id_rsa.pub (RSA)
+@end display
+     в домашнем каталоге пользователя. Затем пользователь должен скопировать
+     открытый ключ в ~/.ssh/authorized_keys в своем домашнем каталоге на
+     удаленном компьютере. Файл author_keys соответствует обычному ~/.rhosts file
+     и имеет один ключ на строку, хотя строки могут быть очень длинными. После
+     этого пользователь может войти без указания пароля.
 
      Вариант аутентификации с открытым ключом доступен в форме аутентификации: вместо
      набора открытых/закрытых ключей используются подписанные сертификаты. Преимущество
@@ -547,7 +621,7 @@ AUTHENTICATION
      Сеанс завершается, когда команда или оболочка на удаленной машине завершаются,
      и все соединения X11 и TCP были закрыты.
 
-ESCAPE CHARACTERS
+@item ESCAPE CHARACTERS
      Когда запрашивается псевдотерминал, ssh поддерживает ряд функций, используя
      escape-символ.
 
@@ -557,38 +631,51 @@ ESCAPE CHARACTERS
      может быть изменен в файлах конфигурации с помощью директивы конфигурации
      EscapeChar или в командной строке с помощью опции -e.
 
-     Поддерживаемые экранирования (при условии использования ‘~’ по умолчанию):
+     Поддерживаемое экранирование (при условии использования ‘~’ по умолчанию):
+@table @asis
+@item    ~.
+             Отключить.
 
-     ~.      Отключить.
+@item     ~^Z
+             SSH в фоновом режиме.
 
-     ~^Z     Фон SSH.
+@item     ~#
+             Список переадресованных соединений.
 
-     ~#      Список переадресованных соединений.
-
-     ~&      Фоновый ssh ​​при выходе из системы при ожидании завершения сеансов
+@item     ~&
+             Фоновый ssh ​​при выходе из системы при ожидании завершения сеансов
              переадресованного соединения/X11.
 
-     ~?      Показать список escape-символов.
+@item     ~?
+             Показать список escape-символов.
 
-     ~B      Отправьте BREAK в удаленную систему (полезно только в том случае, если
+@item     ~B
+             Отправьте BREAK в удаленную систему (полезно только в том случае, если
              узел поддерживает его).
 
-     ~C      Откройте командную строку. В настоящее время это позволяет добавлять
+@item     ~C
+             Откройте командную строку. В настоящее время это позволяет добавлять
              переадресацию портов с использованием параметров -L, -R и -D (см. Выше).
-             Это также позволяет отменять существующие переадресации портов с помощью
-             -KL[bind_address:]port для локальных, -KR[bind_address:]port для удаленных
-             и -KD[bind_address:]port для динамических переадресаций портов. !command
-             позволяет пользователю выполнять локальную команду, если в ssh_config(5)
-             включена опция PermitLocalCommand. Базовая помощь доступна с использованием
-             опции -h.
+             Это также позволяет отменять существующие переадресации портов с помощью:
+@display
+             -KL[bind_address:]port для локальных,
+             -KR[bind_address:]port для удаленных и
+             -KD[bind_address:]port для динамических переадресаций портов.
+@end display
+             !command позволяет пользователю выполнять локальную команду, если в
+             ssh_config(5) включена опция PermitLocalCommand. Базовая помощь
+             доступна с использованием опции -h.
 
-     ~R      Запросить повторное соединение (полезно, только если узел поддерживает его).
+@item     ~R
+             Запросить повторное соединение (полезно, только если узел поддерживает его).
 
-     ~V      Уменьшите детализацию (LogLevel), когда ошибки записываются в stderr.
+@item     ~V
+             Уменьшите детализацию (LogLevel), когда ошибки записываются в stderr.
 
-     ~v      Увеличьте детализацию (LogLevel), когда ошибки записываются в stderr.
-
-TCP FORWARDING
+@item     ~v
+             Увеличьте детализацию (LogLevel), когда ошибки записываются в stderr.
+@end table
+@item TCP FORWARDING
      Пересылка произвольных TCP-соединений по безопасному каналу может быть указана
      либо в командной строке, либо в файле конфигурации. Одним из возможных применений
      пересылки TCP является защищенное соединение с почтовым сервером; другой проходит
@@ -604,10 +691,10 @@ TCP FORWARDING
 
      В следующем примере туннелируется сеанс IRC с клиентского компьютера
      “127.0.0.1” (localhost) на удаленный сервер “server.example.com”:
-
+@display
          $ ssh -f -L 1234:localhost:6667 server.example.com sleep 10
          $ irc -c '#users' -p 1234 pinky 127.0.0.1
-
+@end display
      Это туннелирует соединение с IRC-сервером “server.example.com”, соединяя
      канал “#users” с псевдонимом «pinky», используя порт 1234. Неважно, какой
      порт используется, если он больше 1023 (помните, только root может открывать
@@ -619,7 +706,7 @@ TCP FORWARDING
      (10 секунд, в примере) для запуска службы, которая должна быть туннелирована.
      Если в течение указанного времени соединения не установлены, ssh завершит работу.
 
-X11 FORWARDING
+@item X11 FORWARDING
      Если для переменной ForwardX11 установлено значение “yes” (или см. Описание
      параметров -X, -x, и -Y выше), а пользователь использует X11 (установлена ​​
      переменная окружения DISPLAY), соединение с дисплеем X11 автоматически
@@ -645,13 +732,13 @@ X11 FORWARDING
      параметров -A и -a выше) и пользователь использует агент аутентификации,
      соединение с агентом автоматически перенаправляется на удаленную сторону.
 
-VERIFYING HOST KEYS
+@item VERIFYING HOST KEYS
      При первом подключении к серверу пользователю предоставляется отпечаток
      открытого ключа сервера (если не включена опция StrictHostKeyChecking).
      Отпечатки ключа могут быть определены с помощью ssh-keygen(1):
-
+@display
            $ ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key
-
+@end display
      Если отпечаток ключа уже известен, его можно сопоставить, а ключ можно принять
      или отклонить. Если для сервера доступны только устаревшие (MD5) отпечатки
      ключей, можно использовать опцию ssh-keygen (1) -E для понижения алгоритма
@@ -670,36 +757,36 @@ VERIFYING HOST KEYS
 
      Чтобы получить список отпечатков ключей и их случайный рисунок для всех
      известных хостов, можно использовать следующую командную строку:
-
+@display
            $ ssh-keygen -lv -f ~/.ssh/known_hosts
-
+@end display
      Если отпечаток пальца неизвестен, доступен альтернативный метод проверки: отпечатки
      ключей SSH проверяются DNS. Дополнительная запись ресурса (RR), SSHFP, добавляется
      в файл зоны, и подключающийся клиент может сопоставить отпечаток с указанным ключом.
 
      В этом примере мы подключаем клиента к серверу “host.example.com”. Записи
      ресурса SSHFP сначала должны быть добавлены в файл зоны для host.example.com:
-
+@display
            $ ssh-keygen -r host.example.com.
-
+@end display
      Выходные строки должны быть добавлены в файл зоны. Чтобы убедиться, что зона
      отвечает на запросы отпечатков ключей:
-
+@display
            $ dig -t SSHFP host.example.com
-
+@end display
      Наконец клиент подключается:
-
+@display
            $ ssh -o "VerifyHostKeyDNS ask" host.example.com
            [...]
            Matching host key fingerprint found in DNS.
            Are you sure you want to continue connecting (yes/no)?
            (Соответствующий отпечаток ключа хоста найден в DNS. Вы
            уверены, что хотите продолжить подключение (да/нет)?)
-
+@end display
      См. Параметр VerifyHostKeyDNS в ssh_config(5) для получения
      дополнительной информации.
 
-SSH-BASED VIRTUAL PRIVATE NETWORKS
+@item SSH-BASED VIRTUAL PRIVATE NETWORKS
      ssh поддерживает туннелирование виртуальной частной сети (VPN) с использованием
      псевдоустройства tun(4), что позволяет безопасно соединять две сети. Параметр
      конфигурации sshd_config (5) PermitTunnel контролирует, поддерживает ли сервер
@@ -711,34 +798,35 @@ SSH-BASED VIRTUAL PRIVATE NETWORKS
      разрешает это.
 
      На клиенте:
-
+@display
            # ssh -f -w 0:1 192.168.1.15 true
            # ifconfig tun0 10.1.1.1 10.1.1.2 netmask 255.255.255.252
            # route add 10.0.99.0/24 10.1.1.2
-
+@end display
      На сервере:
-
+@display
            # ifconfig tun1 10.1.1.2 10.1.1.1 netmask 255.255.255.252
            # route add 10.0.50.0/24 10.1.1.1
-
+@end display
      Клиентский доступ может быть более точно настроен с помощью файла
      /root/.ssh/authorized_keys (см. Ниже) и опции сервера PermitRootLogin.
      Следующая запись разрешает соединения на устройстве tun (4) 1 от
      пользователя “jane” и на устройстве tun 2 от пользователя “john”,
      если для PermitRootLogin установлено значение “forced-commands-only”:
-
+@display
        tunnel="1",command="sh /etc/netstart tun1" ssh-rsa ... jane
        tunnel="2",command="sh /etc/netstart tun2" ssh-rsa ... john
-
+@end display
      Поскольку настройка на основе SSH влечет за собой значительные издержки,
      она может быть более подходящей для временных настроек, таких как
      беспроводные VPN. Больше постоянных VPN лучше предоставляют такие
      инструменты, как ipsecctl(8) и isakmpd(8).
 
-ENVIRONMENT
+@item ENVIRONMENT
      ssh обычно устанавливает следующие переменные окружения:
-
-     DISPLAY               Переменная DISPLAY указывает местоположение
+@table @asis
+@item     DISPLAY @anchor{man_ssh_peremen_okruj DISPLAY}
+                           Переменная DISPLAY указывает местоположение
                            сервера X11. Он автоматически устанавливает ssh
                            для указания значения в форме “hostname:n”, где
                            “hostname” указывает хост, на котором работает
@@ -749,17 +837,22 @@ ENVIRONMENT
                            небезопасным (и потребует от пользователя вручную
                            скопировать все необходимые куки авторизации).
 
-     HOME                  Установите путь к домашнему каталогу пользователя.
+@item     HOME @anchor{man_ssh_peremen_okruj HOME}
+                           Установите путь к домашнему каталогу пользователя.
 
-     LOGNAME               Синоним для USER; установить для совместимости с
+@item     LOGNAME @anchor{man_ssh_peremen_okruj LOGNAME}
+                           Синоним для USER; установить для совместимости с
                            системами, которые используют эту переменную.
 
-     MAIL                  Установите путь к почтовому ящику пользователя.
+@item       MAIL @anchor{man_ssh_peremen_okruj MAIL}
+                           Установите путь к почтовому ящику пользователя.
 
-     PATH                  Установите значение по умолчанию PATH, как указано при
+@item     PATH @anchor{man_ssh_peremen_okruj PATH}
+                           Установите значение по умолчанию PATH, как указано при
                            компиляции ssh.
 
-     SSH_ASKPASS           Если ssh требуется фраза-пароль, она будет считывать
+@item     SSH_ASKPASS @anchor{man_ssh_peremen_okruj SSH_ASKPASS}
+                           Если ssh требуется фраза-пароль, она будет считывать
                            фразу-пароль с текущего терминала, если она была запущена
                            с терминала. Если ssh не имеет связанного с ним терминала,
                            но установлены DISPLAY и SSH_ASKPASS, он выполнит программу,
@@ -769,35 +862,42 @@ ENVIRONMENT
                            на некоторых машинах может потребоваться перенаправить ввод
                            с /dev/null для выполнения этой работы.)
 
-     SSH_AUTH_SOCK         Определяет путь к сокету UNIX-домена, используемому
+@item     SSH_AUTH_SOCK @anchor{man_ssh_peremen_okruj SSH_AUTH_SOCK}
+                           Определяет путь к сокету UNIX-домена, используемому
                            для связи с агентом.
 
-     SSH_CONNECTION        Определяет клиентскую и серверную стороны соединения.
+@item     SSH_CONNECTION @anchor{man_ssh_peremen_okruj SSH_CONNECTION}
+                           Определяет клиентскую и серверную стороны соединения.
                            Переменная содержит четыре значения, разделенных пробелом:
                            IP-адрес клиента, номер порта клиента, IP-адрес сервера и
                            номер порта сервера.
 
-     SSH_ORIGINAL_COMMAND  Эта переменная содержит исходную командную строку, если
+@item     SSH_ORIGINAL_COMMAND @anchor{man_ssh_peremen_okruj SSH_ORIGINAL_COMMAND}
+                           Эта переменная содержит исходную командную строку, если
                            выполняется принудительная команда. Может использоваться
                            для извлечения исходных аргументов.
 
-     SSH_TTY               Для него задается имя tty (путь к устройству), связанного с
+@item     SSH_TTY @anchor{man_ssh_peremen_okruj SSH_TTY}
+                           Для него задается имя tty (путь к устройству), связанного с
                            текущей оболочкой или командой. Если текущий сеанс не имеет
                            tty, эта переменная не установлена.
 
-     TZ                    Эта переменная указывает текущую часовую зону, если она
+@item     TZ @anchor{man_ssh_peremen_okruj TZ}
+                           Эта переменная указывает текущую часовую зону, если она
                            была установлена ​​при запуске демона (то есть демон передает
                            значение новым соединениям).
 
-     USER                  Установите имя пользователя, входящего в систему.
-
+@item     USER @anchor{man_ssh_peremen_okruj USER}
+                           Установите имя пользователя, входящего в систему.
+@end table
      Кроме того, ssh читает ~/.ssh/environment и добавляет строки формата
      “VARNAME=value” в среду, если файл существует, и пользователям разрешено
      изменять свою среду. Для получения дополнительной информации см. Параметр
      PermitUserEnvironment в sshd_config(5).
 
-FILES
-     ~/.rhosts
+@item FILES
+@table @asis
+@item     ~/.rhosts @anchor{man_ssh_peremen_okruj ~/.rhosts}
              Этот файл используется для аутентификации на основе хоста (см. Выше). На
              некоторых машинах этот файл может потребоваться для чтения всем, если
              домашний каталог пользователя находится в разделе NFS, потому что sshd(8)
@@ -806,40 +906,42 @@ FILES
              разрешение для большинства машин - чтение и запись для пользователя
              и недоступно для других.
 
-     ~/.shosts
+@item     ~/.shosts @anchor{man_ssh_peremen_okruj ~/.shosts}
              Этот файл используется точно так же, как .rhosts, но разрешает
              аутентификацию на основе хоста без разрешения входа с помощью rlogin/rsh.
 
-     ~/.ssh/
+@item     ~/.ssh/ @anchor{man_ssh_peremen_okruj ~/.ssh/}
              Этот каталог является местоположением по умолчанию для всей
              пользовательской информации о конфигурации и аутентификации. Не
              существует общего требования хранить все содержимое этого каталога
              в секрете, но рекомендуемые разрешения чтения/записи/выполнения для
              пользователя и недоступны для других.
 
-     ~/.ssh/authorized_keys
+@item     ~/.ssh/authorized_keys @anchor{man_ssh_peremen_okruj ~/.ssh/authorized_keys}
              Перечисляет открытые ключи (DSA, ECDSA, Ed25519, RSA), которые можно
              использовать для входа в систему от имени этого пользователя. Формат
              этого файла описан на странице руководства sshd(8). Этот файл не
              является высокочувствительным, но рекомендуемые разрешения для чтения
              и записи для пользователя и недоступны для других.
 
-     ~/.ssh/config
+@item     ~/.ssh/config @anchor{man_ssh_peremen_okruj ~/.ssh/config}
              Это файл конфигурации для каждого пользователя. Формат файла и параметры
              конфигурации описаны в ssh_config(5). Из-за возможного злоупотребления
              этот файл должен иметь строгие разрешения: чтение/запись для пользователя
              и недоступность для записи другими. Это может быть доступно для записи
              в группе при условии, что рассматриваемая группа содержит только пользователя.
 
-     ~/.ssh/environment
+@item     ~/.ssh/environment @anchor{man_ssh_peremen_okruj ~/.ssh/environment}
              Содержит дополнительные определения для переменных среды;
              см. ENVIRONMENT, выше.
-
+@item Файлы закрытых частей ключа аунтификации @anchor{man_ssh_peremen_okruj Файлы закрытых частей ключа аунтификации}
+@display
      ~/.ssh/identity
      ~/.ssh/id_dsa
      ~/.ssh/id_ecdsa
      ~/.ssh/id_ed25519
      ~/.ssh/id_rsa
+@end display
              Содержит закрытый ключ для аутентификации. Эти файлы содержат
              конфиденциальные данные и должны быть доступны для чтения
              пользователем, но недоступны для других (чтение/запись/выполнение).
@@ -847,69 +949,73 @@ FILES
              Можно указать ключевую фразу при создании ключа, который будет
              использоваться для шифрования конфиденциальной части этого файла
              с использованием 3DES.
-
+@item Файлы открытой части ключа аунтификации @anchor{man_ssh_peremen_okruj Файлы открытой части ключа аунтификации}
+@display
      ~/.ssh/identity.pub
      ~/.ssh/id_dsa.pub
      ~/.ssh/id_ecdsa.pub
      ~/.ssh/id_ed25519.pub
      ~/.ssh/id_rsa.pub
-             Содержит открытый ключ для аутентификации. Эти файлы не являются
+@end display
+             Содержат открытый ключ для аутентификации. Эти файлы не являются
              конфиденциальными и могут (но не обязательно) быть доступными для
              чтения любому.
 
-     ~/.ssh/known_hosts
+@item     ~/.ssh/known_hosts @anchor{man_ssh_peremen_okruj ~/.ssh/known_hosts}
              Содержит список ключей хоста для всех хостов, в которые вошел пользователь,
              которых еще нет в общесистемном списке известных ключей хоста. Смотрите
              sshd(8) для более подробной информации о формате этого файла.
 
-     ~/.ssh/rc
+@item     ~/.ssh/rc @anchor{man_ssh_peremen_okruj ~/.ssh/rc}
              Команды в этом файле выполняются ssh, когда пользователь входит в систему,
              непосредственно перед запуском оболочки пользователя (или команды).
              Обратитесь к странице справочника sshd(8) за дополнительной информацией.
 
-     /etc/hosts.equiv
+@item     /etc/hosts.equiv @anchor{man_ssh_peremen_okruj /etc/hosts.equiv}
              Этот файл предназначен для аутентификации на основе хоста (см. Выше). Это
              должно быть доступно для записи только пользователю root.
 
-     /etc/ssh/shosts.equiv
+@item     /etc/ssh/shosts.equiv @anchor{man_ssh_peremen_okruj /etc/ssh/shosts.equiv}
              Этот файл используется точно так же, как hosts.equiv, но допускает
              аутентификацию на основе хоста без разрешения входа с помощью
              rlogin/rsh.
 
-     /etc/ssh/ssh_config
+@item     /etc/ssh/ssh_config @anchor{man_ssh_peremen_okruj /etc/ssh/ssh_config}
              Общесистемный файл конфигурации. Формат файла и параметры конфигурации
              описаны в ssh_config(5).
-
+@item Файлы закрытой части ключей аунтификации на основании хоста @anchor{man_ssh_peremen_okruj Файлы закрытой части ключей аунтификации на основании хоста}
+@display
      /etc/ssh/ssh_host_key
      /etc/ssh/ssh_host_dsa_key
      /etc/ssh/ssh_host_ecdsa_key
      /etc/ssh/ssh_host_ed25519_key
      /etc/ssh/ssh_host_rsa_key
+@end display
              Эти файлы содержат приватные части ключей хоста и используются для
              аутентификации на основе хоста.
 
-     /etc/ssh/ssh_known_hosts
+@item     /etc/ssh/ssh_known_hosts @anchor{man_ssh_peremen_okruj /etc/ssh/ssh_known_hosts}
              Общесистемный список известных ключей хоста. Этот файл должен быть
              подготовлен системным администратором, чтобы он содержал открытые
              ключи хостов всех компьютеров в организации. Это должно быть читаемым
              во всем мире. Смотрите sshd (8) для более подробной информации о
              формате этого файла.
 
-     /etc/ssh/sshrc
+@item     /etc/ssh/sshrc @anchor{man_ssh_peremen_okruj /etc/ssh/sshrc}
              Команды в этом файле выполняются ssh, когда пользователь входит в
              систему, непосредственно перед запуском оболочки пользователя
              (или команды). Обратитесь к странице справочника sshd(8) за
              дополнительной информацией.
-
-EXIT STATUS
+@end table
+@item EXIT STATUS
      ssh завершается со статусом выхода удаленной команды или с 255, если
      произошла ошибка.
 
-SEE ALSO
+@item SEE ALSO
      scp(1), sftp(1), ssh-add(1), ssh-agent(1), ssh-argv0(1), ssh-keygen(1),
      ssh-keyscan(1), tun(4), ssh_config(5), ssh-keysign(8), sshd(8)
 
-STANDARDS
+@item STANDARDS
      S. Lehtinen and C. Lonvick, The Secure Shell (SSH) Protocol Assigned
      Numbers, RFC 4250, January 2006.
 
@@ -953,7 +1059,7 @@ STANDARDS
      Real-World Security, 1999, International Workshop on Cryptographic
      Techniques and E-Commerce (CrypTEC '99).
 
-AUTHORS
+@item AUTHORS
      OpenSSH is a derivative of the original and free ssh 1.2.12 release by
      Tatu Ylonen.  Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo
      de Raadt and Dug Song removed many bugs, re-added newer features and cre‐
@@ -961,3 +1067,4 @@ AUTHORS
      versions 1.5 and 2.0.
 
 BSD                            February 17, 2016                           BSD
+@end table

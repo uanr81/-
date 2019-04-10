@@ -1,14 +1,16 @@
-SSH-AGENT(1)              BSD General Commands Manual             SSH-AGENT(1)
+@node SSH-AGENT, SSH-ARGV0, SSH-ADD(1), Top
+@chapter SSH-AGENT
 
-NAME
+@table @asis
+@item NAME
      ssh-agent — агент аутентификации
 
-SYNOPSIS
-     ssh-agent [-c | -s] [-Dd] [-a bind_address] [-E fingerprint_hash]
-               [-t life] [-P pkcs11_whitelist] [command [arg ...]]
-     ssh-agent [-c | -s] -k
+@item SYNOPSIS
+     ssh-agent [@ref{man_ssh_agent -c,, -c}| -s] [@ref{man_ssh_agent -D,, D}@ref{man_ssh_agent d,, d}] [@ref{man_ssh_agent -a bind_address,, -a bind_address}] [@ref{man_ssh_agent -E fingerprint_hash,, -E fingerprint_hash}]
+               [@ref{man_ssh_agent -t life,, -t life}] [@ref{man_ssh_agent -P,, -P} pkcs11_whitelist] [command [arg ...]]
+     ssh-agent [-c | @ref{man_ssh_agent -s,, -s}] @ref{man_ssh_agent -k,, -k}
 
-DESCRIPTION
+@item DESCRIPTION
      ssh-agent - это программа для хранения закрытых ключей, используемая для
      аутентификации с открытым ключом (RSA, DSA, ECDSA, Ed25519). ssh-agent обычно
      запускается в начале сеанса X-session или входа в систему, а все остальные окна или
@@ -23,47 +25,48 @@ DESCRIPTION
      из ssh-agent и для запроса ключей, которые содержатся в одном.
 
      Возможны следующие варианты:
-
-     -a bind_address
+@table @asis
+@item     -a bind_address @anchor{man_ssh_agent -a bind_address}
              Привязать агент к сокету UNIX-домена bind_address. По умолчанию
              используется $TMPDIR/ssh-XXXXXXXXXX/agent.<ppid>.
 
-     -c
+@item     -c @anchor{man_ssh_agent -c}
              Генерируйте команды C-shell на stdout. Это значение по умолчанию,
              если SHELL выглядит как оболочка стиля csh.
 
-     -D
+@item     -D @anchor{man_ssh_agent -D}
              Режим переднего плана. Если указан этот параметр, ssh-agent не будет
              выполнять ветвление.
 
-     -d
+@item     -d @anchor{man_ssh_agent d}
              Режим отладки. Когда указана эта опция, ssh-agent не будет разветвляться
              и записывает отладочную информацию в стандартную ошибку.
 
-     -E fingerprint_hash
+@item     -E fingerprint_hash @anchor{man_ssh_agent -E fingerprint_hash}
              Определяет алгоритм хеширования, используемый при отображении отпечатков
              клавиш. Допустимые варианты: «md5» и «sha256». По умолчанию это «sha256».
 
-     -k
+@item     -k @anchor{man_ssh_agent -k}
              Убить текущего агента (заданного переменной окружения SSH_AGENT_PID).
 
-     -P      Укажите шаблонный список допустимых путей для разделяемых библиотек PKCS#11,
+@item     -P @anchor{man_ssh_agent -P}
+             Укажите шаблонный список допустимых путей для разделяемых библиотек PKCS#11,
              которые можно добавить с помощью опции -s в ssh-add (1). По умолчанию
              разрешена загрузка библиотек PKCS#11 из “/usr/lib/*,/usr/local/lib/*”.
              Библиотеки PKCS#11, которые не соответствуют белому списку, будут отклонены.
              Смотри PATTERNS в ssh_config(5) для описания синтаксиса списка шаблонов.
 
-     -s
+@item     -s @anchor{man_ssh_agent -s}
              Генерация команд оболочки Bourne на стандартный вывод. Это значение по
              умолчанию, если SHELL не выглядит как оболочка в стиле csh.
 
-     -t life
+@item     -t life @anchor{man_ssh_agent -t life}
              Задайте значение по умолчанию для максимального времени жизни идентификаторов,
              добавляемых к агенту. Время жизни может быть указано в секундах или в формате
              времени, указанном в sshd_config (5). Время жизни, указанное для
              идентификатора с помощью ssh-add (1), переопределяет это значение. Без
              этой опции максимальное время жизни по умолчанию - навсегда.
-
+@end table
      Если указана командная строка, она выполняется как подпроцесс агента. Когда команда
      умирает, агент тоже.
 
@@ -105,16 +108,16 @@ DESCRIPTION
      нужно установить любую из этих переменных среды, вам нужно будет сделать это в
      программе, выполняемой ssh-agent.
 
-FILES
+@item FILES
      $TMPDIR/ssh-XXXXXXXXXX/agent.<ppid>
              Сокеты домена UNIX, используемые для подключения к агенту аутентификации.
              Эти розетки должны быть доступны для чтения только владельцу. Сокеты должны
              автоматически удаляться при выходе из агента.
 
-SEE ALSO
+@item SEE ALSO
      ssh(1), ssh-add(1), ssh-keygen(1), sshd(8)
 
-AUTHORS
+@item AUTHORS
      OpenSSH is a derivative of the original and free ssh 1.2.12 release by
      Tatu Ylonen.  Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo
      de Raadt and Dug Song removed many bugs, re-added newer features and cre‐
@@ -122,3 +125,4 @@ AUTHORS
      versions 1.5 and 2.0.
 
 BSD                            November 30, 2016                           BSD
+@end table

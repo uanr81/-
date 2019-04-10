@@ -1,0 +1,47 @@
+\input texinfo
+@setfilename ../../info/SSH.info
+@documentencoding UTF-8
+@settitle Руководство SSH
+@node Top, SSH, (dir), (dir)
+@top SSH верхний узел
+@ifinfo
+@heading SSH верхний узел
+@end ifinfo
+
+@menu
+* SSH::                         
+* SSHD::                        
+* SSH_CONFIG::                  
+* SSHD_CONFIG::                 
+* SCP(1)::                      
+* SFTP(1)::                     
+* SSH-ADD(1)::                  
+* SSH-AGENT::                   
+* SSH-ARGV0::                   
+* SSH-KEYGEN::                  
+* SSH-KEYSCAN::                 
+* SSH-KEYSIGN::                 
+* ssh-config-example::          
+* sshd_config-example::         
+@end menu
+
+@include man_ssh.texi
+@include man_sshd.texi
+@include man_ssh_config.texi
+@include man_sshd_config.texi
+@include man_scp.texi
+@include man_sftp.texi
+@include man_ssh-add.texi
+
+@include man_ssh-agent.texi
+@include man_ssh-argv0.texi
+
+
+@include man_ssh_keygen.texi
+
+@include man_ssh-keyscan.texi
+@include man_ssh-keysign.texi
+
+@include ssh_config_example.texi
+@include Example_sshd_config.texi
+@bye

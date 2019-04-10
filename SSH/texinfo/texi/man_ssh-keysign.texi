@@ -1,12 +1,13 @@
-SSH-KEYSIGN(8)            BSD System Manager's Manual           SSH-KEYSIGN(8)
-
-NAME
+@node SSH-KEYSIGN, ssh-config-example, SSH-KEYSCAN, Top
+@chapter SSH-KEYSIGN
+@table @asis
+@item NAME
      ssh-keysign — Вспомогательная программа ssh для аутентификации на основе хоста
 
-SYNOPSIS
+@item SYNOPSIS
      ssh-keysign
 
-DESCRIPTION
+@item DESCRIPTION
      ssh-keysign используется ssh(1) для доступа к ключам локального хоста и
      генерирования цифровой подписи, необходимой во время аутентификации на основе хоста.
 
@@ -18,7 +19,8 @@ DESCRIPTION
      sshd(8) для получения дополнительной информации об аутентификации на
      основе хоста.
 
-FILES
+@item FILES
+@display
      /etc/ssh/ssh_config
              Управляет включением ssh-keysign.
 
@@ -39,14 +41,15 @@ FILES
              Если эти файлы существуют, предполагается, что они содержат открытую
              сертификационную информацию, соответствующую приведенным выше
              закрытым ключам.
-
-SEE ALSO
+@end display
+@item SEE ALSO
      ssh(1), ssh-keygen(1), ssh_config(5), sshd(8)
 
-HISTORY
+@item HISTORY
      ssh-keysign first appeared in OpenBSD 3.2.
 
-AUTHORS
-     Markus Friedl <markus@openbsd.org>
+@item AUTHORS
+     Markus Friedl <markus@@openbsd.org>
 
 BSD                            February 17, 2016                           BSD
+@end table

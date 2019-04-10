@@ -1,15 +1,69 @@
-SSHD(8)                   BSD System Manager's Manual                  SSHD(8)
-
-NAME
+@node SSHD, SSH_CONFIG, SSH, Top
+@chapter SSHD 
+@table @asis
+@item NAME
      sshd — OpenSSH SSH демон
 
-SYNOPSIS
-     sshd [-46DdeiqTt] [-b bits] [-C connection_spec]
-          [-c host_certificate_file] [-E log_file] [-f config_file]
-          [-g login_grace_time] [-h host_key_file] [-k key_gen_time]
-          [-o option] [-p port] [-u len]
-
-DESCRIPTION
+@item SYNOPSIS
+     sshd [-@ref{man_ssh_sshd 4,, 4}@ref{man_ssh_sshd 6,, 6}@ref{man_ssh_sshd D,, D}@ref{man_ssh_sshd d,, d}@ref{man_ssh_sshd e,, e}@ref{man_ssh_sshd i,, i}@ref{man_ssh_sshd q,, q}@ref{man_ssh_sshd T,, T}@ref{man_ssh_sshd t,, t}] [@ref{man_ssh_sshd -b bits,, -b bits}] [@ref{man_ssh_sshd -C connection_spec,, -C connection_spec}]
+          [@ref{man_ssh_sshd -c host_certificate_file,, -c host_certificate_file}] [@ref{man_ssh_sshd -E log_file,, -E log_file}] [@ref{man_ssh_sshd -f config_file,, -f config_file}]
+          [@ref{man_ssh_sshd -g login_grace_time,, -g login_grace_time}] [@ref{man_ssh_sshd -h host_key_file,, -h host_key_file}] [@ref{man_ssh_sshd -k key_gen_time,, -k key_gen_time}]
+          [@ref{man_ssh_sshd -o option,, -o option}] [@ref{man_ssh_sshd -p port,, -p port}] [@ref{man_ssh_sshd -u len,, -u len}]
+@item Ключевые слова файла аунтификации
+@display
+     @ref{man_ssh_sshd_auth_file agent-forwarding,, agent-forwarding}
+     @ref{man_ssh_sshd_auth_file cert-authority,, cert-authority}
+     @ref{man_ssh_sshd_auth_file command="command",, command="command"}
+     @ref{man_ssh_sshd_auth_file environment="NAME=value",, environment="NAME=value"}
+     @ref{man_ssh_sshd_auth_file from="pattern-list",, from="pattern-list"}
+     @ref{man_ssh_sshd_auth_file no-agent-forwarding,, no-agent-forwarding}
+     @ref{man_ssh_sshd_auth_file no-port-forwarding,, no-port-forwarding}
+     @ref{man_ssh_sshd_auth_file no-pty,, no-pty}
+     @ref{man_ssh_sshd_auth_file no-user-rc,, no-user-rc}
+     @ref{man_ssh_sshd_auth_file no-X11-forwarding,, no-X11-forwarding}
+     @ref{man_ssh_sshd_auth_file permitopen="host:port",, permitopen="host:port"}
+     @ref{man_ssh_sshd_auth_file port-forwarding,, port-forwarding}
+     @ref{man_ssh_sshd_auth_file principals="principals",, principals="principals"}
+     @ref{man_ssh_sshd_auth_file pty,, pty}
+     @ref{man_ssh_sshd_auth_file restrict,, restrict}
+     @ref{man_ssh_sshd_auth_file tunnel="n",, tunnel="n"}
+     @ref{man_ssh_sshd_auth_file user-rc,, user-rc}
+     @ref{man_ssh_sshd_auth_file X11-forwarding,, X11-forwarding}
+@end display
+@item Список Файлов
+@display
+     @ref{man_ssh_sshd_file ~/.hushlogin,, ~/.hushlogin}
+     @ref{man_ssh_sshd_file ~/.rhosts,, ~/.rhosts}
+     @ref{man_ssh_sshd_file ~/.shosts,, ~/.shosts}
+     @ref{man_ssh_sshd_file ~/.ssh/,, ~/.ssh/}
+     @ref{man_ssh_sshd_file ~/.ssh/authorized_keys,, ~/.ssh/authorized_keys}
+     @ref{man_ssh_sshd_file ~/.ssh/environment,, ~/.ssh/environment}
+     @ref{man_ssh_sshd_file ~/.ssh/known_hosts,, ~/.ssh/known_hosts}
+     @ref{man_ssh_sshd_file ~/.ssh/rc,, ~/.ssh/rc}
+     @ref{man_ssh_sshd_file /etc/hosts.allow  /etc/hosts.deny,, /etc/hosts.allow  /etc/hosts.deny}
+     @ref{man_ssh_sshd_file /etc/hosts.equiv,, /etc/hosts.equiv}
+     @ref{man_ssh_sshd_file /etc/ssh/moduli,, /etc/ssh/moduli}
+     @ref{man_ssh_sshd_file /etc/motd,, /etc/motd}
+     @ref{man_ssh_sshd_file /etc/nologin,, /etc/nologin}
+     @ref{man_ssh_sshd_file /etc/ssh/shosts.equiv,, /etc/ssh/shosts.equiv}
+     @ref{man_ssh_sshd_file Приватные части ключей хоста,, /etc/ssh/ssh_host_key}
+     @ref{man_ssh_sshd_file Приватные части ключей хоста,, /etc/ssh/ssh_host_dsa_key}
+     @ref{man_ssh_sshd_file Приватные части ключей хоста,, /etc/ssh/ssh_host_ecdsa_key}
+     @ref{man_ssh_sshd_file Приватные части ключей хоста,, /etc/ssh/ssh_host_ed25519_key}
+     @ref{man_ssh_sshd_file Приватные части ключей хоста,, /etc/ssh/ssh_host_rsa_key}
+     @ref{man_ssh_sshd_file Открытые части ключей хоста,, /etc/ssh/ssh_host_key.pub}
+     @ref{man_ssh_sshd_file Открытые части ключей хоста,, /etc/ssh/ssh_host_dsa_key.pub}
+     @ref{man_ssh_sshd_file Открытые части ключей хоста,, /etc/ssh/ssh_host_ecdsa_key.pub}
+     @ref{man_ssh_sshd_file Открытые части ключей хоста,, /etc/ssh/ssh_host_ed25519_key.pub}
+     @ref{man_ssh_sshd_file Открытые части ключей хоста,, /etc/ssh/ssh_host_rsa_key.pub}
+     @ref{man_ssh_sshd_file /etc/ssh/ssh_known_hosts,, /etc/ssh/ssh_known_hosts}
+     @ref{man_ssh_sshd_file /etc/ssh/sshd_config,, /etc/ssh/sshd_config}
+     @ref{man_ssh_sshd_file /etc/ssh/sshrc,, /etc/ssh/sshrc}
+     @ref{man_ssh_sshd_file /var/run/sshd,, /var/run/sshd}
+     @ref{man_ssh_sshd_file /var/run/sshd.pid,, /var/run/sshd.pid}
+     
+@end display
+@item DESCRIPTION
      sshd (OpenSSH Daemon) - это программа-демон для ssh(1). Вместе эти программы заменяют
      rlogin и rsh и обеспечивают безопасную зашифрованную связь между двумя ненадежными
      хостами по небезопасной сети.
@@ -27,16 +81,18 @@ DESCRIPTION
      которыми он был запущен, например, /usr/sbin/sshd.
 
      Варианты следующие:
+@table @asis
+@item     -4 @anchor{man_ssh_sshd 4}
+             Заставляет sshd использовать только адреса IPv4.
 
-     -4      Заставляет sshd использовать только адреса IPv4.
+@item     -6 @anchor{man_ssh_sshd 6}
+             Заставляет sshd использовать только адреса IPv6.
 
-     -6      Заставляет sshd использовать только адреса IPv6.
-
-     -b bits
+@item     -b bits @anchor{man_ssh_sshd -b bits}
              Определяет количество бит в ключе сервера эфемерного протокола версии 1
              (по умолчанию 1024).
 
-     -C connection_spec
+@item     -C connection_spec @anchor{man_ssh_sshd -C connection_spec}
              Укажите параметры подключения для использования в расширенном тестовом
              режиме -T. Если предусмотрено, любые директивы Match в файле конфигурации,
              которые будут применяться к указанному пользователю, хосту и адресу, будут
@@ -46,37 +102,40 @@ DESCRIPTION
              “lport”, и “addr”. Все они обязательны и могут поставляться в любом порядке,
              с несколькими опциями -C или в виде списка через запятую.
 
-     -c host_certificate_file
+@item     -c host_certificate_file @anchor{man_ssh_sshd -c host_certificate_file}
              Указывает путь к файлу сертификата для идентификации sshd во время обмена
              ключами. Файл сертификата должен соответствовать файлу ключа хоста, указанному
              с помощью опции -h или директивы конфигурации HostKey.
 
-     -D      Если указан этот параметр, sshd не будет отключаться и не станет демоном. Это
+@item     -D @anchor{man_ssh_sshd D}
+             Если указан этот параметр, sshd не будет отключаться и не станет демоном. Это
              позволяет легко контролировать sshd.
 
-     -d      Режим отладки. Сервер отправляет подробный отладочный вывод со стандартной
+@item     -d @anchor{man_ssh_sshd d}
+             Режим отладки. Сервер отправляет подробный отладочный вывод со стандартной
              ошибкой и не помещает себя в фоновый режим. Сервер также не будет
              разветвляться и будет обрабатывать только одно соединение. Эта опция
              предназначена только для отладки на сервере. Несколько опций -d повышают
              уровень отладки. Максимум 3.
 
-     -E log_file
+@item     -E log_file @anchor{man_ssh_sshd -E log_file}
              Добавьте журналы отладки в log_file вместо системного журнала.
 
-     -e      Записывать журналы отладки в стандартную ошибку вместо системного журнала.
+@item     -e @anchor{man_ssh_sshd e}
+             Записывать журналы отладки в стандартную ошибку вместо системного журнала.
 
-     -f config_file
+@item     -f config_file @anchor{man_ssh_sshd -f config_file}
              Определяет имя файла конфигурации. По умолчанию используется
              /etc/ssh/sshd_config. sshd отказывается запускаться, если нет
              файла конфигурации.
 
-     -g login_grace_time
+@item     -g login_grace_time @anchor{man_ssh_sshd -g login_grace_time}
              Предоставляет льготное время для аутентификации клиентов (по умолчанию 120
              секунд). Если клиенту не удается аутентифицировать пользователя в течение
              этих нескольких секунд, сервер отключается и завершает работу. Нулевое
              значение указывает на отсутствие ограничений.
 
-     -h host_key_file
+@item     -h host_key_file @anchor{man_ssh_sshd -h host_key_file}
              Указывает файл, из которого читается ключ хоста. Эта опция должна быть
              указана, если sshd не запускается от имени пользователя root (поскольку
              обычные файлы ключей хоста обычно не читаются никем, кроме root). По умолчанию
@@ -86,13 +145,14 @@ DESCRIPTION
              версии 2. Можно иметь несколько файлов ключей хоста для разных версий
              протокола и алгоритмов ключей хоста.
 
-     -i      Указывает, что sshd запускается из inetd(8). Если протокол SSH 1 включен,
+@item     -i @anchor{man_ssh_sshd i}
+             Указывает, что sshd запускается из inetd(8). Если протокол SSH 1 включен,
              sshd обычно не следует запускать из inetd, потому что ему нужно сгенерировать
              ключ сервера, прежде чем он сможет ответить клиенту, а это может занять
              некоторое время. Клиентам, возможно, придется ждать слишком долго, если ключ
              был обновлен каждый раз.
 
-     -k key_gen_time
+@item     -k key_gen_time @anchor{man_ssh_sshd -k key_gen_time}
              Указывает, как часто регенерируется ключ сервера эфемерного протокола
              версии 1 (по умолчанию 3600 секунд или один час). Мотивация для регенерации
              ключа довольно часто заключается в том, что ключ нигде не хранится, и примерно
@@ -100,32 +160,36 @@ DESCRIPTION
              перехваченных сообщений, даже если машина взломана или физически захвачена.
              Нулевое значение указывает, что ключ никогда не будет восстановлен.
 
-     -o option
+@item     -o option @anchor{man_ssh_sshd -o option}
              Может использоваться для задания параметров в формате, используемом в файле
              конфигурации. Это полезно для указания параметров, для которых нет отдельного
              флага командной строки. Для получения полной информации о параметрах и их
              значениях, смотри sshd_config(5).
 
-     -p port
+@item     -p port @anchor{man_ssh_sshd -p port}
              Указывает порт, на котором сервер прослушивает соединения (по умолчанию 22).
              Допускается использование нескольких портов. Порты, указанные в файле
              конфигурации с параметром Port, игнорируются, если указан порт командной
              строки. Порты, указанные с помощью опции ListenAddress, переопределяют порты
              командной строки.
 
-     -q      Бесшумный режим. Ничего не отправляется в системный журнал. Обычно начало,
+@item     -q @anchor{man_ssh_sshd q}
+             Бесшумный режим. Ничего не отправляется в системный журнал. Обычно начало,
              аутентификация и завершение каждого соединения регистрируются.
 
-     -T      Расширенный тестовый режим. Проверьте правильность файла конфигурации,
+@item     -T @anchor{man_ssh_sshd T}
+             Расширенный тестовый режим. Проверьте правильность файла конфигурации,
              выведите действующую конфигурацию в стандартный вывод и затем выйдите.
              Опционально, правила соответствия могут применяться путем указания параметров
              соединения с использованием одного или нескольких параметров -C.
 
-     -t      Тестовый режим. Только проверяйте действительность файла конфигурации и
+@item     -t @anchor{man_ssh_sshd t}
+             Тестовый режим. Только проверяйте действительность файла конфигурации и
              работоспособность ключей. Это полезно для надежного обновления sshd,
              поскольку параметры конфигурации могут измениться.
 
-     -u len  Эта опция используется для указания размера поля в структуре utmp, которая
+@item     -u len @anchor{man_ssh_sshd -u len}
+             Эта опция используется для указания размера поля в структуре utmp, которая
              содержит имя удаленного хоста. Если разрешенное имя хоста длиннее len, вместо
              него будет использоваться десятичное значение с точками. Это позволяет узлам
              с очень длинными именами узлов, выходящими за пределы этого поля, по-прежнему
@@ -137,8 +201,8 @@ DESCRIPTION
              HostbasedAuthentication и используют опцию from="pattern-list" в файле ключа.
              Параметры конфигурации, для которых требуется DNS, включают использование
              шаблона USER@@HOST в AllowUsers или DenyUsers.
-
-AUTHENTICATION
+@end table
+@item AUTHENTICATION
      OpenSSH SSH-демон поддерживает протоколы SSH 1 и 2. По умолчанию используется только
      протокол 2, хотя это можно изменить с помощью опции Protocol в sshd_config(5).
      Протокол 1 не должен использоваться и предлагается только для поддержки устаревших
@@ -195,9 +259,9 @@ AUTHENTICATION
      соединения закрываются, сервер отправляет клиенту статус завершения команды, и обе
      стороны завершают работу.
 
-LOGIN PROCESS
+@item LOGIN PROCESS
      Когда пользователь успешно входит в систему, sshd делает следующее:
-
+@display
            1.   Если для входа используется tty, а команда не указана, печатается
                 время последнего входа в систему и /etc/motd (если это не запрещено
                 в файле конфигурации или с помощью ~/.hushlogin; см. Раздел FILES).
@@ -224,8 +288,8 @@ LOGIN PROCESS
 
            9.   Запускает пользовательскую оболочку или команду. Все команды выполняются
                 в оболочке пользователя, как указано в базе данных системных паролей.
-
-SSHRC
+@end display
+@item SSHRC
      Если файл ~/.ssh/rc существует, sh(1) запускает его после чтения файлов среды, но до
      запуска оболочки или команды пользователя. Он не должен выдавать никакого вывода на
      стандартный вывод; Вместо этого следует использовать stderr. Если используется
@@ -239,7 +303,7 @@ SSHRC
 
      Этот файл, вероятно, будет содержать некоторый код инициализации, сопровождаемый
      чем-то вроде:
-
+@display
         if read proto cookie && [ -n "$DISPLAY" ]; then
                 if [ `echo $DISPLAY | cut -c1-10` = 'localhost:' ]; then
                         # X11UseLocalhost=yes
@@ -250,11 +314,11 @@ SSHRC
                         echo add $DISPLAY $proto $cookie
                 fi | xauth -q -
         fi
-
+@end display
      Если этот файл не существует, запускается /etc/ssh/sshrc, и если он также не
      существует, xauth используется для добавления cookie.
 
-AUTHORIZED_KEYS FILE FORMAT
+@item AUTHORIZED_KEYS FILE FORMAT
      AuthorizedKeysFile указывает файлы, содержащие открытые ключи для аутентификации
      с открытым ключом; если эта опция не указана, по умолчанию используется
      ~/.ssh/authorized_keys и ~/.ssh/authorized_keys2. Каждая строка файла содержит
@@ -281,12 +345,12 @@ AUTHORIZED_KEYS FILE FORMAT
      Опции (если есть) состоят из разделенных запятыми спецификаций опций. Пробелы не
      допускаются, кроме как в двойных кавычках. Поддерживаются следующие спецификации
      параметров (обратите внимание, что ключевые слова параметров учитывают регистр):
-
-     agent-forwarding
+@table @asis
+@item     agent-forwarding @anchor{man_ssh_sshd_auth_file agent-forwarding}
              Включите переадресацию агента аутентификации, ранее отключенную
              параметром restrict.
 
-     cert-authority
+@item     cert-authority @anchor{man_ssh_sshd_auth_file cert-authority}
              Указывает, что указанный ключ является центром сертификации (CA), которому
              доверяют для проверки подписанных сертификатов для аутентификации
              пользователя.
@@ -295,7 +359,7 @@ AUTHORIZED_KEYS FILE FORMAT
              параметрам. Если присутствуют как ограничения сертификата, так и параметры
              ключа, применяется наиболее ограничительное объединение.
 
-     command="command"
+@item     command="command" @anchor{man_ssh_sshd_auth_file command="command"}
              Указывает, что команда выполняется всякий раз, когда этот ключ используется
              для аутентификации. Команда, предоставленная пользователем (если есть),
              игнорируется. Команда запускается на pty, если клиент запрашивает pty; в
@@ -312,7 +376,7 @@ AUTHORIZED_KEYS FILE FORMAT
              команда может быть заменена либо директивой ForceCommand sshd_config(5), либо
              командой, встроенной в сертификат.
 
-     environment="NAME=value"
+@item     environment="NAME=value" @anchor{man_ssh_sshd_auth_file environment="NAME=value"}
              Указывает, что строка должна быть добавлена ​​в среду при входе в систему с
              использованием этого ключа. Переменные среды, установленные таким образом,
              переопределяют другие значения среды по умолчанию. Допускается несколько
@@ -320,7 +384,7 @@ AUTHORIZED_KEYS FILE FORMAT
              помощью опции PermitUserEnvironment. Эта опция автоматически отключается,
              если включен UseLogin.
 
-     from="pattern-list"
+@item     from="pattern-list" @anchor{man_ssh_sshd_auth_file from="pattern-list"}
              Указывает, что в дополнение к аутентификации с открытым ключом в списке
              шаблонов, разделенных запятыми, должно присутствовать либо каноническое имя
              удаленного хоста, либо его IP-адрес. Смотрите PATTERNS в ssh_config(5) для
@@ -338,25 +402,26 @@ AUTHORIZED_KEYS FILE FORMAT
              (серверы имен и/или маршрутизаторы должны быть скомпрометированы в
              дополнение только к ключу).
 
-     no-agent-forwarding
+@item     no-agent-forwarding @anchor{man_ssh_sshd_auth_file no-agent-forwarding}
              Запрещает переадресацию агента аутентификации, когда этот ключ используется
              для аутентификации.
 
-     no-port-forwarding
+@item     no-port-forwarding @anchor{man_ssh_sshd_auth_file no-port-forwarding}
              Запрещает пересылку TCP, когда этот ключ используется для аутентификации.
              Любые запросы клиента на переадресацию порта будут возвращать ошибку. Это
              может быть использовано, например, в связи с опцией команды.
 
-     no-pty  Предотвращает распределение tty (запрос на выделение pty не будет выполнен).
+@item     no-pty @anchor{man_ssh_sshd_auth_file no-pty}
+             Предотвращает распределение tty (запрос на выделение pty не будет выполнен).
 
-     no-user-rc
+@item     no-user-rc @anchor{man_ssh_sshd_auth_file no-user-rc}
              Отключает выполнение ~/.ssh/rc.
 
-     no-X11-forwarding
+@item     no-X11-forwarding @anchor{man_ssh_sshd_auth_file no-X11-forwarding}
              Запрещает пересылку X11, когда этот ключ используется для аутентификации.
              Любые запросы клиента X11 на пересылку возвращают ошибку.
 
-     permitopen="host:port"
+@item     permitopen="host:port" @anchor{man_ssh_sshd_auth_file permitopen="host:port"}
              Ограничьте переадресацию локального порта с помощью ssh(1) -L, чтобы он
              мог подключаться только к указанному хосту и порту. Адреса IPv6 можно указать,
              заключив адрес в квадратные скобки. Можно использовать несколько вариантов
@@ -364,37 +429,38 @@ AUTHORIZED_KEYS FILE FORMAT
              сопоставление шаблонов, они должны быть буквальными доменами или адресами.
              Спецификация порта * соответствует любому порту.
 
-     port-forwarding
+@item     port-forwarding @anchor{man_ssh_sshd_auth_file port-forwarding}
              Включить переадресацию портов, ранее отключенную ограничением
 
-     principals="principals"
+@item     principals="principals" @anchor{man_ssh_sshd_auth_file principals="principals"}
              В строке удостоверяющего центра указываются разрешенные участники для
              удостоверяющей аутентификации в виде списка через запятую. Для принятия
              сертификата в списке сертификатов должно быть указано хотя бы одно имя из
              списка. Эта опция игнорируется для ключей, которые не помечены как доверенные
              подписчики сертификатов при использовании опции cert-author.
 
-     pty     Разрешает распределение tty, ранее отключенное опцией restrict.
+@item     pty @anchor{man_ssh_sshd_auth_file pty}
+             Разрешает распределение tty, ранее отключенное опцией restrict.
 
-     restrict
+@item     restrict @anchor{man_ssh_sshd_auth_file restrict}
              Включите все ограничения, то есть отключите порт, агент и переадресацию X11,
              а также отключите распределение PTY и выполнение ~/.ssh/rc. Если какие-либо
              будущие возможности ограничения будут добавлены в файлы authorized_keys, они
              будут включены в этот набор.
 
-     tunnel="n"
+@item     tunnel="n" @anchor{man_ssh_sshd_auth_file tunnel="n"}
              Принудительно подключите устройство tun(4) к серверу. Без этой опции будет
              использоваться следующее доступное устройство, если клиент
              запрашивает туннель.
 
-     user-rc
+@item     user-rc @anchor{man_ssh_sshd_auth_file user-rc}
              Включает выполнение ~/.ssh/rc, ранее отключенного опцией restrict.
 
-     X11-forwarding
+@item     X11-forwarding @anchor{man_ssh_sshd_auth_file X11-forwarding}
              Разрешает переадресацию X11, ранее отключенную опцией restrict.
-
+@end table
      Пример файла author_keys:
-
+@display
         # Комментарии разрешены в начале строки
         ssh-rsa AAAAB3Nza...LiPk== user@@example.net
         from="*.sales.example.net,!pc.sales.example.net" ssh-rsa
@@ -409,8 +475,8 @@ AUTHORIZED_KEYS FILE FORMAT
         user@@example.net
         restrict,pty,command="nethack" ssh-rsa AAAA1f8...IrrC5==
         user@@example.net
-
-SSH_KNOWN_HOSTS FILE FORMAT
+@end display
+@item SSH_KNOWN_HOSTS FILE FORMAT
      Файлы /etc/ssh/ssh_known_hosts и ~/.ssh/known_hosts содержат открытые ключи
      хостов для всех известных хостов. Глобальный файл должен быть подготовлен
      администратором (необязательно), а файл для каждого пользователя поддерживается
@@ -473,7 +539,7 @@ SSH_KNOWN_HOSTS FILE FORMAT
      имени хоста, и преобразование всех имен хостов в их хешированные представления.
 
      Пример ssh_known_hosts file:
-
+@display
         # Комментарии разрешены в начале строки
         closenet,...,192.0.2.53 1024 37 159...93 closenet.example.net
         cvs.example.net,192.0.2.10 ssh-rsa AAAA1234.....=
@@ -484,14 +550,15 @@ SSH_KNOWN_HOSTS FILE FORMAT
         @@revoked * ssh-rsa AAAAB5W...
         # Ключ CA, принятый для любого хоста в *.mydomain.com или *.mydomain.org
         @@cert-authority *.mydomain.org,*.mydomain.com ssh-rsa AAAAB5W...
-
-FILES
-     ~/.hushlogin
+@end display
+@item FILES
+@table @asis
+@item ~/.hushlogin @anchor{man_ssh_sshd_file ~/.hushlogin}
              Этот файл используется для подавления печати времени последнего входа и
              /etc/motd, если включены PrintLastLog и PrintMotd соответственно. Не
              подавляет печать баннера, указанного Баннером.
 
-     ~/.rhosts
+@item     ~/.rhosts @anchor{man_ssh_sshd_file ~/.rhosts}
              Этот файл используется для аутентификации на основе хоста (см. ssh(1) для
              получения дополнительной информации). На некоторых машинах этот файл должен
              быть доступен для чтения всем, если домашний каталог пользователя находится в
@@ -500,17 +567,17 @@ FILES
              Рекомендуемое разрешение для большинства машин - чтение и запись для
              пользователя и недоступно для других.
 
-     ~/.shosts
+@item     ~/.shosts @anchor{man_ssh_sshd_file ~/.shosts}
              Этот файл используется точно так же, как .rhosts, но разрешает
              аутентификацию на основе хоста без разрешения входа с помощью rlogin/rsh.
 
-     ~/.ssh/
+@item     ~/.ssh/ @anchor{man_ssh_sshd_file ~/.ssh/}
              Этот каталог является местоположением по умолчанию для всей пользовательской
              информации о конфигурации и аутентификации. Не существует общего требования
              хранить все содержимое этого каталога в секрете, но рекомендуемые разрешения
              для чтения/записи/выполнения для пользователя и недоступны для других.
 
-     ~/.ssh/authorized_keys
+@item     ~/.ssh/authorized_keys @anchor{man_ssh_sshd_file ~/.ssh/authorized_keys}
              Перечисляет открытые ключи (DSA, ECDSA, Ed25519, RSA), которые можно
              использовать для входа в систему от имени этого пользователя. Формат этого
              файла описан выше. Содержимое файла не очень чувствительно, но рекомендуемые
@@ -521,7 +588,7 @@ FILES
              неавторизованными пользователями. В этом случае sshd не позволит использовать
              его, если для параметра StrictModes не установлено значение “no”.
 
-     ~/.ssh/environment
+@item     ~/.ssh/environment @anchor{man_ssh_sshd_file ~/.ssh/environment}
              Этот файл считывается в среду при входе в систему (если он существует). Он
              может содержать только пустые строки, строки комментариев (начинающиеся с ‘#’)
              и строки присваивания вида name=value. Файл должен быть доступен для записи
@@ -529,63 +596,65 @@ FILES
              Обработка среды по умолчанию отключена и управляется с помощью опции
              PermitUserEnvironment.
 
-     ~/.ssh/known_hosts
+@item     ~/.ssh/known_hosts @anchor{man_ssh_sshd_file ~/.ssh/known_hosts}
              Содержит список ключей хоста для всех хостов, в которые вошел пользователь,
              которых еще нет в общесистемном списке известных ключей хоста. Формат этого
              файла описан выше. Этот файл должен быть доступен для записи только
              пользователю root / владельца и может, но не обязательно, быть доступным
              для чтения всем.
 
-     ~/.ssh/rc
+@item     ~/.ssh/rc @anchor{man_ssh_sshd_file ~/.ssh/rc}
              Содержит процедуры инициализации, которые должны быть выполнены до того,
              как домашний каталог пользователя станет доступным. Этот файл должен быть
              доступен для записи только пользователю, и не должен быть доступен для
              чтения кем-либо еще.
-
-     /etc/hosts.allow
-     /etc/hosts.deny
+@item /etc/hosts.allow  /etc/hosts.deny @anchor{man_ssh_sshd_file /etc/hosts.allow  /etc/hosts.deny}
              Элементы управления доступом, которые должны быть реализованы с помощью
              tcp-wrappers, определены здесь. Дальнейшие подробности описаны в
              hosts_access(5).
 
-     /etc/hosts.equiv
+@item     /etc/hosts.equiv @anchor{man_ssh_sshd_file /etc/hosts.equiv}
              Этот файл предназначен для аутентификации на основе хоста (см. ssh(1)).
              Это должно быть доступно для записи только пользователю root.
 
-     /etc/ssh/moduli
+@item     /etc/ssh/moduli @anchor{man_ssh_sshd_file /etc/ssh/moduli}
              Содержит группы Диффи-Хеллмана, используемые для метода обмена ключами
              "Diffie-Hellman Group Exchange". Формат файла описан в moduli(5). Если в
              этом файле не найдено пригодных для использования групп, будут использоваться
              фиксированные внутренние группы.
 
-     /etc/motd
+@item     /etc/motd @anchor{man_ssh_sshd_file /etc/motd}
              Смотри motd(5).
 
-     /etc/nologin
+@item     /etc/nologin @anchor{man_ssh_sshd_file /etc/nologin}
              Если этот файл существует, sshd не разрешает входить кому-либо, кроме
              пользователя root. Содержимое этого файла отображается всем, кто пытается
              войти в систему, и соединения без полномочий root отклоняются. Файл должен
              быть доступен для чтения всем.
 
-     /etc/ssh/shosts.equiv
+@item     /etc/ssh/shosts.equiv @anchor{man_ssh_sshd_file /etc/ssh/shosts.equiv}
              Этот файл используется точно так же, как hosts.equiv, но допускает
              аутентификацию на основе хоста без разрешения входа с помощью rlogin/rsh.
-
-     /etc/ssh/ssh_host_key
-     /etc/ssh/ssh_host_dsa_key
-     /etc/ssh/ssh_host_ecdsa_key
-     /etc/ssh/ssh_host_ed25519_key
-     /etc/ssh/ssh_host_rsa_key
+@item        Приватные части ключей хоста @anchor{man_ssh_sshd_file Приватные части ключей хоста} 
+@display
+             /etc/ssh/ssh_host_key
+             /etc/ssh/ssh_host_dsa_key
+             /etc/ssh/ssh_host_ecdsa_key
+             /etc/ssh/ssh_host_ed25519_key
+             /etc/ssh/ssh_host_rsa_key 
+@end display
              Эти файлы содержат приватные части ключей хоста. Эти файлы должны принадлежать
              только пользователю root, быть доступными для чтения только пользователю root
              и недоступны для других. Обратите внимание, что sshd не запускается, если эти
              файлы являются group/world-accessible.
-
-     /etc/ssh/ssh_host_key.pub
-     /etc/ssh/ssh_host_dsa_key.pub
-     /etc/ssh/ssh_host_ecdsa_key.pub
-     /etc/ssh/ssh_host_ed25519_key.pub
-     /etc/ssh/ssh_host_rsa_key.pub
+@item   Открытые части ключей хоста @anchor{man_ssh_sshd_file Открытые части ключей хоста}
+@display
+             /etc/ssh/ssh_host_key.pub
+             /etc/ssh/ssh_host_dsa_key.pub
+             /etc/ssh/ssh_host_ecdsa_key.pub
+             /etc/ssh/ssh_host_ed25519_key.pub
+             /etc/ssh/ssh_host_rsa_key.pub
+@end display
              Эти файлы содержат открытые части ключей хоста. Эти файлы должны быть
              доступны для чтения всем пользователям, но доступны для записи только
              пользователю root. Их содержимое должно соответствовать соответствующим
@@ -594,41 +663,41 @@ FILES
              скопировать в известные файлы хостов. Эти файлы создаются с использованием
              ssh-keygen(1).
 
-     /etc/ssh/ssh_known_hosts
+@item     /etc/ssh/ssh_known_hosts @anchor{man_ssh_sshd_file /etc/ssh/ssh_known_hosts}
              Общесистемный список известных ключей хоста. Этот файл должен быть
              подготовлен системным администратором, чтобы он содержал открытые ключи
              хостов всех компьютеров в организации. Формат этого файла описан выше. Этот
              файл должен быть доступен для записи только пользователю root/владельца и
              должен быть доступен для чтения всем пользователям.
 
-     /etc/ssh/sshd_config
+@item     /etc/ssh/sshd_config @anchor{man_ssh_sshd_file /etc/ssh/sshd_config}
              Содержит данные конфигурации для sshd. Формат файла и параметры конфигурации
              описаны в sshd_config(5).
 
-     /etc/ssh/sshrc
+@item     /etc/ssh/sshrc @anchor{man_ssh_sshd_file /etc/ssh/sshrc}
              Подобно ~/.ssh/rc, его можно использовать для глобальной инициализации
              времени входа в систему для конкретного компьютера. Этот файл должен быть
              доступен для записи только пользователю root и должен быть доступен для
              чтения всем.
 
-     /var/run/sshd
+@item     /var/run/sshd @anchor{man_ssh_sshd_file /var/run/sshd}
              Каталог chroot(2), используемый sshd во время разделения привилегий на
              этапе предварительной аутентификации. Каталог не должен содержать никаких
              файлов и должен принадлежать пользователю root, без групповой доступности
              для записи.
 
-     /var/run/sshd.pid
+@item     /var/run/sshd.pid @anchor{man_ssh_sshd_file /var/run/sshd.pid}
              Содержит идентификатор процесса sshd, который прослушивает соединения (если
              несколько демонов запущены одновременно для разных портов, он содержит
              идентификатор процесса, запущенного последним). Содержимое этого файла не
              является конфиденциальным; это может быть читаемым во всем мире.
-
-SEE ALSO
+@end table
+@item SEE ALSO
      scp(1), sftp(1), ssh(1), ssh-add(1), ssh-agent(1), ssh-keygen(1),
      ssh-keyscan(1), chroot(2), hosts_access(5), moduli(5), sshd_config(5),
      inetd(8), sftp-server(8)
 
-AUTHORS
+@item AUTHORS
      OpenSSH is a derivative of the original and free ssh 1.2.12 release by
      Tatu Ylonen.  Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo
      de Raadt and Dug Song removed many bugs, re-added newer features and cre‐
@@ -637,3 +706,4 @@ AUTHORS
      for privilege separation.
 
 BSD                            February 17, 2016                           BSD
+@end table

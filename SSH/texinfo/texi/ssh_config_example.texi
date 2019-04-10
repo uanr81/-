@@ -1,4 +1,7 @@
+@node ssh-config-example, sshd_config-example, SSH-KEYSIGN, Top
+@chapter ssh-config-example
 
+@display
 # Это общесистемный файл конфигурации клиента ssh. Смотрите ssh_config(5) для
 #получения дополнительной информации. Этот файл предоставляет значения по умолчанию
 #для пользователей, и значения можно изменить в файлах конфигурации для каждого
@@ -54,3 +57,4 @@ Host *
     HashKnownHosts yes
     GSSAPIAuthentication yes
     GSSAPIDelegateCredentials no
+@end display

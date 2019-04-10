@@ -1,9 +1,10 @@
-SSH-ARGV0(1)              BSD General Commands Manual             SSH-ARGV0(1)
-
-NAME
+@node SSH-ARGV0, SSH-KEYGEN, SSH-AGENT, Top
+@chapter SSH-ARGV0
+@table @asis
+@item NAME
      ssh-argv0 — заменяет старое имя команды ssh на обработку имени хоста
 
-SYNOPSIS
+@item SYNOPSIS
      hostname | user@@hostname [-l login_name] [command]
 
      hostname | user@@hostname [-afgknqstvxACNTX1246] [-b bind_address]
@@ -11,19 +12,19 @@ SYNOPSIS
      [-m mac_spec] [-o option] [-p port] [-F configfile] [-L
      port:host:hostport] [-R port:host:hostport] [-D port] [command]
 
-DESCRIPTION
+@item DESCRIPTION
      ssh-argv0 заменяет старое имя команды ssh как обработку имени хоста. Если вы
      ссылаетесь на этот скрипт с именем хоста, то выполнение ссылки эквивалентно
      выполнению ssh с этим именем хоста в качестве аргумента. Все остальные аргументы
      передаются в ssh и будут обрабатываться в обычном режиме.
 
-OPTIONS
+@item OPTIONS
      See ssh(1).
 
-FILES
+@item FILES
      See ssh(1).
 
-AUTHORS
+@item AUTHORS
      OpenSSH is a derivative of the original and free ssh 1.2.12 release by
      Tatu Ylonen.  Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo
      de Raadt and Dug Song removed many bugs, re-added newer features and cre‐
@@ -31,7 +32,8 @@ AUTHORS
      versions 1.5 and 2.0.  Jonathan Amery wrote this ssh-argv0 script and the
      associated documentation.
 
-SEE ALSO
+@item SEE ALSO
      ssh(1)
 
 Debian Project                 September 7, 2001                Debian Project
+@end table

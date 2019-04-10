@@ -1,14 +1,16 @@
-#	$OpenBSD: sshd_config,v 1.101 2017/03/14 07:19:07 djm Exp $
+@node sshd_config-example, , ssh-config-example, Top
+@chapter sshd_config-example
+@display
+#sshd_config,v 1.101 2017/03/14 07:19:07 djm Exp $
+# Это общесистемный файл конфигурации сервера sshd. Смотрите sshd_config(5) для
+#получения дополнительной информации.
 
-# This is the sshd server system-wide configuration file.  See
-# sshd_config(5) for more information.
+# Этот sshd был скомпилирован с PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
-# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
-
-# The strategy used for options in the default sshd_config shipped with
-# OpenSSH is to specify options with their default value where
-# possible, but leave them commented.  Uncommented options override the
-# default value.
+# Стратегия, используемая для параметров в sshd_config по умолчанию, поставляемом
+# с OpenSSH, заключается в том, чтобы по возможности указывать параметры со значениями
+# по умолчанию, но оставлять их в комментариях. Некомментированные параметры
+# переопределяют значение по умолчанию.
 
 #Port 22
 #AddressFamily any
@@ -37,7 +39,7 @@ PermitRootLogin yes
 
 #PubkeyAuthentication yes
 
-# Expect .ssh/authorized_keys2 to be disregarded by default in future.
+# Ожидайте, что .ssh/authorized_keys2 будет игнорироваться по умолчанию в будущем.
 #AuthorizedKeysFile	.ssh/authorized_keys .ssh/authorized_keys2
 
 #AuthorizedPrincipalsFile none
@@ -45,23 +47,23 @@ PermitRootLogin yes
 #AuthorizedKeysCommand none
 #AuthorizedKeysCommandUser nobody
 
-# For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
+# Для этого вам также понадобятся ключи хоста в /etc/ssh/ssh_known_hosts
 #HostbasedAuthentication no
-# Change to yes if you don't trust ~/.ssh/known_hosts for
+# Измените на да, если вы не доверяете ~/.ssh/known_hosts 
 # HostbasedAuthentication
 #IgnoreUserKnownHosts no
-# Don't read the user's ~/.rhosts and ~/.shosts files
+# Не читайте файлы пользователя ~/.rhosts и ~/.shosts
 #IgnoreRhosts yes
 
-# To disable tunneled clear text passwords, change to no here!
+# Чтобы отключить туннельные пароли в виде открытого текста, измените на 'no'здесь!
 #PasswordAuthentication yes
 #PermitEmptyPasswords no
 
-# Change to yes to enable challenge-response passwords (beware issues with
-# some PAM modules and threads)
+# Измените на yes, чтобы включить пароли запроса-ответа (остерегайтесь проблем с
+#некоторыми модулями и потоками PAM)
 ChallengeResponseAuthentication no
 
-# Kerberos options
+# Kerberos опции
 #KerberosAuthentication no
 #KerberosOrLocalPasswd yes
 #KerberosTicketCleanup yes
@@ -73,15 +75,15 @@ ChallengeResponseAuthentication no
 #GSSAPIStrictAcceptorCheck yes
 #GSSAPIKeyExchange no
 
-# Set this to 'yes' to enable PAM authentication, account processing,
-# and session processing. If this is enabled, PAM authentication will
-# be allowed through the ChallengeResponseAuthentication and
-# PasswordAuthentication.  Depending on your PAM configuration,
-# PAM authentication via ChallengeResponseAuthentication may bypass
-# the setting of "PermitRootLogin without-password".
-# If you just want the PAM account and session checks to run without
-# PAM authentication, then enable this but set PasswordAuthentication
-# and ChallengeResponseAuthentication to 'no'.
+# Установите для этого параметра значение 'yes', чтобы включить проверку
+# подлинности PAM, обработку учетной записи и обработку сеанса. Если это
+# включено, аутентификация PAM будет разрешена через ChallengeResponseAuthentication
+# и PasswordAuthentication. В зависимости от конфигурации PAM аутентификация PAM
+# через ChallengeResponseAuthentication может обойти настройку
+# "PermitRootLogin without-password". Если вы просто хотите, чтобы проверки учетных
+# записей и сеансов PAM выполнялись без аутентификации PAM, включите эту функцию, но
+# установите для PasswordAuthentication и ChallengeResponseAuthentication
+# значение 'no'.
 UsePAM yes
 
 #AllowAgentForwarding yes
@@ -106,18 +108,19 @@ PrintMotd no
 #ChrootDirectory none
 #VersionAddendum none
 
-# no default banner path
+# отключение баннера по умолчанию
 #Banner none
 
-# Allow client to pass locale environment variables
+# Разрешить клиенту передавать переменные окружения локали
 AcceptEnv LANG LC_*
 
-# override default of no subsystems
+# переопределить по умолчанию без подсистем
 Subsystem	sftp	/usr/lib/openssh/sftp-server
 
-# Example of overriding settings on a per-user basis
-#Match User anoncvs
+# Пример переопределения настроек для каждого пользователя
+# Match User anoncvs
 #	X11Forwarding no
 #	AllowTcpForwarding no
 #	PermitTTY no
 #	ForceCommand cvs server
+@end display

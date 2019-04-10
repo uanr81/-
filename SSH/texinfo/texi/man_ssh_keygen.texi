@@ -1,35 +1,66 @@
-SSH-KEYGEN(1)             BSD General Commands Manual            SSH-KEYGEN(1)
-
-NAME
+@node SSH-KEYGEN, SSH-KEYSCAN, SSH-ARGV0, Top
+@chapter SSH-KEYGEN
+@table @asis
+@item NAME
      ssh-keygen — генерация ключа аутентификации, управление и преобразование
 
-SYNOPSIS
-     ssh-keygen [-q] [-b bits] [-t dsa | ecdsa | ed25519 | rsa | rsa1]
-                [-N new_passphrase] [-C comment] [-f output_keyfile]
-     ssh-keygen -p [-P old_passphrase] [-N new_passphrase] [-f keyfile]
-     ssh-keygen -i [-m key_format] [-f input_keyfile]
-     ssh-keygen -e [-m key_format] [-f input_keyfile]
-     ssh-keygen -y [-f input_keyfile]
-     ssh-keygen -c [-P passphrase] [-C comment] [-f keyfile]
-     ssh-keygen -l [-v] [-E fingerprint_hash] [-f input_keyfile]
-     ssh-keygen -B [-f input_keyfile]
-     ssh-keygen -D pkcs11
-     ssh-keygen -F hostname [-f known_hosts_file] [-l]
-     ssh-keygen -H [-f known_hosts_file]
-     ssh-keygen -R hostname [-f known_hosts_file]
-     ssh-keygen -r hostname [-f input_keyfile] [-g]
-     ssh-keygen -G output_file [-v] [-b bits] [-M memory] [-S start_point]
-     ssh-keygen -T output_file -f input_file [-v] [-a rounds] [-J num_lines]
-                [-j start_line] [-K checkpt] [-W generator]
-     ssh-keygen -s ca_key -I certificate_identity [-h] [-n principals]
-                [-O option] [-V validity_interval] [-z serial_number] file ...
-     ssh-keygen -L [-f input_keyfile]
-     ssh-keygen -A
-     ssh-keygen -k -f krl_file [-u] [-s ca_public] [-z version_number]
-                file ...
-     ssh-keygen -Q -f krl_file file ...
-
-DESCRIPTION
+@item SYNOPSIS
+     ssh-keygen [@ref{man_ssh_keygen -q,, -q}] [@ref{man_ssh_keygen -b bits,, -b bits}] [@ref{man_ssh_keygen -t dsa | ecdsa | ed25519 | rsa | rsa1,, -t dsa | ecdsa | ed25519 | rsa | rsa1}]
+                [@ref{man_ssh_keygen -N new_passphrase,, -N new_passphrase}] [@ref{man_ssh_keygen -C comment,, -C comment}] [@ref{man_ssh_keygen -f filename,, -f output_keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -p,, -p} [@ref{man_ssh_keygen -P passphrase,, -P passphrase}] [@ref{man_ssh_keygen -N new_passphrase,, -N new_passphrase}] [@ref{man_ssh_keygen -f filename,, -f keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -i,, -i} [@ref{man_ssh_keygen -m key_format,, -m key_format}] [@ref{man_ssh_keygen -f filename,, -f input_keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -e,, -e} [@ref{man_ssh_keygen -m key_format,, -m key_format}] [@ref{man_ssh_keygen -f filename,, -f input_keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -y,, -y} [@ref{man_ssh_keygen -f filename,, -f input_keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -c,, -c} [@ref{man_ssh_keygen -P passphrase,, -P passphrase}] [@ref{man_ssh_keygen -C comment,, -C comment}] [@ref{man_ssh_keygen -f filename,, -f filename}-f keyfile]
+     ssh-keygen @ref{man_ssh_keygen -l,, -l} [@ref{man_ssh_keygen -v,, -v}] [@ref{man_ssh_keygen -E fingerprint_hash,, -E fingerprint_hash}] [@ref{man_ssh_keygen -f filename,, -f input_keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -B,, -B} [@ref{man_ssh_keygen -f filename,, -f input_keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -D pkcs11,, -D pkcs11}
+     ssh-keygen @ref{man_ssh_keygen -F hostname,, -F hostname} [@ref{man_ssh_keygen -f filename,, -f known_hosts_file}] [@ref{man_ssh_keygen -l,, -l}]
+     ssh-keygen @ref{man_ssh_keygen -H,, -H} [@ref{man_ssh_keygen -f filename,, -f known_hosts_file}]
+     ssh-keygen @ref{man_ssh_keygen -R hostname,, -R hostname} [@ref{man_ssh_keygen -f filename,, -f known_hosts_file}]
+     ssh-keygen @ref{man_ssh_keygen -r hostname,, -r hostname} [@ref{man_ssh_keygen -f filename,, -f input_keyfile}] [@ref{man_ssh_keygen -g,, -g}]
+     ssh-keygen @ref{man_ssh_keygen -G output_file,, -G output_file} [@ref{man_ssh_keygen -v,, -v}] [@ref{man_ssh_keygen -b bits,, -b bits}] [@ref{man_ssh_keygen -M memory,, -M memory}] [@ref{man_ssh_keygen -S start,, -S start_point}]
+     ssh-keygen @ref{man_ssh_keygen -T output_file,, -T output_file} @ref{man_ssh_keygen -f filename,, -f input_file} [@ref{man_ssh_keygen -v,, -v}] [@ref{man_ssh_keygen -a rounds,, -a rounds}] [@ref{man_ssh_keygen -J num_lines,, -J num_lines}]
+                [@ref{man_ssh_keygen -j start_line,, -j start_line}] [@ref{man_ssh_keygen -K checkpt,, -K checkpt}] [@ref{man_ssh_keygen -W generator,, -W generator}]
+     ssh-keygen @ref{man_ssh_keygen -s ca_key,, -s ca_key} @ref{man_ssh_keygen -I certificate_identity,, -I certificate_identity} [@ref{man_ssh_keygen -h,, -h}] [@ref{man_ssh_keygen -n principals,, -n principals}]
+                [@ref{man_ssh_keygen -O option,, -O option}] [@ref{man_ssh_keygen -V validity_interval,, -V validity_interval}] [@ref{man_ssh_keygen -z serial_number,, -z serial_number}] file ...
+     ssh-keygen @ref{man_ssh_keygen -L,, -L} [@ref{man_ssh_keygen -f filename,, -f input_keyfile}]
+     ssh-keygen @ref{man_ssh_keygen -A,, -A}
+     ssh-keygen @ref{man_ssh_keygen -k,, -k} @ref{man_ssh_keygen -f filename,, -f krl_file} [@ref{man_ssh_keygen -u,, -u}] [@ref{man_ssh_keygen -s ca_key,, -s ca_public}] [@ref{man_ssh_keygen -z serial_number,, -z version_number}] file ...
+     ssh-keygen @ref{man_ssh_keygen -Q,, -Q} @ref{man_ssh_keygen -f filename,, -f krl_file file ...}
+     ssh-keygen @ref{man_ssh_keygen -o,, -o}(нет в манах)
+@item Опции '-O' параметр сертификата при подписи ключа
+@display
+     @ref{man_ssh_keygen_options_o clear,, clear}
+     @ref{man_ssh_keygen_options_o force-command=command,, force-command=command}
+     @ref{man_ssh_keygen_options_o no-agent-forwarding,, no-agent-forwarding}
+     @ref{man_ssh_keygen_options_o no-port-forwarding,, no-port-forwarding}
+     @ref{man_ssh_keygen_options_o no-pty,, no-pty}
+     @ref{man_ssh_keygen_options_o no-user-rc,, no-user-rc}
+     @ref{man_ssh_keygen_options_o no-x11-forwarding,, no-x11-forwarding}
+     @ref{man_ssh_keygen_options_o permit-agent-forwarding,, permit-agent-forwarding}
+     @ref{man_ssh_keygen_options_o permit-port-forwarding,, permit-port-forwarding}
+     @ref{man_ssh_keygen_options_o permit-pty,, permit-pty}
+     @ref{man_ssh_keygen_options_o permit-user-rc,, permit-user-rc}
+     @ref{man_ssh_keygen_options_o permit-x11-forwarding,, permit-x11-forwarding}
+     @ref{man_ssh_keygen_options_o source-address=address_list,, source-address=address_list}
+@end display
+@item спецификации KRL
+@display
+     @ref{man_ssh_keygen_spec_krl serial: serial_number[-serial_number],, serial: serial_number[-serial_number]}
+     @ref{man_ssh_keygen_spec_krl id: key_id,, id: key_id}
+     @ref{man_ssh_keygen_spec_krl key: public_key,, key: public_key}
+     @ref{man_ssh_keygen_spec_krl sha1: public_key,, sha1: public_key}
+@end display
+@item Список файлов ssh_keygen
+@display
+     @ref{man_ssh_keygen_files ~/.ssh/identity,, ~/.ssh/identity}
+     @ref{man_ssh_keygen_files ~/.ssh/identity.pub,, ~/.ssh/identity.pub}
+     @ref{man_ssh_keygen_files ~/.ssh/id_dsa  ~/.ssh/id_ecdsa  ~/.ssh/id_ed25519  ~/.ssh/id_rsa,, ~/.ssh/id_dsa  ~/.ssh/id_ecdsa  ~/.ssh/id_ed25519  ~/.ssh/id_rsa}
+     @ref{man_ssh_keygen_files ~/.ssh/id_dsa.pub  ~/.ssh/id_ecdsa.pub  ~/.ssh/id_ed25519.pub  ~/.ssh/id_rsa.pub,, ~/.ssh/id_dsa.pub  ~/.ssh/id_ecdsa.pub  ~/.ssh/id_ed25519.pub  ~/.ssh/id_rsa.pub}
+     @ref{man_ssh_keygen_files /etc/ssh/moduli,, /etc/ssh/moduli}
+@end display
+@item DESCRIPTION
      ssh-keygen генерирует, управляет и преобразует ключи аутентификации для ssh(1).
      ssh-keygen может создавать ключи для использования протоколами SSH версий 1 и 2.
      Протокол 1 не должен использоваться и предлагается только для поддержки устаревших
@@ -80,14 +111,15 @@ DESCRIPTION
      ключи должны быть размещены для активации.
 
      Возможны следующие варианты:
-
-     -A      Для каждого из типов ключей (rsa1, rsa, dsa, ecdsa и ed25519), для которых
+@table @asis
+@item     -A @anchor{man_ssh_keygen -A}
+             Для каждого из типов ключей (rsa1, rsa, dsa, ecdsa и ed25519), для которых
      	     ключи хоста не существуют, создайте ключи хоста с использованием пути к файлу
 	     ключа по умолчанию, пустой парольной фразы, битов по умолчанию для типа ключа
 	     и комментария по умолчанию. Это используется сценариями системного
 	     администрирования для генерации новых ключей хоста.
 
-     -a rounds
+@item     -a rounds @anchor{man_ssh_keygen -a rounds}
              При сохранении закрытого ключа нового формата (то есть ключа ed25519 или
 	     любого ключа протокола SSH 2, когда установлен флаг -o), эта опция указывает
 	     количество используемых раундов KDF (функция вывода ключа). Более высокие
@@ -97,9 +129,10 @@ DESCRIPTION
              При проверке кандидатов в DH-GEX (с помощью команды -T). Эта опция
 	     указывает количество тестов простоты для выполнения.
 
-     -B      Показать дайджест пузыря указанного файла с закрытым или открытым ключом.
+@item     -B @anchor{man_ssh_keygen -B}
+             Показать дайджест пузыря указанного файла с закрытым или открытым ключом.
 
-     -b bits
+@item     -b bits @anchor{man_ssh_keygen -b bits}
              Определяет количество бит в ключе для создания. Для ключей RSA минимальный
 	     размер составляет 1024 бита, а по умолчанию - 2048 бит. Обычно 2048 бит
 	     считается достаточным. Ключи DSA должны иметь длину 1024 бита, как указано в
@@ -109,49 +142,51 @@ DESCRIPTION
 	     неудачу. Ключи Ed25519 имеют фиксированную длину, и флаг -b будет
 	     игнорироваться.
 
-     -C comment
+@item     -C comment @anchor{man_ssh_keygen -C comment}
              Предоставляет новый комментарий.
 
-     -c      Запрашивает изменение комментария в файлах с закрытым и открытым ключами.
+@item     -c @anchor{man_ssh_keygen -c}
+             Запрашивает изменение комментария в файлах с закрытым и открытым ключами.
      	     Эта операция поддерживается только для ключей RSA1. Программа запросит файл,
 	     содержащий закрытые ключи, парольную фразу, если ключ есть, и новый
 	     комментарий.
 
-     -D pkcs11
+@item     -D pkcs11 @anchor{man_ssh_keygen -D pkcs11}
              Загрузите открытые ключи RSA, предоставляемые общей библиотекой PKCS#11
 	     pkcs11. При использовании в сочетании с -s этот параметр указывает, что ключ
 	     CA находится в токене PKCS#11 (подробности см. В разделе CERTIFICATES).
 
-     -E fingerprint_hash
+@item     -E fingerprint_hash @anchor{man_ssh_keygen -E fingerprint_hash}
              Определяет алгоритм хеширования, используемый при отображении отпечатков
 	     клавиш. Допустимые варианты: “md5” и “sha256”. По умолчанию используется
 	     “sha256”.
 
-     -e      Эта опция будет читать частный или открытый файл ключа OpenSSH и печатать,
+@item     -e @anchor{man_ssh_keygen -e}
+             Эта опция будет читать частный или открытый файл ключа OpenSSH и печатать,
      	     чтобы выводить ключ в одном из форматов, указанных параметром -m. Формат
 	     экспорта по умолчанию - “RFC4716”. Эта опция позволяет экспортировать ключи
 	     OpenSSH для использования другими программами, включая несколько коммерческих
 	     реализаций SSH.
 
-     -F hostname
+@item     -F hostname @anchor{man_ssh_keygen -F hostname}
              Найдите указанное имя хоста в файле known_hosts, в котором перечислены все
 	     найденные совпадения. Эта опция полезна для поиска имен или адресов
 	     хэшированных хостов и может также использоваться вместе с опцией -H для
 	     вывода найденных ключей в хешированном формате.
 
-     -f filename
+@item     -f filename @anchor{man_ssh_keygen -f filename}
              Определяет имя файла ключа.
 
-     -G output_file
+@item     -G output_file @anchor{man_ssh_keygen -G output_file}
              Генерация кандидатов простых чисел для DH-GEX. Эти простые числа должны
 	     быть проверены на безопасность (с использованием опции -T) перед
 	     использованием.
 
-     -g
+@item     -g @anchor{man_ssh_keygen -g}
 	     Используйте общий формат DNS при печати записей ресурсов отпечатков
 	     пальцев с помощью команды -r.
 
-     -H
+@item     -H @anchor{man_ssh_keygen -H}
 	     Хешировать файл known_hosts. Это заменяет все имена хостов и адреса
 	     хешированными представлениями в указанном файле; исходный контент
 	     перемещается в файл с суффиксом .old. Эти хэши могут обычно использоваться
@@ -160,157 +195,158 @@ DESCRIPTION
 	     хостов и поэтому безопасна для использования с файлами, которые смешивают
 	     хэшированные и нехэшированные имена.
 
-     -h
+@item     -h @anchor{man_ssh_keygen -h}
 	     При подписании ключа создайте сертификат хоста вместо сертификата
 	     пользователя. Пожалуйста, смотрите раздел CERTIFICATES для деталей.
 
-     -I certificate_identity
+@item     -I certificate_identity @anchor{man_ssh_keygen -I certificate_identity}
              Укажите идентификатор ключа при подписании открытого ключа. Пожалуйста,
 	     смотрите раздел CERTIFICATES для деталей.
 
-     -i
+@item     -i @anchor{man_ssh_keygen -i}
 	     Этот параметр будет считывать незашифрованный файл закрытого (или открытого)
 	     ключа в формате, заданном параметром -m, и печатать совместимый с OpenSSH
 	     закрытый (или открытый) ключ в стандартный вывод. Эта опция позволяет
 	     импортировать ключи из другого программного обеспечения, включая несколько
 	     коммерческих реализаций SSH. Формат импорта по умолчанию - “RFC4716”.
 
-     -J num_lines
+@item     -J num_lines @anchor{man_ssh_keygen -J num_lines}
              Выйдите из экрана после указанного количества строк во время проверки
 	     кандидатов в DH с помощью опции -T.
 
-     -j start_line
+@item     -j start_line @anchor{man_ssh_keygen -j start_line}
              Начать проверку с указанного номера строки при выполнении проверки
 	     кандидатов DH с помощью опции -T.
 
-     -K checkpt
+@item     -K checkpt @anchor{man_ssh_keygen -K checkpt}
              Запишите последнюю обработанную строку в файл checkpt при выполнении
 	     проверки кандидатов на DH с помощью опции -T. Это будет использоваться для
 	     пропуска строк во входном файле, которые уже были обработаны, если
 	     задание будет перезапущено.
 
-     -k
+@item     -k @anchor{man_ssh_keygen -k}
 	     Создайте файл KRL. В этом режиме ssh-keygen сгенерирует файл KRL в месте,
 	     указанном с помощью флага -f, который аннулирует каждый ключ или сертификат,
 	     представленный в командной строке. Ключи/сертификаты, которые должны быть
 	     отозваны, могут быть указаны в файле открытого ключа или в формате,
 	     описанном в разделе KEY REVOCATION LISTS.
 
-     -L
+@item     -L @anchor{man_ssh_keygen -L}
              Печатает содержимое одного или нескольких сертификатов.
 
-     -l
+@item     -l @anchor{man_ssh_keygen -l}
              Показать отпечаток указанного файла открытого ключа. Частные ключи RSA1
 	     также поддерживаются. Для ключей RSA и DSA ssh-keygen пытается найти
 	     соответствующий файл открытого ключа и печатает его отпечаток. В сочетании
 	     с -v арт-представление ключа ASCII предоставляется вместе
 	     с отпечатком пальца.
 
-     -M memory
+@item     -M memory @anchor{man_ssh_keygen -M memory}
              Укажите объем памяти, который будет использоваться (в мегабайтах)
 	     при генерации модулей-кандидатов для DH-GEX.
 
-     -m key_format
+@item     -m key_format @anchor{man_ssh_keygen -m key_format}
              Укажите формат ключа для параметров преобразования -i (import) или
 	     -e (export). Поддерживаются следующие форматы ключей: «RFC4716»
 	     (открытый или закрытый ключ RFC 4716/SSH2), “PKCS8”
 	     (открытый ключ PEM PKCS8) или “PEM” (открытый ключ PEM). Формат
 	     преобразования по умолчанию - “RFC4716”.
 
-     -N new_passphrase
+@item     -N new_passphrase @anchor{man_ssh_keygen -N new_passphrase}
              Предоставляет новую фразу-пароль.
 
-     -n principals
+@item     -n principals @anchor{man_ssh_keygen -n principals}
              Укажите одного или нескольких участников (имена пользователей или хостов),
 	     которые будут включены в сертификат при подписании ключа. Можно указать
 	     несколько принципов, разделенных запятыми. Пожалуйста, смотрите раздел
 	     CERTIFICATES для деталей.
 
-     -O option
+@item     -O option @anchor{man_ssh_keygen -O option}
              Укажите параметр сертификата при подписи ключа. Эта опция может быть
 	     указана несколько раз. Пожалуйста, смотрите раздел CERTIFICATES для
 	     деталей. Опции, которые действительны для пользовательских сертификатов:
-
-             clear
+@table @asis
+@item             clear @anchor{man_ssh_keygen_options_o clear}
 	             Очистите все разрешенные разрешения. Это полезно для очистки набора
 		     разрешений по умолчанию, поэтому разрешения можно добавлять по
 		     отдельности.
 
-             force-command=command
+@item             force-command=command @anchor{man_ssh_keygen_options_o force-command=command}
                      Принудительно выполняет команду вместо любой оболочки или команды,
 		     указанной пользователем, когда сертификат используется для
 		     аутентификации.
 
-             no-agent-forwarding
+@item             no-agent-forwarding @anchor{man_ssh_keygen_options_o no-agent-forwarding}
                      Отключить пересылку ssh-agent(1) (разрешено по умолчанию).
 
-             no-port-forwarding
+@item             no-port-forwarding @anchor{man_ssh_keygen_options_o no-port-forwarding}
                      Отключить переадресацию портов (разрешено по умолчанию).
 
-             no-pty  Отключить выделение PTY (разрешено по умолчанию).
+@item             no-pty @anchor{man_ssh_keygen_options_o no-pty}
+                     Отключить выделение PTY (разрешено по умолчанию).
 
-             no-user-rc
+@item             no-user-rc @anchor{man_ssh_keygen_options_o no-user-rc}
                      Отключить выполнение ~/.ssh/rc с помощью sshd(8)
 		     (разрешено по умолчанию).
 
-             no-x11-forwarding
+@item             no-x11-forwarding @anchor{man_ssh_keygen_options_o no-x11-forwarding}
                      Отключить пересылку X11 (разрешено по умолчанию).
 
-             permit-agent-forwarding
+@item             permit-agent-forwarding @anchor{man_ssh_keygen_options_o permit-agent-forwarding}
                      Позволяет пересылку ssh-agent(1).
 
-             permit-port-forwarding
+@item             permit-port-forwarding @anchor{man_ssh_keygen_options_o permit-port-forwarding}
                      Позволяет переадресацию портов.
 
-             permit-pty
+@item             permit-pty @anchor{man_ssh_keygen_options_o permit-pty}
                      Разрешает распределение PTY.
 
-             permit-user-rc
+@item             permit-user-rc @anchor{man_ssh_keygen_options_o permit-user-rc}
                      Позволяет выполнять ~/.ssh/rc с помощью sshd(8).
 
-             permit-x11-forwarding
+@item             permit-x11-forwarding @anchor{man_ssh_keygen_options_o permit-x11-forwarding}
                      Позволяет пересылку X11.
 
-             source-address=address_list
+@item             source-address=address_list @anchor{man_ssh_keygen_options_o source-address=address_list}
                      Ограничьте исходные адреса, с которых сертификат считается
 		     действительным. address_list - разделенный запятыми список из
 		     одной или нескольких пар address/netmask в формате CIDR.
 
              В настоящее время никакие опции не действительны для ключей хоста.
-
-     -o
+@end table
+@item     -o @anchor{man_ssh_keygen -o}
 	     Заставляет ssh-keygen сохранять закрытые ключи, используя новый формат
 	     OpenSSH, а не более совместимый формат PEM. Новый формат обладает повышенной
 	     устойчивостью к взлому паролей, но не поддерживается версиями OpenSSH до 6.5.
 	     Ключи Ed25519 всегда используют новый формат закрытого ключа.
 
-     -P passphrase
+@item     -P passphrase @anchor{man_ssh_keygen -P passphrase}
              Предоставляет (старый) пароль.
 
-     -p
+@item     -p @anchor{man_ssh_keygen -p}
              Запрашивает изменение ключевой фразы файла закрытого ключа вместо создания
 	     нового закрытого ключа. Программа запросит файл, содержащий закрытый ключ,
 	     старую парольную фразу и дважды новую парольную фразу.
 
-     -Q
+@item     -Q @anchor{man_ssh_keygen -Q}
              Проверьте, были ли ключи отозваны в KRL.
 
-     -q
+@item     -q @anchor{man_ssh_keygen -q}
              тихое ssh-keygen.
 
-     -R hostname
+@item     -R hostname @anchor{man_ssh_keygen -R hostname}
              Удаляет все ключи, принадлежащие имени хоста, из файла known_hosts. Эта
 	     опция полезна для удаления хэшированных хостов (см. Опцию -H выше).
 
-     -r hostname
+@item     -r hostname @anchor{man_ssh_keygen -r hostname}
              Распечатайте запись ресурса отпечатка SSHFP с именем hostname для
 	     указанного файла открытого ключа.
 
-     -S start
+@item     -S start @anchor{man_ssh_keygen -S start}
              Укажите начальную точку (в шестнадцатеричном формате) при создании
 	     модулей-кандидатов для DH-GEX.
 
-     -s ca_key
+@item     -s ca_key @anchor{man_ssh_keygen -s ca_key}
              Сертифицируйте (подпишите) открытый ключ, используя указанный ключ CA.
 	     Пожалуйста, смотрите раздел CERTIFICATES для деталей.
 
@@ -318,20 +354,20 @@ DESCRIPTION
 	     используется для отзыва сертификатов напрямую по ключу ID или серийному
 	     номеру. Смотрите раздел KEY REVOCATION LISTS для подробностей.
 
-     -T output_file
+@item     -T output_file @anchor{man_ssh_keygen -T output_file}
              Проверьте безопасность кандидатов на обмен с группой DH (генерируется с
 	     помощью опции -G).
 
-     -t dsa | ecdsa | ed25519 | rsa | rsa1
+@item     -t dsa | ecdsa | ed25519 | rsa | rsa1 @anchor{man_ssh_keygen -t dsa | ecdsa | ed25519 | rsa | rsa1}
              Определяет тип ключа для создания. Возможные значения: “rsa1” для версии
 	     протокола 1 и “dsa”, “ecdsa”, “ed25519”, или “rsa” для версии протокола 2.
 
-     -u
+@item     -u @anchor{man_ssh_keygen -u}
              Обновите KRL. При указании с помощью -k ключи, перечисленные через
 	     командную строку, добавляются к существующему KRL, а не к создаваемому
 	     новому KRL.
 
-     -V validity_interval
+@item     -V validity_interval @anchor{man_ssh_keygen -V validity_interval}
              Укажите срок действия при подписании сертификата. Интервал действия может
 	     состоять из одного времени, указывая на то, что сертификат действителен,
 	     начиная с настоящего момента и заканчивая указаным временем, или может
@@ -350,27 +386,27 @@ DESCRIPTION
 	     2010 года и до 12:30 , 1 января 2011 г.), “-1d:20110101” (действует
 	     со вчерашнего дня до полуночи 1 января 2011 г.).
 
-     -v
+@item     -v @anchor{man_ssh_keygen -v}
 	     Детальный режим. Заставляет ssh-keygen печатать отладочные сообщения о его
 	     ходе. Это полезно для отладки генерации модулей. Несколько опций -v
 	     увеличивают многословие. Максимум 3.
 
-     -W generator
+@item     -W generator @anchor{man_ssh_keygen -W generator}
              Укажите желаемый generator при тестировании модулей-кандидатов
 	     для DH-GEX.
 
-     -y
+@item     -y @anchor{man_ssh_keygen -y}
              Эта опция будет читать приватный файл формата OpenSSH и печатать
 	     открытый ключ OpenSSH на стандартный вывод.
 
-     -z serial_number
+@item     -z serial_number @anchor{man_ssh_keygen -z serial_number}
              Указывает серийный номер, который должен быть встроен в сертификат, чтобы
 	     отличить этот сертификат от других и того же CA. Серийный номер по
 	     умолчанию - ноль.
 
              При генерации KRL флаг -z используется для указания номера версии KRL.
-
-MODULI GENERATION
+@end table
+@item MODULI GENERATION
      ssh-keygen может использоваться для генерации групп для протокола Diffie-Hellman
      Group Exchange (DH-GEX). Генерация этих групп представляет собой двухэтапный
      процесс: во-первых, простые числа кандидатов генерируются с использованием быстрого,
@@ -379,9 +415,9 @@ MODULI GENERATION
 
      Генерация простых чисел выполняется с помощью опции -G. Желаемая длина простых
      чисел может быть указана опцией -b. Например:
-
+@display
            # ssh-keygen -G moduli-2048.candidates -b 2048
-
+@end display
      По умолчанию поиск простых чисел начинается в произвольной точке в нужном диапазоне
      длин. Это может быть отменено с помощью опции -S, которая указывает другую
      начальную точку (в шестнадцатеричном формате).
@@ -390,9 +426,9 @@ MODULI GENERATION
      соответствие. Это может быть выполнено с использованием опции -T. В этом режиме
      ssh-keygen будет считывать кандидатов из стандартного ввода (или файла, указанного
      с помощью опции -f). Например:
-
+@display
            # ssh-keygen -T moduli-2048 -f moduli-2048.candidates
-
+@end display
      По умолчанию каждый кандидат будет подвергнут 100 тестам на примитивность. Это
      может быть отменено с помощью опции -a. Значение генератора DH будет выбрано
      автоматически для рассматриваемого простого числа. Если требуется конкретный
@@ -403,7 +439,7 @@ MODULI GENERATION
      чтобы этот файл содержал модули с диапазоном битовых длин и чтобы оба конца
      соединения имели общие модули.
 
-CERTIFICATES
+@item CERTIFICATES
      ssh-keygen поддерживает подписывание ключей для создания сертификатов, которые
      могут использоваться для аутентификации пользователя или хоста. Сертификаты состоят
      из открытого ключа, некоторой идентификационной информации, нуля или более основных
@@ -416,22 +452,22 @@ CERTIFICATES
      ssh-keygen поддерживает два типа сертификатов: user и host. Пользователь удостоверяет
      подлинность пользователей на серверах, в то время как сертификаты узлов проверяют
      подлинность серверов на пользователях. Чтобы создать сертификат пользователя:
-
+@display
            $ ssh-keygen -s /path/to/ca_key -I key_id /path/to/user_key.pub
-
+@end display
      Полученный сертификат будет помещен в /path/to/user_key-cert.pub. Для
      сертификата хоста требуется опция -h:
-
+@display
            $ ssh-keygen -s /path/to/ca_key -I key_id -h /path/to/host_key.pub
-
+@end display
      Сертификат хоста будет выведен на /path/to/host_key-cert.pub.
 
      Для подписи можно использовать ключ CA, хранящийся в токене PKCS#11, предоставив
      библиотеку токенов с помощью -D и определив ключ CA, предоставив его открытую
      половину в качестве аргумента для -s:
-
+@display
            $ ssh-keygen -s ca_key.pub -D libpkcs11.so -I key_id user_key.pub
-
+@end display
      Во всех случаях key_id является "key identifier", который регистрируется
      сервером, когда сертификат используется для аутентификации.
 
@@ -439,10 +475,10 @@ CERTIFICATES
      (user/host) имен. По умолчанию сгенерированные сертификаты действительны для всех
      пользователей или хостов. Чтобы сгенерировать сертификат для указанного набора
      принципов:
-
+@display
            $ ssh-keygen -s ca_key -I key_id -n user1,user2 user_key.pub
            $ ssh-keygen -s ca_key -I key_id -h -n host.domain host_key.pub
-
+@end display
      Дополнительные ограничения на действительность и использование пользовательских
      сертификатов могут быть указаны через параметры сертификатов. Параметр сертификата
      может отключить функции сеанса SSH, может быть действительным только при
@@ -459,7 +495,7 @@ CERTIFICATES
      хоста, публичному ключу CA должен доверять sshd(8) или ssh(1). Пожалуйста,
      обратитесь к этим страницам руководства для деталей.
 
-KEY REVOCATION LISTS
+@item KEY REVOCATION LISTS
      ssh-keygen может управлять форматом OpenSSH Key Revocation Lists (списки отзыва ключей)
      (KRLs). Эти двоичные файлы определяют ключи или сертификаты, которые должны быть
      отозваны, в компактном формате, занимая всего один бит на сертификат, если они
@@ -476,10 +512,10 @@ KEY REVOCATION LISTS
      типами записей, используемых для отзыва ключей, и может использоваться для прямого
      отзыва сертификатов по серийному номеру или ключу ID без наличия полного исходного
      сертификата под рукой. Спецификация KRL состоит из строк, содержащих одну из
-     следующих директив, за которыми следует двоеточие, и некоторую информацию,
-     относящуюся к директивам.
-
-     serial: serial_number[-serial_number]
+     следующих директив, за которыми следует двоеточие, и некоторая информация,
+     которая относится к директивам.
+@table @asis
+@item     serial: serial_number[-serial_number] @anchor{man_ssh_keygen_spec_krl serial: serial_number[-serial_number]}
              Аннулирует сертификат с указанным серийным номером. Серийные числа являются
 	     значениями 64-bit, не включая ноль, и могут быть выражены в десятичном,
 	     шестнадцатеричном или восьмеричном виде. Если заданы два серийных номера,
@@ -487,17 +523,17 @@ KEY REVOCATION LISTS
 	     аннулируется. Ключ CA должен быть указан в командной строке ssh-keygen с
 	     использованием параметра -s.
 
-     id: key_id
+@item     id: key_id @anchor{man_ssh_keygen_spec_krl id: key_id}
              Отзывает сертификат с указанным ключом ID string. Ключ CA должен быть
 	     указан в командной строке ssh-keygen с использованием параметра -s.
 
-     key: public_key
+@item     key: public_key @anchor{man_ssh_keygen_spec_krl key: public_key}
              Отменяет указанный ключ. Если сертификат указан в списке, то он отзывается
 	     как простой открытый ключ.
 
-     sha1: public_key
+@item     sha1: public_key @anchor{man_ssh_keygen_spec_krl sha1: public_key}
              Отменяет указанный ключ по его хэшу SHA1.
-
+@end table
      KRLs может быть обновлен с использованием флага -u в дополнение к -k. Когда
      указана эта опция, ключи, перечисленные через командную строку, объединяются в KRL,
      добавляя к уже существующим.
@@ -508,8 +544,9 @@ KEY REVOCATION LISTS
      (или возникла ошибка), то ssh-keygen завершит работу с ненулевым состоянием выхода.
      Статус нулевого выхода будет возвращен только в том случае, если ключ не был отозван.
 
-FILES
-     ~/.ssh/identity
+@item FILES
+@table @asis
+@item  ~/.ssh/identity @anchor{man_ssh_keygen_files ~/.ssh/identity}
              Содержит протокол аутентификации RSA версии 1 пользователя. Этот файл не
 	     должен быть доступен для чтения никому, кроме пользователя. Можно указать
 	     фразу-пароль при генерации ключа; эта фраза-пароль будет использоваться для
@@ -518,16 +555,12 @@ FILES
 	     файла по умолчанию для закрытого ключа. ssh(1) прочитает этот файл при
 	     попытке входа в систему.
 
-     ~/.ssh/identity.pub
+@item     ~/.ssh/identity.pub @anchor{man_ssh_keygen_files ~/.ssh/identity.pub}
              Содержит открытый ключ протокола RSA версии 1 для аутентификации. Содержимое
 	     этого файла должно быть добавлено в ~/.ssh/authorized_keys на всех машинах,
 	     где пользователь хочет войти в систему с использованием аутентификации RSA.
 	     Нет необходимости хранить содержимое этого файла в секрете.
-
-     ~/.ssh/id_dsa
-     ~/.ssh/id_ecdsa
-     ~/.ssh/id_ed25519
-     ~/.ssh/id_rsa
+@item   ~/.ssh/id_dsa  ~/.ssh/id_ecdsa  ~/.ssh/id_ed25519  ~/.ssh/id_rsa @anchor{man_ssh_keygen_files ~/.ssh/id_dsa  ~/.ssh/id_ecdsa  ~/.ssh/id_ed25519  ~/.ssh/id_rsa}
              Содержит протокол аутентификации пользователя DSA версии 2, ECDSA, Ed25519
 	     или RSA. Этот файл не должен быть доступен для чтения никому, кроме
 	     пользователя. Можно указать фразу-пароль при генерации ключа; эта
@@ -535,27 +568,23 @@ FILES
 	     с использованием 128-битного AES. Ssh-keygen автоматически не обращается к
 	     этому файлу, но он предлагается в качестве файла по умолчанию для закрытого
 	     ключа. ssh(1) прочитает этот файл при попытке входа в систему.
-
-     ~/.ssh/id_dsa.pub
-     ~/.ssh/id_ecdsa.pub
-     ~/.ssh/id_ed25519.pub
-     ~/.ssh/id_rsa.pub
+@item   ~/.ssh/id_dsa.pub  ~/.ssh/id_ecdsa.pub  ~/.ssh/id_ed25519.pub  ~/.ssh/id_rsa.pub @anchor{man_ssh_keygen_files ~/.ssh/id_dsa.pub  ~/.ssh/id_ecdsa.pub  ~/.ssh/id_ed25519.pub  ~/.ssh/id_rsa.pub}
              Содержит протокол версии 2 DSA, ECDSA, Ed25519 или открытый ключ RSA для
 	     аутентификации. Содержимое этого файла должно быть добавлено в
 	     ~/.ssh/authorized_keys на всех машинах, где пользователь хочет войти в
 	     систему с использованием аутентификации с открытым ключом. Нет необходимости
 	     хранить содержимое этого файла в секрете.
 
-     /etc/ssh/moduli
+@item     /etc/ssh/moduli @anchor{man_ssh_keygen_files /etc/ssh/moduli}
              Содержит группы Diffie-Hellman, используемые для DH-GEX. Формат файла
 	     описан в moduli(5).
-
-SEE ALSO
+@end table
+@item SEE ALSO
      ssh(1), ssh-add(1), ssh-agent(1), moduli(5), sshd(8)
 
      Формат файла открытого ключа Secure Shell (SSH), RFC 4716, 2006.
 
-AUTHORS
+@item AUTHORS
      OpenSSH is a derivative of the original and free ssh 1.2.12 release by
      Tatu Ylonen.  Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo
      de Raadt and Dug Song removed many bugs, re-added newer features and cre‐
@@ -563,3 +592,4 @@ AUTHORS
      versions 1.5 and 2.0.
 
 BSD                            February 17, 2016                           BSD
+@end table

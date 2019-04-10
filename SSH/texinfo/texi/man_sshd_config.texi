@@ -1,12 +1,12 @@
-SSHD_CONFIG(5)              BSD File Formats Manual             SSHD_CONFIG(5)
-
-NAME
+@node SSHD_CONFIG, SCP(1), SSH_CONFIG, Top
+@chapter SSHD_CONFIG
+@table @asis
+@item NAME
      sshd_config — Файл конфигурации демона OpenSSH SSH
 
-SYNOPSIS
+@item SYNOPSIS
      /etc/ssh/sshd_config
-
-DESCRIPTION
+@item DESCRIPTION
      sshd (8) считывает данные конфигурации из /etc/ssh/sshd_config (или файла,
      указанного в командной строке -f). Файл содержит пары ключевое слово-аргумент,
      по одной на строку. Строки, начинающиеся с ‘#’ и пустые строки, интерпретируются
@@ -18,18 +18,115 @@ DESCRIPTION
      параметрами по умолчанию в sshd(8). Точный список зависит от того, был ли
      пакет установлен свежим или обновлен с различных возможных предыдущих версий,
      но включает по крайней мере следующее:
-
+@display
            ·   ChallengeResponseAuthentication no
            ·   X11Forwarding yes
            ·   PrintMotd no
            ·   AcceptEnv LANG LC_*
            ·   Subsystem sftp /usr/lib/openssh/sftp-server
            ·   UsePAM yes
-
+@end display
      Возможные ключевые слова и их значения следующие (обратите внимание, что
      ключевые слова не чувствительны к регистру, а аргументы чувствительны к регистру):
-
-     AcceptEnv
+@item Список Ключевых слов
+@display
+     @ref{man_ssh_sshd_config AcceptEnv,, AcceptEnv}
+     @ref{man_ssh_sshd_config AddressFamily,, AddressFamily}
+     @ref{man_ssh_sshd_config AllowAgentForwarding,, AllowAgentForwarding}
+     @ref{man_ssh_sshd_config AllowGroups,, AllowGroups}
+     @ref{man_ssh_sshd_config AllowTcpForwarding,, AllowTcpForwarding}
+     @ref{man_ssh_sshd_config AllowStreamLocalForwarding,, AllowStreamLocalForwarding}
+     @ref{man_ssh_sshd_config AllowUsers,, AllowUsers}
+     @ref{man_ssh_sshd_config AuthenticationMethods,, AuthenticationMethods}
+     @ref{man_ssh_sshd_config AuthorizedKeysCommand,, AuthorizedKeysCommand}
+     @ref{man_ssh_sshd_config AuthorizedKeysCommandUser,, AuthorizedKeysCommandUser}
+     @ref{man_ssh_sshd_config AuthorizedKeysFile,, AuthorizedKeysFile}
+     @ref{man_ssh_sshd_config AuthorizedPrincipalsCommand,, AuthorizedPrincipalsCommand}
+     @ref{man_ssh_sshd_config AuthorizedPrincipalsCommandUser,, AuthorizedPrincipalsCommandUser}
+     @ref{man_ssh_sshd_config AuthorizedPrincipalsFile,, AuthorizedPrincipalsFile}
+     @ref{man_ssh_sshd_config Banner,, Banner}
+     @ref{man_ssh_sshd_config ChallengeResponseAuthentication,, ChallengeResponseAuthentication}
+     @ref{man_ssh_sshd_config ChrootDirectory,, ChrootDirectory}
+     @ref{man_ssh_sshd_config Ciphers,, Ciphers}
+     @ref{man_ssh_sshd_config ClientAliveCountMax,, ClientAliveCountMax}
+     @ref{man_ssh_sshd_config ClientAliveInterval,, ClientAliveInterval}
+     @ref{man_ssh_sshd_config Compression,, Compression}
+     @ref{man_ssh_sshd_config DebianBanner,, DebianBanner}
+     @ref{man_ssh_sshd_config DenyGroups,, DenyGroups}
+     @ref{man_ssh_sshd_config DenyUsers,, DenyUsers}
+     @ref{man_ssh_sshd_config FingerprintHash,, FingerprintHash}
+     @ref{man_ssh_sshd_config ForceCommand,, ForceCommand}
+     @ref{man_ssh_sshd_config GatewayPorts,, GatewayPorts}
+     @ref{man_ssh_sshd_config GSSAPIAuthentication,, GSSAPIAuthentication}
+     @ref{man_ssh_sshd_config GSSAPIKeyExchange,, GSSAPIKeyExchange}
+     @ref{man_ssh_sshd_config GSSAPICleanupCredentials,, GSSAPICleanupCredentials}
+     @ref{man_ssh_sshd_config GSSAPIStrictAcceptorCheck,, GSSAPIStrictAcceptorCheck}
+     @ref{man_ssh_sshd_config GSSAPIStoreCredentialsOnRekey,, GSSAPIStoreCredentialsOnRekey}
+     @ref{man_ssh_sshd_config HostbasedAcceptedKeyTypes,, HostbasedAcceptedKeyTypes}
+     @ref{man_ssh_sshd_config HostbasedAuthentication,, HostbasedAuthentication}
+     @ref{man_ssh_sshd_config HostbasedUsesNameFromPacketOnly,, HostbasedUsesNameFromPacketOnly}
+     @ref{man_ssh_sshd_config HostCertificate,, HostCertificate}
+     @ref{man_ssh_sshd_config HostKey,, HostKey}
+     @ref{man_ssh_sshd_config HostKeyAgent,, HostKeyAgent}
+     @ref{man_ssh_sshd_config HostKeyAlgorithms,, HostKeyAlgorithms}
+     @ref{man_ssh_sshd_config IgnoreRhosts,, IgnoreRhosts}
+     @ref{man_ssh_sshd_config IgnoreUserKnownHosts,, IgnoreUserKnownHosts}
+     @ref{man_ssh_sshd_config IPQoS,, IPQoS}
+     @ref{man_ssh_sshd_config KbdInteractiveAuthentication,, KbdInteractiveAuthentication}
+     @ref{man_ssh_sshd_config KerberosAuthentication,, KerberosAuthentication}
+     @ref{man_ssh_sshd_config KerberosGetAFSToken,, KerberosGetAFSToken}
+     @ref{man_ssh_sshd_config KerberosOrLocalPasswd,, KerberosOrLocalPasswd}
+     @ref{man_ssh_sshd_config KerberosTicketCleanup,, KerberosTicketCleanup}
+     @ref{man_ssh_sshd_config KexAlgorithms,, KexAlgorithms}
+     @ref{man_ssh_sshd_config KeyRegenerationInterval,, KeyRegenerationInterval}
+     @ref{man_ssh_sshd_config ListenAddress,, ListenAddress}
+     @ref{man_ssh_sshd_config LoginGraceTime,, LoginGraceTime}
+     @ref{man_ssh_sshd_config LogLevel,, LogLevel}
+     @ref{man_ssh_sshd_config MACs,, MACs}
+     @ref{man_ssh_sshd_config Match,, Match}
+     @ref{man_ssh_sshd_config MaxAuthTries,, MaxAuthTries}
+     @ref{man_ssh_sshd_config MaxSessions,, MaxSessions}
+     @ref{man_ssh_sshd_config MaxStartups,, MaxStartups}
+     @ref{man_ssh_sshd_config PasswordAuthentication,, PasswordAuthentication}
+     @ref{man_ssh_sshd_config PermitEmptyPasswords,, PermitEmptyPasswords}
+     @ref{man_ssh_sshd_config PermitOpen,, PermitOpen}
+     @ref{man_ssh_sshd_config PermitRootLogin,, PermitRootLogin}
+     @ref{man_ssh_sshd_config PermitTunnel,, PermitTunnel}
+     @ref{man_ssh_sshd_config PermitTTY,, PermitTTY}
+     @ref{man_ssh_sshd_config PermitUserEnvironment,, PermitUserEnvironment}
+     @ref{man_ssh_sshd_config PermitUserRC,, PermitUserRC}
+     @ref{man_ssh_sshd_config PidFile,, PidFile}
+     @ref{man_ssh_sshd_config Port,, Port}
+     @ref{man_ssh_sshd_config PrintLastLog,, PrintLastLog}
+     @ref{man_ssh_sshd_config PrintMotd,, PrintMotd}
+     @ref{man_ssh_sshd_config Protocol,, Protocol}
+     @ref{man_ssh_sshd_config PubkeyAcceptedKeyTypes,, PubkeyAcceptedKeyTypes}
+     @ref{man_ssh_sshd_config PubkeyAuthentication,, PubkeyAuthentication}
+     @ref{man_ssh_sshd_config RekeyLimit,, RekeyLimit}
+     @ref{man_ssh_sshd_config RevokedKeys,, RevokedKeys}
+     @ref{man_ssh_sshd_config RhostsRSAAuthentication,, RhostsRSAAuthentication}
+     @ref{man_ssh_sshd_config RSAAuthentication,, RSAAuthentication}
+     @ref{man_ssh_sshd_config ServerKeyBits,, ServerKeyBits}
+     @ref{man_ssh_sshd_config StreamLocalBindMask,, StreamLocalBindMask}
+     @ref{man_ssh_sshd_config StreamLocalBindUnlink,, StreamLocalBindUnlink}
+     @ref{man_ssh_sshd_config StrictModes,, StrictModes}
+     @ref{man_ssh_sshd_config Subsystem,, Subsystem}
+     @ref{man_ssh_sshd_config SyslogFacility,, SyslogFacility}
+     @ref{man_ssh_sshd_config TCPKeepAlive,, TCPKeepAlive}
+     @ref{man_ssh_sshd_config TrustedUserCAKeys,, TrustedUserCAKeys}
+     @ref{man_ssh_sshd_config UseDNS,, UseDNS}
+     @ref{man_ssh_sshd_config UseLogin,, UseLogin}
+     @ref{man_ssh_sshd_config UsePAM,, UsePAM}
+     @ref{man_ssh_sshd_config UsePrivilegeSeparation,, UsePrivilegeSeparation}
+     @ref{man_ssh_sshd_config VersionAddendum,, VersionAddendum}
+     @ref{man_ssh_sshd_config X11DisplayOffset,, X11DisplayOffset}
+     @ref{man_ssh_sshd_config X11Forwarding,, X11Forwarding}
+     @ref{man_ssh_sshd_config X11UseLocalhost,, X11UseLocalhost}
+     @ref{man_ssh_sshd_config XAuthLocation,, XAuthLocation}
+     
+@end display
+@table @asis
+@item     AcceptEnv @anchor{man_ssh_sshd_config AcceptEnv}
              Указывает, какие переменные среды, отправленные клиентом, будут скопированы
              в environ(7) сеанса. Смотри SendEnv в ssh_config(5) для того, как настроить
              клиент. Переменная окружения TERM всегда отправляется всякий раз, когда
@@ -41,18 +138,18 @@ DESCRIPTION
              этой причине следует соблюдать осторожность при использовании этой директивы.
              По умолчанию не принимается никаких переменных среды.
 
-     AddressFamily
+@item     AddressFamily @anchor{man_ssh_sshd_config AddressFamily}
              Указывает, какое семейство адресов должно использоваться sshd(8). Допустимые
              аргументы: “any”, “inet” (использовать только IPv4) или “inet6” (использовать
              только IPv6). По умолчанию используется “any”.
 
-     AllowAgentForwarding
+@item     AllowAgentForwarding @anchor{man_ssh_sshd_config AllowAgentForwarding}
              Указывает, разрешена ли пересылка ssh-agent(1). По умолчанию используется
              “yes”. Обратите внимание, что отключение переадресации агентов не повышает
              безопасность, если пользователям также не запрещен доступ к оболочке,
              поскольку они всегда могут установить свои собственные серверы пересылки.
 
-     AllowGroups
+@item     AllowGroups @anchor{man_ssh_sshd_config AllowGroups}
              За этим ключевым словом может следовать список шаблонов имен групп,
              разделенных пробелами. Если указано, вход в систему разрешен только для
              пользователей, чья основная группа или список дополнительных групп
@@ -64,7 +161,7 @@ DESCRIPTION
              Смотрите PATTERNS в ssh_config(5) для получения дополнительной информации
              о шаблонах.
 
-     AllowTcpForwarding
+@item     AllowTcpForwarding @anchor{man_ssh_sshd_config AllowTcpForwarding}
              Указывает, разрешена ли пересылка TCP. Доступные опции: “yes” или “all”,
              чтобы разрешить пересылку TCP, “no”, чтобы предотвратить все пересылки TCP,
              “local”, чтобы разрешить только локальную (с точки зрения ssh(1)) пересылку,
@@ -74,7 +171,7 @@ DESCRIPTION
              оболочке, поскольку они всегда могут установить свои собственные серверы
              пересылки.
 
-     AllowStreamLocalForwarding
+@item     AllowStreamLocalForwarding @anchor{man_ssh_sshd_config AllowStreamLocalForwarding}
              Указывает, разрешена ли пересылка StreamLocal (сокет Unix-домена). Доступные
              опции: “yes” или “all”, чтобы разрешить пересылку StreamLocal, “no”, чтобы
              запретить всю пересылку StreamLocal, “local”, чтобы разрешить только
@@ -84,7 +181,7 @@ DESCRIPTION
              пользователям также не запрещен доступ к оболочке, поскольку они всегда могут
              установить свои собственные серверы пересылки.
 
-     AllowUsers
+@item     AllowUsers @anchor{man_ssh_sshd_config AllowUsers}
              За этим ключевым словом может следовать список шаблонов имен пользователей,
              разделенных пробелами. Если указано, вход в систему разрешен только для имен
              пользователей, которые соответствуют одному из шаблонов. Допустимы только
@@ -97,7 +194,7 @@ DESCRIPTION
              Смотрите PATTERNS в ssh_config (5) для получения дополнительной информации
              о шаблонах.
 
-     AuthenticationMethods
+@item     AuthenticationMethods @anchor{man_ssh_sshd_config AuthenticationMethods}
              Определяет методы аутентификации, которые должны быть успешно завершены,
              чтобы пользователю был предоставлен доступ. За этой опцией должен следовать
              один или несколько разделенных запятыми списков имен методов аутентификации.
@@ -130,7 +227,7 @@ DESCRIPTION
              требуется множественная аутентификация; успешного завершения одного метода
              аутентификации достаточно.
 
-     AuthorizedKeysCommand
+@item     AuthorizedKeysCommand @anchor{man_ssh_sshd_config AuthorizedKeysCommand}
              Определяет программу, которая будет использоваться для поиска открытых
              ключей пользователя. Программа должна принадлежать пользователю root, не
              записываться группой или другими пользователями и указываться
@@ -138,12 +235,14 @@ DESCRIPTION
 
              Аргументы AuthorizedKeysCommand могут быть предоставлены с использованием
              следующих токенов, которые будут развернуты во время выполнения:
+@display
              %% заменяется литералом '%',
              %u, заменяется аутентифицируемым именем пользователя,
              %h заменяется домашним каталогом аутентифицируемого пользователя. ,
              %t заменяется типом ключа, предлагаемым для аутентификации,
              %f заменяется отпечатком ключа, а
              %k заменяется ключом, предлагаемым для аутентификации.
+@end display
              Если аргументы не указаны, то будет указано имя пользователя целевого
              пользователя.
 
@@ -154,22 +253,24 @@ DESCRIPTION
              использованием обычных файлов AuthorizedKeysFile. По умолчанию
              AuthorizedKeysCommand не запускается.
 
-     AuthorizedKeysCommandUser
+@item     AuthorizedKeysCommandUser @anchor{man_ssh_sshd_config AuthorizedKeysCommandUser}
              Указывает пользователя, под учетной записью которого запускается
              AuthorizedKeysCommand. Рекомендуется использовать выделенного пользователя,
              который не имеет никакой другой роли на хосте, кроме запуска команд
              авторизованных ключей. Если указан AuthorizedKeysCommand, а
              AuthorizedKeysCommandUser нет, то sshd(8) откажется запускаться.
 
-     AuthorizedKeysFile
+@item     AuthorizedKeysFile @anchor{man_ssh_sshd_config AuthorizedKeysFile}
              Указывает файл, который содержит открытые ключи, которые можно использовать
              для аутентификации пользователя. Формат описан в разделе
              AUTHORIZED_KEYS FILE FORMAT в sshd (8). AuthorizedKeysFile может содержать
              токены вида %T, которые подставляются во время установки соединения.
              Определены следующие токены:
+@display
              %% заменяется литералом '%',
              %h заменяется домашним каталогом аутентифицируемого пользователя, а
              %u заменяется именем пользователя этого пользователя.
+@end display
              После расширения AuthorizedKeysFile считается абсолютным или относительным
              путем к домашнему каталогу пользователя. Несколько файлов могут быть
              перечислены, разделенные пробелом. В качестве альтернативы этот параметр
@@ -177,7 +278,7 @@ DESCRIPTION
              ключей в файлах. По умолчанию используется
              “.ssh/authorized_keys .ssh/authorized_keys2”.
 
-     AuthorizedPrincipalsCommand
+@item     AuthorizedPrincipalsCommand @anchor{man_ssh_sshd_config AuthorizedPrincipalsCommand}
              Определяет программу, которая будет использоваться для генерации списка
              разрешенных участников сертификата согласно AuthorizedPrincipalsFile.
              Программа должна принадлежать пользователю root, недоступна для записи
@@ -186,24 +287,25 @@ DESCRIPTION
              Аргументы AuthorizedPrincipalsCommand могут быть предоставлены с
              использованием следующих токенов, которые будут раскрыты во время
              выполнения:
+@display
              %% заменяется литералом '%',
              %u заменяется аутентифицируемым именем пользователя, а
              %h заменяется домашним каталогом аутентифицируемого пользователя.
-
+@end display
              Программа должна выдавать на стандартном выходе ноль или более строк вывода
              AuthorizedPrincipalsFile. Если указан либо AuthorizedPrincipalsCommand или
              AuthorizedPrincipalsFile, то сертификаты, предлагаемые клиентом для
              аутентификации, должны содержать принципала, который указан в списке. По
              умолчанию AuthorizedPrincipalsCommand не запускается.
 
-     AuthorizedPrincipalsCommandUser
+@item     AuthorizedPrincipalsCommandUser @anchor{man_ssh_sshd_config AuthorizedPrincipalsCommandUser}
              Указывает пользователя, под учетной записью которого запускается
              AuthorizedPrincipalsCommand. Рекомендуется использовать выделенного
              пользователя, который не имеет никакой другой роли на хосте, кроме запуска
              авторизованных команд принцесс. Если указан AuthorizedPrincipalsCommand,
              а AuthorizedPrincipalsCommandUser нет, то sshd(8) откажется запускаться.
 
-     AuthorizedPrincipalsFile
+@item     AuthorizedPrincipalsFile @anchor{man_ssh_sshd_config AuthorizedPrincipalsFile}
              Указывает файл, в котором перечислены имена участников, которые принимаются
              для проверки подлинности сертификата. При использовании сертификатов,
              подписанных ключом, указанным в TrustedUserCAKeys, в этом файле перечислены
@@ -214,9 +316,11 @@ DESCRIPTION
 
              AuthorizedPrincipalsFile может содержать токены вида %T, которые
              подставляются во время установки соединения. Определены следующие токены:
+@display
              %% заменяется литералом '%',
              %h заменяется домашним каталогом аутентифицируемого пользователя, а
              %u заменяется именем пользователя этого пользователя.
+@end display
              После расширения AuthorizedPrincipalsFile считается абсолютным или
              относительным путем к домашнему каталогу пользователя.
 
@@ -229,16 +333,16 @@ DESCRIPTION
              которым доверяют через ~/.ssh/authorized_keys, хотя опция principals= key
              предлагает аналогичное средство (подробнее см. Sshd(8)).
 
-     Banner
+@item     Banner @anchor{man_ssh_sshd_config Banner}
              Содержимое указанного файла отправляется удаленному пользователю до разрешения
              аутентификации. Если аргумент - “none”, тогда баннер не отображается. По
              умолчанию баннер не отображается.
 
-     ChallengeResponseAuthentication
+@item     ChallengeResponseAuthentication @anchor{man_ssh_sshd_config ChallengeResponseAuthentication}
              Указывает, разрешена ли аутентификация по запросу-ответу (например,
              через PAM). По умолчанию используется “yes”.
 
-     ChrootDirectory
+@item     ChrootDirectory @anchor{man_ssh_sshd_config ChrootDirectory}
              Указывает путь к каталогу, к которому chroot(2) следует после аутентификации.
              При запуске сеанса sshd(8) проверяет, что все компоненты пути являются
              корневыми каталогами, которые не доступны для записи любому другому
@@ -247,10 +351,11 @@ DESCRIPTION
 
              Путь может содержать следующие токены, которые раскрываются во время
              выполнения после аутентификации подключающегося пользователя:
+@display
              %% заменяется литералом '%',
              %h заменяется домашним каталогом аутентифицируемого пользователя, а
              %u заменяется именем пользователя этого пользователя.
-
+@end display
              ChrootDirectory должен содержать необходимые файлы и директории для
              поддержки сеанса пользователя. Для интерактивного сеанса это требует,
              по крайней мере, оболочки, обычно sh(1), и базовых узлов /dev, таких
@@ -269,13 +374,13 @@ DESCRIPTION
              По умолчанию установлено значение “none”, что указывает на отсутствие
              chroot(2).
 
-     Ciphers
+@item     Ciphers @anchor{man_ssh_sshd_config Ciphers}
              Определяет разрешенные шифры. Несколько шифров должны быть разделены запятыми.
              Если указанное значение начинается с символа ‘+’, то указанные шифры будут
              добавлены в набор по умолчанию вместо их замены.
 
              Поддерживаемые шифры:
-
+@display
                    3des-cbc
                    aes128-cbc
                    aes192-cbc
@@ -291,17 +396,17 @@ DESCRIPTION
                    blowfish-cbc
                    cast128-cbc
                    chacha20-poly1305@@openssh.com
-
+@end display
              The default is:
-
+@display
                    chacha20-poly1305@@openssh.com,
                    aes128-ctr,aes192-ctr,aes256-ctr,
                    aes128-gcm@@openssh.com,aes256-gcm@@openssh.com
-
+@end display
              Список доступных шифров также можно получить с помощью опции -Q ssh(1)
              с аргументом “cipher”.
 
-     ClientAliveCountMax
+@item     ClientAliveCountMax @anchor{man_ssh_sshd_config ClientAliveCountMax}
              Устанавливает количество живых сообщений клиента (см. Ниже), которые могут
              быть отправлены без sshd(8) получения каких-либо сообщений от клиента. Если
              этот порог достигнут, пока клиент отправляет живые сообщения, sshd отключит
@@ -317,22 +422,22 @@ DESCRIPTION
              по умолчанию, не отвечающие требованиям клиенты SSH будут отключены примерно
              через 45 секунд.
 
-     ClientAliveInterval
+@item     ClientAliveInterval @anchor{man_ssh_sshd_config ClientAliveInterval}
              Устанавливает интервал ожидания в секундах, после чего, если от клиента не
              было получено никаких данных, sshd(8) отправляет сообщение через зашифрованный
              канал для запроса ответа от клиента. По умолчанию используется 0, что 
              означает, что эти сообщения не будут отправлены клиенту.
 
-     Compression
+@item     Compression @anchor{man_ssh_sshd_config Compression}
              Указывает, включено ли сжатие после успешной аутентификации пользователя.
              Аргумент должен быть “yes”, “delayed” (устаревший синоним “yes”) или “no”.
              По умолчанию используется “yes”.
 
-     DebianBanner
+@item     DebianBanner @anchor{man_ssh_sshd_config DebianBanner}
              Указывает, включен ли дополнительный суффикс указанной версии при
              первоначальном согласовании протокола. По умолчанию используется “yes”.
 
-     DenyGroups
+@item     DenyGroups @anchor{man_ssh_sshd_config DenyGroups}
              За этим ключевым словом может следовать список шаблонов имен групп,
              разделенных пробелами. Вход запрещен для пользователей, чья основная группа
              или список дополнительных групп соответствует одному из шаблонов. Допустимы
@@ -344,7 +449,7 @@ DESCRIPTION
              Смотрите PATTERNS в ssh_config(5) для получения дополнительной
              информации о шаблонах.
 
-     DenyUsers
+@item     DenyUsers @anchor{man_ssh_sshd_config DenyUsers}
              За этим ключевым словом может следовать список шаблонов имен пользователей,
              разделенных пробелами. Вход запрещен для имен пользователей, которые
              соответствуют одному из шаблонов. Допустимы только имена пользователей;
@@ -358,12 +463,12 @@ DESCRIPTION
              Смотрите PATTERNS в ssh_config(5) для получения дополнительной
              информации о шаблонах.
 
-     FingerprintHash
+@item     FingerprintHash @anchor{man_ssh_sshd_config FingerprintHash}
              Определяет алгоритм хеширования, используемый при регистрации отпечатков
              кллючей. Допустимые параметры: “md5” и “sha256”. По умолчанию
              используется “sha256”.
 
-     ForceCommand
+@item     ForceCommand @anchor{man_ssh_sshd_config ForceCommand}
              Принудительно выполняет команду, указанную ForceCommand, игнорируя
              любую команду, предоставленную клиентом, и ~/.ssh/rc, если присутствует.
              Команда вызывается с использованием оболочки входа пользователя с
@@ -375,7 +480,7 @@ DESCRIPTION
              файлов поддержки при использовании с ChrootDirectory. По умолчанию
              используется “none”.
 
-     GatewayPorts
+@item     GatewayPorts @anchor{man_ssh_sshd_config GatewayPorts}
              Указывает, разрешено ли удаленным узлам подключаться к портам,
              перенаправленным для клиента. По умолчанию sshd(8) связывает переадресацию
              удаленных портов с адресом обратной связи. Это предотвращает подключение
@@ -389,20 +494,20 @@ DESCRIPTION
              выбрать адрес, с которым связана переадресация. По умолчанию
              используется “no”.
 
-     GSSAPIAuthentication
+@item     GSSAPIAuthentication @anchor{man_ssh_sshd_config GSSAPIAuthentication}
              Указывает, разрешена ли аутентификация пользователя на основе GSSAPI.
              По умолчанию используется “no”.
 
-     GSSAPIKeyExchange
+@item     GSSAPIKeyExchange @anchor{man_ssh_sshd_config GSSAPIKeyExchange}
              Указывает, разрешен ли обмен ключами на основе GSSAPI. Обмен ключами
              GSSAPI не использует ключи ssh для проверки личности хоста. По умолчанию
              используется “no”.
 
-     GSSAPICleanupCredentials
+@item     GSSAPICleanupCredentials @anchor{man_ssh_sshd_config GSSAPICleanupCredentials}
              Указывает, следует ли автоматически уничтожать кэш учетных данных
              пользователя при выходе из системы. По умолчанию используется “yes”.
 
-     GSSAPIStrictAcceptorCheck
+@item     GSSAPIStrictAcceptorCheck @anchor{man_ssh_sshd_config GSSAPIStrictAcceptorCheck}
              Определяет, строго ли относиться к идентификатору акцептора GSSAPI, с
              которым аутентифицируется клиент. Если установлено значение “yes”, то
              клиент должен аутентифицироваться на службе хоста на текущем имени хоста.
@@ -411,19 +516,19 @@ DESCRIPTION
              Это средство предназначено для помощи в работе на многодомных машинах. По
              умолчанию используется “yes”.
 
-     GSSAPIStoreCredentialsOnRekey
+@item     GSSAPIStoreCredentialsOnRekey @anchor{man_ssh_sshd_config GSSAPIStoreCredentialsOnRekey}
              Управляет обновлением учетных данных пользователя GSSAPI после успешного
              повторного подключения. Этот параметр можно использовать для принятия
              обновленных или обновленных учетных данных от совместимого клиента. По
              умолчанию используется “no”.
 
-     HostbasedAcceptedKeyTypes
+@item     HostbasedAcceptedKeyTypes @anchor{man_ssh_sshd_config HostbasedAcceptedKeyTypes}
              Задает типы ключей, которые будут приниматься для аутентификации на
              основе хоста в виде списка шаблонов, разделенных запятыми. С другой стороны,
              если указанное значение начинается с символа ‘+’, то указанные типы ключей
              будут добавляться к набору по умолчанию вместо их замены. По умолчанию для
              этой опции:
-
+@display
                 ecdsa-sha2-nistp256-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp384-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp521-cert-v01@@openssh.com,
@@ -431,28 +536,28 @@ DESCRIPTION
                 ssh-rsa-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
                 ssh-ed25519,ssh-rsa
-
+@end display
              Опция -Q в ssh(1) может использоваться для отображения поддерживаемых
              типов ключей.
 
-     HostbasedAuthentication
+@item     HostbasedAuthentication @anchor{man_ssh_sshd_config HostbasedAuthentication}
              Указывает, разрешена ли аутентификация rhosts или /etc/hosts.equiv вместе
              с успешной аутентификацией хоста клиента с открытым ключом (аутентификация
              на основе хоста). По умолчанию используется “no”.
 
-     HostbasedUsesNameFromPacketOnly
+@item     HostbasedUsesNameFromPacketOnly @anchor{man_ssh_sshd_config HostbasedUsesNameFromPacketOnly}
              Указывает, будет ли сервер пытаться выполнить обратный поиск имени при
              сопоставлении имени в файлах ~/.shosts, ~/.rhosts, и /etc/hosts.equiv во
              время HostbasedAuthentication. Параметр “yes” означает, что sshd(8) использует
              имя, предоставленное клиентом, а не пытается разрешить имя из самого
              соединения TCP. По умолчанию используется “no”.
 
-     HostCertificate
+@item     HostCertificate @anchor{man_ssh_sshd_config HostCertificate}
              Указывает файл, содержащий сертификат общедоступного хоста. Открытый ключ
              сертификата должен соответствовать закрытому ключу хоста, уже указанному в
              HostKey. Поведение sshd(8) по умолчанию - не загружать сертификаты.
 
-     HostKey
+@item     HostKey @anchor{man_ssh_sshd_config HostKey}
              Указывает файл, содержащий закрытый ключ хоста, используемый SSH. По
              умолчанию используется /etc/ssh/ssh_host_key для версии протокола 1 и
              /etc/ssh/ssh_host_dsa_key, /etc/ssh/ssh_host_ecdsa_key,
@@ -470,15 +575,15 @@ DESCRIPTION
              хоста. В этом случае операции с закрытым ключом будут
              делегированы ssh-agent(1).
 
-     HostKeyAgent
+@item     HostKeyAgent @anchor{man_ssh_sshd_config HostKeyAgent}
              Определяет сокет домена UNIX, используемый для связи с агентом, который
              имеет доступ к закрытым ключам хоста. Если указан “SSH_AUTH_SOCK”,
              местоположение сокета будет считываться из переменной среды SSH_AUTH_SOCK.
 
-     HostKeyAlgorithms
+@item     HostKeyAlgorithms @anchor{man_ssh_sshd_config HostKeyAlgorithms}
              Определяет алгоритмы ключей хоста, которые предлагает сервер. По
              умолчанию для этой опции:
-
+@display
                 ecdsa-sha2-nistp256-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp384-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp521-cert-v01@@openssh.com,
@@ -486,23 +591,23 @@ DESCRIPTION
                 ssh-rsa-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
                 ssh-ed25519,ssh-rsa
-
+@end display
              Список доступных типов ключей также можно получить с помощью опции
              ssh(1) -Q с аргументом “key”.
 
-     IgnoreRhosts
+@item     IgnoreRhosts @anchor{man_ssh_sshd_config IgnoreRhosts}
              Указывает, что файлы .rhosts и .shosts не будут использоваться в
              RhostsRSAAuthentication или HostbasedAuthentication.
 
              /etc/hosts.equiv и /etc/ssh/shosts.equiv все еще используются.
              По умолчанию “yes”.
 
-     IgnoreUserKnownHosts
+@item     IgnoreUserKnownHosts @anchor{man_ssh_sshd_config IgnoreUserKnownHosts}
              Указывает, должен ли sshd(8) игнорировать пользовательский
              ~/.ssh/known_hosts во время RhostsRSAAuthentication или
              HostbasedAuthentication. По умолчанию используется “no”.
 
-     IPQoS
+@item     IPQoS @anchor{man_ssh_sshd_config IPQoS}
              Определяет тип сервиса IPv4 или класс DSCP для соединения. Допустимые
              значения: “af11”, “af12”, “af13”, “af21”, “af22”, “af23”, “af31”,
              “af32”, “af33”, “af41”, “af42”, “af43”, “cs0”, “cs1”, “cs2”, “cs3”,
@@ -514,38 +619,38 @@ DESCRIPTION
              а второе - для неинтерактивных сеансов. По умолчанию “lowdelay” для
              интерактивных сессий и “throughput” для неинтерактивных сессий.
 
-     KbdInteractiveAuthentication
+@item     KbdInteractiveAuthentication @anchor{man_ssh_sshd_config KbdInteractiveAuthentication}
              Указывает, разрешить ли интерактивную аутентификацию с клавиатуры. Аргумент
              к этому ключевому слову должен быть “yes” или “no”. По умолчанию используется
              любое значение, установленное для ChallengeResponseAuthentication (по
              умолчанию “yes”)..
 
-     KerberosAuthentication
+@item     KerberosAuthentication @anchor{man_ssh_sshd_config KerberosAuthentication}
              Указывает, будет ли пароль, предоставленный пользователем для
              PasswordAuthentication, проверяться через Kerberos KDC. Чтобы
              использовать эту опцию, серверу нужен сервабер Kerberos, который
              позволяет проверять идентичность KDC's. По умолчанию используется “no”.
 
-     KerberosGetAFSToken
+@item     KerberosGetAFSToken @anchor{man_ssh_sshd_config KerberosGetAFSToken}
              Если AFS активен и у пользователя Kerberos 5 TGT, попытайтесь получить
              токен AFS перед доступом к домашнему каталогу пользователя. По умолчанию
              используется “no”.
 
-     KerberosOrLocalPasswd
+@item     KerberosOrLocalPasswd @anchor{man_ssh_sshd_config KerberosOrLocalPasswd}
              Если аутентификация по паролю через Kerberos не удалась, пароль будет
              проверен с помощью любого дополнительного локального механизма, такого
              как /etc/passwd. По умолчанию используется “yes”.
 
-     KerberosTicketCleanup
+@item     KerberosTicketCleanup @anchor{man_ssh_sshd_config KerberosTicketCleanup}
              Указывает, нужно ли автоматически уничтожать файл кэша билетов
              пользователя при выходе из системы. По умолчанию используется “yes”.
 
-     KexAlgorithms
+@item     KexAlgorithms @anchor{man_ssh_sshd_config KexAlgorithms}
              Определяет доступные алгоритмы KEX (Key Exchange(Обмен ключами)). Несколько
              алгоритмов должны быть разделены запятыми. С другой стороны, если
              указанное значение начинается с символа ‘+’, то указанные методы будут
              добавлены к набору по умолчанию вместо их замены. Поддерживаемые алгоритмы:
-
+@display
                    curve25519-sha256@@libssh.org
                    diffie-hellman-group1-sha1
                    diffie-hellman-group14-sha1
@@ -554,42 +659,42 @@ DESCRIPTION
                    ecdh-sha2-nistp256
                    ecdh-sha2-nistp384
                    ecdh-sha2-nistp521
-
+@end display
              По умолчанию:
-
+@display
                    curve25519-sha256@@libssh.org,
                    ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,
                    diffie-hellman-group-exchange-sha256,
                    diffie-hellman-group14-sha1
-
+@end display
              Список доступных алгоритмов обмена ключами также можно получить, используя
              опцию -Q ssh(1) с аргументом “kex”.
 
-     KeyRegenerationInterval
+@item     KeyRegenerationInterval @anchor{man_ssh_sshd_config KeyRegenerationInterval}
              В протоколе версии 1 эфемерный серверный ключ автоматически восстанавливается
              через столько секунд (если он использовался). Целью регенерации является
              предотвращение дешифрования захваченных сессий путем последующего взлома
              машины и кражи ключей. Ключ никогда нигде не хранится. Если значение
              равно 0, ключ никогда не восстанавливается. По умолчанию 3600 (секунд).
 
-     ListenAddress
+@item     ListenAddress @anchor{man_ssh_sshd_config ListenAddress}
              Определяет локальные адреса, которые должен прослушивать sshd(8). Можно
              использовать следующие формы:
-
+@display
                    ListenAddress host|IPv4_addr|IPv6_addr
                    ListenAddress host|IPv4_addr:port
                    ListenAddress [host|IPv6_addr]:port
-
+@end display
              Если порт не указан, sshd будет прослушивать адрес и все указанные
              параметры порта. По умолчанию прослушиваются все локальные адреса.
              Допускается несколько опций ListenAddress.
 
-     LoginGraceTime
+@item     LoginGraceTime @anchor{man_ssh_sshd_config LoginGraceTime}
              Сервер отключается после этого времени, если пользователь не вошел в
              систему. Если значение равно 0, ограничения по времени нет. Значение по
              умолчанию составляет 120 секунд.
 
-     LogLevel
+@item     LogLevel @anchor{man_ssh_sshd_config LogLevel}
              Дает уровень многословия, который используется при регистрации сообщений
              от sshd(8). Возможные значения: QUIET, FATAL, ERROR, INFO, VERBOSE,
              DEBUG, DEBUG1, DEBUG2, и DEBUG3. По умолчанию используется INFO. DEBUG
@@ -597,7 +702,7 @@ DESCRIPTION
              уровень вывода отладочной информации. Регистрация с уровнем DEBUG нарушает
              конфиденциальность пользователей и не рекомендуется.
 
-     MACs
+@item     MACs @anchor{man_ssh_sshd_config MACs}
              Определяет доступные алгоритмы MAC (код аутентификации сообщения). Алгоритм
              MAC используется для защиты целостности данных. Несколько алгоритмов должны
              быть разделены запятыми. Если указанное значение начинается с символа ‘+’,
@@ -606,7 +711,7 @@ DESCRIPTION
              Алгоритмы, содержащие “-etm”, вычисляют MAC после шифрования
              (encrypt-then-mac). Они считаются более безопасными, и их использование
              рекомендуется. Поддерживаемые MACs:
-
+@display
                    hmac-md5
                    hmac-md5-96
                    hmac-ripemd160
@@ -625,19 +730,19 @@ DESCRIPTION
                    hmac-sha2-512-etm@@openssh.com
                    umac-64-etm@@openssh.com
                    umac-128-etm@@openssh.com
-
+@end display
              По умолчанию:
-
+@display
                    umac-64-etm@@openssh.com,umac-128-etm@@openssh.com,
                    hmac-sha2-256-etm@@openssh.com,hmac-sha2-512-etm@@openssh.com,
                    hmac-sha1-etm@@openssh.com,
-                   umac-64@openssh.com,umac-128@@openssh.com,
+                   umac-64@@openssh.com,umac-128@@openssh.com,
                    hmac-sha2-256,hmac-sha2-512,hmac-sha1
-
+@end display
              Список доступных алгоритмов MAC можно также получить с помощью
              опции -Q ssh(1) с аргументом “mac”.
 
-     Match
+@item     Match @anchor{man_ssh_sshd_config Match}
              Вводит условный блок. Если все критерии в строке Match удовлетворены,
              ключевые слова в следующих строках переопределяют те, которые установлены
              в глобальном разделе файла конфигурации, до следующей строки Match или
@@ -679,12 +784,12 @@ DESCRIPTION
              StreamLocalBindUnlink, TrustedUserCAKeys, X11DisplayOffset,
              X11Forwarding и X11UseLocalHost.
 
-     MaxAuthTries
+@item     MaxAuthTries @anchor{man_ssh_sshd_config MaxAuthTries}
              Задает максимальное количество попыток аутентификации, разрешенных для
              одного соединения. Когда число отказов достигает половины этого значения,
              регистрируются дополнительные сбои. По умолчанию 6.
 
-     MaxSessions
+@item     MaxSessions @anchor{man_ssh_sshd_config MaxSessions}
              Задает максимальное количество сеансов открытой оболочки, входа в систему
              или подсистемы (например, sftp), разрешенных для одного сетевого
              подключения. Несколько сеансов могут быть установлены клиентами, которые
@@ -693,7 +798,7 @@ DESCRIPTION
              в 0 предотвратит все сеансы оболочки, входа в систему и подсистемы, в то
              же время разрешая пересылку. По умолчанию 10.
 
-     MaxStartups
+@item     MaxStartups @anchor{man_ssh_sshd_config MaxStartups}
              Задает максимальное количество одновременных неаутентифицированных
              подключений к демону SSH. Дополнительные соединения будут сброшены до
              тех пор, пока аутентификация не пройдет успешно или не истечет срок
@@ -708,29 +813,29 @@ DESCRIPTION
              возрастает линейно, и все попытки подключения отклоняются, если число
              подключений без проверки подлинности достигает значения “full” (60).
 
-     PasswordAuthentication
+@item     PasswordAuthentication @anchor{man_ssh_sshd_config PasswordAuthentication}
              Указывает, разрешена ли аутентификация по паролю. По умолчанию
              используется “yes”.
 
-     PermitEmptyPasswords
+@item     PermitEmptyPasswords @anchor{man_ssh_sshd_config PermitEmptyPasswords}
              Когда аутентификация по паролю разрешена, она указывает, разрешает ли
              сервер входить в учетные записи с пустыми строками пароля. По умолчанию
              используется “no”.
 
-     PermitOpen
+@item     PermitOpen @anchor{man_ssh_sshd_config PermitOpen}
              Определяет пункты назначения, для которых разрешена переадресация
              порта TCP. Спецификация пересылки должна быть одной из следующих форм:
-
+@display
                    PermitOpen host:port
                    PermitOpen IPv4_addr:port
                    PermitOpen [IPv6_addr]:port
-
+@end display
              Можно указать несколько форвардов, разделив их пробелами. Аргумент “any”
              может использоваться для снятия всех ограничений и разрешения любых запросов
              на пересылку. Аргумент “none” может использоваться для запрета всех запросов
              на пересылку. По умолчанию все запросы на переадресацию портов разрешены.
 
-     PermitRootLogin
+@item     PermitRootLogin @anchor{man_ssh_sshd_config PermitRootLogin}
              Указывает, может ли root войти в систему с помощью ssh(1). Аргумент должен
              быть “yes”, “prohibit-password”, “without-password”, “forced-commands-only”,
              или “no”. По умолчанию используется “prohibit-password”.
@@ -748,7 +853,7 @@ DESCRIPTION
              Если для этого параметра установлено значение “no”, root не
              может войти в систему.
 
-     PermitTunnel
+@item     PermitTunnel @anchor{man_ssh_sshd_config PermitTunnel}
              Указывает, разрешена ли пересылка устройства tun(4). Аргумент должен быть
              “yes”, “point-to-point” (layer 3), “ethernet” (уровень 2), или “no”.
              Указание “yes” разрешает оба “point-to-point” и “ethernet”. По умолчанию
@@ -757,42 +862,42 @@ DESCRIPTION
              Независимо от этого параметра разрешения выбранного устройства tun(4)
              должны разрешать доступ пользователю.
 
-     PermitTTY
+@item     PermitTTY @anchor{man_ssh_sshd_config PermitTTY}
              Указывает, разрешено ли выделение pty(4). По умолчанию
              используется “yes”.
 
-     PermitUserEnvironment
+@item     PermitUserEnvironment @anchor{man_ssh_sshd_config PermitUserEnvironment}
              Определяет, обрабатываются ли опции ~/.ssh/environment и environment= в
              ~/.ssh/authorized_keys с помощью sshd(8). По умолчанию используется “no”.
              Включение обработки среды может позволить пользователям обойти ограничения
              доступа в некоторых конфигурациях, используя такие механизмы,
              как LD_PRELOAD.
 
-     PermitUserRC
+@item     PermitUserRC @anchor{man_ssh_sshd_config PermitUserRC}
              Указывает, выполняется ли какой-либо файл ~/.ssh/rc. По умолчанию
              используется “yes”.
 
-     PidFile
+@item     PidFile @anchor{man_ssh_sshd_config PidFile}
              Указывает файл, содержащий процесс ID демона SSH, или “none”, чтобы
              не записывать его. По умолчанию используется /var/run/sshd.pid.
 
-     Port
+@item     Port @anchor{man_ssh_sshd_config Port}
              Specifies the port number that sshd(8) listens on.  The default
              is 22.  Multiple options of this type are permitted.  See also
              ListenAddress.
 
-     PrintLastLog
+@item     PrintLastLog @anchor{man_ssh_sshd_config PrintLastLog}
              Указывает, должен ли sshd(8) печатать дату и время последнего входа
              пользователя, когда пользователь входит в систему в интерактивном режиме.
              По умолчанию используется “yes”.
 
-     PrintMotd
+@item     PrintMotd @anchor{man_ssh_sshd_config PrintMotd}
              Указывает, должен ли sshd(8) печатать /etc/motd, когда пользователь входит
              в систему в интерактивном режиме. (В некоторых системах он также печатается
              с помощью оболочки, /etc/profile или эквивалентной.) По умолчанию
              используется “yes”.
 
-     Protocol
+@item     Protocol @anchor{man_ssh_sshd_config Protocol}
              Определяет версии протокола, поддерживаемые sshd(8). Возможные
              значения: ‘1’ и ‘2’. Несколько версий должны быть разделены запятыми.
              По умолчанию используется ‘2’. Протокол 1 страдает от ряда
@@ -803,13 +908,13 @@ DESCRIPTION
              предпочтение, потому что клиент выбирает из нескольких вариантов
              протоколов, предлагаемых сервером. Указание “2,1” идентично “1,2”.
 
-     PubkeyAcceptedKeyTypes
+@item     PubkeyAcceptedKeyTypes @anchor{man_ssh_sshd_config PubkeyAcceptedKeyTypes}
              Задает типы ключей, которые будут приняты для аутентификации с открытым
              ключом в виде списка шаблонов, разделенных запятыми. С другой стороны,
              если указанное значение начинается с символа ‘+’, то указанные типы
              ключей будут добавляться к набору по умолчанию вместо их замены. По
              умолчанию для этой опции:
-
+@display
                 ecdsa-sha2-nistp256-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp384-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp521-cert-v01@@openssh.com,
@@ -817,15 +922,15 @@ DESCRIPTION
                 ssh-rsa-cert-v01@@openssh.com,
                 ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
                 ssh-ed25519,ssh-rsa
-
+@end display
              Опция -Q в ssh(1) может использоваться для отображения
              поддерживаемых типов ключей.
 
-     PubkeyAuthentication
+@item     PubkeyAuthentication @anchor{man_ssh_sshd_config PubkeyAuthentication}
              Указывает, разрешена ли аутентификация с открытым ключом. По умолчанию
              используется “yes”.
 
-     RekeyLimit
+@item     RekeyLimit @anchor{man_ssh_sshd_config RekeyLimit}
              Задает максимальный объем данных, которые могут быть переданы до
              повторного согласования ключа сеанса, при желании может следовать
              максимальное количество времени, которое может пройти до повторного
@@ -839,7 +944,7 @@ DESCRIPTION
              после того, как объем данных шифра был отправлен или получен, и
              повторный ввод по времени не выполняется.
 
-     RevokedKeys
+@item     RevokedKeys @anchor{man_ssh_sshd_config RevokedKeys}
              Указывает отозванный файл открытых ключей или “none”, чтобы не
              использовать его. Ключи, перечисленные в этом файле, будут отклонены
              для аутентификации с открытым ключом. Обратите внимание, что если этот
@@ -850,20 +955,20 @@ DESCRIPTION
              Для получения дополнительной информации об KRLs см. Раздел
              KEY REVOCATION LISTS в ssh-keygen(1).
 
-     RhostsRSAAuthentication
+@item     RhostsRSAAuthentication @anchor{man_ssh_sshd_config RhostsRSAAuthentication}
              Указывает, разрешена ли аутентификация rhosts или /etc/hosts.equiv
              вместе с успешной аутентификацией хоста RSA. По умолчанию используется
              “no”. Эта опция применяется только к версии протокола 1.
 
-     RSAAuthentication
+@item     RSAAuthentication @anchor{man_ssh_sshd_config RSAAuthentication}
              Указывает, разрешена ли чистая аутентификация RSA. По умолчанию
              используется “yes”. Эта опция применяется только к версии протокола 1.
 
-     ServerKeyBits
+@item     ServerKeyBits @anchor{man_ssh_sshd_config ServerKeyBits}
              Определяет количество бит в ключе сервера эфемерного протокола версии 1.
              Минимальное значение по умолчанию - 1024.
 
-     StreamLocalBindMask
+@item     StreamLocalBindMask @anchor{man_ssh_sshd_config StreamLocalBindMask}
              Устанавливает восьмеричную маску режима создания файла (umask),
              используемую при создании файла сокета Unix-домена для локальной или
              удаленной переадресации портов. Эта опция используется только для
@@ -874,7 +979,7 @@ DESCRIPTION
              Обратите внимание, что не все операционные системы поддерживают режим
              файлов в файлах сокетов Unix-домена.
 
-     StreamLocalBindUnlink
+@item     StreamLocalBindUnlink @anchor{man_ssh_sshd_config StreamLocalBindUnlink}
              Указывает, следует ли удалить существующий файл сокета Unix-домена для
              локальной или удаленной переадресации портов перед созданием нового. Если
              файл сокета уже существует и StreamLocalBindUnlink не включен, sshd не
@@ -883,7 +988,7 @@ DESCRIPTION
 
              Аргумент должен быть “yes” или “no”. По умолчанию используется “no”.
 
-     StrictModes
+@item     StrictModes @anchor{man_ssh_sshd_config StrictModes}
              Определяет, должен ли sshd(8) проверять режимы файлов и владение файлами
              пользователя и домашним каталогом, прежде чем принимать вход в систему.
              Обычно это желательно, потому что новички иногда случайно покидают свои
@@ -891,7 +996,7 @@ DESCRIPTION
              Обратите внимание, что это не относится к ChrootDirectory, права и владение
              которого проверяются безоговорочно.
 
-     Subsystem
+@item     Subsystem @anchor{man_ssh_sshd_config Subsystem}
              Настраивает внешнюю подсистему (например, демон передачи файлов). Аргументы
              должны быть именем подсистемы и командой (с необязательными аргументами)
              для выполнения по запросу подсистемы.
@@ -904,12 +1009,12 @@ DESCRIPTION
 
              По умолчанию подсистемы не определены.
 
-     SyslogFacility
+@item     SyslogFacility @anchor{man_ssh_sshd_config SyslogFacility}
              Предоставляет код объекта, который используется при регистрации сообщений
              от sshd(8). Возможные значения: DAEMON, USER, AUTH, LOCAL0, LOCAL1, LOCAL2,
              LOCAL3, LOCAL4, LOCAL5, LOCAL6, LOCAL7. По умолчанию используется AUTH.
 
-     TCPKeepAlive
+@item     TCPKeepAlive @anchor{man_ssh_sshd_config TCPKeepAlive}
              Указывает, должна ли система отправлять сообщения поддержки активности
              TCP другой стороне. Если они отправлены, смерть соединения или сбой
              одной из машин будут замечены должным образом. Однако это означает, что
@@ -928,7 +1033,7 @@ DESCRIPTION
 
              Этот вариант ранее назывался KeepAlive.
 
-     TrustedUserCAKeys
+@item     TrustedUserCAKeys @anchor{man_ssh_sshd_config TrustedUserCAKeys}
              Определяет файл, содержащий открытые ключи полномочий сертификатов, которым
              доверяют подписывать пользовательские сертификаты для аутентификации, или
              “none”, чтобы не использовать их. Ключи указаны по одному в строке;
@@ -941,7 +1046,7 @@ DESCRIPTION
              дополнительной информации о сертификатах см. Раздел CERTIFICATES в
              ssh-keygen(1).
 
-     UseDNS
+@item     UseDNS @anchor{man_ssh_sshd_config UseDNS}
              Указывает, должен ли sshd(8) искать имя удаленного хоста и проверять,
              соответствует ли разрешенное имя хоста для адреса удаленного IP тому
              же адресу IP.
@@ -950,7 +1055,7 @@ DESCRIPTION
              то в директивах ~/.ssh/known_hosts from и sshd_config Match Host могут
              использоваться только адреса, а не имена хостов.
 
-     UseLogin
+@item     UseLogin @anchor{man_ssh_sshd_config UseLogin}
              Указывает, используется ли login(1) для интерактивных сеансов входа
              в систему. По умолчанию используется “no”. Обратите внимание, что
              login(1) никогда не используется для удаленного выполнения команд.
@@ -959,7 +1064,7 @@ DESCRIPTION
              cookie xauth(1). Если указан UsePrivilegeSeparation, он будет
              отключен после аутентификации.
 
-     UsePAM
+@item     UsePAM @anchor{man_ssh_sshd_config UsePAM}
              Включает интерфейс Pluggable Authentication Module
              (Сменный модуль аутентификации). Если установлено значение “yes”,
              это включит аутентификацию PAM с использованием
@@ -974,7 +1079,7 @@ DESCRIPTION
              Если UsePAM включен, вы не сможете запускать sshd(8) от имени
              пользователя без полномочий root. По умолчанию используется “no”.
 
-     UsePrivilegeSeparation
+@item     UsePrivilegeSeparation @anchor{man_ssh_sshd_config UsePrivilegeSeparation}
              Указывает, разделяет ли sshd(8) привилегии, создавая непривилегированный
              дочерний процесс для обработки входящего сетевого трафика. После успешной
              аутентификации будет создан другой процесс, имеющий привилегию
@@ -986,17 +1091,17 @@ DESCRIPTION
              будет подвергаться дополнительным ограничениям. По умолчанию используется
              “sandbox”.
 
-     VersionAddendum
+@item     VersionAddendum @anchor{man_ssh_sshd_config VersionAddendum}
              Опционально указывает дополнительный текст для добавления к баннеру
              протокола SSH, отправляемому сервером при подключении. По умолчанию
              используется “none”.
 
-     X11DisplayOffset
+@item     X11DisplayOffset @anchor{man_ssh_sshd_config X11DisplayOffset}
              Задает первый номер дисплея, доступный для пересылки X11 в sshd(8). Это
              предотвращает взаимодействие sshd с реальными серверами X11.
              По умолчанию 10.
 
-     X11Forwarding
+@item     X11Forwarding @anchor{man_ssh_sshd_config X11Forwarding}
              Указывает, разрешена ли пересылка X11. Аргумент должен быть “yes” или
              “no”. По умолчанию используется “no”.
 
@@ -1017,7 +1122,7 @@ DESCRIPTION
              собственные серверы пересылки. Пересылка X11 автоматически отключается,
              если включен UseLogin.
 
-     X11UseLocalhost
+@item     X11UseLocalhost @anchor{man_ssh_sshd_config X11UseLocalhost}
              Указывает, должен ли sshd(8) связывать сервер пересылки X11 с адресом
              обратной связи или с подстановочным адресом. По умолчанию sshd связывает
              сервер пересылки с адресом обратной связи и устанавливает для части имени
@@ -1028,42 +1133,42 @@ DESCRIPTION
              связан с адресом подстановочного знака. Аргумент должен быть “yes” или
              “no”. По умолчанию используется “yes”.
 
-     XAuthLocation
+@item     XAuthLocation @anchor{man_ssh_sshd_config XAuthLocation}
              Задает полный путь к программе xauth(1) или “none”, чтобы не использовать
              ее. По умолчанию используется /usr/bin/xauth.
-
-TIME FORMATS
+@end table
+@item TIME FORMATS
      sshd(8) аргументы командной строки и параметры файла конфигурации, которые
      задают время, могут быть выражены с помощью последовательности вида:
      time[qualifier] (время[спецификатор]), где time - положительное целочисленное
      значение, а квалификатор - один из следующих:
-
+@display
            ⟨none⟩  seconds
            s | S   seconds
            m | M   minutes
            h | H   hours
            d | D   days
            w | W   weeks
-
+@end display
      Каждый член последовательности складывается вместе для вычисления общего
      значения времени.
 
      Примеры формата времени:
-
+@display
            600     600 seconds (10 minutes)
            10m     10 minutes
            1h30m   1 hour 30 minutes (90 minutes)
-
-FILES
+@end display
+@item FILES
      /etc/ssh/sshd_config
              Содержит данные конфигурации для sshd(8). Этот файл должен быть доступен
              для записи только пользователю root, но рекомендуется
              (хотя и не обязательно), чтобы он был доступен для чтения всем.
 
-SEE ALSO
+@item SEE ALSO
      sshd(8)
 
-AUTHORS
+@item AUTHORS
      OpenSSH is a derivative of the original and free ssh 1.2.12 release by
      Tatu Ylonen.  Aaron Campbell, Bob Beck, Markus Friedl, Niels Provos, Theo
      de Raadt and Dug Song removed many bugs, re-added newer features and cre‐
@@ -1072,3 +1177,4 @@ AUTHORS
      for privilege separation.
 
 BSD                            February 17, 2016                           BSD
+@end table

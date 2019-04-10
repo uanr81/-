@@ -1,7 +1,7 @@
 VERIFY(1)                           OpenSSL                          VERIFY(1)
 
 NAME
-       openssl-verify, verify - Utility to verify certificates
+       openssl-verify, verify - Утилита для проверки сертификатов
 
 SYNOPSIS
        openssl verify [-help] [-CAfile file] [-CApath directory] [-no-CAfile]
@@ -17,73 +17,71 @@ SYNOPSIS
        [-verify_name name] [-x509_strict] [-show_chain] [-] [certificates]
 
 DESCRIPTION
-       The verify command verifies certificate chains.
+       Команда verify проверяет цепочки сертификатов.
 
 OPTIONS
        -help
-           Print out a usage message.
+           Распечатайте сообщение об использовании.
 
        -CAfile file
-           A file of trusted certificates.  The file should contain one or
-           more certificates in PEM format.
+           Файл доверенных сертификатов. Файл должен содержать один или несколько
+           сертификатов в формате PEM.
 
        -CApath directory
-           A directory of trusted certificates. The certificates should have
-           names of the form: hash.0 or have symbolic links to them of this
-           form ("hash" is the hashed certificate subject name: see the -hash
-           option of the x509 utility). Under Unix the c_rehash script will
-           automatically create symbolic links to a directory of certificates.
+           Каталог доверенных сертификатов. Сертификаты должны иметь имена в форме:
+           hash.0 или иметь символические ссылки на них этой формы ("hash" - это
+           имя субъекта хешированного сертификата: см. Параметр -hash утилиты x509).
+           Под Unix скрипт c_rehash автоматически создает символические ссылки на
+           каталог сертификатов.
 
        -no-CAfile
-           Do not load the trusted CA certificates from the default file
-           location.
+           Не загружайте доверенные сертификаты CA из расположения файла по умолчанию.
 
        -no-CApath
-           Do not load the trusted CA certificates from the default directory
-           location.
+           Не загружайте доверенные сертификаты CA из каталога по умолчанию.
 
        -allow_proxy_certs
-           Allow the verification of proxy certificates.
+           Разрешить проверку прокси-сертификатов.
 
        -attime timestamp
-           Perform validation checks using time specified by timestamp and not
-           current system time. timestamp is the number of seconds since
-           01.01.1970 (UNIX time).
+           Выполните проверки правильности, используя время, указанное в отметке
+           времени, а не текущее системное время. временная метка - это количество
+           секунд с момента 01.01.1970 (время UNIX).
 
        -check_ss_sig
-           Verify the signature on the self-signed root CA. This is disabled
-           by default because it doesn't add any security.
+           Проверьте подпись на самозаверяющем корне CA. Это отключено по умолчанию,
+           потому что это не добавляет безопасности.
 
        -CRLfile file
-           The file should contain one or more CRLs in PEM format.  This
-           option can be specified more than once to include CRLs from
-           multiple files.
+           Файл должен содержать один или несколько CRLs в формате PEM. Эта опция
+           может быть указана более одного раза, чтобы включить CRLs из
+           нескольких файлов.
 
        -crl_download
-           Attempt to download CRL information for this certificate.
+           Попытайтесь загрузить информацию CRL для этого сертификата.
 
        -crl_check
-           Checks end entity certificate validity by attempting to look up a
-           valid CRL.  If a valid CRL cannot be found an error occurs.
+           Проверяет конец сертификата сущности, пытаясь найти действительный CRL.
+           Если действительный CRL не может быть найден, возникает ошибка.
 
        -crl_check_all
-           Checks the validity of all certificates in the chain by attempting
-           to look up valid CRLs.
+           Проверяет действительность всех сертификатов в цепочке, пытаясь найти
+           действительные CRL.
 
        -engine id
-           Specifying an engine id will cause verify(1) to attempt to load the
-           specified engine.  The engine will then be set as the default for
-           all its supported algorithms.  If you want to load certificates or
-           CRLs that require engine support via any of the -trusted,
-           -untrusted or -CRLfile options, the -engine option must be
-           specified before those options.
+           Указание идентификатора двигателя приведет к тому, что verify(1) попытается
+           загрузить указанный движок. Движок будет установлен по умолчанию для всех
+           поддерживаемых алгоритмов. Если вы хотите загрузить сертификаты или списки
+           отзыва сертификатов, для которых требуется поддержка движка, с помощью любого
+           из параметров -trusted, -untrusted или -CRLfile опции, -engine
+           перед этими параметрами необходимо указать.
 
        -explicit_policy
-           Set policy variable require-explicit-policy (see RFC5280).
+           Установите переменную политики require-explicit-policy (см. RFC5280).
 
        -extended_crl
-           Enable extended CRL features such as indirect CRLs and alternate
-           CRL signing keys.
+           Включите расширенные функции CRL, такие как косвенный ключ CRLs и
+           альтернативные ключи подписи CRL.
 
        -ignore_critical
            Normally if an unhandled critical extension is present which is not

@@ -1,15 +1,16 @@
-SCP(1)                    BSD General Commands Manual                   SCP(1)
-
-NAME
+@node SCP(1), SFTP(1), SSHD_CONFIG, Top
+@chapter SCP
+@table @asis
+@item NAME
      scp — безопасное копирование (программа удаленного копирования файлов)
 
-SYNOPSIS
-     scp [-12346BCpqrTv] [-c cipher] [-F ssh_config] [-i identity_file]
-         [-l limit] [-o ssh_option] [-P port] [-S program]
-         [[user@]host1:]file1 ... [[user@@]host2:]file2
+@item SYNOPSIS
+     scp [-@ref{man_ssh_scp -1,, 1}@ref{man_ssh_scp -2,, 2}@ref{man_ssh_scp 3,, 3}@ref{man_ssh_scp 4,, 4}@ref{man_ssh_scp 6,, 6}@ref{man_ssh_scp B,, B}@ref{man_ssh_scp C,, C}@ref{man_ssh_scp -p,, p}@ref{man_ssh_scp -q,, q}@ref{man_ssh_scp r,, r}@ref{man_ssh_scp T,, T}@ref{man_ssh_scp v,, v}] [@ref{man_ssh_scp c cipher,, c cipher}] [@ref{man_ssh_scp -F ssh_config,, -F ssh_config}] [@ref{man_ssh_scp -i identity_file,, -i identity_file}]
+         [@ref{man_ssh_scp -l limit,, -l limit}] [@ref{man_ssh_scp -o ssh_option,, -o ssh_option}] [@ref{man_ssh_scp -P port,, -P port}] [@ref{man_ssh_scp -S program,, -S program}]
+         [[user@@]host1:]file1 ... [[user@@]host2:]file2
 
-DESCRIPTION
-     scp копирует файлы между хостами в сети. Он использует ssh(1) для передачи данных, использует ту
+@item DESCRIPTION
+     scp копирует файлы между хостами в сети. Она использует ssh(1) для передачи данных, использует ту
      же аутентификацию и обеспечивает ту же безопасность, что и ssh(1). scp запросит пароли или парольные
      фразы, если они необходимы для аутентификации.
 
@@ -19,51 +20,51 @@ DESCRIPTION
      спецификаторов хоста. Копии между двумя удаленными хостами также разрешены.
 
      Варианты следующие:
-
-     -1
+@table @asis
+@item     -1 @anchor{man_ssh_scp -1}
              Заставляет scp использовать протокол 1.
 
-     -2
+@item     -2 @anchor{man_ssh_scp -2}
              Заставляет scp использовать протокол 2.
 
-     -3
+@item     -3 @anchor{man_ssh_scp 3}
              Копии между двумя удаленными хостами передаются через локальный хост. Без этой опции данные
              копируются непосредственно между двумя удаленными хостами. Обратите внимание, что эта опция
              отключает индикатор прогресса.
 
-     -4
+@item     -4 @anchor{man_ssh_scp 4}
              Заставляет scp использовать только адреса IPv4.
 
-     -6
+@item     -6 @anchor{man_ssh_scp 6}
              Заставляет scp использовать только адреса IPv6.
 
-     -B
+@item     -B @anchor{man_ssh_scp B}
              Выбирает пакетный режим (запрещает запрашивать пароли или парольные фразы).
 
-     -C
+@item     -C @anchor{man_ssh_scp C}
              Включение сжатия. Передает флаг -C в ssh (1), чтобы включить сжатие.
 
-     -c cipher
+@item     -c cipher @anchor{man_ssh_scp c cipher}
              Выбирает шифр, который будет использоваться для шифрования передачи данных. Эта опция
              напрямую передается в ssh(1).
 
-     -F ssh_config
+@item     -F ssh_config @anchor{man_ssh_scp -F ssh_config}
              Определяет альтернативный файл конфигурации для пользователя для ssh. Эта опция напрямую
              передается в ssh (1).
 
-     -i identity_file
+@item     -i identity_file @anchor{man_ssh_scp -i identity_file}
              Выбирает файл, из которого читается идентификатор (закрытый ключ) для аутентификации с
              открытым ключом. Эта опция напрямую передается в ssh(1).
 
-     -l limit
+@item     -l limit @anchor{man_ssh_scp -l limit}
              Ограничивает используемую пропускную способность, указанную в Кбит/с.
 
-     -o ssh_option
+@item     -o ssh_option @anchor{man_ssh_scp -o ssh_option}
              Может использоваться для передачи параметров в ssh в формате, используемом в
              ssh_config(5). Это полезно для указания параметров, для которых нет отдельного
              флага командной строки scp.  Для получения полной информации о параметрах, перечисленных
              ниже, и их возможных значений, смотри ssh_config(5).
-
+@display
                    AddressFamily
                    BatchMode
                    BindAddress
@@ -125,46 +126,51 @@ DESCRIPTION
                    User
                    UserKnownHostsFile
                    VerifyHostKeyDNS
-
-     -P port
+@end display
+@item     -P port @anchor{man_ssh_scp -P port}
              Указывает порт для подключения на удаленном хосте. Обратите внимание, что этот параметр
              записывается с заглавной буквы ‘P’, поскольку -p уже зарезервирован для сохранения времени
              и режимов файла.
 
-     -p      Сохраняет время модификации, время доступа и режимы из исходного файла.
+@item     -p @anchor{man_ssh_scp -p}
+             Сохраняет время модификации, время доступа и режимы из исходного файла.
 
-     -q      Тихий режим: отключает индикатор хода выполнения, а также предупреждающие и диагностические
+@item     -q @anchor{man_ssh_scp -q}
+             Тихий режим: отключает индикатор хода выполнения, а также предупреждающие и диагностические
              сообщения от ssh(1).
 
-     -r      Рекурсивно копировать целые каталоги. Обратите внимание, что scp следует символическим ссылкам,
+@item     -r @anchor{man_ssh_scp r}
+             Рекурсивно копировать целые каталоги. Обратите внимание, что scp следует символическим ссылкам,
              встречающимся в обходе дерева.
 
-     -S program
+@item     -S program @anchor{man_ssh_scp -S program}
              Имя программы, используемой для зашифрованного соединения. Программа должна понимать опции ssh(1).
 
-     -T      Отключить строгую проверку имени файла. По умолчанию при копировании файлов с удаленного хоста
+@item     -T @anchor{man_ssh_scp T} 
+             Отключить строгую проверку имени файла. По умолчанию при копировании файлов с удаленного хоста
              в локальный каталог scp проверяет, совпадают ли полученные имена файлов с запрошенными в командной
              строке, чтобы предотвратить отправку удаленным концом неожиданных или нежелательных файлов. Из-за
              различий в том, как различные операционные системы и оболочки интерпретируют подстановочные знаки
              имени файла, эти проверки могут привести к отклонению нужных файлов. Эта опция отключает эти
              проверки за счет полного доверия, что сервер не будет отправлять неожиданные имена файлов.
 
-     -v      Детальный режим. Заставляет scp и ssh(1) печатать отладочные сообщения об их прогрессе. Это
+@item     -v @anchor{man_ssh_scp v}
+             Детальный режим. Заставляет scp и ssh(1) печатать отладочные сообщения об их прогрессе. Это
              полезно при отладке проблем с подключением, аутентификацией и настройкой.
-
-EXIT STATUS
+@end table
+@item EXIT STATUS
      Утилита scp завершает работу с 0 в случае успеха и >0 в случае возникновения ошибки.
 
-SEE ALSO
+@item SEE ALSO
      sftp(1), ssh(1), ssh-add(1), ssh-agent(1), ssh-keygen(1), ssh_config(5),
      sshd(8)
 
-HISTORY
+@item HISTORY
      scp is based on the rcp program in BSD source code from the Regents of
      the University of California.
 
-AUTHORS
-     Timo Rinne <tri@iki.fi>
-     Tatu Ylonen <ylo@cs.hut.fi>
-
+@item AUTHORS
+     Timo Rinne <tri@@iki.fi>
+     Tatu Ylonen <ylo@@cs.hut.fi>
+@end table
 BSD                           September 25, 2015                           BSD
