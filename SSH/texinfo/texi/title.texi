@@ -44,4 +44,5 @@
 
 @include ssh_config_example.texi
 @include Example_sshd_config.texi
+@include sshd_config_example_с_пояснениями.texi
 @bye

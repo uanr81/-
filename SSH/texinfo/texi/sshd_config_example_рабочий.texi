@@ -1,0 +1,97 @@
+@node sshd_config-example-рабочий
+@chapter sshd_config-example-рабочий
+@display
+# Пакет сгенерированный файл конфигурации
+# Для получения дополнительной информации смотрите страницу руководства sshd_config (5).
+# Трудится на nidhost177
+
+# Какие порты, IP-адреса и протоколы мы слушаем
+Port 4776
+# Используйте эти параметры, чтобы ограничить привязку interfaces/protocols sshd к
+#ListenAddress ::
+#ListenAddress 0.0.0.0
+Protocol 2
+# HostKeys для версии протокола 2
+HostKey /etc/ssh/ssh_host_rsa_key
+#HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+#Privilege Separation is turned on for security
+UsePrivilegeSeparation yes
+
+# Lifetime and size of ephemeral version 1 server key
+#KeyRegenerationInterval 3600
+#ServerKeyBits 1024
+
+# логирование
+SyslogFacility AUTH
+LogLevel INFO
+
+# Аутентификация:
+LoginGraceTime 30
+MaxStartups 1:60:2
+PermitRootLogin no
+StrictModes yes
+AllowUsers alnid
+
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile	%h/.ssh/authorized_keys
+
+# Не читайте пользователя ~/.rhosts and ~/.shosts files
+IgnoreRhosts yes
+# Для этого вам также понадобятся ключи хоста в /etc/ssh_known_hosts
+RhostsRSAAuthentication no
+# похоже на версию протокола 2
+HostbasedAuthentication no
+# Раскомментируйте, если не доверяете ~/.ssh/known_hosts для RhostsRSAAuthentication
+#IgnoreUserKnownHosts yes
+
+# Чтобы включить пустые пароли, измените на yes (НЕ РЕКОМЕНДУЕТСЯ)
+PermitEmptyPasswords no
+
+# Измените на yes, чтобы включить пароли запроса-ответа (остерегайтесь
+# проблем с некоторыми модулями и потоками PAM)
+ChallengeResponseAuthentication no
+
+# Измените на no, чтобы отключить пароли в виде открытого текста.
+PasswordAuthentication no
+
+# Kerberos options
+#KerberosAuthentication no
+#KerberosGetAFSToken no
+#KerberosOrLocalPasswd yes
+#KerberosTicketCleanup yes
+
+# GSSAPI options
+#GSSAPIAuthentication no
+#GSSAPICleanupCredentials yes
+
+#X11Forwarding yes
+#X11DisplayOffset 10
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive no
+ClientAliveCountMax 3
+ClientAliveInterval 20
+#UseLogin no
+
+#Banner /etc/issue.net
+DebianBanner no
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Установите для него значение 'yes', чтобы включить аутентификацию PAM,
+# обработку учетной записи и обработку сеанса. Если это включено,
+# аутентификация PAM будет разрешена через ChallengeResponseAuthentication
+# и PasswordAuthentication. В зависимости от вашей конфигурации PAM
+# аутентификация PAM через ChallengeResponseAuthentication может
+# обойти настройку "PermitRootLogin without-password".
+# Если вы просто хотите, чтобы проверки учетных записей и сеансов PAM
+# выполнялись без аутентификации PAM, включите эту функцию, но установите
+# для PasswordAuthentication и ChallengeResponseAuthentication значение 'no'.
+UsePAM yes
+@end display
