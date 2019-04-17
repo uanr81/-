@@ -23,6 +23,9 @@
 * SSH-KEYSIGN::                 
 * ssh-config-example::          
 * sshd_config-example::         
+* sshd_config_example 2::       
+* Руководство 1::               
+* Руководство 2::               
 @end menu
 
 @include man_ssh.texi
@@ -45,4 +48,7 @@
 @include ssh_config_example.texi
 @include Example_sshd_config.texi
 @include sshd_config_example_с_пояснениями.texi
+@include Руководство_1.texi
+@include Руководство_2.texi
+
 @bye

@@ -65,67 +65,68 @@
              флага командной строки scp.  Для получения полной информации о параметрах, перечисленных
              ниже, и их возможных значений, смотри ssh_config(5).
 @display
-                   AddressFamily
-                   BatchMode
-                   BindAddress
-                   CanonicalDomains
-                   CanonicalizeFallbackLocal
-                   CanonicalizeHostname
-                   CanonicalizeMaxDots
-                   CanonicalizePermittedCNAMEs
-                   CertificateFile
-                   ChallengeResponseAuthentication
-                   CheckHostIP
-                   Cipher
-                   Ciphers
-                   Compression
-                   CompressionLevel
-                   ConnectionAttempts
-                   ConnectTimeout
-                   ControlMaster
-                   ControlPath
-                   ControlPersist
-                   GlobalKnownHostsFile
-                   GSSAPIAuthentication
-                   GSSAPIDelegateCredentials
-                   HashKnownHosts
-                   Host
-                   HostbasedAuthentication
-                   HostbasedKeyTypes
-                   HostKeyAlgorithms
-                   HostKeyAlias
-                   HostName
-                   IdentityFile
-                   IdentitiesOnly
-                   IPQoS
-                   KbdInteractiveAuthentication
-                   KbdInteractiveDevices
-                   KexAlgorithms
-                   LogLevel
-                   MACs
-                   NoHostAuthenticationForLocalhost
-                   NumberOfPasswordPrompts
-                   PasswordAuthentication
-                   PKCS11Provider
-                   Port
-                   PreferredAuthentications
-                   Protocol
-                   ProxyCommand
-                   PubkeyAcceptedKeyTypes
-                   PubkeyAuthentication
-                   RekeyLimit
-                   RhostsRSAAuthentication
-                   RSAAuthentication
-                   SendEnv
-                   ServerAliveInterval
-                   ServerAliveCountMax
-                   StrictHostKeyChecking
-                   TCPKeepAlive
-                   UpdateHostKeys
-                   UsePrivilegedPort
-                   User
-                   UserKnownHostsFile
-                   VerifyHostKeyDNS
+      @ref{man_ssh_ssh_config AddressFamily,, AddressFamily}
+      @ref{man_ssh_ssh_config BatchMode,, BatchMode}
+      @ref{man_ssh_ssh_config BindAddress,, BindAddress}
+      @ref{man_ssh_ssh_config CanonicalDomains,, CanonicalDomains}
+      @ref{man_ssh_ssh_config CanonicalizeFallbackLocal,, CanonicalizeFallbackLocal}
+      @ref{man_ssh_ssh_config CanonicalizeHostname,, CanonicalizeHostname}
+      @ref{man_ssh_ssh_config CanonicalizeMaxDots,, CanonicalizeMaxDots}
+      @ref{man_ssh_ssh_config CanonicalizePermittedCNAMEs,, CanonicalizePermittedCNAMEs}
+      @ref{man_ssh_ssh_config CertificateFile,, CertificateFile}
+      @ref{man_ssh_ssh_config ChallengeResponseAuthentication,, ChallengeResponseAuthentication}
+      @ref{man_ssh_ssh_config CheckHostIP,, CheckHostIP}
+      @ref{man_ssh_ssh_config Cipher,, Cipher}
+      @ref{man_ssh_ssh_config Ciphers,, Ciphers}
+      @ref{man_ssh_ssh_config Compression,, Compression}
+      @ref{man_ssh_ssh_config CompressionLevel,, CompressionLevel}
+      @ref{man_ssh_ssh_config ConnectionAttempts,, ConnectionAttempts}
+      @ref{man_ssh_ssh_config ConnectTimeout,, ConnectTimeout}
+      @ref{man_ssh_ssh_config ControlMaster,, ControlMaster}
+      @ref{man_ssh_ssh_config ControlPath,, ControlPath}
+      @ref{man_ssh_ssh_config ControlPersist,, ControlPersist}
+      @ref{man_ssh_ssh_config GlobalKnownHostsFile,, GlobalKnownHostsFile}
+      @ref{man_ssh_ssh_config GSSAPIAuthentication,, GSSAPIAuthentication}
+      @ref{man_ssh_ssh_config GSSAPIDelegateCredentials,, GSSAPIDelegateCredentials}
+      @ref{man_ssh_ssh_config HashKnownHosts,, HashKnownHosts}
+      @ref{man_ssh_ssh_config Host,, Host}
+      @ref{man_ssh_ssh_config HostbasedAuthentication,, HostbasedAuthentication}
+      @ref{man_ssh_ssh_config HostbasedKeyTypes,, HostbasedKeyTypes}
+      @ref{man_ssh_ssh_config HostKeyAlgorithms,, HostKeyAlgorithms}
+      @ref{man_ssh_ssh_config HostKeyAlias,, HostKeyAlias}
+      @ref{man_ssh_ssh_config HostName,, HostName}
+      @ref{man_ssh_ssh_config IdentityFile,, IdentityFile}
+      @ref{man_ssh_ssh_config IdentitiesOnly,, IdentitiesOnly}
+      @ref{man_ssh_ssh_config IPQoS,, IPQoS}
+      @ref{man_ssh_ssh_config KbdInteractiveAuthentication,, KbdInteractiveAuthentication}
+      @ref{man_ssh_ssh_config KbdInteractiveDevices,, KbdInteractiveDevices}
+      @ref{man_ssh_ssh_config KexAlgorithms,, KexAlgorithms}
+      @ref{man_ssh_ssh_config LogLevel,, LogLevel}
+      @ref{man_ssh_ssh_config MACs,, MACs}
+      @ref{man_ssh_ssh_config NoHostAuthenticationForLocalhost,, NoHostAuthenticationForLocalhost}
+      @ref{man_ssh_ssh_config NumberOfPasswordPrompts,, NumberOfPasswordPrompts}
+      @ref{man_ssh_ssh_config PasswordAuthentication,, PasswordAuthentication}
+      @ref{man_ssh_ssh_config PKCS11Provider,, PKCS11Provider}
+      @ref{man_ssh_ssh_config Port,, Port}
+      @ref{man_ssh_ssh_config PreferredAuthentications,, PreferredAuthentications}
+      @ref{man_ssh_ssh_config Protocol,, Protocol}
+      @ref{man_ssh_ssh_config ProxyCommand,, ProxyCommand}
+      @ref{man_ssh_ssh_config PubkeyAcceptedKeyTypes,, PubkeyAcceptedKeyTypes}
+      @ref{man_ssh_ssh_config PubkeyAuthentication,, PubkeyAuthentication}
+      @ref{man_ssh_ssh_config RekeyLimit,, RekeyLimit}
+      @ref{man_ssh_ssh_config RhostsRSAAuthentication,, RhostsRSAAuthentication}
+      @ref{man_ssh_ssh_config RSAAuthentication,, RSAAuthentication}
+      @ref{man_ssh_ssh_config SendEnv,, SendEnv}
+      @ref{man_ssh_ssh_config ServerAliveInterval,, ServerAliveInterval}
+      @ref{man_ssh_ssh_config ServerAliveCountMax,, ServerAliveCountMax}
+      @ref{man_ssh_ssh_config StrictHostKeyChecking,, StrictHostKeyChecking}
+      @ref{man_ssh_ssh_config TCPKeepAlive,, TCPKeepAlive}
+      @ref{man_ssh_ssh_config UpdateHostKeys,, UpdateHostKeys}
+      @ref{man_ssh_ssh_config UsePrivilegedPort,, UsePrivilegedPort}
+      @ref{man_ssh_ssh_config User,, User}
+      @ref{man_ssh_ssh_config UserKnownHostsFile,, UserKnownHostsFile}
+      @ref{man_ssh_ssh_config VerifyHostKeyDNS,, VerifyHostKeyDNS}
+
 @end display
 @item     -P port @anchor{man_ssh_scp -P port}
              Указывает порт для подключения на удаленном хосте. Обратите внимание, что этот параметр
