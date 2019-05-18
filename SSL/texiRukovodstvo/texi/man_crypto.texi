@@ -1,43 +1,43 @@
 CRYPTO(7)                           OpenSSL                          CRYPTO(7)
 
 NAME
-       crypto - OpenSSL cryptographic library
+       crypto - Криптографическая библиотека OpenSSL
 
 SYNOPSIS
-       See the individual manual pages for details.
+       Смотрите отдельные страницы руководства для деталей.
 
 DESCRIPTION
-       The OpenSSL crypto library implements a wide range of cryptographic
-       algorithms used in various Internet standards. The services provided by
-       this library are used by the OpenSSL implementations of SSL, TLS and
-       S/MIME, and they have also been used to implement SSH, OpenPGP, and
-       other cryptographic standards.
+       Крипто библиотека OpenSSL реализует широкий спектр криптографических
+       алгоритмов, используемых в различных интернет-стандартах. Службы,
+       предоставляемые этой библиотекой, используются реализациями OpenSSL SSL,
+       TLS и S/MIME, а также используются для реализации SSH, OpenPGP и
+       других криптографических стандартов.
 
-       libcrypto consists of a number of sub-libraries that implement the
-       individual algorithms.
+       libcrypto состоит из нескольких подбиблиотек, которые реализуют
+       отдельные алгоритмы.
 
-       The functionality includes symmetric encryption, public key
-       cryptography and key agreement, certificate handling, cryptographic
-       hash functions, cryptographic pseudo-random number generator, and
-       various utilities.
+       Функциональные возможности включают симметричное шифрование,
+       криптографию с открытым ключом и согласование ключей, обработку
+       сертификатов, криптографические хеш-функции, генератор криптографических
+       псевдослучайных чисел и различные утилиты.
 
 NOTES
-       Some of the newer functions follow a naming convention using the
-       numbers 0 and 1. For example the functions:
+       Некоторые из новых функций следуют соглашению об именах, используя числа
+       0 и 1. Например, функции:
 
         int X509_CRL_add0_revoked(X509_CRL *crl, X509_REVOKED *rev);
         int X509_add1_trust_object(X509 *x, const ASN1_OBJECT *obj);
 
-       The 0 version uses the supplied structure pointer directly in the
-       parent and it will be freed up when the parent is freed.  In the above
-       example crl would be freed but rev would not.
+       Версия 0 использует предоставленный указатель структуры непосредственно
+       в родительском объекте, и он будет освобожден при освобождении родительского
+       элемента. В приведенном выше примере crl будет освобожден, а rev нет.
 
-       The 1 function uses a copy of the supplied structure pointer (or in
-       some cases increases its link count) in the parent and so both (x and
-       obj above) should be freed up.
+       Функция 1 использует копию предоставленного указателя структуры (или в
+       некоторых случаях увеличивает количество ссылок) в родительском элементе,
+       поэтому оба (x и obj выше) должны быть освобождены.
 
 RETURN VALUES
-       See the individual manual pages for details.
+       Смотрите отдельные страницы руководства для деталей.
 
 SEE ALSO
        openssl(1), ssl(7)

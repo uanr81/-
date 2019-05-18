@@ -5,6 +5,7 @@
      ssh-keygen — генерация ключа аутентификации, управление и преобразование
 
 @item SYNOPSIS
+@display
      ssh-keygen [@ref{man_ssh_keygen -q,, -q}] [@ref{man_ssh_keygen -b bits,, -b bits}] [@ref{man_ssh_keygen -t dsa | ecdsa | ed25519 | rsa | rsa1,, -t dsa | ecdsa | ed25519 | rsa | rsa1}]
                 [@ref{man_ssh_keygen -N new_passphrase,, -N new_passphrase}] [@ref{man_ssh_keygen -C comment,, -C comment}] [@ref{man_ssh_keygen -f filename,, -f output_keyfile}]
      ssh-keygen @ref{man_ssh_keygen -p,, -p} [@ref{man_ssh_keygen -P passphrase,, -P passphrase}] [@ref{man_ssh_keygen -N new_passphrase,, -N new_passphrase}] [@ref{man_ssh_keygen -f filename,, -f keyfile}]
@@ -29,6 +30,7 @@
      ssh-keygen @ref{man_ssh_keygen -k,, -k} @ref{man_ssh_keygen -f filename,, -f krl_file} [@ref{man_ssh_keygen -u,, -u}] [@ref{man_ssh_keygen -s ca_key,, -s ca_public}] [@ref{man_ssh_keygen -z serial_number,, -z version_number}] file ...
      ssh-keygen @ref{man_ssh_keygen -Q,, -Q} @ref{man_ssh_keygen -f filename,, -f krl_file file ...}
      ssh-keygen @ref{man_ssh_keygen -o,, -o}(нет в манах)
+@end display
 @item Опции '-O' параметр сертификата при подписи ключа
 @display
      @ref{man_ssh_keygen_options_o clear,, clear}

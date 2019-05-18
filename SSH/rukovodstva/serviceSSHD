@@ -1,0 +1,250 @@
+Linux OS Service ‘sshd’
+
+Служба sshd (Secure Shell Daemon) является частью реализации OpenSSH для Linux, которая обеспечивает аутентифицированную сквозную зашифрованную сетевую связь. Например, пользователь на одном хосте может войти в другую систему без использования пароля, потому что служба sshd может быть настроена на использование альтернативных методов аутентификации, таких как обмен информацией с общим ключом.
+
+OpenSSH использует технологию клиент/сервер. Клиент, такой как пользователь, запускающий программу ssh, инициирует соединение с сервером sshd на целевом хосте. Сообщения в протоколе SSH обмениваются для аутентификации клиента на целевом хосте, и удаленный доступ затем разрешается или запрещается. Если это разрешено, то создается соединение TCP/IP, позволяющее клиенту обмениваться командами и данными с приложением, порожденным демоном sshd в целевой системе.
+
+Преимущество инструментов OpenSSH заключается в том, что все обмены данными шифруются. Информация аутентификации, такая как имена пользователей, пароли и данные сеанса, никогда не передается в незашифрованном виде. В отличие от таких альтернатив, как telnet или ftp, которые используют исключительно передачу открытого текста.
+
+RPM-пакет openssh-server предоставляет демон /usr/sbin/sshd и его файлы конфигурации.
+
+Существуют две версии протокола связи SSH, версия 1 и версия 2. Как клиент, такой как scp, так и сервер sshd должны использовать одну и ту же версию протокола. Сервер sshd поддерживает обе версии протокола по умолчанию, но каждая версия настраивается отдельно.
+
+Соединения между клиентом и демоном sshd по умолчанию выполняются через порт 22 TCP/IP с использованием протоколов UDP или TCP. Во-первых, клиент и сервер должны согласовать метод шифрования: sshd отправляет список поддерживаемых шифров, а клиент выбирает его предпочтение. Сервер идентифицирует свой хост, используя /etc/ssh/ssh_host_key (версия протокола 1) или один из /etc/ssh/ssh_host_[rd]sa_key (версия протокола 2). Это позволяет клиенту обнаруживать IP-спуфинг или атаки типа «человек посередине». После проверки идентификатора хоста клиент затем пытается использовать один или несколько методов аутентификации, чтобы установить учетные данные доступа к системе для пользователя. Сначала пробуются открытые ключи шифрования, с отступлением от традиционных проблем с паролями. С помощью клиента ssh полное согласование можно просмотреть, добавив переключатели “-v”, например:
+
+$ ssh -vvv myhost.example.com
+
+Демон sshd использует файл /etc/pam.d/sshd для определения необходимых правил аутентификации для своего хоста. Файл по умолчанию предоставляется RPM-пакетом openssh-server и подходит для большинства сайтов.
+
+После аутентификации доступа пользователя демон sshd (8) запускает требуемую клиентскую прикладную программу со стандартными файлами input/error/output (stdin, stderr, stdout), прикрепленными к сеансу TCP/IP.
+
+Функции и поведение, доступные в демоне sshd (8), управляются общесистемным файлом конфигурации /etc/ssh/sshd_config. Файл по умолчанию предоставляется вместе с пакетом RPM, но может быть отредактирован в соответствии с местными требованиями. Например, чтобы предотвратить вход с правами root с помощью ssh, параметр sshd_config можно изменить, как показано в следующем фрагменте:
+
+# vi /etc/ssh/sshd_config
+PermitRootLogin no
+
+Service Control
+
+Чтобы управлять службой sshd по требованию, используйте команду service или напрямую запустите сценарий /etc/init.d/sshd:
+
+# /sbin/service sshd help
+Usage: /etc/init.d/sshd {start|stop|restart|reload|condrestart|status}
+
+# /etc/init.d/sshd help
+Usage: /etc/init.d/sshd {start|stop|restart|reload|condrestart|status}
+
+Доступные команды:
+Команда 	Описание
+start 	Запустите демон sshd.
+stop 	Остановите демон sshd.
+restart 	Эквивалент stop и затем start.
+reload 	Заставьте демон sshd перечитывать свои файлы конфигурации без прерывания обслуживания.
+condrestart 	Если демон sshd в данный момент работает, это то же самое, что и команда перезапуска. Если демон не запущен, никаких действий не предпринимается. Часто используется при установке пакета RPM, чтобы избежать запуска службы, которая еще не запущена.
+status 	Если демон sshd работает, сообщите его PID (идентификатор процесса). Если не работает, сообщите об этом тоже.
+
+The sshd daemon is most commonly started by the sshd service or by the xinetd(8) daemon. Providing command-line arguments directly is possible, but not usually done. Instead, additional command line arguments can be supplied to the sshd(8) daemon by creating the ##@/etc/sysconfig/sshd@## file and defining the ##@${OPTIONS}@## variable:
+
+# Дополнительные параметры командной строки для sshd
+OPTIONS="-q"
+
+В этом примере будет включен тихий режим, не позволяющий sshd регистрировать начало, аутентификацию и окончание каждого сеанса. Обратитесь к онлайн-странице справочника по sshd за подробной информацией о доступных параметрах командной строки.
+Конфигурация
+
+Для управления сервисом sshd во время загрузки используйте инструмент chkconfig:
+
+# /sbin/chkconfig --list sshd
+sshd 0:off 1:off 2:off 3:off 4:off 5:off 6:off
+
+# /sbin/chkconfig sshd on
+
+# /sbin/chkconfig --list sshd
+sshd 0:off 1:off 2:on 3:on 4:on 5:on 6:off
+**************************************************
+@multitable @columnfractions .15 .45 .4
+@item Ключ @tab Команда @tab Описание
+@item C-x 2
+@tab @code{split-window-vertically}
+@tab Разделить выбранное окно на два,
+находящихся одно над другим.
+@item C-x 3
+@tab @code{split-window-horizontally}
+@tab Разделить выбранное окно на два,
+находящихся одно рядом с другим.
+@item C-Mouse-2
+@tab
+@tab На строке режима или полосе прокрутки окна,
+разделить это окно.
+@end multitable
+************************************
+@item upcase
+@itemx downcase
+*************************************
+Различные файлы конфигурации используются для настройки демона sshd для работы, зависящей от сайта. Они описаны ниже:
+Configuration File Path 	Description
+/etc/ssh/sshd_config 	Required configuration file. Most default values are provided as comments.
+/etc/ssh/ssh_host_key 	Contains host key used for the SSH protocol version 1. Needed only if protocol version 1 is used.
+/etc/ssh/ssh_host_rsa_key
+/etc/ssh/ssh_host_dsa_key 	Contains host key used for the SSH protocol version 2. Needed only if protocol version 2 is used.
+/etc/motd 	Message of the day file presented to ssh client upon successful login.
+~/.hushlogin 	If file exists, the /etc/motd file is not displayed by ssh upon a successful login.
+/etc/nologin 	If file exists, its content is displayed by the client and the session is then terminated.  Ignored for root logins.
+~/.ssh/environment 	If file exists and the sshd_config parameter PermitUserEnvironmentis set, then shell environment variables from this file are exported to the SSH session.
+~/.ssh/rc
+/etc/ssh/sshrc 	Files are checked in the order shown and first one found is run. If neither is found, the xauth utility is run.
+~/.ssh/authorized_keys 	Lists the public keys used for RSA session authentication.
+~/.ssh/known_hosts
+/etc/ssh/ssh_known_hosts 	Contain host public keys for all known hosts. The per-user file is maintained automatically.  The optional global file is maintained by the system administrator.
+/etc/moduli
+/etc/ssh/moduli 	Contrary to the man page, the file /etc/moduli is not used in this implementation. The file /etc/ssh/moduli contains Diffie-Hellman groups used for the “Diffie-Hellman Group Exchange” protocol negotiation.
+  	 
+/var/empty/sshd 	chroot directory used during privilege separation prior completion of the authentication phase. Owned by root and not world-writable, this directory typically contains only an etc/localtime file for time and date presentation.
+/etc/hosts.allow
+/etc/hosts.deny 	Access controls to be enforced by the tcp_wrappers facility. See tcpd for more details.
+~/.rhosts 	Used for RSA authentication or host-based authentication.  List of username/hostname pairs to identify logins not requiring a password exchange.
+~/.shosts 	Similar to ~/.rhosts, but ignored by the rlogin or rshd utilities.
+/etc/hosts.equiv 	List of hosts where password challenges are not required as long as the username matches on both the client and server hosts. If a line also contains a username, that user on the client machine can log to any server account, even the host root account; this is generally not recommended.
+/etc/shosts.equiv 	Processed identically to the /etc/hosts.equiv file, this file is ignored by the rsh and rshd daemons.
+Configuration file /etc/ssh/sshd_config
+
+Below is a sample Configuration file /etc/ssh/sshd_config.
+
+#	$OpenBSD: sshd_config,v 1.100 2016/08/15 12:32:04 naddy Exp $
+
+# This is the sshd server system-wide configuration file.  See
+# sshd_config(5) for more information.
+
+# This sshd was compiled with PATH=/usr/local/bin:/usr/bin
+
+# The strategy used for options in the default sshd_config shipped with
+# OpenSSH is to specify options with their default value where
+# possible, but leave them commented.  Uncommented options override the
+# default value.
+
+# If you want to change the port on a SELinux system, you have to tell
+# SELinux about this change.
+# semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
+#
+#Port 22
+#AddressFamily any
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+
+HostKey /etc/ssh/ssh_host_rsa_key
+#HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Ciphers and keying
+#RekeyLimit default none
+
+# Logging
+#SyslogFacility AUTH
+SyslogFacility AUTHPRIV
+#LogLevel INFO
+
+# Authentication:
+
+#LoginGraceTime 2m
+#PermitRootLogin yes
+#StrictModes yes
+#MaxAuthTries 6
+#MaxSessions 10
+
+#PubkeyAuthentication yes
+
+# The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
+# but this is overridden so installations will only check .ssh/authorized_keys
+AuthorizedKeysFile .ssh/authorized_keys
+
+#AuthorizedPrincipalsFile none
+
+#AuthorizedKeysCommand none
+#AuthorizedKeysCommandUser nobody
+
+# For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
+#HostbasedAuthentication no
+# Change to yes if you don't trust ~/.ssh/known_hosts for
+# HostbasedAuthentication
+#IgnoreUserKnownHosts no
+# Don't read the user's ~/.rhosts and ~/.shosts files
+#IgnoreRhosts yes
+
+# To disable tunneled clear text passwords, change to no here!
+#PasswordAuthentication yes
+#PermitEmptyPasswords no
+PasswordAuthentication no
+
+# Change to no to disable s/key passwords
+#ChallengeResponseAuthentication yes
+ChallengeResponseAuthentication no
+
+# Kerberos options
+#KerberosAuthentication no
+#KerberosOrLocalPasswd yes
+#KerberosTicketCleanup yes
+#KerberosGetAFSToken no
+#KerberosUseKuserok yes
+
+# GSSAPI options
+GSSAPIAuthentication yes
+GSSAPICleanupCredentials no
+#GSSAPIStrictAcceptorCheck yes
+#GSSAPIKeyExchange no
+#GSSAPIEnablek5users no
+
+# Set this to 'yes' to enable PAM authentication, account processing,
+# and session processing. If this is enabled, PAM authentication will
+# be allowed through the ChallengeResponseAuthentication and
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication via ChallengeResponseAuthentication may bypass
+# the setting of "PermitRootLogin without-password".
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+# WARNING: 'UsePAM no' is not supported in Red Hat Enterprise Linux and may cause several
+# problems.
+UsePAM yes
+
+#AllowAgentForwarding yes
+#AllowTcpForwarding yes
+#GatewayPorts no
+X11Forwarding yes
+#X11DisplayOffset 10
+#X11UseLocalhost yes
+#PermitTTY yes
+#PrintMotd yes
+#PrintLastLog yes
+#TCPKeepAlive yes
+#UseLogin no
+#UsePrivilegeSeparation sandbox
+#PermitUserEnvironment no
+#Compression delayed
+#ClientAliveInterval 0
+#ClientAliveCountMax 3
+#ShowPatchLevel no
+#UseDNS yes
+#PidFile /var/run/sshd.pid
+#MaxStartups 10:30:100
+#PermitTunnel no
+#ChrootDirectory none
+#VersionAddendum none
+
+# no default banner path
+#Banner none
+
+# Accept locale-related environment variables
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+
+# override default of no subsystems
+Subsystem sftp	/usr/libexec/openssh/sftp-server
+
+# Example of overriding settings on a per-user basis
+#Match User anoncvs
+#	X11Forwarding no
+#	AllowTcpForwarding no
+#	PermitTTY no
+#	ForceCommand cvs server
+

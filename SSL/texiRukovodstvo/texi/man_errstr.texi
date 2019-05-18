@@ -1,30 +1,30 @@
 ERRSTR(1)                           OpenSSL                          ERRSTR(1)
 
 NAME
-       openssl-errstr, errstr - lookup error codes
+       openssl-errstr, errstr - коды ошибок поиска
 
 SYNOPSIS
        openssl errstr error_code
 
 DESCRIPTION
-       Sometimes an application will not load error message and only numerical
-       forms will be available. The errstr utility can be used to display the
-       meaning of the hex code. The hex code is the hex digits after the
-       second colon.
+       Иногда приложение не загружает сообщение об ошибке, и будут доступны
+       только числовые формы. Утилита errstr может использоваться для отображения
+       значения шестнадцатеричного кода. Шестнадцатеричный код - это
+       шестнадцатеричные цифры после второго двоеточия.
 
 OPTIONS
-       None.
+       Нет.
 
 EXAMPLE
-       The error code:
+       Код ошибки:
 
         27594:error:2006D080:lib(32):func(109):reason(128):bss_file.c:107:
 
-       can be displayed with:
+       может отображаться с помощью:
 
         openssl errstr 2006D080
 
-       to produce the error message:
+       выдать сообщение об ошибке:
 
         error:2006D080:BIO routines:BIO_new_file:no such file
 

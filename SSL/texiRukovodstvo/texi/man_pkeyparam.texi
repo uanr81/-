@@ -1,54 +1,54 @@
 PKEYPARAM(1)                        OpenSSL                       PKEYPARAM(1)
 
 NAME
-       openssl-pkeyparam, pkeyparam - public key algorithm parameter
-       processing tool
+       openssl-pkeyparam, pkeyparam - инструмент обработки параметров алгоритма
+       открытого ключа
 
 SYNOPSIS
        openssl pkeyparam [-help] [-in filename] [-out filename] [-text]
        [-noout] [-engine id] [-check]
 
 DESCRIPTION
-       The pkeyparam command processes public key algorithm parameters.  They
-       can be checked for correctness and their components printed out.
+       Команда pkeyparam обрабатывает параметры алгоритма открытого ключа. Их
+       можно проверить на правильность и распечатать их компоненты.
 
 OPTIONS
        -help
-           Print out a usage message.
+           Распечатайте сообщение об использовании.
 
        -in filename
-           This specifies the input filename to read parameters from or
-           standard input if this option is not specified.
+           Это указывает имя файла ввода для чтения параметров или стандартный ввод,
+           если эта опция не указана.
 
        -out filename
-           This specifies the output filename to write parameters to or
-           standard output if this option is not specified.
+           Это указывает имя выходного файла для записи параметров или стандартный
+           вывод, если эта опция не указана.
 
        -text
-           Prints out the parameters in plain text in addition to the encoded
-           version.
+           Распечатывает параметры в виде простого текста в дополнение к
+           закодированной версии.
 
        -noout
-           Do not output the encoded version of the parameters.
+           Не выводите закодированную версию параметров.
 
        -engine id
-           Specifying an engine (by its unique id string) will cause pkeyparam
-           to attempt to obtain a functional reference to the specified
-           engine, thus initialising it if needed. The engine will then be set
-           as the default for all available algorithms.
+           Указание обработчика (по его уникальной строке id) заставит pkeyparam
+           попытаться получить функциональную ссылку на указанный обработчик, тем
+           самым инициализируя его при необходимости. Движок будет установлен по
+           умолчанию для всех доступных алгоритмов.
 
        -check
-           This option checks the correctness of parameters.
+           Эта опция проверяет правильность параметров.
 
 EXAMPLE
-       Print out text version of parameters:
+       Распечатать текстовую версию параметров:
 
         openssl pkeyparam -in param.pem -text
 
 NOTES
-       There are no -inform or -outform options for this command because only
-       PEM format is supported because the key type is determined by the PEM
-       headers.
+       Для этой команды нет параметров -inform или -outform, поскольку
+       поддерживается только формат PEM, поскольку тип ключа определяется
+       заголовками PEM.
 
 SEE ALSO
        genpkey(1), rsa(1), pkcs8(1), dsa(1), genrsa(1), gendsa(1)

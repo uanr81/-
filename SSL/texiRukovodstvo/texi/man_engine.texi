@@ -1,41 +1,41 @@
 ENGINE(1)                           OpenSSL                          ENGINE(1)
 
 NAME
-       openssl-engine, engine - load and query engines
+       openssl-engine, engine - механизмы загрузки и запросов
 
 SYNOPSIS
        openssl engine [ engine... ] [-v] [-vv] [-vvv] [-vvv] [-vvv] [-c] [-t]
        [-tt] [-pre command] [-post command] [ engine... ]
 
 DESCRIPTION
-       The engine command is used to query the status and capabilities of the
-       specified engine's.  Engines may be specified before and after all
-       other command-line flags.  Only those specified are queried.
+       Использование команд для запроса статуса и возможностей указанного движка
+       Движки могут быть указаны до и после всех других флагов командной строки.
+       Запрашиваются только те, которые указаны.
 
 OPTIONS
        -v -vv -vvv -vvvv
-           Provides information about each specified engine. The first flag
-           lists all the possible run-time control commands; the second adds a
-           description of each command; the third adds the input flags, and
-           the final option adds the internal input flags.
+           Предоставляет информацию о каждом указанном движке.
+           Первый флаг перечисляет все возможные команды управления во время выполнения;
+           вторая добавляет описание каждой команды;
+           третий добавляет флаги ввода;
+           последний вариант добавляет внутренние флаги ввода.
 
-       -c  Lists the capabilities of each engine.
+       -c  Перечисляет возможности каждого двигателя.
 
-       -t  Tests if each specified engine is available, and displays the
-           answer.
+       -t  Проверяет, доступен ли каждый указанный движок, и отображает ответ.
 
-       -tt Displays an error trace for any unavailable engine.
+       -tt Отображает трассировку ошибок для любого недоступного движка.
 
        -pre command
        -post command
-           Command-line configuration of engines.  The -pre command is given
-           to the engine before it is loaded and the -post command is given
-           after the engine is loaded.  The command is of the form cmd:val
-           where cmd is the command, and val is the value for the command.
-           See the example below.
+           Конфигурация командной строки движка.
+           -pre command передается движку до его загрузки, а
+           -post command передается после загрузки движка.
+           Команда имеет вид cmd:val, где cmd - это команда, а val - это значение
+           для команды. Смотрите пример ниже.
 
 EXAMPLE
-       To list all the commands available to a dynamic engine:
+       Чтобы перечислить все команды, доступные для динамического движка:
 
         $ openssl engine -t -tt -vvvv dynamic
         (dynamic) Dynamic engine loading support
@@ -55,7 +55,7 @@ EXAMPLE
              LOAD: Load up the ENGINE specified by other settings
                   (input flags): NO_INPUT
 
-       To list the capabilities of the rsax engine:
+       Чтобы перечислить возможности движка rsax:
 
         $ openssl engine -c
         (rsax) RSAX engine support
@@ -64,7 +64,7 @@ EXAMPLE
 
 ENVIRONMENT
        OPENSSL_ENGINES
-           The path to the engines directory.
+           Путь к каталогу движков.
 
 SEE ALSO
        config(5)

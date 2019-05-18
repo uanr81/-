@@ -1,0 +1,51 @@
+/etc/apache2
+  -rw-r--r--   1 alamd alamd  8211 май  8 16:30 apache2.conf
+  -rw-r--r--   1 alamd alamd  7766 окт  9  2018 apache2.conf~
+  -rw-r--r--   1 root  root   7996 май  8 16:30 apache2.conf.bak
+  drwxr-xr-x   2 root  root   4096 май  8 11:37 conf-available
+  drwxr-xr-x   2 root  root   4096 май  8 13:46 conf-enabled
+  -rw-r--r--   1 root  root   1782 июн 11  2018 envvars
+  -rw-r--r--   1 root  root  31063 июн 11  2018 magic
+  drwxr-xr-x   2 root  root  16384 апр  5 12:23 mods-available
+  drwxr-xr-x   2 root  root   4096 окт  8  2018 mods-enabled
+  -rw-r--r--   1 root  root    320 июн 11  2018 ports.conf
+  drwxr-xr-x   2 root  root   4096 май  8 12:56 sites-available
+  drwxr-xr-x   2 root  root   4096 окт  8  2018 sites-enabled
+
+/etc/apache2/sites-available:
+  итого 20
+  drwxr-xr-x 2 root root 4096 май  8 12:56 .
+  drwxr-xr-x 8 root root 4096 май  8 13:03 ..
+  -rw-r--r-- 1 root root 1332 июн 11  2018 000-default.conf
+  -rw-r--r-- 1 root root 6338 июн 11  2018 default-ssl.conf
+
+/etc/apache2/sites-enabled:
+  итого 8
+  drwxr-xr-x 2 root root 4096 окт  8  2018 .
+  drwxr-xr-x 8 root root 4096 май  8 13:03 ..
+  lrwxrwxrwx 1 root root   35 окт  8  2018 000-default.conf -> ../sites-available/000-default.conf
+
+  /var/www/html:
+  итого 20
+  drwxrwxr-x 2 www-data www-data  4096 окт  8  2018 .
+  drwxrwxr-x 4 root     root      4096 май  8 08:52 ..
+  -rw-rw-r-- 1 www-data www-data 11321 окт  8  2018 index.html
+
+/var/www:
+  итого 16
+  drwxrwxr-x  4 root     root     4096 май  8 08:52 .
+  drwxr-xr-x 15 root     root     4096 янв  4 20:10 ..
+  drwxrwxr-x  2 www-data www-data 4096 окт  8  2018 html
+  drwxrwsr-x  2 www-data www-data 4096 май  8 09:38 ZagExpeditor
+
+/var/www/html:
+  итого 20
+  drwxrwxr-x 2 www-data www-data  4096 окт  8  2018 .
+  drwxrwxr-x 4 root     root      4096 май  8 08:52 ..
+  -rw-rw-r-- 1 www-data www-data 11321 окт  8  2018 index.html
+
+  /var/www/ZagExpeditor:
+  итого 364
+  drwxrwsr-x 2 www-data www-data   4096 май  8 09:38 .
+  drwxrwxr-x 4 root     root       4096 май  8 08:52 ..
+  -rw-rwSr-- 1 www-data www-data 360476 май  8 16:48 1cema.xml

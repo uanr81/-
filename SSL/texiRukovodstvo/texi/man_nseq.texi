@@ -1,59 +1,60 @@
 NSEQ(1)                             OpenSSL                            NSEQ(1)
 
 NAME
-       openssl-nseq, nseq - create or examine a Netscape certificate sequence
+       openssl-nseq, nseq - создать или проверить последовательность сертификатов Netscape
 
 SYNOPSIS
        openssl nseq [-help] [-in filename] [-out filename] [-toseq]
 
 DESCRIPTION
-       The nseq command takes a file containing a Netscape certificate
-       sequence and prints out the certificates contained in it or takes a
-       file of certificates and converts it into a Netscape certificate
-       sequence.
+       Команда nseq берет файл, содержащий последовательность сертификатов
+       Netscape, и распечатывает содержащиеся в нем сертификаты или берет
+       файл сертификатов и преобразует его в последовательность сертификатов
+       Netscape.
 
 OPTIONS
        -help
-           Print out a usage message.
+           Распечатайте сообщение об использовании.
 
        -in filename
-           This specifies the input filename to read or standard input if this
-           option is not specified.
+           Здесь указывается имя файла для чтения или стандартный ввод, если
+           эта опция не указана.
 
        -out filename
-           Specifies the output filename or standard output by default.
+           Задает имя выходного файла или стандартный вывод по умолчанию.
 
        -toseq
-           Normally a Netscape certificate sequence will be input and the
-           output is the certificates contained in it. With the -toseq option
-           the situation is reversed: a Netscape certificate sequence is
-           created from a file of certificates.
+           Обычно последовательность сертификатов Netscape вводится, а выходные
+           данные - содержащиеся в ней сертификаты. С опцией -toseq ситуация меняется:
+           последовательность файлов сертификатов Netscape создается из
+           файла сертификатов.
 
 EXAMPLES
-       Output the certificates in a Netscape certificate sequence
+       Вывести сертификаты в последовательности сертификатов Netscape
 
         openssl nseq -in nseq.pem -out certs.pem
 
-       Create a Netscape certificate sequence
+       Создать последовательность сертификатов Netscape
 
         openssl nseq -in certs.pem -toseq -out nseq.pem
 
 NOTES
-       The PEM encoded form uses the same headers and footers as a
-       certificate:
+       Форма в кодировке PEM использует те же верхние и нижние колонтитулы,
+       что и сертификат:
 
         -----BEGIN CERTIFICATE-----
         -----END CERTIFICATE-----
 
-       A Netscape certificate sequence is a Netscape specific format that can
-       be sent to browsers as an alternative to the standard PKCS#7 format
-       when several certificates are sent to the browser: for example during
-       certificate enrollment.  It is used by Netscape certificate server for
-       example.
+       Последовательность сертификатов Netscape - это специальный формат
+       Netscape, который можно отправлять в браузеры в качестве альтернативы
+       стандартному формату PKCS#7, когда несколько сертификатов отправляются
+       в браузер: например, во время регистрации сертификата. Например, он
+       используется сервером сертификатов Netscape.
 
 BUGS
-       This program needs a few more options: like allowing DER or PEM input
-       and output files and allowing multiple certificate files to be used.
+       Эта программа нуждается в нескольких дополнительных параметрах: например,
+       разрешить входные и выходные файлы DER или PEM и разрешить использование
+       нескольких файлов сертификатов.
 
 COPYRIGHT
        Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.

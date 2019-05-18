@@ -1,7 +1,7 @@
 PKEYUTL(1)                          OpenSSL                         PKEYUTL(1)
 
 NAME
-       openssl-pkeyutl, pkeyutl - public key algorithm utility
+       openssl-pkeyutl, pkeyutl - утилита с открытым ключом
 
 SYNOPSIS
        openssl pkeyutl [-help] [-in file] [-out file] [-sigfile file] [-inkey
@@ -12,240 +12,240 @@ SYNOPSIS
        file...]  [-writerand file] [-engine id] [-engine_impl]
 
 DESCRIPTION
-       The pkeyutl command can be used to perform low level public key
-       operations using any supported algorithm.
+       Команда pkeyutl может использоваться для выполнения операций с открытым
+       ключом низкого уровня с использованием любого поддерживаемого алгоритма.
 
 OPTIONS
        -help
-           Print out a usage message.
+           Распечатайте сообщение об использовании.
 
        -in filename
-           This specifies the input filename to read data from or standard
-           input if this option is not specified.
+           Здесь указывается вход filename для чтения данных или стандартный ввод,
+           если эта опция не указана.
 
        -out filename
-           Specifies the output filename to write to or standard output by
-           default.
+           Задает вывод filename для записи или стандартный вывод по умолчанию.
 
        -sigfile file
-           Signature file, required for verify operations only
+           Файл подписи, необходимый только для проверочных операций
 
        -inkey file
-           The input key file, by default it should be a private key.
+           Файл ввода ключа, по умолчанию это должен быть закрытый ключ.
 
        -keyform PEM|DER|ENGINE
-           The key format PEM, DER or ENGINE. Default is PEM.
+           Формат ключа PEM, DER или ENGINE. По умолчанию PEM.
 
        -passin arg
-           The input key password source. For more information about the
-           format of arg see the PASS PHRASE ARGUMENTS section in openssl(1).
+           Ключ ввода источника пароля. Для получения дополнительной информации о
+           формате arg см. Раздел PASS PHRASE ARGUMENTS в openssl(1)..
 
        -peerkey file
-           The peer key file, used by key derivation (agreement) operations.
+           Файл однорангового ключа, используемый операциями деривации
+           (согласования) ключа.
 
        -peerform PEM|DER|ENGINE
-           The peer key format PEM, DER or ENGINE. Default is PEM.
+           Формат однорангового ключа PEM, DER или ENGINE. По умолчанию PEM.
 
        -pubin
-           The input file is a public key.
+           Входной файл является открытым ключом.
 
        -certin
-           The input is a certificate containing a public key.
+           Вход является сертификатом, содержащим открытый ключ.
 
        -rev
-           Reverse the order of the input buffer. This is useful for some
-           libraries (such as CryptoAPI) which represent the buffer in little
-           endian format.
+           Обратный порядок входного буфера. Это полезно для некоторых библиотек
+           (таких как CryptoAPI), которые представляют буфер в формате с прямым
+           порядком байтов.
 
        -sign
-           Sign the input data (which must be a hash) and output the signed
-           result. This requires a private key.
+           Подпишите входные данные (которые должны быть хешами) и выведите
+           подписанный результат. Для этого требуется закрытый ключ.
 
        -verify
-           Verify the input data (which must be a hash) against the signature
-           file and indicate if the verification succeeded or failed.
+           Проверьте входные данные (которые должны быть хэшем) по отношению к
+           файлу подписи и укажите, была ли проверка успешной или неудачной.
 
        -verifyrecover
-           Verify the input data (which must be a hash) and output the
-           recovered data.
+           Проверьте входные данные (которые должны быть хешами) и выведите
+           восстановленные данные.
 
        -encrypt
-           Encrypt the input data using a public key.
+           Зашифруйте входные данные с помощью открытого ключа.
 
        -decrypt
-           Decrypt the input data using a private key.
+           Расшифруйте входные данные с помощью закрытого ключа.
 
        -derive
-           Derive a shared secret using the peer key.
+           Получите общий секрет с помощью однорангового ключа.
 
        -kdf algorithm
-           Use key derivation function algorithm.  The supported algorithms
-           are at present TLS1-PRF and HKDF.  Note: additional parameters and
-           the KDF output length will normally have to be set for this to
-           work.  See EVP_PKEY_CTX_set_hkdf_md(3) and
-           EVP_PKEY_CTX_set_tls1_prf_md(3) for the supported string parameters
-           of each algorithm.
+           Используйте алгоритм получения ключа. Поддерживаемые алгоритмы в настоящее
+           время TLS1-PRF и HKDF. Примечание: обычно для этого должны быть установлены
+           дополнительные параметры и выходная длина KDF. Смотри
+           EVP_PKEY_CTX_set_hkdf_md(3) и EVP_PKEY_CTX_set_tls1_prf_md(3) для
+           поддерживаемых строковых параметров каждого алгоритма.
 
        -kdflen length
-           Set the output length for KDF.
+           Установите выходную длину для KDF.
 
        -pkeyopt opt:value
-           Public key options specified as opt:value. See NOTES below for more
-           details.
+           Параметры открытого ключа определены как opt:value. Смотрите примечания
+           ниже для более подробной информации.
 
        -hexdump
-           hex dump the output data.
+           шестнадцатеричный дамп выходных данных.
 
        -asn1parse
-           Parse the ASN.1 output data, this is useful when combined with the
-           -verifyrecover option when an ASN1 structure is signed.
+           Разбор выходных данных ASN.1, это полезно при сочетании с опцией
+           -verifyrecover, когда структура ASN1 подписана.
 
        -rand file...
-           A file or files containing random data used to seed the random
-           number generator.  Multiple files can be specified separated by an
-           OS-dependent character.  The separator is ; for MS-Windows, , for
-           OpenVMS, and : for all others.
+           Файл или файлы, содержащие случайные данные, используемые для заполнения
+           генератора случайных чисел. Можно указать несколько файлов, разделенных
+           символом, зависящим от ОС. Разделителем является ';' для MS-Windows, ',' для
+           OpenVMS и ':' для всех остальных.
 
        [-writerand file]
-           Writes random data to the specified file upon exit.  This can be
-           used with a subsequent -rand flag.
+           Записывает случайные данные в указанный файл при выходе. Это может быть
+           использовано с последующим флагом -rand.
 
        -engine id
-           Specifying an engine (by its unique id string) will cause pkeyutl
-           to attempt to obtain a functional reference to the specified
-           engine, thus initialising it if needed. The engine will then be set
-           as the default for all available algorithms.
+           Указание механизма (по его уникальной строке идентификатора) заставит
+           pkeyutl попытаться получить функциональную ссылку на указанный механизм,
+           тем самым инициализируя его при необходимости. Движок будет установлен по
+           умолчанию для всех доступных алгоритмов.
 
        -engine_impl
-           When used with the -engine option, it specifies to also use engine
-           id for crypto operations.
+           При использовании с параметром -engine он также указывает на использование
+           идентификатора механизма для операций шифрования.
 
 NOTES
-       The operations and options supported vary according to the key
-       algorithm and its implementation. The OpenSSL operations and options
-       are indicated below.
+       Поддерживаемые операции и параметры зависят от алгоритма ключа и его реализации.
+       Операции и опции OpenSSL указаны ниже.
 
-       Unless otherwise mentioned all algorithms support the digest:alg option
-       which specifies the digest in use for sign, verify and verifyrecover
-       operations.  The value alg should represent a digest name as used in
-       the EVP_get_digestbyname() function for example sha1. This value is not
-       used to hash the input data. It is used (by some algorithms) for
-       sanity-checking the lengths of data passed in to the pkeyutl and for
-       creating the structures that make up the signature (e.g. DigestInfo in
-       RSASSA PKCS#1 v1.5 signatures).
+       Если не указано иное, все алгоритмы поддерживают опцию digest:alg, которая
+       задает дайджест, используемый для операций подписи, проверки и восстановления.
+       Значение alg должно представлять имя дайджеста, которое используется в функции
+       EVP_get_digestbyname(), например, sha1. Это значение не используется для
+       хеширования входных данных. Это используется (некоторыми алгоритмами) для
+       проверки правильности длины данных, передаваемых в pkeyutl, и для создания
+       структур, составляющих сигнатуру (например, DigestInfo в сигнатурах
+       RSASSA PKCS#1 v1.5).
 
-       This utility does not hash the input data but rather it will use the
-       data directly as input to the signature algorithm. Depending on the key
-       type, signature type, and mode of padding, the maximum acceptable
-       lengths of input data differ. The signed data can't be longer than the
-       key modulus with RSA. In case of ECDSA and DSA the data shouldn't be
-       longer than the field size, otherwise it will be silently truncated to
-       the field size. In any event the input size must not be larger than the
-       largest supported digest size.
+       Эта утилита не хэширует входные данные, а использует данные непосредственно
+       в качестве входных данных для алгоритма подписи. В зависимости от типа ключа,
+       типа подписи и режима заполнения максимальные допустимые длины входных данных
+       различаются. Подписанные данные не могут быть длиннее ключевого модуля с RSA.
+       В случае ECDSA и DSA данные не должны быть длиннее размера поля, иначе они
+       будут незаметно усечены до размера поля. В любом случае входной размер не
+       должен превышать максимально поддерживаемый размер дайджеста.
 
-       In other words, if the value of digest is sha1 the input should be the
-       20 bytes long binary encoding of the SHA-1 hash function output.
+       Другими словами, если значение дайджеста равно sha1, на входе должно быть
+       двоичное кодирование длиной 20 байтов выходных данных хэш-функции SHA-1.
 
-       The Ed25519 and Ed448 signature algorithms are not supported by this
-       utility.  They accept non-hashed input, but this utility can only be
-       used to sign hashed input.
+       Алгоритмы подписи Ed25519 и Ed448 не поддерживаются этой утилитой. Они принимают
+       ввод без хеширования, но эта утилита может использоваться только для подписи
+       ввода с хешированием.
 
 RSA ALGORITHM
-       The RSA algorithm generally supports the encrypt, decrypt, sign, verify
-       and verifyrecover operations. However, some padding modes support only
-       a subset of these operations. The following additional pkeyopt values
-       are supported:
+       Алгоритм RSA обычно поддерживает операции шифрования, дешифрования, подписи,
+       проверки и восстановления. Однако некоторые режимы заполнения поддерживают
+       только подмножество этих операций. Поддерживаются следующие дополнительные
+       значения pkeyopt:
 
        rsa_padding_mode:mode
-           This sets the RSA padding mode. Acceptable values for mode are
-           pkcs1 for PKCS#1 padding, sslv23 for SSLv23 padding, none for no
-           padding, oaep for OAEP mode, x931 for X9.31 mode and pss for PSS.
+           Это устанавливает режим заполнения RSA. Приемлемые значения для режима:
+           pkcs1 для заполнения PKCS#1,
+           sslv23 для заполнения SSLv23,
+           none для no padding,
+           oaep для режима OAEP,
+           x931 для режима X9.31 и
+           pss для PSS.
 
-           In PKCS#1 padding if the message digest is not set then the
-           supplied data is signed or verified directly instead of using a
-           DigestInfo structure. If a digest is set then the a DigestInfo
-           structure is used and its the length must correspond to the digest
-           type.
+           В заполнении PKCS#1, если дайджест сообщения не установлен, то предоставленные
+           данные подписываются или проверяются напрямую вместо использования структуры
+           DigestInfo. Если дайджест установлен, то используется структура DigestInfo,
+           длина которой должна соответствовать типу дайджеста.
 
-           For oaep mode only encryption and decryption is supported.
+           Для режима oaep поддерживается только шифрование и дешифрование.
 
-           For x931 if the digest type is set it is used to format the block
-           data otherwise the first byte is used to specify the X9.31 digest
-           ID. Sign, verify and verifyrecover are can be performed in this
-           mode.
+           Для x931, если задан тип дайджеста, он используется для форматирования
+           данных блока, в противном случае первый байт используется для указания
+           дайджеста X9.31 ID. Подписывать, проверять и проверять восстановление
+           можно в этом режиме.
 
-           For pss mode only sign and verify are supported and the digest type
-           must be specified.
+           Для режима pss поддерживаются только подпись и проверка, и тип дайджеста
+           должен быть указан.
 
        rsa_pss_saltlen:len
-           For pss mode only this option specifies the salt length. Three
-           special values are supported: "digest" sets the salt length to the
-           digest length, "max" sets the salt length to the maximum
-           permissible value. When verifying "auto" causes the salt length to
-           be automatically determined based on the PSS block structure.
+           Для режима pss только эта опция указывает длину соли. Поддерживаются три
+           специальных значения:
+           "digest" устанавливает длину соли в длину дайджеста,
+           "max" устанавливает длину соли в максимально допустимое значение.
+           "auto" при проверке автоматически определяется длина соли на основе
+           блочной структуры PSS.
 
        rsa_mgf1_md:digest
-           For PSS and OAEP padding sets the MGF1 digest. If the MGF1 digest
-           is not explicitly set in PSS mode then the signing digest is used.
+           Для отступа PSS и OAEP устанавливает дайджест MGF1. Если дайджест MGF1
+           явно не установлен в режиме PSS, то используется дайджест подписи.
 
 RSA-PSS ALGORITHM
-       The RSA-PSS algorithm is a restricted version of the RSA algorithm
-       which only supports the sign and verify operations with PSS padding.
-       The following additional pkeyopt values are supported:
+       Алгоритм RSA-PSS является ограниченной версией алгоритма RSA, который
+       поддерживает только знак и проверяет операции с заполнением PSS. Поддерживаются
+       следующие дополнительные значения pkeyopt: 
 
        rsa_padding_mode:mode, rsa_pss_saltlen:len, rsa_mgf1_md:digest
-           These have the same meaning as the RSA algorithm with some
-           additional restrictions. The padding mode can only be set to pss
-           which is the default value.
+           Они имеют то же значение, что и алгоритм RSA, с некоторыми дополнительными
+           ограничениями. Режим заполнения может быть установлен только на pss, что
+           является значением по умолчанию.
 
-           If the key has parameter restrictions than the digest, MGF1 digest
-           and salt length are set to the values specified in the parameters.
-           The digest and MG cannot be changed and the salt length cannot be
-           set to a value less than the minimum restriction.
+           Если ключ имеет ограничения параметров, чем для дайджеста, для дайджеста MGF1
+           и длины соли устанавливаются значения, указанные в параметрах. Дайджест и MG
+           не могут быть изменены, а длина соли не может быть установлена ​​на значение
+           меньше минимального ограничения.
 
 DSA ALGORITHM
-       The DSA algorithm supports signing and verification operations only.
-       Currently there are no additional options other than digest. Only the
-       SHA1 digest can be used and this digest is assumed by default.
+       Алгоритм DSA поддерживает только операции подписи и проверки. В настоящее время
+       нет никаких дополнительных опций, кроме дайджеста. Можно использовать только
+       дайджест SHA1, и этот дайджест принят по умолчанию.
 
 DH ALGORITHM
-       The DH algorithm only supports the derivation operation and no
-       additional options.
+       Алгоритм DH поддерживает только операцию деривации и никаких дополнительных опций.
 
 EC ALGORITHM
-       The EC algorithm supports sign, verify and derive operations. The sign
-       and verify operations use ECDSA and derive uses ECDH. Currently there
-       are no additional options other than digest. Only the SHA1 digest can
-       be used and this digest is assumed by default.
+       Алгоритм EC поддерживает операции со знаком, проверкой и выводом. Операции sign и
+       verify используют ECDSA, а производные - ECDH. В настоящее время нет никаких
+       дополнительных опций, кроме дайджеста. Можно использовать только дайджест SHA1,
+       и этот дайджест принят по умолчанию.
 
 X25519 and X448 ALGORITHMS
-       The X25519 and X448 algorithms support key derivation only. Currently
-       there are no additional options.
+       Алгоритмы X25519 и X448 поддерживают только получение ключей. На данный момент
+       дополнительных опций нет.
 
 EXAMPLES
-       Sign some data using a private key:
+       Подпишите некоторые данные с помощью закрытого ключа:
 
         openssl pkeyutl -sign -in file -inkey key.pem -out sig
 
-       Recover the signed data (e.g. if an RSA key is used):
+       Восстановить подписанные данные (например, если используется ключ RSA):
 
         openssl pkeyutl -verifyrecover -in sig -inkey key.pem
 
-       Verify the signature (e.g. a DSA key):
+       Проверьте подпись (например, ключ DSA):
 
         openssl pkeyutl -verify -in file -sigfile sig -inkey key.pem
 
-       Sign data using a message digest value (this is currently only valid
-       for RSA):
+       Подписать данные, используя значение дайджеста сообщения (в настоящее время
+       это действительно только для RSA):
 
         openssl pkeyutl -sign -in file -inkey key.pem -out sig -pkeyopt digest:sha256
 
-       Derive a shared secret value:
+       Получите общий секретный показатель:
 
         openssl pkeyutl -derive -inkey key.pem -peerkey pubkey.pem -out secret
 
-       Hexdump 48 bytes of TLS1 PRF using digest SHA256 and shared secret and
-       seed consisting of the single byte 0xFF:
+       Hexdump 48 байтов PRF TLS1 с использованием дайджеста SHA256 и общего
+       секрета и начального числа, состоящего из одного байта 0xFF:
 
         openssl pkeyutl -kdf TLS1-PRF -kdflen 48 -pkeyopt md:SHA256 \
            -pkeyopt hexsecret:ff -pkeyopt hexseed:ff -hexdump
