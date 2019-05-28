@@ -1,0 +1,356 @@
+@node test invocation
+@section @command{test}: Check file types and compare values
+
+@pindex test
+@cindex check file types
+@cindex compare values
+@cindex expression evaluation
+
+@command{test} возвращает состояние 0 (true) или 1 (false) в зависимости от оценки
+условного выражения @var{expr}. Каждая часть выражения должна быть отдельным аргументом.
+
+У @command{test} есть проверки состояния файлов, операторы строк и операторы сравнения
+чисел.
+
+@command{test} имеет альтернативную форму, которая использует открывающие и
+закрывающие квадратные скобки вместо ведущего @samp{test}. Например, вместо
+@samp{test -d /} вы можете написать @samp{[ -d / ]}. Квадратные скобки должны
+быть отдельными аргументами; например, @samp{[-d /]} не дает желаемого эффекта.
+Поскольку @samp{test @var{expr}} и @samp{[@var{expr} ]} имеют одинаковое значение,
+только первая форма обсуждается ниже.
+
+Конспекты:
+
+@example
+test @var{expression}
+test
+[ @var{expression} ]
+[ ]
+[ @var{option}
+@end example
+
+@mayConflictWithShellBuiltIn{test}
+
+If ##@@var{expression}@## is omitted, ##@@command{test}@## returns false.
+Если @var{expression} является единственным аргументом, @command{test} возвращает false,
+если аргумент равен нулю, и true в противном случае. Аргумент может быть любой строкой,
+включая такие строки, как @samp{-d}, @samp{-1}, @samp{--}, @samp{--help} и
+@samp{--version}, которые большинство других программ будут рассматривать как опции.
+Чтобы получить справку и информацию о версии, вызовите команды @samp{[ --help} и
+@samp{[ --version} без обычных закрывающих скобок.  @xref{Common options}.
+
+Статус возврата:
+
+@display
+0 if the expression is true,
+1 if the expression is false,
+2 if an error occurred.
+@end display
+
+@menu
+* File type tests::             -[bcdfhLpSt]
+* Access permission tests::     -[gkruwxOG]
+* File characteristic tests::   -e -s -nt -ot -ef
+* String tests::                -z -n = == !=
+* Numeric tests::               -eq -ne -lt -le -gt -ge
+* Connectives for test::        ! -a -o
+@end menu
+
+
+@node File type tests
+@subsection File type tests
+
+@cindex file type tests
+
+These options test for particular types of files.  (Everything's a file,
+but not all files are the same!)
+
+@table @samp
+
+@item -b @var{file}
+@opindex -b
+@cindex block special check
+True if @var{file} exists and is a block special device.
+
+@item -c @var{file}
+@opindex -c
+@cindex character special check
+True if @var{file} exists and is a character special device.
+
+@item -d @var{file}
+@opindex -d
+@cindex directory check
+True if @var{file} exists and is a directory.
+
+@item -f @var{file}
+@opindex -f
+@cindex regular file check
+True if @var{file} exists and is a regular file.
+
+@item -h @var{file}
+@itemx -L @var{file}
+@opindex -L
+@opindex -h
+@cindex symbolic link check
+True if @var{file} exists and is a symbolic link.
+Unlike all other file-related tests, this test does not dereference
+@var{file} if it is a symbolic link.
+
+@item -p @var{file}
+@opindex -p
+@cindex named pipe check
+True if @var{file} exists and is a named pipe.
+
+@item -S @var{file}
+@opindex -S
+@cindex socket check
+True if @var{file} exists and is a socket.
+
+@item -t @var{fd}
+@opindex -t
+@cindex terminal check
+True if @var{fd} is a file descriptor that is associated with a
+terminal.
+
+@end table
+
+
+@node Access permission tests
+@subsection Access permission tests
+
+@cindex access permission tests
+@cindex permission tests
+
+These options test for particular access permissions.
+
+@table @samp
+
+@item -g @var{file}
+@opindex -g
+@cindex set-group-ID check
+True if @var{file} exists and has its set-group-ID bit set.
+
+@item -k @var{file}
+@opindex -k
+@cindex sticky bit check
+True if @var{file} exists and has its @dfn{sticky} bit set.
+
+@item -r @var{file}
+@opindex -r
+@cindex readable file check
+True if @var{file} exists and read permission is granted.
+
+@item -u @var{file}
+@opindex -u
+@cindex set-user-ID check
+True if @var{file} exists and has its set-user-ID bit set.
+
+@item -w @var{file}
+@opindex -w
+@cindex writable file check
+True if @var{file} exists and write permission is granted.
+
+@item -x @var{file}
+@opindex -x
+@cindex executable file check
+True if @var{file} exists and execute permission is granted
+(or search permission, if it is a directory).
+
+@item -O @var{file}
+@opindex -O
+@cindex owned by effective user ID check
+True if @var{file} exists and is owned by the current effective user ID.
+
+@item -G @var{file}
+@opindex -G
+@cindex owned by effective group ID check
+True if @var{file} exists and is owned by the current effective group ID.
+
+@end table
+
+@node File characteristic tests
+@subsection File characteristic tests
+
+@cindex file characteristic tests
+
+These options test other file characteristics.
+
+@table @samp
+
+@item -e @var{file}
+@opindex -e
+@cindex existence-of-file check
+True if @var{file} exists.
+
+@item -s @var{file}
+@opindex -s
+@cindex nonempty file check
+True if @var{file} exists and has a size greater than zero.
+
+@item @var{file1} -nt @var{file2}
+@opindex -nt
+@cindex newer-than file check
+True if @var{file1} is newer (according to modification date) than
+@var{file2}, or if @var{file1} exists and @var{file2} does not.
+
+@item @var{file1} -ot @var{file2}
+@opindex -ot
+@cindex older-than file check
+True if @var{file1} is older (according to modification date) than
+@var{file2}, or if @var{file2} exists and @var{file1} does not.
+
+@item @var{file1} -ef @var{file2}
+@opindex -ef
+@cindex same file check
+@cindex hard link check
+True if @var{file1} and @var{file2} have the same device and inode
+numbers, i.e., if they are hard links to each other.
+
+@end table
+
+
+@node String tests
+@subsection String tests
+
+@cindex string tests
+
+These options test string characteristics.  You may need to quote
+@var{string} arguments for the shell.  For example:
+
+@example
+test -n "$V"
+@end example
+
+The quotes here prevent the wrong arguments from being passed to
+@command{test} if @samp{$V} is empty or contains special characters.
+
+@table @samp
+
+@item -z @var{string}
+@opindex -z
+@cindex zero-length string check
+True if the length of @var{string} is zero.
+
+@item -n @var{string}
+@itemx @var{string}
+@opindex -n
+@cindex nonzero-length string check
+True if the length of @var{string} is nonzero.
+
+@item @var{string1} = @var{string2}
+@opindex =
+@cindex equal string check
+True if the strings are equal.
+
+@item @var{string1} == @var{string2}
+@opindex ==
+@cindex equal string check
+True if the strings are equal (synonym for =).
+
+@item @var{string1} != @var{string2}
+@opindex !=
+@cindex not-equal string check
+True if the strings are not equal.
+
+@end table
+
+
+@node Numeric tests
+@subsection Numeric tests
+
+@cindex numeric tests
+@cindex arithmetic tests
+
+Numeric relational operators.  The arguments must be entirely numeric
+(possibly negative), or the special expression @w{@code{-l @var{string}}},
+which evaluates to the length of @var{string}.
+
+@table @samp
+
+@item @var{arg1} -eq @var{arg2}
+@itemx @var{arg1} -ne @var{arg2}
+@itemx @var{arg1} -lt @var{arg2}
+@itemx @var{arg1} -le @var{arg2}
+@itemx @var{arg1} -gt @var{arg2}
+@itemx @var{arg1} -ge @var{arg2}
+@opindex -eq
+@opindex -ne
+@opindex -lt
+@opindex -le
+@opindex -gt
+@opindex -ge
+These arithmetic binary operators return true if @var{arg1} is equal,
+not-equal, less-than, less-than-or-equal, greater-than, or
+greater-than-or-equal than @var{arg2}, respectively.
+
+@end table
+
+For example:
+
+@example
+test -1 -gt -2 && echo yes
+@result{} yes
+test -l abc -gt 1 && echo yes
+@result{} yes
+test 0x100 -eq 1
+@error{} test: integer expression expected before -eq
+@end example
+
+
+@node Connectives for test
+@subsection Connectives for @command{test}
+
+@cindex logical connectives
+@cindex connectives, logical
+
+Note it's preferred to use shell logical primitives
+rather than these logical connectives internal to @command{test},
+because an expression may become ambiguous
+depending on the expansion of its parameters.
+
+For example, this becomes ambiguous when @samp{$1}
+is set to @samp{'!'} and @samp{$2} to the empty string @samp{''}:
+
+@example
+test "$1" -a "$2"
+@end example
+
+and should be written as:
+
+@example
+test "$1" && test "$2"
+@end example
+
+Note the shell logical primitives also benefit from
+short circuit operation, which can be significant
+for file attribute tests.
+
+@table @samp
+
+@item ! @var{expr}
+@opindex !
+True if @var{expr} is false.
+@samp{!} has lower precedence than all parts of @var{expr}.
+Note @samp{!} needs to be specified to the left
+of a binary expression, I.e., @samp{'!' 1 -gt 2}
+rather than @samp{1 '!' -gt 2}.
+Also @samp{!} is often a shell special character
+and is best used quoted.
+
+
+@item @var{expr1} -a @var{expr2}
+@opindex -a
+@cindex logical and operator
+@cindex and operator
+True if both @var{expr1} and @var{expr2} are true.
+@samp{-a} is left associative,
+and has a higher precedence than @samp{-o}.
+
+@item @var{expr1} -o @var{expr2}
+@opindex -o
+@cindex logical or operator
+@cindex or operator
+True if either @var{expr1} or @var{expr2} is true.
+@samp{-o} is left associative.
+
+@end table

@@ -1,0 +1,167 @@
+TEST(1)                          User Commands                         TEST(1)
+
+НАЗВАНИЕ
+       test - проверить типы файлов и сравнить значения
+
+СИНТАКСИС
+       test EXPRESSION
+       test
+
+       [ EXPRESSION ]
+       [ ]
+       [ OPTION
+
+ОПИСАНИЕ
+       Выход со статусом, определенным EXPRESSION.
+
+       --help
+             показать справку и выйти
+
+       --version
+              вывести информацию о версии и выйти
+
+       Пропущенный EXPRESSION по умолчанию равен false. В противном случае
+       EXPRESSION имеет значение true или false и устанавливает статус выхода.
+       Это один из:
+
+       ( EXPRESSION )
+              EXPRESSION истина
+
+       ! EXPRESSION
+              EXPRESSION ложь
+
+       EXPRESSION1 -a EXPRESSION2
+              оба EXPRESSION1 и EXPRESSION2 верны
+
+       EXPRESSION1 -o EXPRESSION2
+              либо EXPRESSION1, либо EXPRESSION2 верно
+
+       -n STRING
+              длина STRING отлична от нуля
+
+       STRING
+              эквивалентно -n STRING
+
+       -z STRING
+              длина STRING равна нулю
+
+       STRING1 = STRING2
+              строки равны
+
+       STRING1 != STRING2
+              строки не равны
+
+       INTEGER1 -eq INTEGER2
+              INTEGER1 точное соответствие на INTEGER2
+
+       INTEGER1 -ge INTEGER2
+              INTEGER1 больше или равно INTEGER2
+
+       INTEGER1 -gt INTEGER2
+              INTEGER1 больше, чем INTEGER2
+
+       INTEGER1 -le INTEGER2
+              INTEGER1 меньше или равно INTEGER2
+
+       INTEGER1 -lt INTEGER2
+              INTEGER1 меньше, чем INTEGER2
+
+       INTEGER1 -ne INTEGER2
+              INTEGER1 не равно INTEGER2
+
+       FILE1 -ef FILE2
+              FILE1 и FILE2 имеют одинаковые номера устройств и индексов
+
+       FILE1 -nt FILE2
+              FILE1 новее (дата модификации), чем FILE2
+
+       FILE1 -ot FILE2
+              FILE1 старше, чем FILE2
+
+       -b FILE
+              FILE существует и является специальным блоком
+
+       -c FILE
+              FILE существует и является особенным
+
+       -d FILE
+              FILE существует и является каталогом
+
+       -e FILE
+              FILE существует
+
+       -f FILE
+              FILE существует и является обычным файлом
+
+       -g FILE
+              FILE существует и является set-group-ID
+
+       -G FILE
+              FILE существует и принадлежит эффективной группе ID
+
+       -h FILE
+              FILE существует и является символической ссылкой (такой же, как -L)
+
+       -k FILE
+              FILE существует и имеет свой набор битов
+
+       -L FILE
+              FILE существует и является символической ссылкой (такой же, как -h)
+
+       -O FILE
+              FILE существует и принадлежит эффективному пользователю ID
+
+       -p FILE
+              FILE существует и является именованным каналом
+
+       -r FILE
+              FILE существует и разрешение на чтение предоставляется
+
+       -s FILE
+              FILE существует и имеет размер больше нуля
+
+       -S FILE
+              FILE существует и является сокетом
+
+       -t FD FILE
+              дескриптор файла FD открывается на терминале
+
+       -u FILE
+              FILE существует и его бит set-user-ID установлен
+
+       -w FILE
+              FILE существует и разрешение на запись предоставлено
+
+       -x FILE
+              FILE существует и разрешение на выполнение (или поиск) предоставлено
+
+       За исключением -h и -L, все тесты FILE-related (связанные с FILE) разыменовывают
+       символьные ссылки. Помните, что для оболочек необходимо избегать скобок (например,
+       с помощью обратной косой черты). INTEGER также может быть -l STRING, который
+       оценивает длину STRING.
+
+       Примечание:  [  поддерживает опции --help и --version, но тест не дает. test
+       относится к каждому из них так же, как к любому другому непустому STRING.
+
+       ПРИМЕЧАНИЕ: ваша оболочка может иметь свою собственную версию test и/или [,
+       которая обычно заменяет версию, описанную здесь. Пожалуйста, обратитесь к
+       документации вашей оболочки для деталей о поддерживаемых опциях.
+
+AUTHOR
+       Written by Kevin Braunsdorf and Matthew Bradburn.
+
+REPORTING BUGS
+       GNU coreutils online help: <http://www.gnu.org/software/coreutils/>
+       Report [ translation bugs to <http://translationproject.org/team/>
+
+COPYRIGHT
+       Copyright © 2016 Free Software Foundation, Inc.   License  GPLv3+:  GNU
+       GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+       This  is  free  software:  you  are free to change and redistribute it.
+       There is NO WARRANTY, to the extent permitted by law.
+
+SEE ALSO
+       Full documentation at: <http://www.gnu.org/software/coreutils/[>
+       or available locally via: info '(coreutils) test invocation'
+
+GNU coreutils 8.25               February 2017                         TEST(1)
