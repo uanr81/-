@@ -16,9 +16,9 @@ SYNOPSIS
        [-no-CAfile] [-no-CApath] [-CSP name]
 
 DESCRIPTION
-       The pkcs12 command allows PKCS#12 files (sometimes referred to as PFX
-       files) to be created and parsed. PKCS#12 files are used by several
-       programs including Netscape, MSIE and MS Outlook.
+       Команда pkcs12 позволяет создавать и анализировать файлы PKCS#12
+       (иногда называемые файлами PFX). Файлы PKCS#12 используются несколькими
+       программами, включая Netscape, MSIE и MS Outlook.
 
 OPTIONS
        There are a lot of options the meaning of some depends of whether a
@@ -31,12 +31,12 @@ PARSING OPTIONS
            Print out a usage message.
 
        -in filename
-           This specifies filename of the PKCS#12 file to be parsed. Standard
-           input is used by default.
+           Это указывает имя файла файла PKCS#12 для анализа. Стандартный ввод
+           используется по умолчанию.
 
        -out filename
-           The filename to write certificates and private keys to, standard
-           output by default.  They are all written in PEM format.
+           Имя файла для записи сертификатов и закрытых ключей, стандартный вывод
+           по умолчанию. Все они написаны в формате PEM.
 
        -passin arg
            The PKCS#12 file (i.e. input file) password source. For more
