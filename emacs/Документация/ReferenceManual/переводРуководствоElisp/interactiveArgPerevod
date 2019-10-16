@@ -1,0 +1,93 @@
+21.2.2 Кодовые символы для интерактивного
+
+Описания символов кода ниже содержат ряд ключевых слов, определенных здесь следующим образом:
+
+Completion
+    Provide completion. <TAB>, <SPC>, and <RET> выполнить завершение имени, потому что аргумент читается с использованием completing-read (see Completion). ? отображает список возможных завершений.
+Existing
+    Требовать имя существующего объекта. Неверное имя не принимается; Команды для выхода из минибуфера не выходят, если текущий ввод недействителен.
+Default
+    Некоторое значение по умолчанию используется, если пользователь не вводит текст в минибуфер. Значение по умолчанию зависит от символа кода.
+No I/O
+    Эта буква кода вычисляет аргумент без чтения каких-либо входных данных. Следовательно, он не использует строку приглашения, и любая указанная вами строка приглашения игнорируется.
+
+    Даже несмотря на то, что буква кода не использует строку приглашения, вы должны следовать за ней с новой строкой, если она не является последним символом кода в строке.
+Prompt
+    Подсказка следует сразу за символом кода. Приглашение заканчивается либо концом строки, либо переводом строки.
+Special
+    Этот символ кода имеет смысл только в начале интерактивной строки и не ищет подсказки или новой строки. Это отдельный, изолированный персонаж. 
+
+Вот описания символов кода для использования с Interactive:
+
+‘*’
+    Сообщить об ошибке, если текущий буфер доступен только для чтения. Специальный.
+‘@’
+    Выберите окно, упомянутое в первом событии мыши в последовательности клавиш, которая вызвала эту команду. Специальный.
+‘^’
+    Если команда была вызвана с помощью shift-translation, установите отметку и временно активируйте регион или расширьте уже активный регион перед выполнением команды. Если команда была вызвана без shift-translation, а регион временно активен, деактивируйте регион перед выполнением команды. Специальный.
+‘a’
+    Имя функции (т.е. символ, удовлетворяющий fboundp). Существующий, Завершение, Подсказка.
+‘b’
+    Имя существующего буфера. По умолчанию используется имя текущего буфера (см. Буферы). Существующий, Завершение, По умолчанию, Подсказка.
+‘B’
+    Имя буфера. Буфер не должен существовать. По умолчанию используется имя недавно использованного буфера, отличного от текущего буфера. Завершение, По умолчанию, Подсказка.
+‘c’
+    Характер. Курсор не перемещается в область эха. Незамедлительный.
+‘C’
+    Имя команды (то есть символ, удовлетворяющий команде p). Существующий, Завершение, Подсказка.
+‘d’
+    The position of point, as an integer (see Point). No I/O.
+‘D’
+    A directory. The default is the current default directory of the current buffer, default-directory (see File Name Expansion). Existing, Completion, Default, Prompt.
+‘e’
+    The first or next non-keyboard event in the key sequence that invoked the command. More precisely, ‘e’ gets events that are lists, so you can look at the data in the lists. See Input Events. No I/O.
+
+    You use ‘e’ for mouse events and for special system events (see Misc Events). The event list that the command receives depends on the event. See Input Events, which describes the forms of the list for each event in the corresponding subsections.
+
+    You can use ‘e’ more than once in a single command's interactive specification. If the key sequence that invoked the command has n events that are lists, the nth ‘e’ provides the nth such event. Events that are not lists, such as function keys and ASCII characters, do not count where ‘e’ is concerned.
+‘f’
+    A file name of an existing file (see File Names). The default directory is default-directory. Existing, Completion, Default, Prompt.
+‘F’
+    A file name. The file need not exist. Completion, Default, Prompt.
+‘G’
+    A file name. The file need not exist. If the user enters just a directory name, then the value is just that directory name, with no file name within the directory added. Completion, Default, Prompt.
+‘i’
+    An irrelevant argument. This code always supplies nil as the argument's value. No I/O.
+‘k’
+    A key sequence (see Key Sequences). This keeps reading events until a command (or undefined command) is found in the current key maps. The key sequence argument is represented as a string or vector. The cursor does not move into the echo area. Prompt.
+
+    If ‘k’ reads a key sequence that ends with a down-event, it also reads and discards the following up-event. You can get access to that up-event with the ‘U’ code character.
+
+    This kind of input is used by commands such as describe-key and global-set-key.
+‘K’
+    A key sequence, whose definition you intend to change. This works like ‘k’, except that it suppresses, for the last input event in the key sequence, the conversions that are normally used (when necessary) to convert an undefined key into a defined one.
+‘m’
+    The position of the mark, as an integer. No I/O.
+‘M’
+    Arbitrary text, read in the minibuffer using the current buffer's input method, and returned as a string (see Input Methods). Prompt.
+‘n’
+    A number, read with the minibuffer. If the input is not a number, the user has to try again. ‘n’ never uses the prefix argument. Prompt.
+‘N’
+    The numeric prefix argument; but if there is no prefix argument, read a number as with n. The value is always a number. See Prefix Command Arguments. Prompt.
+‘p’
+    The numeric prefix argument. (Note that this ‘p’ is lower case.) No I/O.
+‘P’
+    The raw prefix argument. (Note that this ‘P’ is upper case.) No I/O.
+‘r’
+    Point and the mark, as two numeric arguments, smallest first. This is the only code letter that specifies two successive arguments rather than one. This will signal an error if the mark is not set in the buffer which is current when the command is invoked. No I/O.
+‘s’
+    Arbitrary text, read in the minibuffer and returned as a string (see Text from Minibuffer). Terminate the input with either C-j or <RET>. (C-q may be used to include either of these characters in the input.) Prompt.
+‘S’
+    An interned symbol whose name is read in the minibuffer. Terminate the input with either C-j or <RET>. Other characters that normally terminate a symbol (e.g., whitespace, parentheses and brackets) do not do so here. Prompt.
+‘U’
+    A key sequence or nil. Can be used after a ‘k’ or ‘K’ argument to get the up-event that was discarded (if any) after ‘k’ or ‘K’ read a down-event. If no up-event has been discarded, ‘U’ provides nil as the argument. No I/O.
+‘v’
+    A variable declared to be a user option (i.e., satisfying the predicate custom-variable-p). This reads the variable using read-variable. See Definition of read-variable. Existing, Completion, Prompt.
+‘x’
+    A Lisp object, specified with its read syntax, terminated with a C-j or <RET>. The object is not evaluated. See Object from Minibuffer. Prompt.
+‘X’
+    A Lisp form's value. ‘X’ reads as ‘x’ does, then evaluates the form so that its value becomes the argument for the command. Prompt.
+‘z’
+    A coding system name (a symbol). If the user enters null input, the argument value is nil. See Coding Systems. Completion, Existing, Prompt.
+‘Z’
+    A coding system name (a symbol)—but only if this command has a prefix argument. With no prefix argument, ‘Z’ provides nil as the argument value. Completion, Existing, Prompt. 

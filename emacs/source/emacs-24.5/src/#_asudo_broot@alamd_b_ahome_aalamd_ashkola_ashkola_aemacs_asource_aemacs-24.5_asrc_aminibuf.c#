@@ -878,7 +878,7 @@ read_minibuf_unwind (void)
 
 DEFUN ("read-from-minibuffer", Fread_from_minibuffer,
        Sread_from_minibuffer, 1, 7, 0,
-       doc: /* Прочитайте строку из минибуфера, предложив строку PROMPTOt.
+       doc: /* Прочитайте строку из минибуфера, предложив строку PROMPT.
 	       Необязательный второй аргумент INITIAL-CONTENTS является устаревшей 
 	       альтернативой DEFAULT-VALUE. Обычно это должно быть ноль в новом коде, 
 	       кроме случаев, когда HIST является минусом. Это обсуждается более 
@@ -970,33 +970,32 @@ DEFUN ("read-from-minibuffer", Fread_from_minibuffer,
   return val;
 }
 
-/* Функции, которые используют минибуфер для чтения различных вещей.  */
+/* Functions that use the minibuffer to read various things.  */
 
 DEFUN ("read-string", Fread_string, Sread_string, 1, 5, 0,
-       doc: /*Прочитайте строку из минибуфера, предложив строку PROMPT. Если 
-	      non-nil, второй аргумент INITIAL-INPUT - это строка для вставки 
-	      перед чтением. Этот аргумент был заменен DEFAULT-VALUE и обычно 
-	      должен быть равен нулю в новом коде. Он ведет себя как 
-	      INITIAL-CONTENTS в `read-from-minibuffer' (см.).
-	      Третий аргумент HISTORY, если non-nil, указывает список истории и, 
-	      возможно, начальную позицию в списке.
-	      Смотрите `read-from-minibuffer' для деталей аргумента HISTORY. 
-	      Четвертый аргумент DEFAULT-VALUE - это значение по умолчанию или 
-	      список значений по умолчанию. Если non-nil, он используется для 
-	      команд истории и в качестве значения (или первого элемента списка 
-	      значений по умолчанию) для возврата, если пользователь вводит пустую строку.
-	      Пятый аргумент INHERIT-INPUT-METHOD, если non-nil, означает, что 
-	      минибуфер наследует текущий метод ввода и настройку 
-	      `enable-multibyte-characters'.  */)
+       doc: /* Read a string from the minibuffer, prompting with string PROMPT.
+If non-nil, second arg INITIAL-INPUT is a string to insert before reading.
+  This argument has been superseded by DEFAULT-VALUE and should normally be nil
+  in new code.  It behaves as INITIAL-CONTENTS in `read-from-minibuffer' (which
+  see).
+The third arg HISTORY, if non-nil, specifies a history list
+  and optionally the initial position in the list.
+See `read-from-minibuffer' for details of HISTORY argument.
+Fourth arg DEFAULT-VALUE is the default value or the list of default values.
+ If non-nil, it is used for history commands, and as the value (or the first
+ element of the list of default values) to return if the user enters the
+ empty string.
+Fifth arg INHERIT-INPUT-METHOD, if non-nil, means the minibuffer inherits
+ the current input method and the setting of `enable-multibyte-characters'.  */)
   (Lisp_Object prompt, Lisp_Object initial_input, Lisp_Object history, Lisp_Object default_value, Lisp_Object inherit_input_method)
 {
   Lisp_Object val;
   ptrdiff_t count = SPECPDL_INDEX ();
 
-  /* На всякий случай, если мы находимся в рекурсивном минибуфере, 
-     дайте понять, что таблица завершений предыдущего минибуфера не 
-     относится к новому минибуферу.
-     FIXME: `minibuffer-completion-table' вместо этого должен быть локальным буфером.  */
+  /* Just in case we're in a recursive minibuffer, make it clear that the
+     previous minibuffer's completion table does not apply to the new
+     minibuffer.
+     FIXME: `minibuffer-completion-table' should be buffer-local instead.  */
   specbind (Qminibuffer_completion_table, Qnil);
 
   val = Fread_from_minibuffer (prompt, initial_input, Qnil,

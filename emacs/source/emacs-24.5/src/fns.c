@@ -1,9 +1,9 @@
-/* Random utility Lisp functions.
+/* Случайные утилиты Lisp-функций.
 
 Copyright (C) 1985-1987, 1993-1995, 1997-2015 Free Software Foundation,
 Inc.
 
-This file is part of GNU Emacs.
+Этот файл является частью GNU Emacs.
 
 GNU Emacs is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -52,23 +52,23 @@ static Lisp_Object Qmd5, Qsha1, Qsha224, Qsha256, Qsha384, Qsha512;
 static bool internal_equal (Lisp_Object, Lisp_Object, int, bool, Lisp_Object);
 
 DEFUN ("identity", Fidentity, Sidentity, 1, 1, 0,
-       doc: /* Return the argument unchanged.  */)
+       doc: /* Вернуть аргумент без изменений.  */)
   (Lisp_Object arg)
 {
   return arg;
 }
 
 DEFUN ("random", Frandom, Srandom, 0, 1, 0,
-       doc: /* Return a pseudo-random number.
-All integers representable in Lisp, i.e. between `most-negative-fixnum'
-and `most-positive-fixnum', inclusive, are equally likely.
+       doc: /* Вернуть псевдослучайное число.
+Все целые числа, представимые в Лиспе, то есть между `most-negative-fixnum' 
+и `most-positive-fixnum' включительно, одинаково вероятны.
 
-With positive integer LIMIT, return random number in interval [0,LIMIT).
-With argument t, set the random number seed from the current time and pid.
-With a string argument, set the seed based on the string's contents.
-Other values of LIMIT are ignored.
+С положительным целым числом LIMIT, вернуть случайное число в интервале [0,LIMIT).
+С аргументом t установите случайное число семян из текущего времени и pid.
+С помощью строкового аргумента установите начальное значение на основе содержимого строки.
+Другие значения LIMIT игнорируются.
 
-See Info node `(elisp)Random Numbers' for more details.  */)
+См. Info-узел `(elisp)Random Numbers' для более подробной информации.  */)
   (Lisp_Object limit)
 {
   EMACS_INT val;
@@ -82,9 +82,9 @@ See Info node `(elisp)Random Numbers' for more details.  */)
   if (INTEGERP (limit) && 0 < XINT (limit))
     while (true)
       {
-	/* Return the remainder, except reject the rare case where
-	   get_random returns a number so close to INTMASK that the
-	   remainder isn't random.  */
+	/* Возврат остатка, за исключением отклонения редкого случая, 
+	   когда get_random возвращает число, настолько близкое к 
+	   INTMASK, что остаток не является случайным.  */
 	EMACS_INT remainder = val % XINT (limit);
 	if (val - remainder <= INTMASK - XINT (limit) + 1)
 	  return make_number (remainder);
@@ -93,11 +93,12 @@ See Info node `(elisp)Random Numbers' for more details.  */)
   return make_number (val);
 }
 
-/* Heuristic on how many iterations of a tight loop can be safely done
-   before it's time to do a QUIT.  This must be a power of 2.  */
+/* Эвристика в отношении того, сколько итераций узкого цикла 
+   можно безопасно выполнить, прежде чем пришло время сделать 
+   QUIT. Это должно быть степень 2.  */
 enum { QUIT_COUNT_HEURISTIC = 1 << 16 };
 
-/* Random data-structure functions.  */
+/* Случайные функции структуры данных.  */
 
 static void
 CHECK_LIST_END (Lisp_Object x, Lisp_Object y)
@@ -106,11 +107,12 @@ CHECK_LIST_END (Lisp_Object x, Lisp_Object y)
 }
 
 DEFUN ("length", Flength, Slength, 1, 1, 0,
-       doc: /* Return the length of vector, list or string SEQUENCE.
-A byte-code function object is also allowed.
-If the string contains multibyte characters, this is not necessarily
-the number of bytes in the string; it is the number of characters.
-To get the number of bytes, use `string-bytes'.  */)
+       doc: /* Вернуть длину вектора, списка или строки SEQUENCE. 
+	       Объект функции с байт-кодом также разрешен. Если 
+	       строка содержит многобайтовые символы, это не обязательно 
+	       количество байтов в строке; это количество символов. 
+	       Чтобы получить количество байтов, используйте 
+	       `string-bytes'. */)
   (register Lisp_Object sequence)
 {
   register Lisp_Object val;
@@ -155,10 +157,12 @@ To get the number of bytes, use `string-bytes'.  */)
 }
 
 DEFUN ("safe-length", Fsafe_length, Ssafe_length, 1, 1, 0,
-       doc: /* Return the length of a list, but avoid error or infinite loop.
-This function never gets an error.  If LIST is not really a list,
-it returns 0.  If LIST is circular, it returns a finite value
-which is at least the number of distinct elements.  */)
+       doc: /* Вернуть длину списка, но избежать ошибки или 
+	       бесконечного цикла. Эта функция никогда не получает 
+	       ошибку. Если LIST на самом деле не является списком, 
+	       он возвращает 0. Если LIST является круглым, он возвращает 
+	       конечное значение, которое является по крайней мере 
+	       количеством различных элементов.  */)
   (Lisp_Object list)
 {
   Lisp_Object tail, halftail;
@@ -168,7 +172,7 @@ which is at least the number of distinct elements.  */)
   if (! CONSP (list))
     return make_number (0);
 
-  /* halftail is used to detect circular lists.  */
+  /* Halftail используется для обнаружения круговых списков.  */
   for (tail = halftail = list; ; )
     {
       tail = XCDR (tail);
@@ -189,15 +193,15 @@ which is at least the number of distinct elements.  */)
 	}
     }
 
-  /* If the length does not fit into a fixnum, return a float.
-     On all known practical machines this returns an upper bound on
-     the true length.  */
+  /* Если длина не соответствует фикснуму, верните 
+     поплавок. На всех известных практических машинах 
+     это возвращает верхнюю границу истинной длины.  */
   return hilen ? make_float (hilen + lolen) : make_fixnum_or_float (lolen);
 }
 
 DEFUN ("string-bytes", Fstring_bytes, Sstring_bytes, 1, 1, 0,
-       doc: /* Return the number of bytes in STRING.
-If STRING is multibyte, this may be greater than the length of STRING.  */)
+       doc: /* Вернуть количество байтов в STRING. Если STRING 
+	       многобайтовый, это может быть больше длины STRING.  */)
   (Lisp_Object string)
 {
   CHECK_STRING (string);
@@ -205,9 +209,9 @@ If STRING is multibyte, this may be greater than the length of STRING.  */)
 }
 
 DEFUN ("string-equal", Fstring_equal, Sstring_equal, 2, 2, 0,
-       doc: /* Return t if two strings have identical contents.
-Case is significant, but text properties are ignored.
-Symbols are also allowed; their print names are used instead.  */)
+       doc: /* Вернуть t, если две строки имеют одинаковое содержимое.
+	       Регистр имеет значение, но свойства текста игнорируются. Символы также допускаются; 
+	       вместо них используются их печатные имена.  */)
   (register Lisp_Object s1, Lisp_Object s2)
 {
   if (SYMBOLP (s1))

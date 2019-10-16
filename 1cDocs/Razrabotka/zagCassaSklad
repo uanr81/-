@@ -1,1 +1,0 @@
-scp -F /home/alamd/example/sbros/txt /home/alamd/zagKS.xml voshod:/var/www/mobPril/zagCassSklad/1cema.xml
